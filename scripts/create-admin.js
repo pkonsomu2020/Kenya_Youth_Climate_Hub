@@ -1,14 +1,27 @@
 /**
  * One-time script to create the KYCH admin user in Supabase Auth.
  * Run with: node scripts/create-admin.js
+ *
+ * Reads credentials from environment variables — never hardcode them here.
+ * Set these in your .env file before running:
+ *   NEXT_PUBLIC_SUPABASE_URL=...
+ *   SUPABASE_SERVICE_KEY=...
+ *   ADMIN_EMAIL=...
+ *   ADMIN_PASSWORD=...
  */
 
-const SUPABASE_URL = "https://vtlsykfqhbifwumfaisl.supabase.co";
-const SERVICE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0bHN5a2ZxaGJpZnd1bWZhaXNsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODYyOTc5NCwiZXhwIjoyMDk0MjA1Nzk0fQ.HGPE_r4IaCusAAnX5Pivp1-U4uMWuz7QUjgVeI1QmeQ";
+require("dotenv").config();
 
-const ADMIN_EMAIL = "admin@kych.org";
-const ADMIN_PASSWORD = "KYCH@2026!";
+const SUPABASE_URL  = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SERVICE_KEY   = process.env.SUPABASE_SERVICE_KEY;
+const ADMIN_EMAIL   = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+if (!SUPABASE_URL || !SERVICE_KEY || !ADMIN_EMAIL || !ADMIN_PASSWORD) {
+  console.error("✗ Missing required environment variables.");
+  console.error("  Set NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_KEY, ADMIN_EMAIL, ADMIN_PASSWORD in your .env file.");
+  process.exit(1);
+}
 
 async function createAdmin() {
   console.log("Creating admin user in Supabase Auth...\n");
@@ -23,18 +36,14 @@ async function createAdmin() {
     body: JSON.stringify({
       email: ADMIN_EMAIL,
       password: ADMIN_PASSWORD,
-      email_confirm: true, // skip email verification
-      user_metadata: {
-        role: "admin",
-        name: "KYCH Admin",
-      },
+      email_confirm: true,
+      user_metadata: { role: "admin", name: "KYCH Admin" },
     }),
   });
 
   const data = await res.json();
 
   if (!res.ok) {
-    // If user already exists, that's fine
     if (data.msg?.includes("already been registered") || data.code === "email_exists") {
       console.log("✓ Admin user already exists — nothing to do.");
       return;
@@ -45,9 +54,8 @@ async function createAdmin() {
   }
 
   console.log("✓ Admin user created successfully!");
-  console.log(`  Email:    ${ADMIN_EMAIL}`);
-  console.log(`  Password: ${ADMIN_PASSWORD}`);
-  console.log(`  User ID:  ${data.id}`);
+  console.log(`  Email:   ${ADMIN_EMAIL}`);
+  console.log(`  User ID: ${data.id}`);
   console.log("\nYou can now log in at https://kenyayouthclimatehub.org/admin-hub/login");
 }
 

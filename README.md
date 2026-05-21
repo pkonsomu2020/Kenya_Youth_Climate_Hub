@@ -165,9 +165,7 @@ Admin dashboard: [https://kenyayouthclimatehub.org/admin-hub](https://kenyayouth
 
 The admin hub (`/admin-hub`) is a full CMS protected by Supabase Auth.
 
-**Default credentials:**
-- Email: `admin@kych.org`
-- Password: `KYCH@2026!`
+Access is restricted to authorised administrators only. Credentials are managed securely and not stored in this repository.
 
 **Sections:**
 | Route | Purpose |
