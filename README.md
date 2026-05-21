@@ -157,28 +157,6 @@ npm run dev
 
 Open [https://kenyayouthclimatehub.org](https://kenyayouthclimatehub.org) to view the frontend.
 
-Admin dashboard: [https://kenyayouthclimatehub.org/admin-hub](https://kenyayouthclimatehub.org/admin-hub)
-
----
-
-## Admin Dashboard
-
-The admin hub (`/admin-hub`) is a full CMS protected by Supabase Auth.
-
-Access is restricted to authorised administrators only. Credentials are managed securely and not stored in this repository.
-
-**Sections:**
-| Route | Purpose |
-|---|---|
-| `/admin-hub` | Dashboard — stats overview, quick actions, recent messages |
-| `/admin-hub/news` | Manage news articles |
-| `/admin-hub/opportunities` | Manage funding opportunities |
-| `/admin-hub/events` | Manage events |
-| `/admin-hub/resources` | Manage E-Library resources |
-| `/admin-hub/messages` | View contact form submissions |
-| `/admin-hub/booking-space` | Manage space booking requests |
-| `/admin-hub/settings` | Site-wide settings (hero text, impact stats) |
-
 ---
 
 ## Interactive Tools (E-Library)
