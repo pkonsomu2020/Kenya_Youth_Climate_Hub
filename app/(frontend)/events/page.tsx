@@ -7,7 +7,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { useEvents } from "@/lib/useEvents";
 import {
   MapPin, Calendar, ExternalLink, RefreshCw,
-  Wifi, WifiOff, Search, Globe, Monitor, Users, AlertCircle,
+  Search, Globe, Monitor, Users, AlertCircle,
 } from "lucide-react";
 
 
@@ -108,39 +108,11 @@ export default function Events() {
       <PageHeader
         eyebrow="Calendar"
         title={<>Events & <span>Workshops</span></>}
-        subtitle="Climate conferences, hackathons, summits and webinars — Kenya and worldwide. AI-curated and updated every 12 hours."
+        subtitle="Climate conferences, hackathons, summits and webinars — Kenya and worldwide."
       />
 
       <section className="sec">
         <div className="sec-in">
-
-          {/* Status + Refresh */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: ".75rem", marginBottom: "1.5rem" }}>
-            <span style={{ display: "flex", alignItems: "center", gap: ".35rem", fontSize: ".75rem", color: isOnline ? "var(--green)" : "#dc2626", fontFamily: "var(--fm)" }}>
-              {isOnline ? <Wifi size={13} /> : <WifiOff size={13} />}
-              {isOnline ? `Live · ${events.length} upcoming events · Updated every 12h` : "Backend offline — start with npm run dev in backend/"}
-            </span>
-            <button
-              onClick={refetch}
-              disabled={loading}
-              style={{ display: "flex", alignItems: "center", gap: ".3rem", fontSize: ".72rem", fontFamily: "var(--fs)", fontWeight: 600, color: "var(--green)", background: "transparent", border: "1px solid var(--green)", borderRadius: 6, padding: ".3rem .7rem", cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.5 : 1 }}
-            >
-              <RefreshCw size={12} style={{ animation: loading ? "spin 1s linear infinite" : "none" }} />
-              Refresh
-            </button>
-          </div>
-
-          {/* Error banner */}
-          {error && (
-            <div style={{ padding: "1rem 1.25rem", marginBottom: "1.5rem", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, fontSize: ".85rem", color: "#991B1B", display: "flex", alignItems: "center", gap: ".6rem" }}>
-              <WifiOff size={16} />
-              <span>
-                <strong>Backend not running.</strong> Start it with{" "}
-                <code style={{ background: "#FEE2E2", padding: ".1rem .4rem", borderRadius: 4 }}>npm run dev</code>{" "}
-                inside the <code style={{ background: "#FEE2E2", padding: ".1rem .4rem", borderRadius: 4 }}>backend/</code> folder, then click Refresh.
-              </span>
-            </div>
-          )}
 
           {/* Filters */}
           <div style={{ display: "flex", flexDirection: "column", gap: ".75rem", marginBottom: "2rem" }}>

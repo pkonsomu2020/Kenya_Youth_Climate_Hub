@@ -125,48 +125,11 @@ export default function Opportunities() {
       <PageHeader
         eyebrow="Live Board"
         title={<>Funding & <span>Opportunities</span></>}
-        subtitle="Grants, fellowships, internships and competitions open to young Kenyans — AI-curated and updated every 12 hours."
+        subtitle="Grants, fellowships, internships and competitions open to young Kenyans."
       />
 
       <section className="sec">
         <div className="sec-in">
-
-          {/* Status + Refresh row */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: ".75rem", marginBottom: "1.5rem" }}>
-            <span style={{ display: "flex", alignItems: "center", gap: ".35rem", fontSize: ".75rem", color: isOnline ? "var(--green)" : "#dc2626", fontFamily: "var(--fm)" }}>
-              {isOnline ? <Wifi size={13} /> : <WifiOff size={13} />}
-              {isOnline
-                ? `Live · ${opportunities.length} opportunities · Updated every 12h`
-                : "Backend offline — start with npm run dev in backend/"}
-            </span>
-            <button
-              onClick={refetch}
-              disabled={loading}
-              style={{
-                display: "flex", alignItems: "center", gap: ".3rem",
-                fontSize: ".72rem", fontFamily: "var(--fs)", fontWeight: 600,
-                color: "var(--green)", background: "transparent",
-                border: "1px solid var(--green)", borderRadius: 6,
-                padding: ".3rem .7rem", cursor: loading ? "not-allowed" : "pointer",
-                opacity: loading ? 0.5 : 1,
-              }}
-            >
-              <RefreshCw size={12} style={{ animation: loading ? "spin 1s linear infinite" : "none" }} />
-              Refresh
-            </button>
-          </div>
-
-          {/* Error banner */}
-          {error && (
-            <div style={{ padding: "1rem 1.25rem", marginBottom: "1.5rem", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, fontSize: ".85rem", color: "#991B1B", display: "flex", alignItems: "center", gap: ".6rem" }}>
-              <WifiOff size={16} />
-              <span>
-                <strong>Backend not running.</strong> Start it with{" "}
-                <code style={{ background: "#FEE2E2", padding: ".1rem .4rem", borderRadius: 4 }}>npm run dev</code>{" "}
-                inside the <code style={{ background: "#FEE2E2", padding: ".1rem .4rem", borderRadius: 4 }}>backend/</code> folder, then click Refresh.
-              </span>
-            </div>
-          )}
 
           {/* Filters */}
           <div style={{ display: "flex", flexDirection: "column", gap: ".75rem", marginBottom: "2rem" }}>
@@ -213,16 +176,16 @@ export default function Opportunities() {
                 <div key={o.id} className="k-card" style={{ display: "flex", flexDirection: "column" }}>
                   {/* Header */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: ".75rem", flexWrap: "wrap" }}>
-                    <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ minWidth: "150px", flex: "1 1 150px" }}>
                       <span className={`k-tag ${TYPE_STYLES[o.type] || "t-grant"}`}>{o.type}</span>
-                      <div className="k-card-title" style={{ marginTop: ".5rem" }}>{o.name || o.title}</div>
+                      <div className="k-card-title" style={{ marginTop: ".5rem", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis" }}>{o.name || o.title}</div>
                       <div style={{ fontSize: ".7rem", color: "var(--muted-foreground)", fontFamily: "var(--fm)", marginTop: ".2rem" }}>
                         {o.provider || o.source}
                       </div>
                     </div>
                     {o.amount && (
-                      <div style={{ textAlign: "right", flexShrink: 0 }}>
-                        <div style={{ fontFamily: "var(--fs)", fontWeight: 800, color: "var(--green)", fontSize: ".9rem" }}>
+                      <div style={{ textAlign: "right", flexShrink: 0, maxWidth: "100%", flex: "0 1 auto" }}>
+                        <div style={{ fontFamily: "var(--fs)", fontWeight: 800, color: "var(--green)", fontSize: ".85rem", background: "var(--green-pale)", padding: ".2rem .5rem", borderRadius: "6px" }}>
                           {o.amount}
                         </div>
                       </div>
