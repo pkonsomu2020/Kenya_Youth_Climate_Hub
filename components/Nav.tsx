@@ -12,7 +12,6 @@ const links = [
   { to: "/programs",      label: "Programs"      },
   { to: "/events",        label: "Events"        },
   { to: "/news",          label: "News"          },
-  { to: "/booking-space", label: "Book Space"    },
 ] as const;
 
 export function Nav() {

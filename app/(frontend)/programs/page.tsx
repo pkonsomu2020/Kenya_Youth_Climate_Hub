@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
-import { Trophy, Leaf, ArrowRight, Calendar, Users, MapPin, CheckCircle2, Clock } from "lucide-react";
+import { Trophy, Leaf, ArrowRight, Calendar, Users, MapPin, CheckCircle2 } from "lucide-react";
 
 // ── Program data ──────────────────────────────────────────────────────────────
 const programs = [
@@ -36,30 +36,30 @@ const programs = [
   },
   {
     id: "begreen",
-    tag: "COMING SOON",
-    tagColor: "#0ea5e9",
-    title: "BeGreen Program",
+    tag: "ACTIVE PROGRAM",
+    tagColor: "#059669",
+    title: "BeGreen Africa Initiative",
     short: "BeGreen",
     icon: Leaf,
-    iconBg: "linear-gradient(135deg,#0ea5e9,#0284c7)",
-    status: "Opening Soon",
-    statusColor: "#0ea5e9",
-    statusBg: "#f0f9ff",
-    year: "2026",
-    location: "Kenya",
-    participants: "TBA",
-    deadline: "TBA",
-    prize: "TBA",
-    description: "BeGreen is an upcoming KYCH program focused on green skills, sustainable livelihoods, and environmental stewardship for young Kenyans. Full details and application information will be shared soon.",
+    iconBg: "linear-gradient(135deg,#059669,#10B981)",
+    status: "Active — Kenya Pilot",
+    statusColor: "#059669",
+    statusBg: "#ecfdf5",
+    year: "2023–2025",
+    location: "Nairobi, Kisumu, Mombasa",
+    participants: "2,264 Youth Applied",
+    deadline: "Open",
+    prize: "USD 5,000",
+    description: "A multi-partner green entrepreneurship programme targeting youth aged 18–35 in Kenya's waste management sector — 846 jobs created, ~USD 2.7M revenue generated, and 29.9M kgs of waste managed.",
     highlights: [
-      "Green skills training",
-      "Sustainable livelihood support",
-      "Environmental stewardship",
-      "Community-led action",
+      "Seed funding up to USD 5,000",
+      "Business & green entrepreneurship training",
+      "Incubation & structured mentorship",
+      "Acceleration funds (USD 1,000–3,000)",
     ],
-    focusAreas: ["Green Skills & Training", "Sustainable Livelihoods", "Environmental Stewardship"],
-    gradient: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-    href: "#",
+    focusAreas: ["Plastic Waste Management", "Organic Waste & Biogas", "E-Waste Enterprises"],
+    gradient: "linear-gradient(135deg, #059669 0%, #047857 100%)",
+    href: "/programs/begreen",
   },
 ];
 
@@ -67,7 +67,6 @@ const programs = [
 function ProgramCard({ p }: { p: typeof programs[0] }) {
   const [hovered, setHovered] = useState(false);
   const Icon = p.icon;
-  const isComingSoon = p.id === "begreen";
 
   return (
     <div
@@ -169,39 +168,25 @@ function ProgramCard({ p }: { p: typeof programs[0] }) {
 
         {/* Prize + CTA */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "1.1rem", borderTop: "1px solid var(--border)", gap: "1rem", flexWrap: "wrap" }}>
-          {p.prize !== "TBA" ? (
-            <div>
-              <div style={{ fontSize: ".62rem", color: "var(--muted-foreground)", fontFamily: "var(--fm)", textTransform: "uppercase", letterSpacing: ".06em" }}>Prize Pool</div>
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.2rem", color: "#059669", letterSpacing: "-.02em" }}>{p.prize}</div>
+          <div>
+            <div style={{ fontSize: ".62rem", color: "var(--muted-foreground)", fontFamily: "var(--fm)", textTransform: "uppercase", letterSpacing: ".06em" }}>
+              {p.id === "begreen" ? "Seed Funding" : "Prize Pool"}
             </div>
-          ) : (
-            <div style={{ fontSize: ".8rem", color: "var(--muted-foreground)", fontStyle: "italic" }}>Details coming soon</div>
-          )}
+            <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.2rem", color: "#059669", letterSpacing: "-.02em" }}>{p.prize}</div>
+          </div>
 
-          {isComingSoon ? (
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: ".4rem",
-              padding: ".55rem 1.1rem", borderRadius: 100,
-              background: "var(--cd)", color: "var(--muted-foreground)",
-              fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".78rem",
-              border: "1px solid var(--border)",
-            }}>
-              <Clock size={13} /> Coming Soon
-            </div>
-          ) : (
-            <Link href={p.href as any} style={{
-              display: "inline-flex", alignItems: "center", gap: ".4rem",
-              padding: ".55rem 1.1rem", borderRadius: 100,
-              background: "#059669", color: "#fff",
-              fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".78rem",
-              textDecoration: "none", transition: "background .2s",
-            }}
-              onMouseEnter={e => (e.currentTarget.style.background = "#047857")}
-              onMouseLeave={e => (e.currentTarget.style.background = "#059669")}
-            >
-              View Program <ArrowRight size={13} />
-            </Link>
-          )}
+          <Link href={p.href as any} style={{
+            display: "inline-flex", alignItems: "center", gap: ".4rem",
+            padding: ".55rem 1.1rem", borderRadius: 100,
+            background: "#059669", color: "#fff",
+            fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".78rem",
+            textDecoration: "none", transition: "background .2s",
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = "#047857")}
+            onMouseLeave={e => (e.currentTarget.style.background = "#059669")}
+          >
+            View Program <ArrowRight size={13} />
+          </Link>
         </div>
       </div>
     </div>

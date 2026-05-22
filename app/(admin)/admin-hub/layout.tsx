@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { BarChart3, BookOpen, Target, Calendar, Newspaper, LogOut, MapPin } from "lucide-react";
+import { BarChart3, BookOpen, Target, Calendar, Newspaper, LogOut } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { logout } from "./login/actions";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -15,7 +15,6 @@ const NAV = [
   { to: "/admin-hub/opportunities",label: "Opportunities", icon: Target },
   { to: "/admin-hub/events",       label: "Events",        icon: Calendar },
   { to: "/admin-hub/news",         label: "News",          icon: Newspaper },
-  { to: "/admin-hub/booking-space",label: "Space Bookings",icon: MapPin },
 ] as Array<{ to: string; label: string; icon: LucideIcon; exact?: boolean }>;
 
 export default function AdminHubLayout({ children }: { children: React.ReactNode }) {

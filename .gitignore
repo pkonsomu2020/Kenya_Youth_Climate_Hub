@@ -25,6 +25,7 @@
 # ── Local dev / scratch files (keep locally, not in git) ──
 profiles.txt
 scratch_create_bookings.sql
+scripts/create-admin.js
 
 # ── TypeScript ────────────────────────────────────────────
 *.tsbuildinfo
