@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { useOpportunities } from "@/lib/useOpportunities";
-import { Clock, Bell, ExternalLink, RefreshCw, Wifi, WifiOff, Search, AlertCircle } from "lucide-react";
+import { Clock, Bell, ExternalLink, RefreshCw, Search, AlertCircle } from "lucide-react";
 
 
 
