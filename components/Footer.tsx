@@ -28,7 +28,7 @@ export function Footer() {
           <div>
             <div style={{ fontSize: ".95rem", fontWeight: 700, color: "#fff", marginBottom: ".5rem", letterSpacing: ".02em" }}>Address</div>
             <div style={{ fontSize: ".9rem", color: "rgba(255,255,255,.45)", lineHeight: 1.7 }}>
-              Climate Innovation Hub,<br />Ngong Road, Nairobi, Kenya
+              Manga House, Kiambere RD, Upper Hill, Nairobi, Kenya
             </div>
           </div>
         </div>
@@ -60,7 +60,7 @@ export function Footer() {
               onMouseEnter={e => (e.currentTarget.style.opacity = ".7")}
               onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
             >
-              +254 712 345 678
+              (+254) 0115963306
             </a>
           </div>
         </div>
