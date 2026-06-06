@@ -21,12 +21,12 @@ const stats = [
 // ── Programme phases ──────────────────────────────────────────────────────────
 const phases = [
   { n: 1, title: "Application Drive",           outcome: "2,264 youth applied across Kenya" },
-  { n: 2, title: "Business Management Training","outcome": "759 started; 502 completed" },
+  { n: 2, title: "Business Management Training","outcome": "759 trained; 502 completed" },
   { n: 3, title: "Green Entrepreneurship Training","outcome": "502 completed both BMT & GET" },
   { n: 4, title: "Business Plan Development",   outcome: "320 business plans submitted" },
   { n: 5, title: "Pitching Events",             outcome: "207 youth pitched (Nairobi, Kisumu, Mombasa)" },
   { n: 6, title: "Seed Funding Disbursement",   outcome: "146 received grants up to USD 5,000" },
-  { n: 7, title: "Incubation & Mentorship",     outcome: "Ongoing structured support" },
+  { n: 7, title: "Incubation & Mentorship",     outcome: "146 innovations supported" },
   { n: 8, title: "Acceleration Funds",          outcome: "112 received USD 1,000–3,000 additional" },
 ];
 
@@ -53,8 +53,8 @@ export default function BeGreenPage() {
   return (
     <>
       <PageHeader
-        eyebrow="BeGreen Africa Initiative — Kenya"
-        title={<>Green Entrepreneurship for <span>Kenya's Youth</span></>}
+        eyebrow="Green Entrepreneurship for Kenya's Youth"
+        title={<>BeGreen Africa <span>Initiative</span></>}
         subtitle="A multi-partner programme building green entrepreneurship in waste management — simultaneously addressing youth unemployment and environmental degradation."
       />
 
@@ -107,7 +107,7 @@ export default function BeGreenPage() {
               <div className="s-label">About BeGreen</div>
               <h2 className="s-title">What is the <span>BeGreen Initiative?</span></h2>
               <p style={{ color: "var(--muted-foreground)", marginTop: "1.25rem", lineHeight: 1.75, fontSize: ".92rem" }}>
-                The <strong style={{ color: "var(--dark)" }}>BeGreen Africa Initiative</strong> is a multi-partner programme implemented in Kenya by UNICEF/Generation Unlimited, the Tony Elumelu Foundation, and the IKEA Foundation, with technical support from KNBS.
+                The <strong style={{ color: "var(--dark)" }}>BeGreen Africa Initiative</strong> is a multi-partner programme implemented in Kenya by UNICEF/Generation Unlimited, the Tony Elumelu Foundation, and the IKEA Foundation, with incubation support from STEM Impact Center Kenya.
               </p>
               <p style={{ color: "var(--muted-foreground)", marginTop: ".75rem", lineHeight: 1.75, fontSize: ".92rem" }}>
                 It targets youth aged <strong style={{ color: "var(--dark)" }}>18–35 years</strong> to build green entrepreneurship in the waste management sector — simultaneously addressing youth unemployment and environmental degradation.

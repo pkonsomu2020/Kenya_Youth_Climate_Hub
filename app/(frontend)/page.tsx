@@ -1,11 +1,10 @@
 "use client";
 
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
 import { Newsletter } from "@/components/Newsletter";
 import { DollarSign, BookOpen, Trophy, Calendar, Leaf, Lightbulb, Handshake, Rocket, CalendarDays, Bot, Recycle, Sun, Sprout, Droplets, Trees, Globe, FileText, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { useNews } from "@/lib/useNews";
 import { useContent } from "@/lib/contentStore";
 import { successStories } from "@/lib/data/successStories";
@@ -38,7 +37,16 @@ const renderIcon = (iconName: string, size: number = 24) => {
   return IconComponent ? <IconComponent size={size} /> : null;
 };
 
-const partners = ["UNICEF", "Yoma", "Generation Unlimited", "STEM Impact Center", "Green Army Foundation", "Afosi", "KCIC", "Ministry of Environment"];
+const partners = [
+  { name: "UNICEF", logo: "/PARTNERS/UNICEF_Logo.png" },
+  { name: "Yoma", logo: "/PARTNERS/YOMA_Logo.png" },
+  { name: "Generation Unlimited", logo: "/PARTNERS/Logo_Generation_Unlimited_0.png.jpg" },
+  { name: "STEM Impact Center", logo: "/PARTNERS/STEM IMPACT_Logo.png" },
+  { name: "Green Army Foundation", logo: "/PARTNERS/GREEN ARMY_Logo.jpg" },
+  { name: "Afosi", logo: "/PARTNERS/afosi_logo.png" },
+  { name: "KCIC", logo: "/PARTNERS/KCIC_Logo.png" },
+  { name: "Ministry of Environment", logo: "/PARTNERS/MIN_OF_ENVIRONMENT.jpg" },
+];
 
 const PREVIEW_VIDEOS = [
   "/c_df_b_e_bc_e_c_videomp_.mp4",
@@ -47,11 +55,41 @@ const PREVIEW_VIDEOS = [
 ];
 
 const programs = [
-  { icon: "Leaf", title: "Youth Climate Leadership & Advocacy", desc: "Training Kenya's next climate negotiators, county advocates, and movement leaders to influence policy at every level." },
-  { icon: "Lightbulb", title: "Climate Innovation & Entrepreneurship", desc: "Incubating youth-led green startups — from clean energy to waste tech — through the Youth Climate Innovation Challenge." },
-  { icon: "DollarSign", title: "Climate Finance & Opportunity Access", desc: "Connecting young Kenyans to grants, fellowships, competitions, and jobs that match their climate ambitions." },
-  { icon: "BookOpen", title: "Capacity Building & Knowledge", desc: "Equipping young people with the skills, data, and tools to lead climate action through trainings and digital resources." },
-  { icon: "Handshake", title: "Partnerships & Ecosystem Building", desc: "Building bridges between youth, government, NGOs, development partners, and the private sector." },
+  {
+    icon: "Leaf",
+    title: "Youth Climate Leadership & Advocacy",
+    desc: "Training Kenya's next climate negotiators, county advocates, and movement leaders to influence policy at every level.",
+    image: "/Pillar_IMAGES/Youth Climate Leadership & Advocacy.jpeg",
+    area: "leadership",
+  },
+  {
+    icon: "Lightbulb",
+    title: "Climate Innovation & Entrepreneurship",
+    desc: "Incubating youth-led green startups — from clean energy to waste tech — through the Youth Climate Innovation Challenge.",
+    image: "/Pillar_IMAGES/Climate Innovation & Entrepreneurship.jpeg",
+    area: "innovation",
+  },
+  {
+    icon: "DollarSign",
+    title: "Climate Finance & Opportunity Access",
+    desc: "Connecting young Kenyans to grants, fellowships, competitions, and jobs that match their climate ambitions.",
+    image: "/Pillar_IMAGES/Climate Finance & Opportunity Access.jpeg",
+    area: "finance",
+  },
+  {
+    icon: "BookOpen",
+    title: "Capacity Building & Knowledge",
+    desc: "Equipping young people with the skills, data, and tools to lead climate action through trainings and digital resources.",
+    image: "/Pillar_IMAGES/Capacity Building & Knowledge.jpeg",
+    area: "capacity",
+  },
+  {
+    icon: "Handshake",
+    title: "Partnerships & Ecosystem Building",
+    desc: "Building bridges between youth, government, NGOs, development partners, and the private sector.",
+    image: "/Pillar_IMAGES/Partnerships & Ecosystem Building.jpeg",
+    area: "partnerships",
+  },
 ];
 
 const features = [
@@ -73,16 +111,18 @@ const GRADIENT_MAP: Record<string, string> = {
 };
 
 function renderNewsIcon(iconName: string, size = 48) {
-  const Icon = (Icons as any)[iconName];
+  const iconCollection = Icons as unknown as Record<string, LucideIcon>;
+  const Icon = iconCollection[iconName];
   return Icon ? <Icon size={size} strokeWidth={1.5} /> : <Globe size={size} strokeWidth={1.5} />;
 }
 
 export default function Home() {
   const { content } = useContent();
   const s = content.settings;
-  const { articles: liveNews, loading: newsLoading } = useNews({ limit: 3 });
+  const { articles: liveNews, loading: newsLoading, error: newsError } = useNews({ limit: 3 });
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
 
   const handleNextVideo = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -94,32 +134,93 @@ export default function Home() {
     setCurrentVideoIndex((prev) => (prev - 1 + PREVIEW_VIDEOS.length) % PREVIEW_VIDEOS.length);
   };
 
-  // Scroll animation observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-    );
-
-    const elements = document.querySelectorAll('.animate-on-scroll');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, [newsLoading, liveNews]);
+  const newsCards = newsLoading
+    ? Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="k-card" style={{ padding: 0, overflow: "hidden" }}>
+          <div style={{ height: 175, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
+          <div style={{ padding: "1rem 1.1rem 1.2rem", display: "flex", flexDirection: "column", gap: ".6rem" }}>
+            <div style={{ height: 14, borderRadius: 4, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
+            <div style={{ height: 14, borderRadius: 4, background: "var(--border)", width: "75%", animation: "shimmer 1.5s infinite" }} />
+            <div style={{ height: 12, borderRadius: 4, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
+          </div>
+        </div>
+      ))
+    : newsError
+    ? [
+        <div key="news-error" style={{ gridColumn: "1 / -1", padding: "2rem", background: "#FEF3F2", border: "1px solid #FECACA", borderRadius: 16, color: "#991B1B", textAlign: "center" }}>
+          <p style={{ margin: 0, fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1rem" }}>
+            Unable to load news right now.
+          </p>
+          <p style={{ margin: ".75rem 0 0", color: "var(--muted-foreground)", fontSize: ".95rem" }}>
+            The news API is unavailable or the backend is offline. Please refresh the page or try again later.
+          </p>
+        </div>,
+      ]
+    : liveNews.length === 0
+    ? [
+        <div key="news-empty" style={{ gridColumn: "1 / -1", padding: "2rem", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, color: "var(--muted-foreground)", textAlign: "center" }}>
+          <p style={{ margin: 0, fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1rem" }}>
+            No news articles are available right now.
+          </p>
+          <p style={{ margin: ".75rem 0 0", color: "var(--muted-foreground)", fontSize: ".95rem" }}>
+            Check back soon for the latest climate news and event updates from the Hub.
+          </p>
+        </div>,
+      ]
+    : liveNews.slice(0, 3).map((n, idx) => (
+        <a
+          key={n.id}
+          href={n.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`k-card animate-on-scroll stagger-${idx + 1}`}
+          style={{ padding: 0, textDecoration: "none", display: "block" }}
+        >
+          {n.image_url ? (
+            <div style={{ height: 175, overflow: "hidden", position: "relative" }}>
+              <img
+                src={n.image_url}
+                alt={n.title}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                onError={(e) => {
+                  const el = e.target as HTMLImageElement;
+                  el.parentElement!.style.background = GRADIENT_MAP[n.category] || "#059669";
+                  el.style.display = "none";
+                }}
+              />
+              <span style={{ position: "absolute", bottom: ".5rem", right: ".5rem", background: "rgba(0,0,0,.5)", color: "#fff", fontSize: ".6rem", padding: ".2rem .5rem", borderRadius: 4, fontFamily: "var(--fm)" }}>
+                {n.source}
+              </span>
+            </div>
+          ) : (
+            <div style={{ height: 175, background: GRADIENT_MAP[n.category] || n.gradient || "#059669", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,.35)", transition: "all 0.3s", position: "relative" }}>
+              <div className="news-card-icon-wrapper">{renderNewsIcon(n.icon || "Globe", 48)}</div>
+              <span style={{ position: "absolute", bottom: ".5rem", right: ".5rem", background: "rgba(0,0,0,.25)", color: "rgba(255,255,255,.8)", fontSize: ".6rem", padding: ".2rem .5rem", borderRadius: 4, fontFamily: "var(--fm)" }}>
+                {n.source}
+              </span>
+            </div>
+          )}
+          <div style={{ padding: ".8rem 1.1rem 0", display: "flex", alignItems: "center", gap: ".5rem" }}>
+            <span className="k-tag t-news">{n.category}</span>
+            <span style={{ fontSize: ".67rem", color: "var(--muted-foreground)", fontFamily: "var(--fm)" }}>{n.date}</span>
+          </div>
+          <div style={{ padding: ".8rem 1.1rem 1.2rem" }}>
+            <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".95rem", lineHeight: 1.3, color: "var(--dark)", marginBottom: ".4rem", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: ".4rem" }}>
+              <span>{n.title}</span>
+              <ExternalLink size={12} style={{ flexShrink: 0, marginTop: 2, color: "var(--muted-foreground)" }} />
+            </div>
+            <div style={{ fontSize: ".78rem", color: "var(--muted-foreground)", lineHeight: 1.55 }}>{n.excerpt}</div>
+          </div>
+        </a>
+      ));
 
   return (
     <>
       {/* HERO */}
       <section style={{ position: "relative", minHeight: "90vh", display: "flex", alignItems: "center", background: "var(--background)", padding: "8rem 2.5rem 4rem" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }} className="hero-grid">
+        <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }} className="hero-grid animate-on-scroll">
           {/* Left Content */}
-          <div>
+          <div className="animate-on-scroll stagger-1">
             <div style={{ fontFamily: "var(--fm)", fontSize: ".7rem", letterSpacing: ".15em", color: "var(--muted-foreground)", textTransform: "uppercase", marginBottom: "1rem" }}>
               Empowering youth, one climate solution at a time.
             </div>
@@ -132,23 +233,23 @@ export default function Home() {
 
             {/* Quick Links */}
             <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap", marginTop: "2rem" }}>
-              <Link href="/opportunities" style={{ fontSize: ".8rem", color: "var(--muted-foreground)", textDecoration: "none", padding: ".5rem 1rem", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontFamily: "var(--fs)", fontWeight: 600, transition: "all .3s cubic-bezier(0.4, 0, 0.2, 1)", display: "flex", alignItems: "center", gap: ".4rem" }} className="quick-link">
+              <Link href="/opportunities" style={{ fontSize: ".8rem", color: "var(--muted-foreground)", textDecoration: "none", padding: ".5rem 1rem", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontFamily: "var(--fs)", fontWeight: 600, transition: "all .3s cubic-bezier(0.4, 0, 0.2, 1)", display: "flex", alignItems: "center", gap: ".4rem" }} className="quick-link animate-on-scroll stagger-2">
                 <DollarSign size={16} /> Funding
               </Link>
-              <Link href="/e-library" style={{ fontSize: ".8rem", color: "var(--muted-foreground)", textDecoration: "none", padding: ".5rem 1rem", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontFamily: "var(--fs)", fontWeight: 600, transition: "all .3s cubic-bezier(0.4, 0, 0.2, 1)", display: "flex", alignItems: "center", gap: ".4rem" }} className="quick-link">
+              <Link href="/e-library" style={{ fontSize: ".8rem", color: "var(--muted-foreground)", textDecoration: "none", padding: ".5rem 1rem", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontFamily: "var(--fs)", fontWeight: 600, transition: "all .3s cubic-bezier(0.4, 0, 0.2, 1)", display: "flex", alignItems: "center", gap: ".4rem" }} className="quick-link animate-on-scroll stagger-3">
                 <BookOpen size={16} /> Resources
               </Link>
-              <Link href="/programs" style={{ fontSize: ".8rem", color: "var(--muted-foreground)", textDecoration: "none", padding: ".5rem 1rem", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontFamily: "var(--fs)", fontWeight: 600, transition: "all .3s cubic-bezier(0.4, 0, 0.2, 1)", display: "flex", alignItems: "center", gap: ".4rem" }} className="quick-link">
+              <Link href="/programs" style={{ fontSize: ".8rem", color: "var(--muted-foreground)", textDecoration: "none", padding: ".5rem 1rem", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontFamily: "var(--fs)", fontWeight: 600, transition: "all .3s cubic-bezier(0.4, 0, 0.2, 1)", display: "flex", alignItems: "center", gap: ".4rem" }} className="quick-link animate-on-scroll stagger-4">
                 <Trophy size={16} /> Programs
               </Link>
-              <Link href="/events" style={{ fontSize: ".8rem", color: "var(--muted-foreground)", textDecoration: "none", padding: ".5rem 1rem", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontFamily: "var(--fs)", fontWeight: 600, transition: "all .3s cubic-bezier(0.4, 0, 0.2, 1)", display: "flex", alignItems: "center", gap: ".4rem" }} className="quick-link">
+              <Link href="/events" style={{ fontSize: ".8rem", color: "var(--muted-foreground)", textDecoration: "none", padding: ".5rem 1rem", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontFamily: "var(--fs)", fontWeight: 600, transition: "all .3s cubic-bezier(0.4, 0, 0.2, 1)", display: "flex", alignItems: "center", gap: ".4rem" }} className="quick-link animate-on-scroll stagger-5">
                 <Calendar size={16} /> Events
               </Link>
             </div>
           </div>
 
           {/* Right Visual */}
-          <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div className="animate-on-scroll stagger-2" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {/* Background Decorative Shapes */}
             <div style={{ position: "absolute", width: "100%", height: "100%", maxWidth: 500, maxHeight: 500 }}>
               <div style={{ position: "absolute", top: "10%", right: "5%", width: "45%", height: "45%", background: "var(--green)", borderRadius: "50% 50% 0 50%", opacity: 0.15, transform: "rotate(15deg)" }} />
@@ -180,10 +281,10 @@ export default function Home() {
       </section>
 
       {/* IMPACT BAR */}
-      <div style={{ background: "#0A0A0A", padding: "2.5rem" }}>
+      <div className="animate-on-scroll" style={{ background: "#0A0A0A", padding: "2.5rem" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: "1rem", textAlign: "center" }}>
-          {[[(s.impactYouth||0).toLocaleString(), "Youth Reached"], [(s.impactProjects||0).toString(), "Projects Incubated"], [s.impactFunding||"", "Funding Mobilised"], [(s.impactCounties||0).toString(), "Counties Covered"], ["60+", "Opportunities Listed"]].map(([n, l]) => (
-            <div key={l} className="animate-on-scroll">
+          {[[(s.impactYouth||0).toLocaleString(), "Youth Reached"], [(s.impactProjects||0).toString(), "Projects Incubated"], [s.impactFunding||"", "Funding Mobilised"], [(s.impactCounties||0).toString(), "Counties Covered"], ["60+", "Opportunities Listed"]].map(([n, l], idx) => (
+            <div key={l} className={`animate-on-scroll stagger-${(idx % 5) + 1}`}>
               <span className="impact-stat" style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "2.2rem", color: "var(--green)", letterSpacing: "-.03em", display: "block", lineHeight: 1 }}>{n}</span>
               <span style={{ fontFamily: "var(--fm)", fontSize: ".62rem", color: "rgba(255,255,255,.45)", letterSpacing: ".08em", marginTop: ".4rem", display: "block", textTransform: "uppercase" }}>{l}</span>
             </div>
@@ -195,14 +296,20 @@ export default function Home() {
       <div className="marq-bar">
         <div className="marq-track">
           {[...partners, ...partners].map((p, i) => (
-            <div key={i} className="m-chip"><span className="m-chip-dot" />{p}</div>
+            <div key={i} className="m-chip" style={{ padding: "0.5rem 1rem", border: "none", gap: "0", background: "transparent" }}>
+              <img 
+                src={p.logo} 
+                alt={p.name}
+                style={{ height: "40px", maxWidth: "140px", objectFit: "contain" }}
+              />
+            </div>
           ))}
         </div>
       </div>
 
       {/* ABOUT SPLIT */}
-      <div className="about-split-grid">
-        <div style={{ padding: "5rem 2.5rem", background: "var(--card)" }}>
+      <div className="about-split-grid animate-on-scroll">
+        <div className="animate-on-scroll stagger-1" style={{ padding: "5rem 2.5rem", background: "var(--card)" }}>
           <div style={{ maxWidth: 500 }}>
             <div className="s-label">Who We Are</div>
             <h2 className="s-title">More Than a Hub<br /><span>A Movement</span></h2>
@@ -215,7 +322,7 @@ export default function Home() {
             <Link href="/about" className="btn-green" style={{ marginTop: "1.75rem" }}>Our Story & Team →</Link>
           </div>
         </div>
-        <div style={{ background: "var(--green)", padding: "5rem 2.5rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <div className="animate-on-scroll stagger-2" style={{ background: "var(--green)", padding: "5rem 2.5rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div className="s-label" style={{ color: "rgba(255,255,255,.4)" }}>Our Values</div>
           <h3 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.5rem", color: "#fff", letterSpacing: "-.02em" }}>What We Stand For</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: ".7rem", marginTop: "1.5rem" }}>
@@ -237,7 +344,7 @@ export default function Home() {
       </div>
 
       {/* VIDEO PREVIEW SECTION */}
-      <section style={{ position: "relative", width: "100%", height: "60vh", minHeight: 400, background: "#000", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <section className="animate-on-scroll" style={{ position: "relative", width: "100%", height: "60vh", minHeight: 400, background: "#000", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
         {/* Looping Preview Video */}
         <video
           key={PREVIEW_VIDEOS[currentVideoIndex]}
@@ -328,16 +435,111 @@ export default function Home() {
       )}
 
       {/* CORE PROGRAMS */}
-      <section className="sec">
+      <section className="sec" style={{ background: "var(--background)" }}>
         <div className="sec-in">
           <div className="s-label animate-on-scroll">What We Do</div>
           <h2 className="s-title animate-on-scroll">Five Pillars of<br /><span>Climate Action</span></h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: "1.1rem", marginTop: "2.5rem" }}>
+          <div className="pillars-grid" style={{ gap: "1.25rem", marginTop: "3rem" }}>
             {programs.map((p, idx) => (
-              <div key={p.title} className={`k-card animate-on-scroll stagger-${(idx % 5) + 1}`}>
-                <div className="k-card-icon">{renderIcon(p.icon)}</div>
-                <div className="k-card-title">{p.title}</div>
-                <div className="k-card-desc">{p.desc}</div>
+              <div
+                key={p.title}
+                className={`animate-on-scroll stagger-${(idx % 5) + 1} group`}
+                style={{
+                  gridArea: p.area,
+                  position: "relative",
+                  minHeight: p.area === "leadership" ? 480 : 320,
+                  borderRadius: 24,
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  cursor: "pointer",
+                  boxShadow: "0 10px 40px rgba(0,0,0,0.06)",
+                }}
+                onMouseEnter={(e) => {
+                  const img = e.currentTarget.querySelector('.pillar-bg-img') as HTMLElement;
+                  if (img) img.style.transform = 'scale(1.05)';
+                  const iconBox = e.currentTarget.querySelector('.pillar-icon-box') as HTMLElement;
+                  if (iconBox) {
+                    iconBox.style.background = 'var(--green)';
+                    iconBox.style.color = '#fff';
+                    iconBox.style.borderColor = 'transparent';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  const img = e.currentTarget.querySelector('.pillar-bg-img') as HTMLElement;
+                  if (img) img.style.transform = 'scale(1)';
+                  const iconBox = e.currentTarget.querySelector('.pillar-icon-box') as HTMLElement;
+                  if (iconBox) {
+                    iconBox.style.background = 'rgba(255,255,255,0.15)';
+                    iconBox.style.color = '#fff';
+                    iconBox.style.borderColor = 'rgba(255,255,255,0.2)';
+                  }
+                }}
+              >
+                {/* Background Image */}
+                <img 
+                  src={p.image.replace(/[^\/]+$/, (m) => encodeURIComponent(m))} 
+                  alt={p.title} 
+                  className="pillar-bg-img"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    transition: "transform 0.7s cubic-bezier(0.25, 1, 0.5, 1)",
+                    zIndex: 0
+                  }}
+                />
+
+                {/* Dark Gradient Overlay only at bottom */}
+                <div style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 45%, transparent 100%)",
+                  zIndex: 1,
+                  pointerEvents: "none"
+                }} />
+
+                {/* Content Container */}
+                <div style={{ position: "relative", zIndex: 2, padding: "2rem", width: "100%" }}>
+                  <div
+                    className="pillar-icon-box"
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 12,
+                      background: "rgba(255,255,255,0.15)",
+                      backdropFilter: "blur(10px)",
+                      WebkitBackdropFilter: "blur(10px)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#fff",
+                      marginBottom: "1.25rem",
+                      transition: "all 0.3s ease",
+                    }}
+                  >
+                    {renderIcon(p.icon, 20)}
+                  </div>
+                  
+                  <h3 style={{ 
+                    fontFamily: "var(--fs)", fontWeight: 800, fontSize: p.area === "leadership" ? "1.6rem" : "1.3rem", 
+                    color: "#fff", lineHeight: 1.2, marginBottom: "0.5rem" 
+                  }}>
+                    {p.title}
+                  </h3>
+                  
+                  <p style={{ 
+                    color: "rgba(255,255,255,0.75)", fontSize: "0.95rem", 
+                    lineHeight: 1.6, margin: 0,
+                    display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden"
+                  }}>
+                    {p.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -363,39 +565,37 @@ export default function Home() {
       </section>
 
       {/* CHALLENGE BANNER — powered by Flarehub */}
-      <section style={{ background: "var(--green)", padding: "4rem 2.5rem", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", right: -80, top: -80, width: 320, height: 320, borderRadius: "50%", background: "rgba(255,255,255,.05)" }} />
-        <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
-          <div style={{ fontFamily: "var(--fm)", fontSize: ".65rem", letterSpacing: ".12em", color: "rgba(255,255,255,.6)", textTransform: "uppercase", marginBottom: ".75rem", display: "flex", alignItems: "center", gap: ".4rem" }}>
-            <Rocket size={14} /> Applications Open Now
+      <section className="animate-on-scroll flarehub-cta-section" style={{ background: "var(--green)", padding: "4rem 2.5rem", overflow: "hidden" }}>
+        <div className="flarehub-cta">
+          <div className="flarehub-copy">
+            <div style={{ fontFamily: "var(--fm)", fontSize: ".65rem", letterSpacing: ".12em", color: "rgba(255,255,255,.6)", textTransform: "uppercase", marginBottom: ".75rem", display: "flex", alignItems: "center", gap: ".4rem" }}>
+              <Rocket size={14} /> Applications Open Now
+            </div>
+            <h2 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "clamp(2.2rem,4vw,3.4rem)", color: "#fff", letterSpacing: "-.025em", lineHeight: 1.08, marginBottom: ".75rem" }}>
+              Youth Climate Innovation<br />Challenge 2025
+            </h2>
+            <p style={{ fontSize: ".95rem", color: "rgba(255,255,255,.85)", maxWidth: 520, marginBottom: "1.75rem", lineHeight: 1.75 }}>
+              Compete for funding, mentorship, and a national platform — in partnership with Flarehub.
+            </p>
+            <a
+              href="https://www.flarehub.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flarehub-cta-button"
+            >
+              <ExternalLink size={14} /> Explore Flarehub
+            </a>
           </div>
-          <h2 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "clamp(1.6rem,3vw,2.4rem)", color: "#fff", letterSpacing: "-.025em", lineHeight: 1.08, marginBottom: ".75rem" }}>
-            Youth Climate Innovation<br />Challenge 2025
-          </h2>
-          <p style={{ fontSize: ".9rem", color: "rgba(255,255,255,.7)", maxWidth: 420, marginBottom: "1.75rem", lineHeight: 1.6 }}>
-            Compete for funding, mentorship, and a national platform — in partnership with Flarehub.
-          </p>
-          <a
-            href="https://www.flarehub.org"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex", alignItems: "center", gap: ".5rem",
-              background: "#fff", color: "#059669",
-              padding: ".75rem 1.6rem", borderRadius: 100,
-              fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".85rem",
-              textDecoration: "none", transition: "all .2s",
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(0,0,0,.2)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}
-          >
-            <ExternalLink size={14} /> Explore Flarehub
-          </a>
+          <div className="flarehub-visual" style={{
+            backgroundImage: `url("/drone_cofee.png")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }} />
         </div>
       </section>
 
       {/* STORIES */}
-      <section className="sec" style={{ background: "var(--cd)" }}>
+      <section className="sec animate-on-scroll" style={{ background: "var(--background)", paddingBottom: "6rem" }}>
         <div className="sec-in">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
             <div>
@@ -406,30 +606,156 @@ export default function Home() {
               See all stories <span className="link-arrow">→</span>
             </Link>
           </div>
-          <div className="hide-scrollbar" style={{ display: "flex", gap: "1.1rem", marginTop: "2.25rem", overflowX: "auto", paddingBottom: ".75rem" }}>
-            {successStories.map((s, idx) => (
-              <div key={s.id} className={`story-card animate-on-scroll stagger-${(idx % 5) + 1}`} style={{ flexShrink: 0, width: 280, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden", transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", display: "flex", flexDirection: "column" }}>
-                <div style={{ height: 280, background: s.gradient, position: "relative", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,.4)", transition: "all 0.3s", overflow: "hidden" }}>
-                  {s.photo ? (
-                    <img src={s.photo} alt={s.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
-                  ) : (
-                    <div className="story-icon-wrapper"><Trees size={48} /></div>
-                  )}
-                  <span className="k-tag" style={{ position: "absolute", top: ".6rem", left: ".6rem", background: "var(--green)", color: "#fff" }}>{s.tag}</span>
-                </div>
-                <div style={{ padding: "1.1rem", display: "flex", flexDirection: "column", flex: 1 }}>
-                  <div style={{ fontSize: ".68rem", color: "var(--green)", fontFamily: "var(--fm)", marginBottom: ".4rem", fontWeight: 700 }}>{s.name}</div>
-                  <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".95rem", color: "var(--dark)", marginBottom: ".4rem" }}>{s.company}</div>
-                  <div style={{ fontSize: ".77rem", color: "var(--muted-foreground)", lineHeight: 1.55 }}>{s.excerpt}</div>
-                </div>
+          
+          <div style={{ position: "relative", minHeight: 600, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", marginTop: "4rem" }}>
+            
+            {/* Cards wrapper */}
+            <div style={{ position: "relative", width: "100%", height: 580, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {successStories.map((s, idx) => {
+                const length = successStories.length;
+                const prev = (currentStoryIndex - 1 + length) % length;
+                const next = (currentStoryIndex + 1) % length;
+                const isCurrent = idx === currentStoryIndex;
+                const isPrev = idx === prev;
+                const isNext = idx === next;
+                
+                if (!isCurrent && !isPrev && !isNext) return null;
+
+                const baseStyle: CSSProperties = {
+                  position: "absolute",
+                  top: 0,
+                  left: "50%",
+                  width: "clamp(320px, 90vw, 420px)",
+                  height: "100%",
+                  borderRadius: 0,
+                  background: "#fff",
+                  boxShadow: isCurrent ? "0 25px 50px rgba(0,0,0,0.15)" : "0 10px 30px rgba(0,0,0,0.08)",
+                  transition: "all 0.6s cubic-bezier(0.25, 1, 0.5, 1)",
+                  transform: "translateX(-50%) scale(1)",
+                  zIndex: isCurrent ? 4 : 3,
+                  opacity: isCurrent ? 1 : 0.6,
+                  display: "flex",
+                  flexDirection: "column",
+                  overflow: "hidden",
+                  cursor: isCurrent ? "default" : "pointer",
+                };
+
+                if (isPrev) {
+                  baseStyle.transform = "translateX(calc(-50% - 360px)) scale(0.85)";
+                }
+                if (isNext) {
+                  baseStyle.transform = "translateX(calc(-50% + 360px)) scale(0.85)";
+                }
+
+                return (
+                  <div key={s.id} style={baseStyle} onClick={() => !isCurrent && setCurrentStoryIndex(idx)}>
+                    {/* Top Image Area */}
+                    <div style={{ position: "relative", height: 340, width: "100%", background: "#e5e7eb" }}>
+                      {s.photo && (
+                        <img src={s.photo} alt={s.company} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
+                      )}
+                      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)", pointerEvents: "none" }} />
+                      <div style={{ position: "absolute", bottom: "1.25rem", left: "1.5rem", right: "1.5rem", color: "#fff", fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.6rem", textTransform: "uppercase", letterSpacing: "0.02em", pointerEvents: "none" }}>
+                        {s.company}
+                      </div>
+                    </div>
+                    
+                    {/* Bottom Content */}
+                    <div style={{ flex: 1, padding: "1.8rem 1.5rem", display: "flex", flexDirection: "column", background: "#fff" }}>
+                      <div style={{ color: "#6B7280", fontSize: "1.05rem", lineHeight: 1.6, overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", marginBottom: "auto" }}>
+                        {s.excerpt}
+                      </div>
+                      
+                      <div style={{ height: 1, width: "100%", background: "#F3F4F6", margin: "1.5rem 0" }} />
+                      
+                      {/* Footer Row */}
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+                        <div>
+                          <div style={{ fontSize: "0.75rem", color: "#6B7280", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.4rem" }}>
+                            Founder
+                          </div>
+                          <div style={{ color: "var(--green)", fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.05rem" }}>
+                            {s.name}
+                          </div>
+                        </div>
+                        
+                        {isCurrent ? (
+                          <Link href={`/success-stories/${s.id}`} style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none" }}>
+                            <span style={{ color: "var(--green)", fontSize: "0.85rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                              Read Story
+                            </span>
+                            <div 
+                              style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--green)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform 0.2s" }}
+                              onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.1)"}
+                              onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+                            >
+                              <ChevronRight size={20} />
+                            </div>
+                          </Link>
+                        ) : (
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none", opacity: 0.5 }}>
+                            <span style={{ color: "var(--green)", fontSize: "0.85rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                              Read Story
+                            </span>
+                            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--green)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <ChevronRight size={20} />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Pagination Controls */}
+            <div style={{ position: "relative", marginTop: "2rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "1.5rem", zIndex: 10 }}>
+              <button
+                type="button"
+                onClick={() => setCurrentStoryIndex((index) => (index - 1 + successStories.length) % successStories.length)}
+                style={{ width: 48, height: 48, borderRadius: "50%", background: "#fff", border: "1px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#4B5563", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", transition: "all 0.2s" }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+                onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+              >
+                <ChevronLeft size={24} />
+              </button>
+              
+              <div style={{ display: "flex", gap: "0.6rem", alignItems: "center" }}>
+                {successStories.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentStoryIndex(idx)}
+                    style={{
+                      width: idx === currentStoryIndex ? 28 : 10,
+                      height: 10,
+                      borderRadius: 10,
+                      background: idx === currentStoryIndex ? "var(--green)" : "#D1D5DB",
+                      border: "none",
+                      cursor: "pointer",
+                      transition: "all 0.3s"
+                    }}
+                    aria-label={`Go to story ${idx + 1}`}
+                  />
+                ))}
               </div>
-            ))}
+
+              <button
+                type="button"
+                onClick={() => setCurrentStoryIndex((index) => (index + 1) % successStories.length)}
+                style={{ width: 48, height: 48, borderRadius: "50%", background: "#fff", border: "1px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#4B5563", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", transition: "all 0.2s" }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+                onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+              >
+                <ChevronRight size={24} />
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
       {/* NEWS */}
-      <section className="sec">
+      <section className="sec animate-on-scroll">
         <div className="sec-in">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
             <div>
@@ -441,64 +767,7 @@ export default function Home() {
             </Link>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "1.1rem", marginTop: "2.5rem" }}>
-            {newsLoading
-              ? Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="k-card" style={{ padding: 0, overflow: "hidden" }}>
-                    <div style={{ height: 175, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
-                    <div style={{ padding: "1rem 1.1rem 1.2rem", display: "flex", flexDirection: "column", gap: ".6rem" }}>
-                      <div style={{ height: 14, borderRadius: 4, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
-                      <div style={{ height: 14, borderRadius: 4, background: "var(--border)", width: "75%", animation: "shimmer 1.5s infinite" }} />
-                      <div style={{ height: 12, borderRadius: 4, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
-                    </div>
-                  </div>
-                ))
-              : liveNews.slice(0, 3).map((n, idx) => (
-                  <a
-                    key={n.id}
-                    href={n.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`k-card animate-on-scroll stagger-${idx + 1}`}
-                    style={{ padding: 0, textDecoration: "none", display: "block" }}
-                  >
-                    {n.image_url ? (
-                      <div style={{ height: 175, overflow: "hidden", position: "relative" }}>
-                        <img
-                          src={n.image_url}
-                          alt={n.title}
-                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                          onError={(e) => {
-                            const el = e.target as HTMLImageElement;
-                            el.parentElement!.style.background = GRADIENT_MAP[n.category] || "#059669";
-                            el.style.display = "none";
-                          }}
-                        />
-                        <span style={{ position: "absolute", bottom: ".5rem", right: ".5rem", background: "rgba(0,0,0,.5)", color: "#fff", fontSize: ".6rem", padding: ".2rem .5rem", borderRadius: 4, fontFamily: "var(--fm)" }}>
-                          {n.source}
-                        </span>
-                      </div>
-                    ) : (
-                      <div style={{ height: 175, background: GRADIENT_MAP[n.category] || n.gradient || "#059669", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,.35)", transition: "all 0.3s", position: "relative" }}>
-                        <div className="news-card-icon-wrapper">{renderNewsIcon(n.icon || "Globe", 48)}</div>
-                        <span style={{ position: "absolute", bottom: ".5rem", right: ".5rem", background: "rgba(0,0,0,.25)", color: "rgba(255,255,255,.8)", fontSize: ".6rem", padding: ".2rem .5rem", borderRadius: 4, fontFamily: "var(--fm)" }}>
-                          {n.source}
-                        </span>
-                      </div>
-                    )}
-                    <div style={{ padding: ".8rem 1.1rem 0", display: "flex", alignItems: "center", gap: ".5rem" }}>
-                      <span className="k-tag t-news">{n.category}</span>
-                      <span style={{ fontSize: ".67rem", color: "var(--muted-foreground)", fontFamily: "var(--fm)" }}>{n.date}</span>
-                    </div>
-                    <div style={{ padding: ".8rem 1.1rem 1.2rem" }}>
-                      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".95rem", lineHeight: 1.3, color: "var(--dark)", marginBottom: ".4rem", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: ".4rem" }}>
-                        <span>{n.title}</span>
-                        <ExternalLink size={12} style={{ flexShrink: 0, marginTop: 2, color: "var(--muted-foreground)" }} />
-                      </div>
-                      <div style={{ fontSize: ".78rem", color: "var(--muted-foreground)", lineHeight: 1.55 }}>{n.excerpt}</div>
-                    </div>
-                  </a>
-                ))
-            }
+            {newsCards}
           </div>
         </div>
       </section>

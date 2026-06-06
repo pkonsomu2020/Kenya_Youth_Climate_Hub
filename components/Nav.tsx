@@ -6,12 +6,13 @@ import { X, Menu } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
 const links = [
-  { to: "/about",         label: "About"         },
-  { to: "/e-library",     label: "E-Library"     },
-  { to: "/opportunities", label: "Opportunities" },
-  { to: "/programs",      label: "Programs"      },
-  { to: "/events",        label: "Events"        },
-  { to: "/news",          label: "News"          },
+  { to: "/about",           label: "About"           },
+  { to: "/e-library",       label: "E-Library"       },
+  { to: "/opportunities",   label: "Opportunities"   },
+  { to: "/programs",        label: "Programs"        },
+  { to: "/events",          label: "Events"          },
+  { to: "/news",            label: "News"            },
+  { to: "/success-stories", label: "Success Stories" },
 ] as const;
 
 export function Nav() {

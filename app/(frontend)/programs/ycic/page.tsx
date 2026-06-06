@@ -82,8 +82,8 @@ export default function YCICPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Youth Climate Innovation Challenge"
-        title={<>Empowering Young Kenyans to Develop <span>Innovative Climate Solutions</span></>}
+        eyebrow="Empowering Young Kenyans to Develop Innovative Climate Solutions"
+        title={<>Youth Climate Innovation <span>Challenge</span></>}
         subtitle="For informal settlements — creating sustainable and resilient communities through innovative approaches."
       />
 

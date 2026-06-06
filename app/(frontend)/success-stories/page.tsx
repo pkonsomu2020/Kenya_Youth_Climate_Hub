@@ -3,27 +3,9 @@
 import { PageHeader } from "@/components/PageHeader";
 import { successStories } from "@/lib/data/successStories";
 import { Trees } from "lucide-react";
-import { useEffect } from "react";
+import Link from "next/link";
 
 export default function SuccessStoriesPage() {
-  // Scroll animation observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-    );
-
-    const elements = document.querySelectorAll('.animate-on-scroll');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
   return (
     <>
       <PageHeader
@@ -47,7 +29,7 @@ export default function SuccessStoriesPage() {
               {/* Photo Side */}
               <div style={{ position: "relative", width: "100%", aspectRatio: "1/1.1", borderRadius: 12, overflow: "hidden", background: story.gradient, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {story.photo ? (
-                  <img src={story.photo} alt={story.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top" }} />
+                  <img src={story.photo} alt={story.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
                 ) : (
                   <Trees size={64} color="rgba(255,255,255,0.4)" />
                 )}
@@ -69,7 +51,11 @@ export default function SuccessStoriesPage() {
                   {story.fullText}
                 </p>
                 
-                <div style={{ marginTop: "1.5rem", height: 1, width: 40, background: "var(--border)" }} />
+                <div style={{ marginTop: "2rem" }}>
+                  <Link href={`/success-stories/${story.id}`} className="btn-green" style={{ display: "inline-flex", padding: "0.65rem 1.4rem" }}>
+                    Read Story →
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
