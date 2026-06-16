@@ -9,11 +9,11 @@ import { Globe, ExternalLink, ArrowRight } from "lucide-react";
 const CATS = ["All", "News", "Climate Insights", "Success Stories", "Events Recap", "Partner Updates"];
 
 const GRADIENT_MAP: Record<string, string> = {
-  News: "#059669",
-  "Climate Insights": "#047857",
-  "Success Stories": "#10B981",
-  "Events Recap": "#10B981",
-  "Partner Updates": "#059669",
+  News: "#5dba2f",
+  "Climate Insights": "#4aa324",
+  "Success Stories": "#72cf46",
+  "Events Recap": "#72cf46",
+  "Partner Updates": "#5dba2f",
 };
 
 function renderIcon(iconName: string, size = 40) {
@@ -65,12 +65,12 @@ function NewsCard({ article, index }: { article: any; index: number }) {
             style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.6s ease", transform: hov ? "scale(1.05)" : "scale(1)" }}
             onError={(e) => {
               const p = (e.target as HTMLImageElement).parentElement!;
-              p.style.background = GRADIENT_MAP[article.category] || "#059669";
+              p.style.background = GRADIENT_MAP[article.category] || "var(--green)";
               (e.target as HTMLImageElement).style.display = "none";
             }}
           />
         ) : (
-          <div style={{ width: "100%", height: "100%", background: GRADIENT_MAP[article.category] || "#059669", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,.3)" }}>
+          <div style={{ width: "100%", height: "100%", background: GRADIENT_MAP[article.category] || "var(--green)", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,.3)" }}>
             {renderIcon(article.icon || "Globe", 44)}
           </div>
         )}
