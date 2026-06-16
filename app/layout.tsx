@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const spaceGrotesk = localFont({
-  src: [
-    { path: '../public/Space Grotesk/SpaceGrotesk-Light.ttf',    weight: '300', style: 'normal' },
-    { path: '../public/Space Grotesk/SpaceGrotesk-Regular.ttf',  weight: '400', style: 'normal' },
-    { path: '../public/Space Grotesk/SpaceGrotesk-Medium.ttf',   weight: '500', style: 'normal' },
-    { path: '../public/Space Grotesk/SpaceGrotesk-SemiBold.ttf', weight: '600', style: 'normal' },
-    { path: '../public/Space Grotesk/SpaceGrotesk-Bold.ttf',     weight: '700', style: 'normal' },
-  ],
-  variable: '--font-space-grotesk',
-  display: 'swap',
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-montserrat",
+  display: "swap",
 });
 
 const BASE_URL = "https://kenyayouthclimatehub.org";
@@ -114,7 +109,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} h-full antialiased`}
+      className={`${montserrat.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

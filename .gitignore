@@ -27,6 +27,9 @@ profiles.txt
 scratch_create_bookings.sql
 scripts/create-admin.js
 
+# ── Old Vite reference project (not part of the deployed app) ──
+NEW_KYCH/
+
 # ── TypeScript ────────────────────────────────────────────
 *.tsbuildinfo
 next-env.d.ts

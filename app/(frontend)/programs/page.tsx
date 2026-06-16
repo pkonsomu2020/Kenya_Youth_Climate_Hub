@@ -199,7 +199,7 @@ export default function ProgramsPage() {
     <>
       <PageHeader
         eyebrow="KYCH Programs"
-        title={<>Our <span>Programs</span></>}
+        title={<>Our <span style={{ color: "#5dba2f" }}>Programs</span></>}
         subtitle="Flagship initiatives empowering young Kenyans to develop climate solutions, build green skills, and lead community action."
       />
 

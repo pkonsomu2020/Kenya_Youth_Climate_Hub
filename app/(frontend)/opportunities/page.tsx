@@ -1,100 +1,139 @@
 "use client";
 
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { useOpportunities } from "@/lib/useOpportunities";
-import { Clock, Bell, ExternalLink, RefreshCw, Search, AlertCircle } from "lucide-react";
-
-
+import { Clock, ExternalLink, Search, AlertCircle, ArrowRight, Bell } from "lucide-react";
 
 const TYPES  = ["All", "Grant", "Fellowship", "Internship", "Competition", "Job", "Accelerator"];
 const TOPICS = ["All", "Energy", "Water", "Agriculture", "Policy", "Finance", "Innovation", "Resilience", "Advocacy", "Waste"];
 
-const TYPE_STYLES: Record<string, string> = {
-  Grant: "t-grant",
-  Fellowship: "t-fellow",
-  Internship: "t-event",
-  Competition: "t-news",
-  Job: "t-res",
-  Accelerator: "t-grant",
+const TYPE_COLORS: Record<string, string> = {
+  Grant: "#5dba2f", Fellowship: "#047857", Internship: "#10B981",
+  Competition: "#34D399", Job: "#065F46", Accelerator: "#5dba2f",
 };
 
-// ── Deadline helpers ──────────────────────────────────────────
 function parseDeadline(str: string | null): Date | null {
   if (!str || str === "Open" || str === "Rolling") return null;
   const d = new Date(str);
   if (!isNaN(d.getTime())) return d;
-  const d2 = new Date(str.replace(/(\d+)(st|nd|rd|th)/gi, "$1"));
-  return isNaN(d2.getTime()) ? null : d2;
+  return new Date(str.replace(/(\d+)(st|nd|rd|th)/gi, "$1"));
 }
-
-function getDaysUntil(deadlineStr: string | null): number | null {
-  const d = parseDeadline(deadlineStr);
-  if (!d) return null;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return Math.ceil((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+function getDaysUntil(s: string | null): number | null {
+  const d = parseDeadline(s);
+  if (!d || isNaN(d.getTime())) return null;
+  const t = new Date(); t.setHours(0,0,0,0);
+  return Math.ceil((d.getTime() - t.getTime()) / 86400000);
 }
 
 function DeadlineBadge({ deadline }: { deadline: string | null }) {
   if (!deadline || deadline === "Open" || deadline === "Rolling") {
-    return (
-      <div style={{ fontSize: ".72rem", color: "var(--green)", fontWeight: 600, fontFamily: "var(--fs)", display: "flex", alignItems: "center", gap: ".3rem" }}>
-        <Clock size={14} /> Open / Rolling
-      </div>
-    );
+    return <span style={{ fontSize: "11px", fontFamily: "Montserrat, sans-serif", fontWeight: 700, color: "#5dba2f", display: "flex", alignItems: "center", gap: ".3rem" }}><Clock size={12} /> Open / Rolling</span>;
   }
-
   const days = getDaysUntil(deadline);
-
-  // Past deadline — shouldn't show but just in case
   if (days !== null && days < 0) return null;
+  if (days !== null && days <= 7) return <span style={{ fontSize: "11px", fontFamily: "Montserrat, sans-serif", fontWeight: 700, color: "#dc2626", display: "flex", alignItems: "center", gap: ".3rem" }}><AlertCircle size={12} />{days === 0 ? "Closes TODAY" : `Closes in ${days}d`}</span>;
+  if (days !== null && days <= 30) return <span style={{ fontSize: "11px", fontFamily: "Montserrat, sans-serif", fontWeight: 700, color: "#d97706", display: "flex", alignItems: "center", gap: ".3rem" }}><Clock size={12} />Closes: {deadline}</span>;
+  return <span style={{ fontSize: "11px", fontFamily: "Montserrat, sans-serif", fontWeight: 600, color: "#5dba2f", display: "flex", alignItems: "center", gap: ".3rem" }}><Clock size={12} />Closes: {deadline}</span>;
+}
 
-  // Closing very soon (≤ 7 days)
-  if (days !== null && days <= 7) {
-    return (
-      <div style={{ fontSize: ".72rem", color: "#dc2626", fontWeight: 700, fontFamily: "var(--fs)", display: "flex", alignItems: "center", gap: ".3rem" }}>
-        <AlertCircle size={14} />
-        {days === 0 ? "Closes TODAY!" : `Closes in ${days} day${days === 1 ? "" : "s"}`}
-      </div>
-    );
-  }
+function useInView(ref: React.RefObject<Element | null>) {
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setV(true); }, { threshold: 0.05 });
+    if (ref.current) o.observe(ref.current);
+    return () => o.disconnect();
+  }, [ref]);
+  return v;
+}
 
-  // Closing soon (≤ 30 days)
-  if (days !== null && days <= 30) {
-    return (
-      <div style={{ fontSize: ".72rem", color: "#d97706", fontWeight: 600, fontFamily: "var(--fs)", display: "flex", alignItems: "center", gap: ".3rem" }}>
-        <Clock size={14} /> Closes: {deadline}
-      </div>
-    );
-  }
+function OppCard({ o, index }: { o: any; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref);
+  const [hov, setHov] = useState(false);
+  const days = getDaysUntil(o.deadline);
+  const isUrgent = days !== null && days <= 7;
+  const isSoon   = days !== null && days <= 30 && days > 7;
+  const accentColor = isUrgent ? "#dc2626" : isSoon ? "#d97706" : (TYPE_COLORS[o.type] || "#5dba2f");
 
-  // Normal deadline
   return (
-    <div style={{ fontSize: ".72rem", color: "var(--green)", fontWeight: 600, fontFamily: "var(--fs)", display: "flex", alignItems: "center", gap: ".3rem" }}>
-      <Clock size={14} /> Closes: {deadline}
+    <div
+      ref={ref}
+      style={{
+        background: hov ? "rgba(93,186,47,.03)" : "var(--card-dark)",
+        border: `1px solid ${hov ? "#5dba2f" : "var(--border)"}`,
+        borderTop: `3px solid ${accentColor}`,
+        borderRadius: 16, padding: "1.75rem",
+        display: "flex", flexDirection: "column",
+        opacity: inView ? 1 : 0,
+        transform: inView ? "translateY(0)" : "translateY(40px)",
+        transition: `opacity 0.6s ease ${index * 0.07}s, transform 0.6s ease ${index * 0.07}s, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease`,
+        boxShadow: hov ? `0 20px 40px -10px ${accentColor}25` : "none",
+      }}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+    >
+      {/* Type + amount row */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: ".75rem", marginBottom: "1rem", flexWrap: "wrap" }}>
+        <span style={{ fontSize: "9px", padding: "4px 10px", background: TYPE_COLORS[o.type] || "#5dba2f", color: "#fff", borderRadius: 4, fontFamily: "Montserrat, sans-serif", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          {o.type}
+        </span>
+        {o.amount && (
+          <span style={{ fontSize: "11px", fontFamily: "Montserrat, sans-serif", fontWeight: 800, color: "#5dba2f", background: "rgba(93,186,47,.1)", border: "1px solid rgba(93,186,47,.2)", padding: "3px 10px", borderRadius: 6 }}>
+            {o.amount}
+          </span>
+        )}
+      </div>
+
+      {/* Title */}
+      <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "1rem", color: "var(--text-on-dark)", lineHeight: 1.4, marginBottom: ".35rem", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+        {o.name || o.title}
+      </div>
+      <div style={{ fontSize: "11px", color: "var(--muted-foreground)", fontFamily: "Montserrat, sans-serif", fontWeight: 600, marginBottom: ".85rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        {o.provider || o.source}
+      </div>
+
+      {/* Description */}
+      <p style={{ fontSize: ".82rem", color: "var(--muted-foreground)", lineHeight: 1.65, flex: 1, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden", marginBottom: ".85rem" }}>
+        {o.desc}
+      </p>
+
+      {/* Topic tag */}
+      <div style={{ marginBottom: "1rem" }}>
+        <span style={{ fontSize: "9px", padding: "3px 9px", background: "rgba(255,255,255,.06)", color: "var(--muted-foreground)", borderRadius: 4, fontFamily: "Montserrat, sans-serif", fontWeight: 700, border: "1px solid var(--border)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+          {o.topic}
+        </span>
+      </div>
+
+      {/* Footer */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid var(--border)", paddingTop: "1rem", gap: ".5rem", flexWrap: "wrap" }}>
+        <DeadlineBadge deadline={o.deadline} />
+        <div style={{ display: "flex", gap: ".5rem" }}>
+          <button title="Remind me" style={{ width: 34, height: 34, borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--muted-foreground)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all .2s" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5dba2f"; (e.currentTarget as HTMLElement).style.color = "#5dba2f"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLElement).style.color = "var(--muted-foreground)"; }}
+          ><Bell size={14} /></button>
+          <a href={o.url} target="_blank" rel="noopener noreferrer"
+            style={{ display: "flex", alignItems: "center", gap: ".35rem", padding: ".45rem 1rem", borderRadius: 8, background: "#5dba2f", color: "#fff", fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", textDecoration: "none", transition: "background .2s" }}
+            onMouseEnter={e => (e.currentTarget.style.background = "#4aa324")}
+            onMouseLeave={e => (e.currentTarget.style.background = "#5dba2f")}
+          >
+            Apply <ExternalLink size={11} />
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
 
-// Skeleton card while loading
 function SkeletonCard() {
   return (
-    <div className="k-card" style={{ display: "flex", flexDirection: "column", gap: ".75rem" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div style={{ width: 70, height: 22, borderRadius: 6, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
-        <div style={{ width: 60, height: 22, borderRadius: 6, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
-      </div>
-      <div style={{ height: 16, borderRadius: 4, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
-      <div style={{ height: 16, borderRadius: 4, background: "var(--border)", width: "70%", animation: "shimmer 1.5s infinite" }} />
-      <div style={{ height: 13, borderRadius: 4, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
-      <div style={{ height: 13, borderRadius: 4, background: "var(--border)", width: "80%", animation: "shimmer 1.5s infinite" }} />
-      <div style={{ borderTop: "1px solid var(--border)", paddingTop: ".75rem", display: "flex", justifyContent: "space-between" }}>
-        <div style={{ width: 100, height: 18, borderRadius: 4, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
-        <div style={{ width: 70, height: 28, borderRadius: 6, background: "var(--border)", animation: "shimmer 1.5s infinite" }} />
-      </div>
+    <div style={{ background: "var(--card-dark)", borderRadius: 16, padding: "1.75rem", border: "1px solid var(--border)", borderTop: "3px solid var(--border)", display: "flex", flexDirection: "column", gap: ".75rem" }}>
+      <div style={{ height: 20, borderRadius: 4, background: "rgba(255,255,255,.06)", width: "35%", animation: "shimmer 1.5s infinite" }} />
+      <div style={{ height: 16, borderRadius: 4, background: "rgba(255,255,255,.06)", animation: "shimmer 1.5s infinite" }} />
+      <div style={{ height: 16, borderRadius: 4, background: "rgba(255,255,255,.06)", width: "65%", animation: "shimmer 1.5s infinite" }} />
+      <div style={{ height: 13, borderRadius: 4, background: "rgba(255,255,255,.06)", animation: "shimmer 1.5s infinite" }} />
+      <div style={{ height: 13, borderRadius: 4, background: "rgba(255,255,255,.06)", width: "80%", animation: "shimmer 1.5s infinite" }} />
     </div>
   );
 }
@@ -103,148 +142,74 @@ export default function Opportunities() {
   const [type, setType]   = useState("All");
   const [topic, setTopic] = useState("All");
   const [search, setSearch] = useState("");
-
+  const [searchFocus, setSearchFocus] = useState(false);
   const { opportunities, loading, error, refetch } = useOpportunities({ limit: 50, type, topic });
+  const headerRef = useRef<HTMLDivElement>(null);
+  const headerInView = useInView(headerRef);
 
-  // Client-side search filter
   const filtered = opportunities.filter((o) => {
     if (!search) return true;
     const q = search.toLowerCase();
-    return (
-      o.name?.toLowerCase().includes(q) ||
-      o.provider?.toLowerCase().includes(q) ||
-      o.desc?.toLowerCase().includes(q) ||
-      o.topic?.toLowerCase().includes(q)
-    );
+    return o.name?.toLowerCase().includes(q) || o.provider?.toLowerCase().includes(q) || o.desc?.toLowerCase().includes(q);
   });
-
-  const isOnline = !error;
 
   return (
     <>
       <PageHeader
         eyebrow="Live Board"
-        title={<>Funding & <span>Opportunities</span></>}
-        subtitle="Grants, fellowships, internships and competitions open to young Kenyans."
+        title={<>Funding & <span style={{ color: "#5dba2f" }}>Opportunities</span></>}
+        subtitle="Grants, fellowships, internships and competitions open to young Kenyans — AI-curated and updated every 12 hours."
       />
 
-      <section className="sec">
-        <div className="sec-in">
+      <section className="py-20 px-6 md:px-16" style={{ background: "var(--section-dark)", minHeight: "60vh" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
 
           {/* Filters */}
-          <div style={{ display: "flex", flexDirection: "column", gap: ".75rem", marginBottom: "2rem" }}>
-            <div>
-              <div className="s-label" style={{ marginBottom: ".5rem" }}>Type</div>
-              <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
-                {TYPES.map((t) => (
-                  <button key={t} className={`f-pill ${type === t ? "on" : ""}`} onClick={() => setType(t)}>{t}</button>
-                ))}
-              </div>
+          <div
+            ref={headerRef}
+            style={{ marginBottom: "2.5rem", opacity: headerInView ? 1 : 0, transform: headerInView ? "translateY(0)" : "translateY(20px)", transition: "opacity 0.7s ease, transform 0.7s ease" }}
+          >
+            <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap", marginBottom: ".85rem" }}>
+              {TYPES.map((t) => (
+                <button key={t} onClick={() => setType(t)} style={{ padding: ".4rem .9rem", borderRadius: 99, fontSize: ".72rem", fontFamily: "Montserrat, sans-serif", fontWeight: 700, cursor: "pointer", border: "1px solid", transition: "all .2s", borderColor: type === t ? "#5dba2f" : "var(--border)", background: type === t ? "#5dba2f" : "transparent", color: type === t ? "#fff" : "var(--muted-foreground)" }}>{t}</button>
+              ))}
             </div>
-            <div>
-              <div className="s-label" style={{ marginBottom: ".5rem" }}>Topic</div>
-              <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
-                {TOPICS.map((t) => (
-                  <button key={t} className={`f-pill ${topic === t ? "on" : ""}`} onClick={() => setTopic(t)}>{t}</button>
-                ))}
-              </div>
+            <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+              {TOPICS.map((t) => (
+                <button key={t} onClick={() => setTopic(t)} style={{ padding: ".35rem .8rem", borderRadius: 99, fontSize: ".68rem", fontFamily: "Montserrat, sans-serif", fontWeight: 700, cursor: "pointer", border: "1px solid", transition: "all .2s", borderColor: topic === t ? "#5dba2f" : "var(--border)", background: topic === t ? "rgba(93,186,47,.15)" : "transparent", color: topic === t ? "#5dba2f" : "var(--muted-foreground)" }}>{t}</button>
+              ))}
             </div>
-
-            {/* Search */}
             <div style={{ position: "relative", maxWidth: 320 }}>
-              <Search size={14} style={{ position: "absolute", left: ".65rem", top: "50%", transform: "translateY(-50%)", color: "var(--muted-foreground)" }} />
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search opportunities…"
-                style={{ paddingLeft: "2rem", paddingRight: ".75rem", paddingTop: ".45rem", paddingBottom: ".45rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".82rem", fontFamily: "inherit", width: "100%" }}
+              <Search size={13} style={{ position: "absolute", left: ".85rem", top: "50%", transform: "translateY(-50%)", color: "var(--muted-foreground)" }} />
+              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search opportunities…"
+                onFocus={() => setSearchFocus(true)} onBlur={() => setSearchFocus(false)}
+                style={{ paddingLeft: "2.3rem", paddingRight: "1rem", paddingTop: ".55rem", paddingBottom: ".55rem", border: `1px solid ${searchFocus ? "#5dba2f" : "var(--border)"}`, borderRadius: 10, fontSize: ".85rem", fontFamily: "Montserrat, sans-serif", width: "100%", background: "rgba(255,255,255,.05)", color: "var(--text-on-dark)", boxShadow: searchFocus ? "0 0 0 3px rgba(93,186,47,.15)" : "none", transition: "all .2s", outline: "none" }}
               />
             </div>
           </div>
 
-          {/* Loading skeletons */}
           {loading && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(290px,1fr))", gap: "1.1rem" }}>
-              {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {Array.from({length:6}).map((_,i) => <SkeletonCard key={i} />)}
             </div>
           )}
 
-          {/* Opportunities grid */}
           {!loading && filtered.length > 0 && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(290px,1fr))", gap: "1.1rem" }}>
-              {filtered.map((o) => (
-                <div key={o.id} className="k-card" style={{ display: "flex", flexDirection: "column" }}>
-                  {/* Header */}
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: ".75rem", flexWrap: "wrap" }}>
-                    <div style={{ minWidth: "150px", flex: "1 1 150px" }}>
-                      <span className={`k-tag ${TYPE_STYLES[o.type] || "t-grant"}`}>{o.type}</span>
-                      <div className="k-card-title" style={{ marginTop: ".5rem", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis" }}>{o.name || o.title}</div>
-                      <div style={{ fontSize: ".7rem", color: "var(--muted-foreground)", fontFamily: "var(--fm)", marginTop: ".2rem" }}>
-                        {o.provider || o.source}
-                      </div>
-                    </div>
-                    {o.amount && (
-                      <div style={{ textAlign: "right", flexShrink: 0, maxWidth: "100%", flex: "0 1 auto" }}>
-                        <div style={{ fontFamily: "var(--fs)", fontWeight: 800, color: "var(--green)", fontSize: ".85rem", background: "var(--green-pale)", padding: ".2rem .5rem", borderRadius: "6px" }}>
-                          {o.amount}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Description */}
-                  <div className="k-card-desc" style={{ flex: 1 }}>{o.desc}</div>
-
-                  {/* Topic tag */}
-                  <div style={{ marginTop: ".6rem" }}>
-                    <span style={{ fontSize: ".65rem", padding: ".15rem .5rem", background: "var(--cd)", color: "var(--muted-foreground)", borderRadius: 4, fontFamily: "var(--fm)", border: "1px solid var(--border)" }}>
-                      {o.topic}
-                    </span>
-                  </div>
-
-                  {/* Footer */}
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid var(--border)", paddingTop: "1rem", marginTop: "1rem", gap: ".5rem", flexWrap: "wrap" }}>
-                    <DeadlineBadge deadline={o.deadline} />
-                    <div style={{ display: "flex", gap: ".4rem" }}>
-                      <button
-                        className="btn-g"
-                        style={{ padding: ".4rem .8rem", fontSize: ".72rem", display: "flex", alignItems: "center", gap: ".3rem" }}
-                        title="Set reminder"
-                      >
-                        <Bell size={14} />
-                      </button>
-                      <a
-                        href={o.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-a"
-                        style={{ padding: ".4rem .9rem", fontSize: ".72rem", display: "flex", alignItems: "center", gap: ".3rem", textDecoration: "none" }}
-                      >
-                        Apply <ExternalLink size={12} />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filtered.map((o, i) => <OppCard key={o.id} o={o} index={i} />)}
             </div>
           )}
 
-          {/* Empty state */}
           {!loading && !error && filtered.length === 0 && (
-            <div style={{ textAlign: "center", padding: "4rem 2rem", color: "var(--muted-foreground)" }}>
-              <RefreshCw size={40} style={{ margin: "0 auto 1rem", opacity: 0.3, display: "block" }} />
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", marginBottom: ".5rem" }}>
-                No opportunities yet
-              </div>
-              <div style={{ fontSize: ".85rem", marginBottom: "1.5rem" }}>
-                The backend is fetching climate opportunities. Click Refresh to check.
-              </div>
-              <button onClick={refetch} className="btn-green" style={{ display: "inline-flex", alignItems: "center", gap: ".4rem" }}>
-                <RefreshCw size={14} /> Refresh Now
+            <div style={{ textAlign: "center", padding: "5rem 2rem" }}>
+              <Clock size={48} color="rgba(93,186,47,.3)" style={{ margin: "0 auto 1.25rem", display: "block" }} />
+              <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "1.1rem", color: "var(--text-on-dark)", marginBottom: ".5rem" }}>No opportunities yet</div>
+              <p style={{ color: "var(--muted-foreground)", marginBottom: "1.5rem" }}>Our AI is fetching climate opportunities. Check back soon.</p>
+              <button onClick={refetch} style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", padding: ".85rem 1.75rem", borderRadius: 10, background: "#5dba2f", color: "#fff", fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: ".85rem", border: "none", cursor: "pointer" }}>
+                Refresh Now <ArrowRight size={14} />
               </button>
             </div>
           )}
-
         </div>
       </section>
     </>

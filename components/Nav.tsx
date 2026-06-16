@@ -64,7 +64,7 @@ export function Nav() {
   const panelStyle: React.CSSProperties = isMobile
     ? {
         position: "fixed", inset: 0, zIndex: 400,
-        background: "#0d1a0f",
+        background: "#1a1f2c",
         display: "flex", flexDirection: "column",
         transform: open ? "translateX(0)" : "translateX(100%)",
         transition: "transform .45s cubic-bezier(0.4,0,0.2,1)",
@@ -73,7 +73,7 @@ export function Nav() {
     : {
         position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 400,
         width: 480, maxWidth: "90vw",
-        background: "#0d1a0f",
+        background: "#1a1f2c",
         display: "flex", flexDirection: "column",
         transform: open ? "translateX(0)" : "translateX(100%)",
         transition: "transform .45s cubic-bezier(0.4,0,0.2,1)",
@@ -185,7 +185,7 @@ export function Nav() {
                   fontWeight: 800,
                   fontSize: "clamp(2rem, 6vw, 3rem)",
                   lineHeight: 1.15,
-                  color: active ? "#059669" : "rgba(255,255,255,.92)",
+                  color: active ? "#5dba2f" : "rgba(255,255,255,.92)",
                   textDecoration: "none",
                   padding: ".5rem 0",
                   borderBottom: "1px solid rgba(255,255,255,.06)",
@@ -193,11 +193,11 @@ export function Nav() {
                   animationDelay: open ? `${i * 0.05}s` : "0s",
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.color = "#059669";
+                  (e.currentTarget as HTMLElement).style.color = "#5dba2f";
                   (e.currentTarget as HTMLElement).style.paddingLeft = "8px";
                 }}
                 onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.color = active ? "#059669" : "rgba(255,255,255,.92)";
+                  (e.currentTarget as HTMLElement).style.color = active ? "#5dba2f" : "rgba(255,255,255,.92)";
                   (e.currentTarget as HTMLElement).style.paddingLeft = "0";
                 }}
               >
@@ -208,7 +208,19 @@ export function Nav() {
         </nav>
 
         {/* ── Bottom padding ── */}
-        <div style={{ padding: "1.5rem 2rem 2rem", flexShrink: 0 }} />
+        <div style={{ padding: "1.5rem 2rem 2rem", flexShrink: 0, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={{ fontFamily: "Montserrat, sans-serif", fontSize: "10px", color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Kenya Youth Climate Hub</span>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            {[{l:"FB", h:"https://www.facebook.com/profile.php?id=61581202055325"},{l:"LI",h:"https://www.linkedin.com/company/kenya-youth-climate-hub/posts/?feedView=all"}].map((s)=>(
+              <a key={s.l} href={s.h} target="_blank" rel="noopener noreferrer"
+                style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "#5dba2f", fontFamily: "Montserrat, sans-serif", fontSize: "9px", fontWeight: 700, textDecoration: "none", transition: "all 0.2s" }}
+                onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.background="#5dba2f";(e.currentTarget as HTMLElement).style.color="#fff";}}
+                onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.background="rgba(255,255,255,0.08)";(e.currentTarget as HTMLElement).style.color="#5dba2f";}}>
+                {s.l}
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );
