@@ -92,7 +92,7 @@ function NewsCard({ article, index }: { article: any; index: number }) {
         <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: ".95rem", lineHeight: 1.4, color: "var(--text-on-dark)", marginBottom: ".6rem", flex: 1 }}>
           {article.title}
         </div>
-        <div style={{ fontSize: ".78rem", color: "var(--muted-foreground)", lineHeight: 1.65, marginBottom: "1.25rem", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+        <div style={{ fontSize: ".78rem", color: "var(--muted-foreground)", lineHeight: 1.65, marginBottom: "1.25rem", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any, overflow: "hidden" }}>
           {article.excerpt}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: ".4rem", fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "11px", letterSpacing: "0.08em", color: hov ? "#5dba2f" : "var(--muted-foreground)", transition: "color .2s", textTransform: "uppercase" }}>

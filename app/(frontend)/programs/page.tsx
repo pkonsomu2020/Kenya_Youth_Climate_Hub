@@ -149,7 +149,7 @@ function ProgramCard({ p }: { p: typeof programs[0] }) {
 
         {/* Short description — 2 lines max */}
         <p style={{ fontSize: ".85rem", color: "var(--muted-foreground)", lineHeight: 1.6, marginBottom: "1.25rem",
-          display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+          display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any, overflow: "hidden" }}>
           {p.description}
         </p>
 

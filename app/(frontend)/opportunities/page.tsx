@@ -86,7 +86,7 @@ function OppCard({ o, index }: { o: any; index: number }) {
       </div>
 
       {/* Title */}
-      <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "1rem", color: "var(--text-on-dark)", lineHeight: 1.4, marginBottom: ".35rem", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+      <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "1rem", color: "var(--text-on-dark)", lineHeight: 1.4, marginBottom: ".35rem", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any, overflow: "hidden" }}>
         {o.name || o.title}
       </div>
       <div style={{ fontSize: "11px", color: "var(--muted-foreground)", fontFamily: "Montserrat, sans-serif", fontWeight: 600, marginBottom: ".85rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
@@ -94,7 +94,7 @@ function OppCard({ o, index }: { o: any; index: number }) {
       </div>
 
       {/* Description */}
-      <p style={{ fontSize: ".82rem", color: "var(--muted-foreground)", lineHeight: 1.65, flex: 1, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden", marginBottom: ".85rem" }}>
+      <p style={{ fontSize: ".82rem", color: "var(--muted-foreground)", lineHeight: 1.65, flex: 1, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" as any, overflow: "hidden", marginBottom: ".85rem" }}>
         {o.desc}
       </p>
 

@@ -250,7 +250,7 @@ export default function ResourcesAdmin() {
                 </div>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".88rem", color: "var(--dark)", lineHeight: 1.3 }}>{tool.title}</div>
                 {(tool.use_case || tool.description) && (
-                  <div style={{ fontSize: ".75rem", color: "var(--muted-foreground)", marginTop: ".2rem", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                  <div style={{ fontSize: ".75rem", color: "var(--muted-foreground)", marginTop: ".2rem", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any }}>
                     {tool.use_case || tool.description}
                   </div>
                 )}

@@ -336,7 +336,7 @@ export default function EventsAdmin() {
                 </div>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".88rem", color: "var(--dark)", lineHeight: 1.3 }}>{event.title}</div>
                 {event.description && (
-                  <div style={{ fontSize: ".75rem", color: "var(--muted-foreground)", marginTop: ".2rem", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                  <div style={{ fontSize: ".75rem", color: "var(--muted-foreground)", marginTop: ".2rem", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any }}>
                     {event.description}
                   </div>
                 )}

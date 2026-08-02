@@ -106,7 +106,7 @@ function EventRow({ event, index }: { event: any; index: number }) {
         <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "1rem", color: "var(--text-on-dark)", lineHeight: 1.3, marginBottom: ".4rem" }}>{event.title}</div>
 
         {event.description && (
-          <div style={{ fontSize: ".82rem", color: "var(--muted-foreground)", lineHeight: 1.6, marginBottom: ".6rem", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{event.description}</div>
+          <div style={{ fontSize: ".82rem", color: "var(--muted-foreground)", lineHeight: 1.6, marginBottom: ".6rem", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any, overflow: "hidden" }}>{event.description}</div>
         )}
 
         <div style={{ display: "flex", gap: "1.25rem", flexWrap: "wrap", alignItems: "center" }}>

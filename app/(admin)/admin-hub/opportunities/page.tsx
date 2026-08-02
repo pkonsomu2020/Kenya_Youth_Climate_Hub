@@ -338,7 +338,7 @@ export default function OppsAdmin() {
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".88rem", color: "var(--dark)", lineHeight: 1.3 }}>{opp.name || opp.title}</div>
                 <div style={{ fontSize: ".72rem", color: "var(--muted-foreground)", marginTop: ".15rem" }}>{opp.provider}</div>
                 {opp.desc && (
-                  <div style={{ fontSize: ".75rem", color: "var(--muted-foreground)", marginTop: ".25rem", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                  <div style={{ fontSize: ".75rem", color: "var(--muted-foreground)", marginTop: ".25rem", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any }}>
                     {opp.desc}
                   </div>
                 )}
