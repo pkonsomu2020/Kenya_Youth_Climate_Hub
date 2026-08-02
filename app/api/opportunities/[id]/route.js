@@ -5,7 +5,7 @@ import supabase from '@/lib/db/supabase';
 const TABLE_MAP = {
   news: 'news_articles',
   events: 'events_live',
-  opportunities: 'opportunities_live',
+  opportunities: 'opportunities',
   library: 'library_resources'
 };
 

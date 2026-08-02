@@ -148,6 +148,10 @@ export default function Opportunities() {
   const headerInView = useInView(headerRef);
 
   const filtered = opportunities.filter((o) => {
+    // Defensive: never render an opportunity whose deadline has already
+    // passed, even if it slipped through upstream filtering.
+    const days = getDaysUntil(o.deadline);
+    if (days !== null && days < 0) return false;
     if (!search) return true;
     const q = search.toLowerCase();
     return o.name?.toLowerCase().includes(q) || o.provider?.toLowerCase().includes(q) || o.desc?.toLowerCase().includes(q);

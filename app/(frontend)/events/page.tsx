@@ -53,8 +53,8 @@ function EventRow({ event, index }: { event: any; index: number }) {
   const [hov, setHov] = useState(false);
   const { month, day } = getMonthDay(event.event_date);
   const days = getDaysUntil(event.event_date);
-  const isUrgent = days !== null && days <= 7;
-  const isSoon   = days !== null && days <= 30 && days > 7;
+  const isUrgent = days !== null && days >= 0 && days <= 7;
+  const isSoon   = days !== null && days > 7 && days <= 30;
   const accentColor = isUrgent ? "#dc2626" : isSoon ? "#d97706" : "#5dba2f";
 
   return (
@@ -163,6 +163,10 @@ export default function Events() {
   const headerInView = useInView(headerRef);
 
   const filtered = events.filter((e) => {
+    // Defensive: never render an event whose date has already passed,
+    // even if it slipped through upstream filtering.
+    const days = getDaysUntil(e.event_date);
+    if (days !== null && days < 0) return false;
     if (!search) return true;
     const q = search.toLowerCase();
     return e.title?.toLowerCase().includes(q) || e.location?.toLowerCase().includes(q) || e.description?.toLowerCase().includes(q);
