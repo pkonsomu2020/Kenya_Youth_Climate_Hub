@@ -1,116 +1,152 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { PageHeader } from "@/components/PageHeader";
-import { successStories } from "@/lib/data/successStories";
-import { Trees, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useRef, useEffect, useState } from "react";
+import { successStories } from "@/lib/data/successStories";
+import { NK, nkShadow, nkCard } from "@/lib/nkTheme";
+import { GrowHeading } from "@/components/GrowHeading";
+import { CTABand } from "@/components/CTABand";
 
-function useInView(ref: React.RefObject<Element | null>) {
-  const [v, setV] = useState(false);
+function useInView(ref: React.RefObject<Element | null>, threshold = 0.12) {
+  const [inView, setInView] = useState(false);
   useEffect(() => {
-    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setV(true); }, { threshold: 0.1 });
-    if (ref.current) o.observe(ref.current);
-    return () => o.disconnect();
-  }, [ref]);
-  return v;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setInView(true); obs.disconnect(); } }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [ref, threshold]);
+  return inView;
 }
 
-function StoryRow({ story, index }: { story: typeof successStories[0]; index: number }) {
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
-  const isEven = index % 2 === 0;
-
   return (
-    <div
-      ref={ref}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-        gap: "3rem",
-        alignItems: "center",
-        padding: "3rem",
-        background: "var(--card-dark)",
-        border: "1px solid var(--border)",
-        borderRadius: 20,
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(50px)",
-        transition: `opacity 0.8s ease ${index * 0.1}s, transform 0.8s ease ${index * 0.1}s`,
-      }}
-    >
-      {/* Photo */}
-      <div style={{ position: "relative", borderRadius: 14, overflow: "hidden", aspectRatio: "1/1", background: story.gradient }}>
-        {story.photo ? (
-          <img src={story.photo} alt={story.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
-        ) : (
-          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Trees size={64} color="rgba(255,255,255,0.3)" />
-          </div>
-        )}
-        {/* Gradient overlay */}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(15,23,42,.6) 0%, transparent 50%)" }} />
-        {/* Tag */}
-        <span style={{ position: "absolute", top: "1rem", left: "1rem", background: "#5dba2f", color: "#fff", fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: "9px", letterSpacing: "0.15em", textTransform: "uppercase", padding: "4px 10px", borderRadius: 4 }}>
-          {story.tag}
-        </span>
-      </div>
-
-      {/* Content */}
-      <div>
-        <div style={{ height: 3, width: 40, background: "#5dba2f", borderRadius: 2, marginBottom: "1.5rem" }} />
-        <h2 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "clamp(1.5rem,3vw,2.2rem)", color: "var(--text-on-dark)", letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: ".5rem" }}>
-          {story.company}
-        </h2>
-        <div style={{ fontFamily: "Montserrat, sans-serif", fontSize: "11px", fontWeight: 700, color: "#5dba2f", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "1.25rem" }}>
-          Founded by {story.name}
-        </div>
-        <p style={{ fontSize: "1rem", color: "var(--muted-foreground)", lineHeight: 1.8, marginBottom: "2rem" }}>
-          {story.fullText}
-        </p>
-        <Link
-          href={`/success-stories/${story.id}`}
-          style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#5dba2f", textDecoration: "none", borderBottom: "2px solid rgba(93,186,47,.3)", paddingBottom: "2px", transition: "border-color .2s" }}
-          onMouseEnter={e => (e.currentTarget.style.borderBottomColor = "#5dba2f")}
-          onMouseLeave={e => (e.currentTarget.style.borderBottomColor = "rgba(93,186,47,.3)")}
-        >
-          Read Full Story <ArrowRight size={14} />
-        </Link>
-      </div>
+    <div ref={ref} style={{ opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(20px)", transition: `opacity .8s ease ${delay}s, transform .8s ease ${delay}s` }}>
+      {children}
     </div>
   );
 }
 
+// Normalize the data file's inconsistent tag casing ("Renewal energy" typo,
+// "Renewable Energy") into one canonical label for filtering/display.
+function normalizeTag(tag: string): string {
+  if (/renew/i.test(tag)) return "Renewable Energy";
+  return tag;
+}
+
+const FILTERS = ["All", "Renewable Energy", "WASH"];
+
+const BADGE_COLORS = [
+  { bg: NK.green, fg: NK.navyDeep },
+  { bg: NK.ink, fg: NK.green },
+];
+
+function StoryCard({ story, index }: { story: typeof successStories[0]; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref);
+  const [hov, setHov] = useState(false);
+  const badge = normalizeTag(story.tag) === "WASH" ? { bg: NK.greenAlt, fg: NK.white } : BADGE_COLORS[index % 2];
+
+  return (
+    <Link
+      ref={ref as any}
+      href={`/success-stories/${story.id}`}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        ...nkCard, display: "flex", flexDirection: "column", textDecoration: "none", padding: "1.75rem",
+        opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(40px)",
+        transition: `opacity .5s ease ${index * 0.08}s, transform .5s ease ${index * 0.08}s, box-shadow .2s, translate .2s`,
+        boxShadow: hov ? nkShadow(NK.green) : nkShadow(NK.ink),
+        translate: hov ? "0 -4px" : "0 0",
+      }}
+    >
+      {story.photo && (
+        <div style={{ height: 160, overflow: "hidden", border: `2px solid ${NK.ink}`, marginBottom: "1.25rem" }}>
+          <img src={story.photo} alt={story.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
+        </div>
+      )}
+      <span style={{
+        alignSelf: "flex-start", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase",
+        padding: "5px 9px", background: badge.bg, color: badge.fg, marginBottom: "1rem",
+      }}>
+        {normalizeTag(story.tag)}
+      </span>
+      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.3rem", color: NK.ink, marginBottom: ".75rem" }}>{story.company}</div>
+      <p style={{ fontSize: ".9rem", color: NK.muted, lineHeight: 1.6, flex: 1, marginBottom: "1.25rem" }}>{story.excerpt}</p>
+      <div style={{ display: "flex", alignItems: "center", gap: ".75rem", paddingTop: "1rem", borderTop: "1px solid rgba(16,28,51,0.1)" }}>
+        <div style={{ width: 38, height: 38, background: NK.ink, color: NK.green, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".8rem", flexShrink: 0 }}>
+          {story.name.split(" ").map((n) => n[0]).join("")}
+        </div>
+        <div>
+          <div style={{ fontFamily: "var(--fm)", fontSize: 9, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.1em" }}>Founder</div>
+          <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".9rem", color: NK.ink }}>{story.name}</div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 export default function SuccessStoriesPage() {
-  const headerRef = useRef<HTMLDivElement>(null);
-  const headerInView = useInView(headerRef);
+  const [filter, setFilter] = useState("All");
+  const filtered = filter === "All" ? successStories : successStories.filter((s) => normalizeTag(s.tag) === filter);
 
   return (
     <>
-      <PageHeader
-        eyebrow="YCIC Beneficiaries"
-        title={<>Success <span style={{ color: "#5dba2f" }}>Stories</span></>}
-        subtitle="Meet the young Kenyan innovators who turned their climate ideas into real impact."
-      />
-
-      <section className="py-32 px-6 md:px-16" style={{ background: "var(--section-dark)" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div
-            ref={headerRef}
-            style={{ marginBottom: "4rem", opacity: headerInView ? 1 : 0, transform: headerInView ? "translateY(0)" : "translateY(30px)", transition: "opacity 0.8s ease, transform 0.8s ease" }}
-          >
-            <span style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "11px", letterSpacing: "0.25em", textTransform: "uppercase", color: "#5dba2f" }}>Impact Stories</span>
-            <h2 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "clamp(2rem,4vw,3.5rem)", color: "var(--text-on-dark)", letterSpacing: "-0.03em", lineHeight: 1.05, marginTop: "1rem" }}>
-              YOUNG KENYANS <span style={{ color: "#5dba2f" }}>LEADING</span><br />CLIMATE ACTION
-            </h2>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-            {successStories.map((story, idx) => (
-              <StoryRow key={story.id} story={story} index={idx} />
-            ))}
-          </div>
+      {/* ── HERO ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
+          <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>
+            Featured
+          </span>
+          <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.6vw,86px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.02, margin: 0 }}>
+            Climate startup <span style={{ color: NK.green }}>stories.</span>
+          </GrowHeading>
+          <p style={{ fontFamily: "var(--fb)", fontSize: "1.25rem", color: NK.muted, lineHeight: 1.7, marginTop: "1.5rem", maxWidth: 660 }}>
+            Founders backed through the Youth Climate Innovation Challenge, turning Kenyan climate challenges into working businesses.
+          </p>
         </div>
       </section>
+
+      {/* ── FILTER + GRID ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "1.5rem 2.5rem 5.5rem" }}>
+          <Reveal>
+            <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap", marginBottom: "2rem" }}>
+              {FILTERS.map((f) => {
+                const active = filter === f;
+                return (
+                  <button
+                    key={f}
+                    onClick={() => setFilter(f)}
+                    style={{
+                      padding: "9px 18px", fontFamily: "var(--fs)", fontWeight: 600, fontSize: 13,
+                      border: `2px solid ${active ? NK.green : NK.ink}`,
+                      background: active ? NK.green : "transparent",
+                      color: active ? NK.navyDeep : NK.ink,
+                      cursor: "pointer", transition: "all .2s",
+                    }}
+                  >
+                    {f}
+                  </button>
+                );
+              })}
+            </div>
+          </Reveal>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem" }} className="nk-grid-3">
+            {filtered.map((s, i) => <StoryCard key={s.id} story={s} index={i} />)}
+          </div>
+
+          {filtered.length === 0 && (
+            <div style={{ textAlign: "center", padding: "4rem 2rem", color: NK.muted, fontFamily: "var(--fb)" }}>
+              No stories in this category yet.
+            </div>
+          )}
+        </div>
+      </section>
+
+      <CTABand title="Your solution could be next." buttonLabel="Apply to the challenge →" href="/opportunities" />
     </>
   );
 }

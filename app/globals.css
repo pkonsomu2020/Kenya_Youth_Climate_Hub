@@ -1057,8 +1057,14 @@ body.nav-open .ai-fab { opacity:0; pointer-events:none; transform:scale(0.8); }
 
 /* ───────── RESPONSIVE ───────── */
 
-/* ── Prevent horizontal overflow on all screens ── */
-html, body { overflow-x: hidden; max-width: 100vw; }
+/* ── Prevent horizontal overflow on all screens ──
+   NOTE: deliberately NOT setting overflow-x on html/body — per the CSS
+   spec, setting overflow-x without overflow-y implicitly forces
+   overflow-y:auto too, turning body into its own scroll container and
+   breaking position:sticky for every descendant (this is what silently
+   broke the sticky nav). max-width alone still prevents the page from
+   growing wider than the viewport. */
+html, body { max-width: 100vw; }
 * { box-sizing: border-box; }
 
 @media (max-width: 1024px) {
@@ -1173,4 +1179,88 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 @keyframes spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   KYCH v2 — ported from NEW_KYCH design (brutalist: hard
+   corners, offset shadows, navy/green/cream). Font stays
+   Montserrat (var(--fs)/--fb/--fm)) per instruction.
+   ═══════════════════════════════════════════════════════════ */
+
+/* Scroll-reveal used by redesigned pages — same fade+rise+clip
+   effect as NEW_KYCH's `data-reveal`. Observed by ScrollReveal.tsx
+   alongside the existing .animate-on-scroll class. */
+.nk-reveal {
+  opacity: 0;
+  transform: translateY(18px) scale(0.995);
+  clip-path: inset(0 0 22% 0);
+  transition: opacity 0.8s cubic-bezier(.16,.84,.3,1),
+              transform 0.8s cubic-bezier(.16,.84,.3,1),
+              clip-path 0.9s cubic-bezier(.16,.84,.3,1);
+}
+.nk-reveal.visible {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0 0);
+}
+
+/* Partner "split-flap" board (Home page) */
+@keyframes nkFlapIn {
+  from { transform: translateY(-104%) rotateX(38deg); opacity: 0; }
+  to   { transform: translateY(0) rotateX(0); opacity: 1; }
+}
+@keyframes nkBarFill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* Hero rotating word (Home page) */
+@keyframes nkRollIn {
+  from { transform: translateY(108%); }
+  to   { transform: translateY(0); }
+}
+
+/* CTA "sun" toggle sway (Home page) */
+@keyframes nkSunSway {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(4deg); }
+}
+
+/* Partners marquee — continuous slow scroll, loops seamlessly since the
+   track renders the partner list twice and shifts exactly by half its width. */
+@keyframes nkPartnerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nk-reveal { transition-duration: 0.001s !important; }
+}
+
+/* Nav breakpoint — desktop links vs. hamburger */
+@media (max-width: 1040px) {
+  .nk-nav-links { display: none !important; }
+  .nk-nav-burger { display: flex !important; }
+}
+
+/* Footer grid collapses on tablet/mobile */
+@media (max-width: 980px) {
+  .nk-footer-grid { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 640px) {
+  .nk-footer-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Shared redesign grid breakpoints (hero, 2-col sections, 3/4-col card grids) */
+@media (max-width: 980px) {
+  .nk-hero-grid { grid-template-columns: 1fr !important; }
+  .nk-hero-visual { display: none !important; }
+  .nk-2col { grid-template-columns: 1fr !important; }
+  .nk-grid-3 { grid-template-columns: 1fr 1fr !important; }
+  .nk-grid-4 { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 680px) {
+  .nk-grid-3 { grid-template-columns: 1fr !important; }
+  .nk-grid-4 { grid-template-columns: 1fr !important; }
+  .nk-2col-tight { grid-template-columns: 1fr !important; }
 }

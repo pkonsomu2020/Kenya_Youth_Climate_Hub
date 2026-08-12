@@ -4,11 +4,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const params = await searchParams;
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", alignItems: "center", justifyContent: "center", background: "var(--light)", padding: "1.5rem" }}>
+    <div className="ah-login" style={{ display: "flex", minHeight: "100vh", alignItems: "center", justifyContent: "center", background: "var(--light)", padding: "1.5rem" }}>
       <div className="ah-panel" style={{ width: "100%", maxWidth: 400 }}>
         <div style={{ textAlign: "center", marginBottom: "2rem" }}>
           <img src="/kych_logo.png" alt="KYCH Logo" style={{ height: "110px", width: "auto", margin: "0 auto 1rem" }} />
-          <h1 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.5rem", color: "var(--dark)" }}>Admin Login</h1>
+          <h1 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.5rem", color: "var(--dark)", textTransform: "uppercase" }}>Admin Login</h1>
           <p style={{ fontSize: ".88rem", color: "var(--muted-foreground)", marginTop: ".25rem" }}>Secure access to the KYCH CMS</p>
         </div>
 

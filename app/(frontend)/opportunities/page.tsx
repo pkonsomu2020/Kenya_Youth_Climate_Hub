@@ -1,157 +1,121 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { PageHeader } from "@/components/PageHeader";
 import { useOpportunities } from "@/lib/useOpportunities";
-import { Clock, ExternalLink, Search, AlertCircle, ArrowRight, Bell } from "lucide-react";
+import { Clock, Search, ArrowRight } from "lucide-react";
+import { NK, nkShadow, nkCard, nkBadgeForKey } from "@/lib/nkTheme";
+import { GrowHeading } from "@/components/GrowHeading";
+import { CTABand } from "@/components/CTABand";
 
-const TYPES  = ["All", "Grant", "Fellowship", "Internship", "Competition", "Job", "Accelerator"];
+const TYPES = ["All", "Grant", "Fellowship", "Internship", "Competition", "Job", "Accelerator"];
 const TOPICS = ["All", "Energy", "Water", "Agriculture", "Policy", "Finance", "Innovation", "Resilience", "Advocacy", "Waste"];
 
-const TYPE_COLORS: Record<string, string> = {
-  Grant: "#5dba2f", Fellowship: "#047857", Internship: "#10B981",
-  Competition: "#34D399", Job: "#065F46", Accelerator: "#5dba2f",
-};
+function useInView(ref: React.RefObject<Element | null>, threshold = 0.1) {
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); o.disconnect(); } }, { threshold });
+    if (ref.current) o.observe(ref.current);
+    return () => o.disconnect();
+  }, [ref, threshold]);
+  return v;
+}
 
 function parseDeadline(str: string | null): Date | null {
   if (!str || str === "Open" || str === "Rolling") return null;
   const d = new Date(str);
   if (!isNaN(d.getTime())) return d;
-  return new Date(str.replace(/(\d+)(st|nd|rd|th)/gi, "$1"));
+  const d2 = new Date(str.replace(/(\d+)(st|nd|rd|th)/gi, "$1"));
+  return isNaN(d2.getTime()) ? null : d2;
 }
 function getDaysUntil(s: string | null): number | null {
   const d = parseDeadline(s);
-  if (!d || isNaN(d.getTime())) return null;
-  const t = new Date(); t.setHours(0,0,0,0);
+  if (!d) return null;
+  const t = new Date(); t.setHours(0, 0, 0, 0);
   return Math.ceil((d.getTime() - t.getTime()) / 86400000);
 }
-
-function DeadlineBadge({ deadline }: { deadline: string | null }) {
-  if (!deadline || deadline === "Open" || deadline === "Rolling") {
-    return <span style={{ fontSize: "11px", fontFamily: "Montserrat, sans-serif", fontWeight: 700, color: "#5dba2f", display: "flex", alignItems: "center", gap: ".3rem" }}><Clock size={12} /> Open / Rolling</span>;
-  }
-  const days = getDaysUntil(deadline);
-  if (days !== null && days < 0) return null;
-  if (days !== null && days <= 7) return <span style={{ fontSize: "11px", fontFamily: "Montserrat, sans-serif", fontWeight: 700, color: "#dc2626", display: "flex", alignItems: "center", gap: ".3rem" }}><AlertCircle size={12} />{days === 0 ? "Closes TODAY" : `Closes in ${days}d`}</span>;
-  if (days !== null && days <= 30) return <span style={{ fontSize: "11px", fontFamily: "Montserrat, sans-serif", fontWeight: 700, color: "#d97706", display: "flex", alignItems: "center", gap: ".3rem" }}><Clock size={12} />Closes: {deadline}</span>;
-  return <span style={{ fontSize: "11px", fontFamily: "Montserrat, sans-serif", fontWeight: 600, color: "#5dba2f", display: "flex", alignItems: "center", gap: ".3rem" }}><Clock size={12} />Closes: {deadline}</span>;
+function ctaLabel(type: string): string {
+  return type === "Grant" ? "Apply now →" : "View details →";
 }
 
-function useInView(ref: React.RefObject<Element | null>) {
-  const [v, setV] = useState(false);
-  useEffect(() => {
-    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setV(true); }, { threshold: 0.05 });
-    if (ref.current) o.observe(ref.current);
-    return () => o.disconnect();
-  }, [ref]);
-  return v;
+function FilterPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: "8px 16px", fontFamily: "var(--fs)", fontWeight: 600, fontSize: 12.5,
+        border: `2px solid ${active ? NK.green : NK.ink}`,
+        background: active ? NK.green : "transparent",
+        color: active ? NK.navyDeep : NK.ink,
+        cursor: "pointer", transition: "all .2s",
+      }}
+    >
+      {label}
+    </button>
+  );
 }
 
 function OppCard({ o, index }: { o: any; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
   const [hov, setHov] = useState(false);
+  const badge = nkBadgeForKey(o.type || "Opportunity");
   const days = getDaysUntil(o.deadline);
-  const isUrgent = days !== null && days <= 7;
-  const isSoon   = days !== null && days <= 30 && days > 7;
-  const accentColor = isUrgent ? "#dc2626" : isSoon ? "#d97706" : (TYPE_COLORS[o.type] || "#5dba2f");
+
+  let deadlineText: string;
+  if (!o.deadline || o.deadline === "Open" || o.deadline === "Rolling") deadlineText = "Open / Rolling";
+  else if (days !== null && days >= 0 && days <= 7) deadlineText = days === 0 ? "Closes TODAY" : `Closes in ${days}d`;
+  else deadlineText = `Closes: ${o.deadline}`;
 
   return (
-    <div
-      ref={ref}
+    <a
+      ref={ref as any}
+      href={o.url} target="_blank" rel="noopener noreferrer"
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
-        background: hov ? "rgba(93,186,47,.03)" : "var(--card-dark)",
-        border: `1px solid ${hov ? "#5dba2f" : "var(--border)"}`,
-        borderTop: `3px solid ${accentColor}`,
-        borderRadius: 16, padding: "1.75rem",
-        display: "flex", flexDirection: "column",
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(40px)",
-        transition: `opacity 0.6s ease ${index * 0.07}s, transform 0.6s ease ${index * 0.07}s, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease`,
-        boxShadow: hov ? `0 20px 40px -10px ${accentColor}25` : "none",
+        ...nkCard, display: "flex", flexDirection: "column", padding: "1.75rem", textDecoration: "none",
+        opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(30px)",
+        transition: `opacity .5s ease ${index * 0.06}s, transform .5s ease ${index * 0.06}s, box-shadow .2s, translate .2s`,
+        boxShadow: hov ? nkShadow(NK.green) : nkShadow(NK.ink),
+        translate: hov ? "0 -4px" : "0 0",
       }}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
     >
-      {/* Type + amount row */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: ".75rem", marginBottom: "1rem", flexWrap: "wrap" }}>
-        <span style={{ fontSize: "9px", padding: "4px 10px", background: TYPE_COLORS[o.type] || "#5dba2f", color: "#fff", borderRadius: 4, fontFamily: "Montserrat, sans-serif", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: ".75rem", marginBottom: "1.1rem" }}>
+        <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 9px", background: badge.bg, color: badge.fg }}>
           {o.type}
         </span>
         {o.amount && (
-          <span style={{ fontSize: "11px", fontFamily: "Montserrat, sans-serif", fontWeight: 800, color: "#5dba2f", background: "rgba(93,186,47,.1)", border: "1px solid rgba(93,186,47,.2)", padding: "3px 10px", borderRadius: 6 }}>
-            {o.amount}
-          </span>
+          <span style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: 12.5, color: NK.greenAlt }}>{o.amount}</span>
         )}
       </div>
-
-      {/* Title */}
-      <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "1rem", color: "var(--text-on-dark)", lineHeight: 1.4, marginBottom: ".35rem", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any, overflow: "hidden" }}>
-        {o.name || o.title}
-      </div>
-      <div style={{ fontSize: "11px", color: "var(--muted-foreground)", fontFamily: "Montserrat, sans-serif", fontWeight: 600, marginBottom: ".85rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-        {o.provider || o.source}
-      </div>
-
-      {/* Description */}
-      <p style={{ fontSize: ".82rem", color: "var(--muted-foreground)", lineHeight: 1.65, flex: 1, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical" as any, overflow: "hidden", marginBottom: ".85rem" }}>
-        {o.desc}
-      </p>
-
-      {/* Topic tag */}
-      <div style={{ marginBottom: "1rem" }}>
-        <span style={{ fontSize: "9px", padding: "3px 9px", background: "rgba(255,255,255,.06)", color: "var(--muted-foreground)", borderRadius: 4, fontFamily: "Montserrat, sans-serif", fontWeight: 700, border: "1px solid var(--border)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-          {o.topic}
-        </span>
-      </div>
-
-      {/* Footer */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid var(--border)", paddingTop: "1rem", gap: ".5rem", flexWrap: "wrap" }}>
-        <DeadlineBadge deadline={o.deadline} />
-        <div style={{ display: "flex", gap: ".5rem" }}>
-          <button title="Remind me" style={{ width: 34, height: 34, borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--muted-foreground)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all .2s" }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5dba2f"; (e.currentTarget as HTMLElement).style.color = "#5dba2f"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLElement).style.color = "var(--muted-foreground)"; }}
-          ><Bell size={14} /></button>
-          <a href={o.url} target="_blank" rel="noopener noreferrer"
-            style={{ display: "flex", alignItems: "center", gap: ".35rem", padding: ".45rem 1rem", borderRadius: 8, background: "#5dba2f", color: "#fff", fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase", textDecoration: "none", transition: "background .2s" }}
-            onMouseEnter={e => (e.currentTarget.style.background = "#4aa324")}
-            onMouseLeave={e => (e.currentTarget.style.background = "#5dba2f")}
-          >
-            Apply <ExternalLink size={11} />
-          </a>
-        </div>
-      </div>
-    </div>
+      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", color: NK.ink, marginBottom: ".35rem", lineHeight: 1.25 }}>{o.name || o.title}</div>
+      <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: ".9rem" }}>{o.provider || o.source}</div>
+      <p style={{ fontSize: ".88rem", color: NK.muted, lineHeight: 1.6, flex: 1, marginBottom: "1.1rem" }}>{o.desc}</p>
+      <div style={{ fontFamily: "var(--fm)", fontSize: 11.5, color: NK.mutedLabel, marginBottom: "1rem" }}>{deadlineText}</div>
+      <span style={{ alignSelf: "flex-start", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 14, color: NK.ink, borderBottom: `2px solid ${NK.green}`, paddingBottom: 2 }}>
+        {ctaLabel(o.type)}
+      </span>
+    </a>
   );
 }
 
 function SkeletonCard() {
   return (
-    <div style={{ background: "var(--card-dark)", borderRadius: 16, padding: "1.75rem", border: "1px solid var(--border)", borderTop: "3px solid var(--border)", display: "flex", flexDirection: "column", gap: ".75rem" }}>
-      <div style={{ height: 20, borderRadius: 4, background: "rgba(255,255,255,.06)", width: "35%", animation: "shimmer 1.5s infinite" }} />
-      <div style={{ height: 16, borderRadius: 4, background: "rgba(255,255,255,.06)", animation: "shimmer 1.5s infinite" }} />
-      <div style={{ height: 16, borderRadius: 4, background: "rgba(255,255,255,.06)", width: "65%", animation: "shimmer 1.5s infinite" }} />
-      <div style={{ height: 13, borderRadius: 4, background: "rgba(255,255,255,.06)", animation: "shimmer 1.5s infinite" }} />
-      <div style={{ height: 13, borderRadius: 4, background: "rgba(255,255,255,.06)", width: "80%", animation: "shimmer 1.5s infinite" }} />
+    <div style={{ ...nkCard, boxShadow: nkShadow(NK.ink), padding: "1.75rem" }}>
+      <div style={{ height: 20, width: 70, background: "rgba(16,28,51,0.08)", marginBottom: "1.1rem" }} />
+      <div style={{ height: 20, background: "rgba(16,28,51,0.08)", marginBottom: 8 }} />
+      <div style={{ height: 12, width: "50%", background: "rgba(16,28,51,0.06)", marginBottom: 16 }} />
+      <div style={{ height: 14, background: "rgba(16,28,51,0.06)" }} />
     </div>
   );
 }
 
 export default function Opportunities() {
-  const [type, setType]   = useState("All");
+  const [type, setType] = useState("All");
   const [topic, setTopic] = useState("All");
   const [search, setSearch] = useState("");
-  const [searchFocus, setSearchFocus] = useState(false);
   const { opportunities, loading, error, refetch } = useOpportunities({ limit: 50, type, topic });
-  const headerRef = useRef<HTMLDivElement>(null);
-  const headerInView = useInView(headerRef);
 
   const filtered = opportunities.filter((o) => {
-    // Defensive: never render an opportunity whose deadline has already
-    // passed, even if it slipped through upstream filtering.
-    const days = getDaysUntil(o.deadline);
-    if (days !== null && days < 0) return false;
     if (!search) return true;
     const q = search.toLowerCase();
     return o.name?.toLowerCase().includes(q) || o.provider?.toLowerCase().includes(q) || o.desc?.toLowerCase().includes(q);
@@ -159,63 +123,66 @@ export default function Opportunities() {
 
   return (
     <>
-      <PageHeader
-        eyebrow="Live Board"
-        title={<>Funding & <span style={{ color: "#5dba2f" }}>Opportunities</span></>}
-        subtitle="Grants, fellowships, internships and competitions open to young Kenyans — AI-curated and updated every 12 hours."
-      />
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
+          <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>
+            Funding &amp; Opportunities
+          </span>
+          <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.6vw,86px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.02, margin: 0 }}>
+            Find your <span style={{ color: NK.green }}>next opportunity.</span>
+          </GrowHeading>
+          <p style={{ fontFamily: "var(--fb)", fontSize: "1.25rem", color: NK.muted, lineHeight: 1.7, marginTop: "1.5rem", maxWidth: 660 }}>
+            A live board of grants, fellowships, competitions and internships, with deadline alerts, matched to your climate ambitions.
+          </p>
+        </div>
+      </section>
 
-      <section className="py-20 px-6 md:px-16" style={{ background: "var(--section-dark)", minHeight: "60vh" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-
-          {/* Filters */}
-          <div
-            ref={headerRef}
-            style={{ marginBottom: "2.5rem", opacity: headerInView ? 1 : 0, transform: headerInView ? "translateY(0)" : "translateY(20px)", transition: "opacity 0.7s ease, transform 0.7s ease" }}
-          >
-            <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap", marginBottom: ".85rem" }}>
-              {TYPES.map((t) => (
-                <button key={t} onClick={() => setType(t)} style={{ padding: ".4rem .9rem", borderRadius: 99, fontSize: ".72rem", fontFamily: "Montserrat, sans-serif", fontWeight: 700, cursor: "pointer", border: "1px solid", transition: "all .2s", borderColor: type === t ? "#5dba2f" : "var(--border)", background: type === t ? "#5dba2f" : "transparent", color: type === t ? "#fff" : "var(--muted-foreground)" }}>{t}</button>
-              ))}
-            </div>
-            <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-              {TOPICS.map((t) => (
-                <button key={t} onClick={() => setTopic(t)} style={{ padding: ".35rem .8rem", borderRadius: 99, fontSize: ".68rem", fontFamily: "Montserrat, sans-serif", fontWeight: 700, cursor: "pointer", border: "1px solid", transition: "all .2s", borderColor: topic === t ? "#5dba2f" : "var(--border)", background: topic === t ? "rgba(93,186,47,.15)" : "transparent", color: topic === t ? "#5dba2f" : "var(--muted-foreground)" }}>{t}</button>
-              ))}
-            </div>
-            <div style={{ position: "relative", maxWidth: 320 }}>
-              <Search size={13} style={{ position: "absolute", left: ".85rem", top: "50%", transform: "translateY(-50%)", color: "var(--muted-foreground)" }} />
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search opportunities…"
-                onFocus={() => setSearchFocus(true)} onBlur={() => setSearchFocus(false)}
-                style={{ paddingLeft: "2.3rem", paddingRight: "1rem", paddingTop: ".55rem", paddingBottom: ".55rem", border: `1px solid ${searchFocus ? "#5dba2f" : "var(--border)"}`, borderRadius: 10, fontSize: ".85rem", fontFamily: "Montserrat, sans-serif", width: "100%", background: "rgba(255,255,255,.05)", color: "var(--text-on-dark)", boxShadow: searchFocus ? "0 0 0 3px rgba(93,186,47,.15)" : "none", transition: "all .2s", outline: "none" }}
-              />
-            </div>
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "1.5rem 2.5rem 5.5rem" }}>
+          <div style={{ marginBottom: ".85rem", display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
+            {TYPES.map((t) => <FilterPill key={t} label={t} active={type === t} onClick={() => setType(t)} />)}
+          </div>
+          <div style={{ marginBottom: "1rem", display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
+            {TOPICS.map((t) => <FilterPill key={t} label={t} active={topic === t} onClick={() => setTopic(t)} />)}
+          </div>
+          <div style={{ position: "relative", maxWidth: 320, marginBottom: "2rem" }}>
+            <Search size={14} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: NK.mutedLabel }} />
+            <input
+              value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search opportunities…"
+              style={{ width: "100%", padding: "10px 12px 10px 34px", border: `2px solid ${NK.ink}`, fontFamily: "var(--fb)", fontSize: 13.5, outline: "none", background: NK.white, color: NK.ink }}
+            />
           </div>
 
           {loading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {Array.from({length:6}).map((_,i) => <SkeletonCard key={i} />)}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
+              {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
             </div>
           )}
 
           {!loading && filtered.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
               {filtered.map((o, i) => <OppCard key={o.id} o={o} index={i} />)}
             </div>
           )}
 
           {!loading && !error && filtered.length === 0 && (
-            <div style={{ textAlign: "center", padding: "5rem 2rem" }}>
-              <Clock size={48} color="rgba(93,186,47,.3)" style={{ margin: "0 auto 1.25rem", display: "block" }} />
-              <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "1.1rem", color: "var(--text-on-dark)", marginBottom: ".5rem" }}>No opportunities yet</div>
-              <p style={{ color: "var(--muted-foreground)", marginBottom: "1.5rem" }}>Our AI is fetching climate opportunities. Check back soon.</p>
-              <button onClick={refetch} style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", padding: ".85rem 1.75rem", borderRadius: 10, background: "#5dba2f", color: "#fff", fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: ".85rem", border: "none", cursor: "pointer" }}>
+            <div style={{ textAlign: "center", padding: "5rem 2rem", border: `2px solid ${NK.ink}` }}>
+              <Clock size={40} color={NK.green} style={{ margin: "0 auto 1rem", display: "block" }} />
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.ink, marginBottom: ".5rem" }}>No opportunities yet</div>
+              <p style={{ color: NK.muted, marginBottom: "1.5rem" }}>Our AI is fetching climate opportunities. Check back soon.</p>
+              <button onClick={refetch} style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", padding: "12px 24px", background: NK.green, color: NK.navyDeep, fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, border: "none", cursor: "pointer" }}>
                 Refresh Now <ArrowRight size={14} />
               </button>
             </div>
           )}
+
+          {error && (
+            <div style={{ textAlign: "center", padding: "3rem 2rem", color: NK.muted, fontFamily: "var(--fb)" }}>{error}</div>
+          )}
         </div>
       </section>
+
+      <CTABand title="Never miss a deadline." buttonLabel="Subscribe for alerts →" href="mailto:info@kenyayouthclimatehub.org" external />
     </>
   );
 }

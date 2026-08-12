@@ -1,244 +1,214 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { PageHeader } from "@/components/PageHeader";
-import { Trophy, Leaf, ArrowRight, Calendar, Users, MapPin, CheckCircle2 } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
+import { Trophy, Leaf, Users } from "lucide-react";
+import { NK } from "@/lib/nkTheme";
+import { GrowHeading } from "@/components/GrowHeading";
+import { CTABand } from "@/components/CTABand";
 
-// ── Program data ──────────────────────────────────────────────────────────────
-const programs = [
-  {
-    id: "ycic",
-    tag: "FLAGSHIP PROGRAM",
-    tagColor: "#059669",
-    title: "Youth Climate Innovation Challenge",
-    short: "YCIC",
-    icon: Trophy,
-    iconBg: "linear-gradient(135deg,#059669,#10B981)",
-    status: "Applications Closed",
-    statusColor: "#dc2626",
-    statusBg: "#fef2f2",
-    year: "2025",
-    location: "Kenya (Nationwide)",
-    participants: "300 Young Innovators",
-    deadline: "June 9, 2025",
-    prize: "KES 500,000",
-    description: "The Youth Climate Innovation Challenge (YCIC) empowers young Kenyans to develop climate solutions for informal settlements — focusing on creating sustainable and resilient communities through innovative approaches.",
-    highlights: [
-      "Seed funding up to KES 500,000",
-      "6 months expert mentorship",
-      "National incubation support",
-      "Showcase at Climate Innovation Summit, Nairobi",
-    ],
-    focusAreas: ["Water, Sanitation & Hygiene (WASH)", "Flood Resilience & Urban Drainage", "Renewable Energy & Sustainable Infrastructure"],
-    gradient: "linear-gradient(135deg, #059669 0%, #047857 100%)",
-    href: "/programs/ycic",
-  },
-  {
-    id: "begreen",
-    tag: "ACTIVE PROGRAM",
-    tagColor: "#059669",
-    title: "BeGreen Africa Initiative",
-    short: "BeGreen",
-    icon: Leaf,
-    iconBg: "linear-gradient(135deg,#059669,#10B981)",
-    status: "Active — Kenya Pilot",
-    statusColor: "#059669",
-    statusBg: "#ecfdf5",
-    year: "2023–2025",
-    location: "Nairobi, Kisumu, Mombasa",
-    participants: "2,264 Youth Applied",
-    deadline: "Open",
-    prize: "USD 5,000",
-    description: "A multi-partner green entrepreneurship programme targeting youth aged 18–35 in Kenya's waste management sector — 846 jobs created, ~USD 2.7M revenue generated, and 29.9M kgs of waste managed.",
-    highlights: [
-      "Seed funding up to USD 5,000",
-      "Business & green entrepreneurship training",
-      "Incubation & structured mentorship",
-      "Acceleration funds (USD 1,000–3,000)",
-    ],
-    focusAreas: ["Plastic Waste Management", "Organic Waste & Biogas", "E-Waste Enterprises"],
-    gradient: "linear-gradient(135deg, #059669 0%, #047857 100%)",
-    href: "/programs/begreen",
-  },
-];
+function useInView(ref: React.RefObject<Element | null>, threshold = 0.12) {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setInView(true); obs.disconnect(); } }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [ref, threshold]);
+  return inView;
+}
 
-// ── Program Card ──────────────────────────────────────────────────────────────
-function ProgramCard({ p }: { p: typeof programs[0] }) {
-  const [hovered, setHovered] = useState(false);
-  const Icon = p.icon;
-
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref);
   return (
-    <div
-      style={{
-        background: "var(--card)",
-        border: "1px solid var(--border)",
-        borderRadius: 20,
-        overflow: "hidden",
-        transition: "transform .3s, box-shadow .3s",
-        transform: hovered ? "translateY(-6px)" : "translateY(0)",
-        boxShadow: hovered ? "0 20px 50px rgba(0,0,0,.12)" : "0 2px 12px rgba(0,0,0,.04)",
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Card hero banner */}
-      <div style={{
-        background: p.gradient,
-        padding: "2.5rem 2rem 2rem",
-        position: "relative",
-        overflow: "hidden",
-        minHeight: 180,
-      }}>
-        {/* Decorative circles */}
-        <div style={{ position: "absolute", right: -40, top: -40, width: 180, height: 180, borderRadius: "50%", background: "rgba(255,255,255,.06)" }} />
-        <div style={{ position: "absolute", right: 40, bottom: -60, width: 120, height: 120, borderRadius: "50%", background: "rgba(255,255,255,.04)" }} />
-
-        <div style={{ position: "relative", zIndex: 1 }}>
-          {/* Tag */}
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: ".4rem",
-            background: "rgba(255,255,255,.15)", border: "1px solid rgba(255,255,255,.2)",
-            borderRadius: 99, padding: ".25rem .75rem",
-            fontSize: ".62rem", fontWeight: 700, fontFamily: "var(--fm)",
-            letterSpacing: ".1em", color: "#fff", textTransform: "uppercase",
-            marginBottom: "1rem",
-          }}>
-            {p.tag}
-          </div>
-
-          {/* Icon + title */}
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "1rem" }}>
-            <div style={{
-              width: 52, height: 52, borderRadius: 14,
-              background: "rgba(255,255,255,.15)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              flexShrink: 0,
-            }}>
-              <Icon size={26} color="#fff" />
-            </div>
-            <div>
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.35rem", color: "#fff", lineHeight: 1.2, letterSpacing: "-.02em" }}>
-                {p.title}
-              </div>
-              <div style={{ fontSize: ".75rem", color: "rgba(255,255,255,.65)", marginTop: ".3rem", fontFamily: "var(--fm)" }}>
-                {p.year} · {p.location}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Card body */}
-      <div style={{ padding: "1.5rem 2rem 1.75rem" }}>
-
-        {/* Status + meta row */}
-        <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap", marginBottom: "1rem", alignItems: "center" }}>
-          <span style={{
-            fontSize: ".68rem", fontWeight: 700, fontFamily: "var(--fm)",
-            padding: ".25rem .65rem", borderRadius: 99,
-            background: p.statusBg, color: p.statusColor,
-            border: `1px solid ${p.statusColor}30`,
-          }}>
-            {p.status}
-          </span>
-          <span style={{ fontSize: ".72rem", color: "var(--muted-foreground)", display: "flex", alignItems: "center", gap: ".3rem", fontFamily: "var(--fm)" }}>
-            <Users size={12} /> {p.participants}
-          </span>
-        </div>
-
-        {/* Short description — 2 lines max */}
-        <p style={{ fontSize: ".85rem", color: "var(--muted-foreground)", lineHeight: 1.6, marginBottom: "1.25rem",
-          display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any, overflow: "hidden" }}>
-          {p.description}
-        </p>
-
-        {/* Focus area tags */}
-        <div style={{ display: "flex", gap: ".35rem", flexWrap: "wrap", marginBottom: "1.5rem" }}>
-          {p.focusAreas.map((f) => (
-            <span key={f} style={{
-              fontSize: ".65rem", padding: ".2rem .55rem", borderRadius: 99,
-              background: "var(--cd)", color: "var(--dark)",
-              border: "1px solid var(--border)", fontFamily: "var(--fm)",
-            }}>
-              {f}
-            </span>
-          ))}
-        </div>
-
-        {/* Prize + CTA */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "1.1rem", borderTop: "1px solid var(--border)", gap: "1rem", flexWrap: "wrap" }}>
-          <div>
-            <div style={{ fontSize: ".62rem", color: "var(--muted-foreground)", fontFamily: "var(--fm)", textTransform: "uppercase", letterSpacing: ".06em" }}>
-              {p.id === "begreen" ? "Seed Funding" : "Prize Pool"}
-            </div>
-            <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.2rem", color: "#059669", letterSpacing: "-.02em" }}>{p.prize}</div>
-          </div>
-
-          <Link href={p.href as any} style={{
-            display: "inline-flex", alignItems: "center", gap: ".4rem",
-            padding: ".55rem 1.1rem", borderRadius: 100,
-            background: "#059669", color: "#fff",
-            fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".78rem",
-            textDecoration: "none", transition: "background .2s",
-          }}
-            onMouseEnter={e => (e.currentTarget.style.background = "#047857")}
-            onMouseLeave={e => (e.currentTarget.style.background = "#059669")}
-          >
-            View Program <ArrowRight size={13} />
-          </Link>
-        </div>
-      </div>
+    <div ref={ref} style={{ opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(20px)", transition: `opacity .8s ease ${delay}s, transform .8s ease ${delay}s` }}>
+      {children}
     </div>
   );
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+function Eyebrow({ children, color = NK.greenAlt }: { children: React.ReactNode; color?: string }) {
+  return (
+    <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color, marginBottom: "1rem" }}>
+      {children}
+    </span>
+  );
+}
+
+const PROGRAMS = [
+  {
+    id: "ycic",
+    tag: "Flagship program",
+    icon: Trophy,
+    title: "Youth Climate Innovation Challenge",
+    status: "Applications Closed",
+    year: "2025",
+    location: "Kenya (Nationwide)",
+    participants: "300 Young Innovators",
+    prize: "KES 500,000",
+    prizeLabel: "Prize Pool",
+    description: "An incubator for youth-led green startups, from clean energy to waste tech, focused on solutions for informal settlements. Winners receive seed funding, six months of expert mentorship and a route to market.",
+    focusAreas: ["Water, Sanitation & Hygiene (WASH)", "Flood Resilience & Urban Drainage", "Renewable Energy & Sustainable Infrastructure"],
+    image: "/nk/sheria.jpg",
+    href: "/programs/ycic",
+  },
+  {
+    id: "begreen",
+    tag: "Active program",
+    icon: Leaf,
+    title: "BeGreen Africa Initiative",
+    status: "Active — Kenya Pilot",
+    year: "2023–2025",
+    location: "Nairobi, Kisumu, Mombasa",
+    participants: "2,264 Youth Applied",
+    prize: "USD 5,000",
+    prizeLabel: "Seed Funding",
+    description: "A multi-partner green entrepreneurship programme for youth aged 18–35 in Kenya's waste management sector — 846 jobs created, ~USD 2.7M revenue generated, and 29.9M kgs of waste managed.",
+    focusAreas: ["Plastic Waste Management", "Organic Waste & Biogas", "E-Waste Enterprises"],
+    image: "/nk/hero4.jpg",
+    href: "/programs/begreen",
+  },
+];
+
+const PILLARS = [
+  { title: "Youth Climate Leadership & Advocacy", desc: "Training Kenya's next climate negotiators, county advocates, and movement leaders to influence policy at every level." },
+  { title: "Climate Innovation & Entrepreneurship", desc: "Incubating youth-led green startups, from clean energy to waste tech, through the Youth Climate Innovation Challenge." },
+  { title: "Climate Finance & Opportunity Access", desc: "Connecting young Kenyans to grants, fellowships, competitions, and jobs that match their climate ambitions." },
+  { title: "Capacity Building & Knowledge", desc: "Equipping young people with the skills, data, and tools to lead climate action through trainings and digital resources." },
+  { title: "Partnerships & Ecosystem Building", desc: "Building bridges between youth, government, NGOs, development partners, and the private sector." },
+];
+
+function ProgramBanner({ p, index }: { p: typeof PROGRAMS[0]; index: number }) {
+  const [hov, setHov] = useState(false);
+  const Icon = p.icon;
+  return (
+    <Reveal delay={index * 0.1}>
+      <div style={{
+        background: NK.ink, color: NK.offWhiteOnDark,
+        display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: "3.5rem",
+        padding: "3rem", alignItems: "center",
+      }} className="nk-2col">
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: ".65rem", marginBottom: "1.25rem" }}>
+            <div style={{ width: 40, height: 40, background: NK.green, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <Icon size={20} color={NK.navyDeep} />
+            </div>
+            <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11.5, letterSpacing: "0.1em", textTransform: "uppercase", color: NK.green }}>{p.tag}</span>
+          </div>
+          <h2 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(28px,3.4vw,44px)", color: "#fff", lineHeight: 1.15, margin: "0 0 1rem" }}>{p.title}</h2>
+          <p style={{ fontFamily: "var(--fb)", fontSize: "1rem", color: NK.mutedOnDark, lineHeight: 1.7, marginBottom: "1.5rem" }}>{p.description}</p>
+
+          <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap", marginBottom: "1.5rem" }}>
+            {p.focusAreas.map((f) => (
+              <span key={f} style={{ fontSize: ".7rem", fontFamily: "var(--fm)", padding: "5px 10px", border: `1px solid ${NK.borderNavy}`, color: NK.mutedOnDark }}>{f}</span>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap", marginBottom: "1.75rem" }}>
+            <div>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 10, color: NK.mutedOnDark, textTransform: "uppercase", letterSpacing: "0.08em" }}>{p.prizeLabel}</div>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.3rem", color: NK.green }}>{p.prize}</div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: ".4rem", fontFamily: "var(--fm)", fontSize: ".8rem", color: NK.mutedOnDark }}>
+              <Users size={13} /> {p.participants}
+            </div>
+            <div style={{ fontFamily: "var(--fm)", fontSize: ".8rem", color: NK.mutedOnDark }}>{p.status}</div>
+          </div>
+
+          <Link
+            href={p.href as any}
+            onMouseEnter={() => setHov(true)}
+            onMouseLeave={() => setHov(false)}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: ".5rem",
+              padding: "14px 28px", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase",
+              background: hov ? NK.bg : NK.green, color: NK.navyDeep, textDecoration: "none", transition: "background .2s",
+            }}
+          >
+            View program →
+          </Link>
+        </div>
+        <div style={{ height: 300, overflow: "hidden" }}>
+          <img src={p.image} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        </div>
+      </div>
+    </Reveal>
+  );
+}
+
 export default function ProgramsPage() {
   return (
     <>
-      <PageHeader
-        eyebrow="KYCH Programs"
-        title={<>Our <span style={{ color: "#5dba2f" }}>Programs</span></>}
-        subtitle="Flagship initiatives empowering young Kenyans to develop climate solutions, build green skills, and lead community action."
-      />
-
-      <section className="sec">
-        <div className="sec-in">
-
-          {/* Stats bar */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-            gap: "1rem",
-            marginBottom: "3rem",
-            padding: "1.5rem 2rem",
-            background: "var(--cd)",
-            borderRadius: 16,
-            border: "1px solid var(--border)",
-          }}>
-            {[
-              ["2", "Active Programs"],
-              ["300+", "Youth Participants"],
-              ["KES 500K", "Prize Pool"],
-              ["47", "Counties Reached"],
-            ].map(([n, l]) => (
-              <div key={l} style={{ textAlign: "center" }}>
-                <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.5rem", color: "#059669", letterSpacing: "-.02em" }}>{n}</div>
-                <div style={{ fontSize: ".68rem", color: "var(--muted-foreground)", fontFamily: "var(--fm)", textTransform: "uppercase", letterSpacing: ".06em", marginTop: ".2rem" }}>{l}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Program cards grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "1.5rem" }}>
-            {programs.map((p) => (
-              <ProgramCard key={p.id} p={p} />
-            ))}
-          </div>
-
+      {/* ── HERO ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
+          <Eyebrow>Programs &amp; Challenges</Eyebrow>
+          <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.6vw,86px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.02, margin: 0 }}>
+            Programs that <span style={{ color: NK.green }}>build leaders.</span>
+          </GrowHeading>
+          <p style={{ fontFamily: "var(--fb)", fontSize: "1.25rem", color: NK.muted, lineHeight: 1.7, marginTop: "1.5rem", maxWidth: 660 }}>
+            Apply for incubators, mentorship programs and challenges designed to accelerate youth-led climate action across all 47 counties.
+          </p>
         </div>
       </section>
+
+      {/* ── PROGRAM BANNERS ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "1.5rem 2.5rem 5rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          {PROGRAMS.map((p, i) => <ProgramBanner key={p.id} p={p} index={i} />)}
+        </div>
+      </section>
+
+      {/* ── FIVE PILLARS ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "1.5rem 2.5rem 5rem" }}>
+          <Reveal>
+            <div style={{ marginBottom: "2.5rem" }}>
+              <Eyebrow>What We Do</Eyebrow>
+              <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
+                Five pillars of <span style={{ color: NK.green }}>climate action.</span>
+              </GrowHeading>
+              <p style={{ fontFamily: "var(--fb)", fontSize: "1rem", color: NK.muted, marginTop: ".75rem", maxWidth: 640 }}>
+                Focused strategic areas designed to accelerate climate action through youth-led innovation.
+              </p>
+            </div>
+          </Reveal>
+          <div>
+            {PILLARS.map((p, i) => (
+              <PillarRow key={p.title} p={p} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CTABand title="Build your climate solution with us." buttonLabel="View opportunities →" href="/opportunities" />
     </>
+  );
+}
+
+function PillarRow({ p, index }: { p: typeof PILLARS[0]; index: number }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: "flex", gap: "2rem", padding: "1.9rem 0", alignItems: "flex-start",
+        borderTop: `2px solid ${NK.ink}`,
+        borderBottom: index === PILLARS.length - 1 ? `2px solid ${NK.ink}` : "none",
+        background: hov ? NK.tintGreen : "transparent",
+        transition: "background .2s",
+        flexWrap: "wrap",
+      }}
+    >
+      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "2.75rem", color: NK.green, minWidth: 80, lineHeight: 1 }}>{String(index + 1).padStart(2, "0")}</div>
+      <div style={{ flex: 1, minWidth: 260 }}>
+        <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.4rem", color: NK.ink, marginBottom: ".5rem" }}>{p.title}</div>
+        <p style={{ fontSize: ".92rem", color: NK.muted, lineHeight: 1.65, margin: 0, maxWidth: 640 }}>{p.desc}</p>
+      </div>
+      <div style={{ fontFamily: "var(--fm)", fontSize: 11.5, color: NK.mutedLabel, alignSelf: "center", whiteSpace: "nowrap" }}>
+        PILLAR {String(index + 1).padStart(2, "0")} / 05
+      </div>
+    </div>
   );
 }

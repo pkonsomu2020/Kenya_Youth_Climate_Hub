@@ -1,962 +1,692 @@
 "use client";
 
-import Link from 'next/link';
-import { Newsletter } from "@/components/Newsletter";
-import { DollarSign, BookOpen, Trophy, Calendar, Leaf, Lightbulb, Handshake, Rocket, CalendarDays, Bot, Recycle, Sun, Sprout, Droplets, Trees, Globe, FileText, ExternalLink, ChevronLeft, ChevronRight, ArrowRight, CheckCircle, MapPin, Zap } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import { useState, useRef, useEffect, type CSSProperties } from "react";
+import Link from "next/link";
+import { useState, useRef, useEffect } from "react";
+import { DollarSign, Trophy, BookOpen, Rocket, CalendarDays, Bot, ArrowRight, ChevronLeft, ChevronRight, Sun } from "lucide-react";
 import { useNews } from "@/lib/useNews";
-import { useContent } from "@/lib/contentStore";
 import { successStories } from "@/lib/data/successStories";
-import { AnimatePresence, motion } from "framer-motion";
-import * as Icons from "lucide-react";
+import { NK, nkShadow, nkCard } from "@/lib/nkTheme";
+import { GrowHeading } from "@/components/GrowHeading";
 
-// ── Icon mapper ──────────────────────────────────────────────
-const iconMap: Record<string, LucideIcon> = {
-  Leaf, Lightbulb, DollarSign, BookOpen, Handshake, Rocket,
-  CalendarDays, Bot, Recycle, Sun, Sprout, Droplets, Trees,
-  Globe, FileText, Trophy, Zap,
-};
-const renderIcon = (iconName: string, size: number = 24) => {
-  const I = iconMap[iconName];
-  return I ? <I size={size} /> : null;
-};
-function renderNewsIcon(iconName: string, size = 48) {
-  const col = Icons as unknown as Record<string, LucideIcon>;
-  const I = col[iconName];
-  return I ? <I size={size} strokeWidth={1.5} /> : <Globe size={size} strokeWidth={1.5} />;
-}
-
-// ── Shared useInView hook ────────────────────────────────────
-function useInView(ref: React.RefObject<Element | null>, threshold = 0.15) {
+function useInView(ref: React.RefObject<Element | null>, threshold = 0.12) {
   const [inView, setInView] = useState(false);
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) setInView(true); },
-      { threshold }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setInView(true); obs.disconnect(); } }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
   }, [ref, threshold]);
   return inView;
 }
 
-// ── Hero slides (uses real hero images) ─────────────────────
-const heroSlides = [
-  {
-    id: 1,
-    subtitle: "Empowering youth, one climate solution at a time.",
-    title: (<>Welcome to <span style={{ color: "#5dba2f" }}>Kenya Youth</span><br /><span style={{ color: "#5dba2f" }}>Climate Hub</span></>),
-    desc: "Join a community of young innovators addressing climate challenges and building a sustainable future for Kenya.",
-    img: "/hero_1.png",
-  },
-  {
-    id: 2,
-    subtitle: "Climate Innovation & Entrepreneurship",
-    title: (<>Incubating <span style={{ color: "#5dba2f" }}>Green</span><br /><span style={{ color: "#5dba2f" }}>Startups</span></>),
-    desc: "Connecting young Kenyans to grants, fellowships, competitions, and jobs that match their climate ambitions.",
-    img: "/hero_2.png",
-  },
-  {
-    id: 3,
-    subtitle: "Youth Climate Leadership",
-    title: (<>Leading the <span style={{ color: "#5dba2f" }}>Change</span><br />Across Counties</>),
-    desc: "Training Kenya's next climate negotiators, county advocates, and movement leaders to influence policy at every level.",
-    img: "/hero_3.png",
-  },
-];
+// ── Data ──────────────────────────────────────────────────────
+const HERO_WORDS = ["climate innovators", "county changemakers", "green founders", "policy advocates"];
 
-// ── Partners data ────────────────────────────────────────────
-const partners = [
+const PARTNERS = [
   { name: "UNICEF", logo: "/PARTNERS/UNICEF_Logo.png" },
   { name: "Yoma", logo: "/PARTNERS/YOMA_Logo.png" },
   { name: "Generation Unlimited", logo: "/PARTNERS/Logo_Generation_Unlimited_0.png.jpg" },
   { name: "STEM Impact Center", logo: "/PARTNERS/STEM IMPACT_Logo.png" },
   { name: "Green Army Foundation", logo: "/PARTNERS/GREEN ARMY_Logo.jpg" },
-  { name: "Afosi", logo: "/PARTNERS/afosi_logo.png" },
   { name: "KCIC", logo: "/PARTNERS/KCIC_Logo.png" },
   { name: "Ministry of Environment", logo: "/PARTNERS/MIN_OF_ENVIRONMENT.jpg" },
+  { name: "Afosi", logo: "/PARTNERS/afosi_logo.png" },
 ];
 
-// ── Pillar programs (real images) ────────────────────────────
-const programs = [
-  {
-    num: "01", icon: "Leaf",
-    title: "Youth Climate Leadership & Advocacy",
-    desc: "Training Kenya's next climate negotiators, county advocates, and movement leaders to influence policy at every level.",
-    image: "/Pillar_IMAGES/Youth Climate Leadership & Advocacy.jpeg",
-  },
-  {
-    num: "02", icon: "Lightbulb",
-    title: "Climate Innovation & Entrepreneurship",
-    desc: "Incubating youth-led green startups — from clean energy to waste tech — through the Youth Climate Innovation Challenge.",
-    image: "/Pillar_IMAGES/Climate Innovation & Entrepreneurship.jpeg",
-  },
-  {
-    num: "03", icon: "DollarSign",
-    title: "Climate Finance & Opportunity Access",
-    desc: "Connecting young Kenyans to grants, fellowships, competitions, and jobs that match their climate ambitions.",
-    image: "/Pillar_IMAGES/Climate Finance & Opportunity Access.jpeg",
-  },
-  {
-    num: "04", icon: "BookOpen",
-    title: "Capacity Building & Knowledge",
-    desc: "Equipping young people with the skills, data, and tools to lead climate action through trainings and digital resources.",
-    image: "/Pillar_IMAGES/Capacity Building & Knowledge.jpeg",
-  },
-  {
-    num: "05", icon: "Handshake",
-    title: "Partnerships & Ecosystem Building",
-    desc: "Building bridges between youth, government, NGOs, development partners, and the private sector.",
-    image: "/Pillar_IMAGES/Partnerships & Ecosystem Building.jpeg",
-  },
+const PLATFORM_TOOLS = [
+  { num: "01", icon: BookOpen, label: "E-Library & Resource Hub", desc: "Reports, toolkits, policy briefs, and research papers. Save them to your dashboard.", cta: "Browse Library →", href: "/e-library" },
+  { num: "02", icon: DollarSign, label: "Funding & Opportunities", desc: "A live board of grants, fellowships, and internships with deadline alerts.", cta: "Find Funding →", href: "/opportunities" },
+  { num: "03", icon: Rocket, label: "Programs & Challenges", desc: "Apply for incubators like the Youth Climate Innovation Challenge and mentorship programs.", cta: "View Programs →", href: "/programs" },
+  { num: "04", icon: CalendarDays, label: "Events & Workshops", desc: "Register for bootcamps, policy dialogues, and webinars from KYCH and partners.", cta: "View Calendar →", href: "/events" },
+  { num: "05", icon: Bot, label: "Climate AI Assistant", desc: "A 24/7 AI guide trained on Kenya's climate data, opportunities and resources.", cta: "Ask AI Now →", href: null },
 ];
 
-// ── Platform features ────────────────────────────────────────
-const features = [
-  { icon: "BookOpen", num: "01", label: "E-Library & Resource Hub", desc: "Reports, toolkits, policy briefs, and research papers. Save them to your dashboard.", cta: "Browse Library", to: "/e-library" },
-  { icon: "DollarSign", num: "02", label: "Funding & Opportunities", desc: "A live board of grants, fellowships, and internships with deadline alerts.", cta: "Find Funding", to: "/opportunities" },
-  { icon: "Rocket", num: "03", label: "Programs & Challenges", desc: "Apply for incubators like the Youth Climate Innovation Challenge and mentorship programs.", cta: "View Programs", to: "/programs" },
-  { icon: "CalendarDays", num: "04", label: "Events & Workshops", desc: "Register for bootcamps, policy dialogues, and webinars from KYCH and partners.", cta: "View Calendar", to: "/events" },
-  { icon: "Bot", num: "05", label: "Climate AI Assistant", desc: "A 24/7 AI guide trained on Kenya's climate data, opportunities & resources.", cta: "Ask AI Now", to: "/dashboard" },
+const PILLARS = [
+  { title: "Youth Climate Leadership & Advocacy", desc: "Training Kenya's next climate negotiators, county advocates, and movement leaders to influence policy at every level." },
+  { title: "Climate Innovation & Entrepreneurship", desc: "Incubating youth-led green startups, from clean energy to waste tech, through the Youth Climate Innovation Challenge." },
+  { title: "Climate Finance & Opportunity Access", desc: "Connecting young Kenyans to grants, fellowships, competitions, and jobs that match their climate ambitions." },
+  { title: "Capacity Building & Knowledge", desc: "Equipping young people with the skills, data, and tools to lead climate action through trainings and digital resources." },
+  { title: "Partnerships & Ecosystem Building", desc: "Building bridges between youth, government, NGOs, development partners, and the private sector." },
 ];
 
-// ── Values ───────────────────────────────────────────────────
-const values = [
-  { num: "01", title: "Climate Justice", desc: "Fair outcomes for frontline communities" },
-  { num: "02", title: "Youth Inclusion", desc: "Ages 15–35 at the centre of every decision" },
-  { num: "03", title: "Gender Equity", desc: "Equal voice, equal access, equal impact" },
-  { num: "04", title: "Innovation", desc: "Kenyan solutions for Kenyan challenges" },
-  { num: "05", title: "Evidence-Based", desc: "Data-driven, research-backed action" },
-  { num: "06", title: "Systems Change", desc: "Beyond symptoms — changing root causes" },
+const VALUES = [
+  { title: "Climate Justice", desc: "Fair outcomes for frontline communities" },
+  { title: "Youth Inclusion", desc: "Ages 15–35 at the centre of every decision" },
+  { title: "Gender Equity", desc: "Equal voice, equal access, equal impact" },
+  { title: "Innovation", desc: "Kenyan solutions for Kenyan challenges" },
+  { title: "Evidence-Based", desc: "Data-driven, research-backed action" },
+  { title: "Systems Change", desc: "Beyond symptoms, changing root causes" },
 ];
 
 const GRADIENT_MAP: Record<string, string> = {
-  News: "#059669", "Climate Insights": "#047857",
-  "Success Stories": "#10B981", "Events Recap": "#10B981", "Partner Updates": "#059669",
+  News: NK.green, "Climate Insights": NK.greenAlt, "Success Stories": NK.green, "Events Recap": NK.greenAlt, "Partner Updates": NK.green,
 };
 
-const PREVIEW_VIDEOS = [
-  "/c_df_b_e_bc_e_c_videomp_.mp4",
-  "/e_a_ea_d_videomp_.mp4",
-  "/e_b_d_a_be_e_f_mp_.mp4",
-];
+const PREVIEW_VIDEOS = ["/c_df_b_e_bc_e_c_videomp_.mp4", "/e_a_ea_d_videomp_.mp4", "/e_b_d_a_be_e_f_mp_.mp4"];
 
+// ── Eyebrow label ─────────────────────────────────────────────
+function Eyebrow({ children, color = NK.greenAlt }: { children: React.ReactNode; color?: string }) {
+  return (
+    <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color, marginBottom: "1rem" }}>
+      {children}
+    </span>
+  );
+}
 
+// ── Partner flip-board ───────────────────────────────────────
+function PartnerBoard() {
+  const [idx, setIdx] = useState(0);
+  const [barKey, setBarKey] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-// ─────────────────────────────────────────────────────────────
-// PILLAR CARD — pinned note style with slight tilt
-// ─────────────────────────────────────────────────────────────
-const TILT = [-4, -1.5, 0, 1.5, 4]; // degrees per card
-const PIN_OFFSET = [18, 28, 50, 72, 62]; // % horizontal position of pin
+  const restart = (newIdx?: number) => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (newIdx !== undefined) setIdx(newIdx);
+    setBarKey((k) => k + 1);
+    timerRef.current = setInterval(() => {
+      setIdx((p) => (p + 1) % PARTNERS.length);
+      setBarKey((k) => k + 1);
+    }, 3200);
+  };
 
-function PillarCard({ pillar, index }: { pillar: typeof programs[0]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref);
-  const [hovered, setHovered] = useState(false);
-  const tilt = TILT[index] ?? 0;
-  const pinX = PIN_OFFSET[index] ?? 50;
+  useEffect(() => { restart(); return () => { if (timerRef.current) clearInterval(timerRef.current); }; }, []);
 
   return (
-    <div
-      ref={ref}
-      style={{
-        opacity: inView ? 1 : 0,
-        transform: inView
-          ? `rotate(${hovered ? tilt * 0.5 : tilt}deg) translateY(${hovered ? -10 : 0}px)`
-          : "translateY(60px) scale(0.95)",
-        transition: `opacity 0.7s ease ${index * 0.12}s, transform 0.5s cubic-bezier(0.34,1.56,0.64,1)`,
-        cursor: "pointer",
-        position: "relative",
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Pin */}
-      <div style={{
-        position: "absolute",
-        top: -10,
-        left: `${pinX}%`,
-        transform: "translateX(-50%)",
-        width: 16, height: 16,
-        borderRadius: "50%",
-        background: "radial-gradient(circle at 35% 35%, #e05c2f, #b83e18)",
-        boxShadow: "0 3px 8px rgba(0,0,0,.4), inset 0 1px 2px rgba(255,255,255,.3)",
-        zIndex: 10,
-      }} />
-
-      {/* Card */}
-      <div style={{
-        background: "var(--section-light)",
-        borderRadius: 16,
-        padding: "2rem 1.75rem 1.75rem",
-        border: "1px solid rgba(0,0,0,.08)",
-        boxShadow: hovered
-          ? "0 24px 60px -10px rgba(0,0,0,.22), 0 8px 20px -5px rgba(0,0,0,.12)"
-          : "0 8px 30px -5px rgba(0,0,0,.15), 0 2px 8px -2px rgba(0,0,0,.08)",
-        transition: "box-shadow 0.3s ease",
-        minHeight: 260,
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
-        overflow: "hidden",
-      }}>
-        {/* Subtle texture lines */}
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(0,0,0,.03) 28px)", borderRadius: 16, pointerEvents: "none" }} />
-
-        {/* Icon badge */}
-        <div style={{
-          position: "absolute", top: "1.5rem", right: "1.5rem",
-          width: 36, height: 36, borderRadius: 10,
-          background: "var(--section-dark)", opacity: 0.07,
-        }} />
-        <div style={{
-          position: "absolute", top: "1.5rem", right: "1.5rem",
-          width: 36, height: 36, borderRadius: 10,
-          background: "rgba(93,186,47,.1)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-        }}>
-          {renderIcon(pillar.icon, 18)}
-        </div>
-
-        <div style={{ position: "relative", zIndex: 1, flex: 1, display: "flex", flexDirection: "column" }}>
-          {/* Number */}
-          <div style={{
-            fontFamily: "Montserrat, sans-serif",
-            fontWeight: 900,
-            fontSize: "clamp(2.5rem,6vw,4rem)",
-            color: "#5dba2f",
-            lineHeight: 1,
-            marginBottom: ".5rem",
-            letterSpacing: "-0.04em",
-          }}>
-            {String(index + 1).padStart(2, "0")}
-          </div>
-
-          {/* Title */}
-          <h3 style={{
-            fontFamily: "Montserrat, sans-serif",
-            fontWeight: 900,
-            fontSize: "1.1rem",
-            color: "var(--foreground)",
-            lineHeight: 1.25,
-            marginBottom: ".85rem",
-            letterSpacing: "-0.02em",
-          }}>
-            {pillar.title}
-          </h3>
-
-          {/* Description */}
-          <p style={{
-            fontFamily: "Montserrat, sans-serif",
-            fontSize: ".82rem",
-            color: "var(--muted-foreground)",
-            lineHeight: 1.7,
-            flex: 1,
-          }}>
-            {pillar.desc}
-          </p>
-
-          {/* Step indicator */}
-          <div style={{
-            marginTop: "1.25rem",
-            paddingTop: ".85rem",
-            borderTop: "1px dashed rgba(0,0,0,.1)",
-            fontFamily: "Montserrat, sans-serif",
-            fontSize: "9px",
-            fontWeight: 700,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: "var(--muted-foreground)",
-          }}>
-            PILLAR {String(index + 1).padStart(2, "0")} / 05
+    <div style={{ background: NK.ink, padding: "1.5rem 2.5rem", display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap" }}>
+      <div style={{ flexShrink: 0 }}>
+        <div style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: NK.green }}>Backed by</div>
+        <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedOnDark, marginTop: 4 }}>{String(idx + 1).padStart(2, "0")} / {String(PARTNERS.length).padStart(2, "0")}</div>
+      </div>
+      <div style={{ flex: 1, minWidth: 200, overflow: "hidden" }}>
+        <div key={idx} style={{ animation: "nkFlapIn 0.5s ease", display: "flex", alignItems: "center" }}>
+          <div style={{ background: "#fff", padding: "10px 22px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+            <img src={PARTNERS[idx].logo} alt={PARTNERS[idx].name} style={{ height: "clamp(26px,3.5vw,38px)", maxWidth: 180, objectFit: "contain" }} />
           </div>
         </div>
+        <div style={{ height: 3, background: "rgba(255,255,255,0.1)", marginTop: 10, maxWidth: 240 }}>
+          <div key={barKey} style={{ height: "100%", background: NK.green, animation: "nkBarFill 3.2s linear" }} />
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+        {PARTNERS.map((p, i) => (
+          <button
+            key={p.name}
+            onClick={() => restart(i)}
+            aria-label={`Show ${p.name}`}
+            style={{
+              width: i === idx ? 26 : 6, height: 6, border: "none", cursor: "pointer",
+              background: i === idx ? NK.green : "#2B3A57", transition: "width .3s, background .3s",
+            }}
+          />
+        ))}
       </div>
     </div>
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// TOOL CARD
-// ─────────────────────────────────────────────────────────────
-function ToolCard({ tool, index }: { tool: typeof features[0]; index: number }) {
+// ── Value card ────────────────────────────────────────────────
+function ValueCard({ v, index }: { v: typeof VALUES[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
-  const [hovered, setHovered] = useState(false);
-
+  const [hov, setHov] = useState(false);
   return (
     <div
       ref={ref}
-      className="rounded-2xl p-7 cursor-pointer flex flex-col justify-between"
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
       style={{
-        background: hovered ? "#5dba2f" : "var(--card-dark)",
-        border: `1px solid ${hovered ? "#5dba2f" : "var(--border)"}`,
+        ...nkCard,
+        padding: "2rem",
         opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(40px)",
-        transition: `opacity 0.7s ease ${index * 0.1}s, transform 0.7s ease ${index * 0.1}s, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease`,
-        minHeight: "260px",
-        boxShadow: hovered ? "0 20px 40px -10px rgba(93,186,47,0.25)" : "none",
+        transform: inView ? "translateY(0)" : "translateY(30px)",
+        transition: `opacity .5s ease ${index * 0.06}s, transform .5s ease ${index * 0.06}s, box-shadow .2s, translate .2s`,
+        boxShadow: hov ? nkShadow(NK.green) : nkShadow(NK.ink),
+        translate: hov ? "0 -4px" : "0 0",
       }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
-      <div>
-        <div className="flex items-start justify-between mb-6">
-          <div
-            className="w-11 h-11 rounded-xl flex items-center justify-center"
-            style={{ background: hovered ? "rgba(255,255,255,0.2)" : "rgba(93,186,47,0.1)" }}
-          >
-            <span style={{ color: hovered ? "#fff" : "#5dba2f" }}>{renderIcon(tool.icon, 20)}</span>
-          </div>
-          <span className="font-black" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.2em", color: hovered ? "rgba(255,255,255,0.5)" : "#334155" }}>
-            {tool.num}
-          </span>
-        </div>
-        <h3 className="font-extrabold tracking-tight mb-3" style={{ fontSize: "16px", color: "var(--text-on-dark)", lineHeight: "1.3" }}>
-          {tool.label}
-        </h3>
-        <p style={{ fontFamily: "Montserrat, sans-serif", fontSize: "13px", color: hovered ? "rgba(255,255,255,0.85)" : "var(--muted-foreground)", lineHeight: "1.6" }}>
-          {tool.desc}
-        </p>
-      </div>
-      <Link
-        href={tool.to}
-        className="flex items-center gap-2 font-black uppercase mt-6 transition-all duration-200"
-        style={{ fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.1em", color: hovered ? "#ffffff" : "#5dba2f", textDecoration: "none" }}
-      >
-        {tool.cta}
-        <ArrowRight size={12} />
-      </Link>
+      <div style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, color: NK.green, marginBottom: ".75rem" }}>{String(index + 1).padStart(2, "0")}</div>
+      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", color: NK.ink, marginBottom: ".5rem" }}>{v.title}</div>
+      <p style={{ fontSize: ".9rem", color: NK.muted, lineHeight: 1.6, margin: 0 }}>{v.desc}</p>
     </div>
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// STORY CARD (horizontal scroll)
-// ─────────────────────────────────────────────────────────────
+// ── Platform tool card ────────────────────────────────────────
+function ToolCard({ tool, index, onChatOpen }: { tool: typeof PLATFORM_TOOLS[0]; index: number; onChatOpen: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref);
+  const [hov, setHov] = useState(false);
+  const Icon = tool.icon;
+  const content = (
+    <>
+      <div style={{ width: 46, height: 46, background: index % 2 === 0 ? NK.green : NK.greenAlt, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem", color: NK.navyDeep }}>
+        <Icon size={22} />
+      </div>
+      <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedOnDark, marginBottom: ".5rem" }}>{tool.num}</div>
+      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.05rem", color: "#fff", marginBottom: ".6rem", lineHeight: 1.25 }}>{tool.label}</div>
+      <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.6, marginBottom: "1.25rem" }}>{tool.desc}</p>
+      <span style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".82rem", color: hov ? NK.green : NK.offWhiteOnDark }}>{tool.cta}</span>
+    </>
+  );
+  const sharedStyle: React.CSSProperties = {
+    display: "block", background: NK.panelNavy, border: `1px solid ${hov ? NK.green : NK.borderNavy}`,
+    padding: "1.75rem", textAlign: "left", textDecoration: "none", cursor: "pointer",
+    opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(30px)",
+    transition: `opacity .5s ease ${index * 0.06}s, transform .5s ease ${index * 0.06}s, border-color .2s`,
+  };
+  if (tool.href) {
+    return <Link ref={ref as any} href={tool.href as any} style={sharedStyle} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>{content}</Link>;
+  }
+  return <button ref={ref as any} onClick={onChatOpen} style={{ ...sharedStyle, width: "100%" }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>{content}</button>;
+}
+
+// ── Pillar row ────────────────────────────────────────────────
+function PillarRow({ p, index }: { p: typeof PILLARS[0]; index: number }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: "flex", gap: "2rem", padding: "1.9rem 0", alignItems: "flex-start",
+        borderTop: `2px solid ${NK.ink}`,
+        borderBottom: index === PILLARS.length - 1 ? `2px solid ${NK.ink}` : "none",
+        background: hov ? NK.tintGreen : "transparent",
+        transition: "background .2s",
+        flexWrap: "wrap",
+      }}
+    >
+      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "2.75rem", color: NK.green, minWidth: 80, lineHeight: 1 }}>{String(index + 1).padStart(2, "0")}</div>
+      <div style={{ flex: 1, minWidth: 260 }}>
+        <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.4rem", color: NK.ink, marginBottom: ".5rem" }}>{p.title}</div>
+        <p style={{ fontSize: ".92rem", color: NK.muted, lineHeight: 1.65, margin: 0, maxWidth: 640 }}>{p.desc}</p>
+      </div>
+      <div style={{ fontFamily: "var(--fm)", fontSize: 11.5, color: NK.mutedLabel, alignSelf: "center", whiteSpace: "nowrap" }}>
+        PILLAR {String(index + 1).padStart(2, "0")} / 05
+      </div>
+    </div>
+  );
+}
+
+// ── Success story card ───────────────────────────────────────
 function StoryCard({ story, index }: { story: typeof successStories[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
-  const [hovered, setHovered] = useState(false);
-
+  const [hov, setHov] = useState(false);
   return (
-    <div
-      ref={ref}
-      className="rounded-2xl overflow-hidden flex-shrink-0 transition-all duration-700"
+    <Link
+      ref={ref as any}
+      href={`/success-stories/${story.id}`}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
       style={{
-        width: "clamp(280px, 30vw, 380px)",
-        background: "var(--card)",
-        boxShadow: hovered ? "0 30px 60px -15px rgba(0,0,0,0.15)" : "0 4px 20px -5px rgba(0,0,0,0.06)",
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : `translateY(${40 + index * 10}px)`,
-        transitionDelay: `${index * 0.1}s`,
+        ...nkCard, display: "flex", flexDirection: "column", textDecoration: "none",
+        flexShrink: 0, width: "clamp(280px, 30vw, 360px)", padding: "1.75rem",
+        opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(40px)",
+        transition: `opacity .6s ease ${index * 0.08}s, transform .6s ease ${index * 0.08}s, box-shadow .2s, translate .2s`,
+        boxShadow: hov ? nkShadow(NK.green) : nkShadow(NK.ink),
+        translate: hov ? "0 -4px" : "0 0",
       }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
-      <div className="relative overflow-hidden" style={{ height: 240 }}>
-        {story.photo ? (
-          <img
-            src={story.photo}
-            alt={story.name}
-            className="w-full h-full object-cover transition-transform duration-700"
-            style={{ objectPosition: "center 15%", transform: hovered ? "scale(1.06)" : "scale(1)" }}
-          />
-        ) : (
-          <div style={{ width: "100%", height: "100%", background: story.gradient, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Trees size={64} color="rgba(255,255,255,0.3)" />
-          </div>
-        )}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(15,23,42,0.7) 0%, transparent 60%)" }} />
-        <div className="absolute top-4 left-4">
-          <span className="font-black uppercase px-2 py-1 rounded" style={{ background: "#5dba2f", color: "#fff", fontFamily: "Montserrat, sans-serif", fontSize: "9px", letterSpacing: "0.15em" }}>
-            {story.tag}
-          </span>
+      <span style={{
+        alignSelf: "flex-start", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10.5, letterSpacing: "0.08em", textTransform: "uppercase",
+        padding: "5px 9px", background: index % 2 === 0 ? NK.green : NK.ink, color: index % 2 === 0 ? NK.navyDeep : NK.green, marginBottom: "1rem",
+      }}>
+        {story.tag.replace("Renewal energy", "Renewable Energy")}
+      </span>
+      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.3rem", color: NK.ink, marginBottom: ".75rem" }}>{story.company}</div>
+      <p style={{ fontSize: ".88rem", color: NK.muted, lineHeight: 1.6, flex: 1, marginBottom: "1.25rem" }}>{story.excerpt}</p>
+      <div style={{ display: "flex", alignItems: "center", gap: ".75rem", paddingTop: "1rem", borderTop: "1px solid rgba(16,28,51,0.1)" }}>
+        <div style={{ width: 36, height: 36, background: NK.ink, color: NK.green, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".78rem", flexShrink: 0 }}>
+          {story.name.split(" ").map((n) => n[0]).join("")}
         </div>
-        <div className="absolute bottom-4 left-5">
-          <h3 className="font-extrabold tracking-tight uppercase" style={{ color: "#fff", fontSize: "20px" }}>
-            {story.company}
-          </h3>
+        <div>
+          <div style={{ fontFamily: "var(--fm)", fontSize: 9, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.1em" }}>Founder</div>
+          <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".85rem", color: NK.ink }}>{story.name}</div>
         </div>
       </div>
-      <div className="p-7">
-        <p style={{ color: "#6b7280", fontFamily: "Montserrat, sans-serif", fontSize: "14px", lineHeight: "1.7" }}>
-          {story.excerpt}
-        </p>
-        <div className="flex items-center justify-between mt-6 pt-5" style={{ borderTop: "1px solid #f0e8db" }}>
-          <div>
-            <span className="uppercase block" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "9px", color: "#9ca3af", letterSpacing: "0.15em" }}>Founder</span>
-            <span className="font-black" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "14px", color: "#5dba2f" }}>
-              {story.name}
+    </Link>
+  );
+}
+
+// ── CTA / Newsletter with sun toggle ────────────────────────────
+function NewsletterCTA() {
+  const [sunOn, setSunOn] = useState(false);
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const ctaColor = sunOn ? NK.navyDeep : NK.offWhiteOnDark;
+  const btnBg = sunOn ? NK.navyDeep : NK.green;
+  const btnFg = sunOn ? "#F6F8F4" : NK.navyDeep;
+
+  return (
+    <section style={{ background: NK.navyDeep, position: "relative", overflow: "hidden", transition: "background .8s" }}>
+      {sunOn && <div style={{ position: "absolute", inset: 0, background: NK.green, transition: "opacity .8s" }} />}
+      <div style={{ maxWidth: 1320, margin: "0 auto", padding: "8rem 2.5rem 6.5rem", position: "relative", zIndex: 1 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "2rem", flexWrap: "wrap" }}>
+          <div style={{ maxWidth: 640 }}>
+            <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: sunOn ? NK.navyDeep : NK.green, display: "block", marginBottom: "1rem" }}>
+              Stay in the Loop
             </span>
+            <h2 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(36px,5.5vw,72px)", color: sunOn ? NK.navyDeep : "#fff", textTransform: "uppercase", letterSpacing: "-0.02em", lineHeight: 1.05, margin: 0 }}>
+              Ready to join the <span style={{ color: sunOn ? NK.navyDeep : NK.green }}>movement?</span>
+            </h2>
+            <p style={{ fontFamily: "var(--fb)", fontSize: 15, color: ctaColor, marginTop: "1rem", lineHeight: 1.7, opacity: 0.85 }}>
+              Weekly climate opportunities, news, and challenge updates, straight to your inbox.
+            </p>
           </div>
-          <Link
-            href={`/success-stories/${story.id}`}
-            className="flex items-center gap-2 font-black uppercase transition-all"
-            style={{ color: "#5dba2f", fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.08em", textDecoration: "none" }}
+          <button
+            onClick={() => setSunOn((s) => !s)}
+            title="Bring the sun up"
+            style={{ background: "none", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: ".4rem", flexShrink: 0 }}
           >
-            Read Story
-            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "#5dba2f" }}>
-              <ArrowRight size={14} color="#fff" />
-            </div>
-          </Link>
+            <Sun size={40} color={sunOn ? "#F6F8F4" : NK.green} style={{ animation: sunOn ? "none" : "nkSunSway 5s ease-in-out infinite" }} />
+            <span style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: ctaColor, textTransform: "uppercase", letterSpacing: "0.1em", opacity: 0.7 }}>
+              {sunOn ? "sun's up" : "bring the sun up"}
+            </span>
+          </button>
         </div>
+
+        {submitted ? (
+          <div style={{ marginTop: "2rem", padding: "1rem 1.25rem", background: "rgba(76,184,44,0.15)", border: `1px solid ${NK.green}`, maxWidth: 440 }}>
+            <p style={{ fontFamily: "var(--fb)", fontSize: 13, fontWeight: 700, color: NK.green, margin: 0 }}>You&apos;re subscribed! ✓</p>
+          </div>
+        ) : (
+          <form
+            onSubmit={(e) => { e.preventDefault(); if (email) setSubmitted(true); }}
+            style={{ display: "flex", gap: ".75rem", marginTop: "2.5rem", flexWrap: "wrap", maxWidth: 480 }}
+          >
+            <input
+              type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@email.com"
+              style={{ flex: 1, minWidth: 220, padding: "14px 16px", background: "rgba(255,255,255,0.06)", border: `2px solid ${sunOn ? NK.navyDeep : "rgba(255,255,255,0.15)"}`, color: ctaColor, fontFamily: "var(--fb)", fontSize: 14, outline: "none" }}
+            />
+            <button type="submit" style={{ padding: "14px 28px", background: btnBg, color: btnFg, border: "none", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase", cursor: "pointer", transition: "background .3s, color .3s" }}>
+              Subscribe →
+            </button>
+          </form>
+        )}
+
+        <Link href="/opportunities" style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", marginTop: "1.5rem", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", color: ctaColor, textDecoration: "none", borderBottom: `2px solid ${sunOn ? NK.navyDeep : "rgba(255,255,255,0.3)"}`, paddingBottom: 2 }}>
+          Get Started Today <ArrowRight size={14} />
+        </Link>
       </div>
-    </div>
+    </section>
   );
 }
 
-
-
-// ─────────────────────────────────────────────────────────────
-// PARTNER BADGE (real logo images)
-// ─────────────────────────────────────────────────────────────
-function PartnerBadge({ partner, index }: { partner: typeof partners[0]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref);
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <div
-      ref={ref}
-      className="flex flex-col items-center justify-center py-5 px-4 rounded-xl cursor-default transition-all duration-300"
-      style={{
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(20px)",
-        transitionDelay: `${index * 60}ms`,
-        background: hovered ? "var(--section-dark)" : "var(--cd)",
-        border: `1px solid ${hovered ? "#5dba2f" : "transparent"}`,
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <img
-        src={partner.logo}
-        alt={partner.name}
-        style={{ height: "40px", maxWidth: "120px", objectFit: "contain", filter: hovered ? "brightness(0) invert(1)" : "none", transition: "filter 0.3s" }}
-      />
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-// MAIN PAGE
-// ─────────────────────────────────────────────────────────────
+// ── Main page ─────────────────────────────────────────────────
 export default function Home() {
-  const { content } = useContent();
-  const s = content.settings;
   const { articles: liveNews, loading: newsLoading, error: newsError } = useNews({ limit: 3 });
+  const [wordIdx, setWordIdx] = useState(0);
+  const [videoModal, setVideoModal] = useState(false);
+  const [videoIdx, setVideoIdx] = useState(0);
 
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-
-  // Auto-advance hero slider
   useEffect(() => {
-    const t = setInterval(() => setCurrentSlide((p) => (p + 1) % heroSlides.length), 6000);
+    const t = setInterval(() => setWordIdx((p) => (p + 1) % HERO_WORDS.length), 2600);
     return () => clearInterval(t);
   }, []);
 
-  const nextSlide = () => setCurrentSlide((p) => (p + 1) % heroSlides.length);
-  const prevSlide = () => setCurrentSlide((p) => (p === 0 ? heroSlides.length - 1 : p - 1));
+  const openChat = () => {
+    // The floating ClimateAIChatbot manages its own open state; dispatch a
+    // custom event it listens for so "Ask AI Now" can trigger it directly.
+    window.dispatchEvent(new CustomEvent("kych:open-chat"));
+  };
 
-  const handleNextVideo = (e?: React.MouseEvent) => { if (e) e.stopPropagation(); setCurrentVideoIndex((p) => (p + 1) % PREVIEW_VIDEOS.length); };
-  const handlePrevVideo = (e?: React.MouseEvent) => { if (e) e.stopPropagation(); setCurrentVideoIndex((p) => (p - 1 + PREVIEW_VIDEOS.length) % PREVIEW_VIDEOS.length); };
-
-  // ── Refs for scroll-reveal sections ──
-  const aboutRef = useRef<HTMLDivElement>(null);
-  const aboutInView = useInView(aboutRef);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const heroInView = useInView(heroRef, 0.01);
   const valuesRef = useRef<HTMLDivElement>(null);
   const valuesInView = useInView(valuesRef);
-  const pillarsRef = useRef<HTMLDivElement>(null);
-  const pillarsInView = useInView(pillarsRef);
   const toolsRef = useRef<HTMLDivElement>(null);
   const toolsInView = useInView(toolsRef);
+  const pillarsRef = useRef<HTMLDivElement>(null);
+  const pillarsInView = useInView(pillarsRef);
   const storiesRef = useRef<HTMLDivElement>(null);
   const storiesInView = useInView(storiesRef);
   const newsRef = useRef<HTMLDivElement>(null);
   const newsInView = useInView(newsRef);
 
-  // ── News cards ──
-  const newsCards = newsLoading
-    ? Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="rounded-2xl overflow-hidden" style={{ background: "var(--card-dark)" }}>
-          <div style={{ height: 200, background: "rgba(255,255,255,0.05)", animation: "shimmer 1.5s infinite" }} />
-          <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: ".6rem" }}>
-            <div style={{ height: 14, borderRadius: 4, background: "rgba(255,255,255,0.08)", animation: "shimmer 1.5s infinite" }} />
-            <div style={{ height: 14, borderRadius: 4, background: "rgba(255,255,255,0.08)", width: "75%", animation: "shimmer 1.5s infinite" }} />
-          </div>
-        </div>
-      ))
-    : newsError
-    ? [<div key="err" style={{ gridColumn: "1/-1", padding: "2rem", background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.3)", borderRadius: 16, color: "#fca5a5", textAlign: "center", fontFamily: "Montserrat, sans-serif" }}>Unable to load news right now. Please try again later.</div>]
-    : liveNews.length === 0
-    ? [<div key="empty" style={{ gridColumn: "1/-1", padding: "2rem", background: "rgba(255,255,255,0.05)", borderRadius: 16, color: "var(--muted-foreground)", textAlign: "center", fontFamily: "Montserrat, sans-serif" }}>No news articles available right now. Check back soon.</div>]
-    : liveNews.slice(0, 3).map((n, idx) => (
-        <a
-          key={n.id}
-          href={n.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-2xl overflow-hidden block"
-          style={{
-            textDecoration: "none",
-            background: "var(--card-dark)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            opacity: 1,
-            transform: "translateY(0)",
-            transition: `all 0.7s ease ${idx * 0.15}s`,
-          }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "#5dba2f"; (e.currentTarget as HTMLElement).style.transform = "translateY(-6px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 20px 40px -10px rgba(93,186,47,0.2)"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.06)"; (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}
-        >
-          {n.image_url ? (
-            <div style={{ height: 200, overflow: "hidden", position: "relative" }}>
-              <img src={n.image_url} alt={n.title} style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                onError={(e) => { const el = e.target as HTMLImageElement; el.parentElement!.style.background = GRADIENT_MAP[n.category] || "#059669"; el.style.display = "none"; }} />
-              <span style={{ position: "absolute", bottom: ".5rem", right: ".5rem", background: "rgba(0,0,0,.5)", color: "#fff", fontSize: ".6rem", padding: ".2rem .5rem", borderRadius: 4, fontFamily: "Montserrat, sans-serif" }}>{n.source}</span>
-            </div>
-          ) : (
-            <div style={{ height: 200, background: GRADIENT_MAP[n.category] || "#059669", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,.35)", position: "relative" }}>
-              {renderNewsIcon(n.icon || "Globe", 48)}
-              <span style={{ position: "absolute", bottom: ".5rem", right: ".5rem", background: "rgba(0,0,0,.25)", color: "rgba(255,255,255,.8)", fontSize: ".6rem", padding: ".2rem .5rem", borderRadius: 4, fontFamily: "Montserrat, sans-serif" }}>{n.source}</span>
-            </div>
-          )}
-          <div style={{ padding: "1.5rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: ".5rem", marginBottom: ".75rem" }}>
-              <span style={{ background: "#5dba2f", color: "#fff", fontSize: "9px", fontFamily: "Montserrat, sans-serif", letterSpacing: "0.15em", textTransform: "uppercase", padding: "2px 8px", borderRadius: 4, fontWeight: 700 }}>{n.category}</span>
-              <span style={{ fontSize: ".67rem", color: "var(--muted-foreground)", fontFamily: "Montserrat, sans-serif" }}>{n.date}</span>
-            </div>
-            <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".95rem", lineHeight: 1.3, color: "var(--text-on-dark)", marginBottom: ".4rem", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: ".4rem" }}>
-              <span>{n.title}</span>
-              <ExternalLink size={12} style={{ flexShrink: 0, marginTop: 2, color: "var(--muted-foreground)" }} />
-            </div>
-            <div style={{ fontSize: ".78rem", color: "var(--muted-foreground)", lineHeight: 1.55, fontFamily: "Montserrat, sans-serif" }}>{n.excerpt}</div>
-          </div>
-        </a>
-      ));
-
   return (
     <>
-      {/* ════════════════════════════════════════════════════
-          HERO — full-screen image slider
-          ════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ minHeight: "95vh", display: "flex", alignItems: "center", background: "var(--section-dark)" }}>
-        {/* Background with Framer Motion zoom */}
-        <AnimatePresence mode="popLayout">
-          <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0, scale: 1 }}
-            animate={{ opacity: 1, scale: 1.08 }}
-            exit={{ opacity: 0 }}
-            transition={{ opacity: { duration: 1.5, ease: "easeInOut" }, scale: { duration: 8, ease: "linear" } }}
-            className="absolute inset-0 z-0 origin-center"
-          >
-            <div className="absolute inset-0 z-10" style={{ background: "linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.5) 60%, transparent 100%)" }} />
-            <div className="absolute inset-0 z-10" style={{ background: "rgba(0,0,0,0.35)" }} />
-            <img
-              src={heroSlides[currentSlide].img}
-              alt="Hero Background"
-              className="w-full h-full object-cover"
-              style={{ objectPosition: "center 20%" }}
-            />
-          </motion.div>
-        </AnimatePresence>
+      {/* ── HERO ── */}
+      <section style={{ background: NK.bg, position: "relative", overflow: "hidden" }}>
+        <div
+          ref={heroRef}
+          style={{
+            maxWidth: 1320, margin: "0 auto", padding: "3.75rem 2.5rem 5.75rem",
+            display: "grid", gridTemplateColumns: "1.04fr 0.96fr", gap: "4.25rem", alignItems: "center",
+          }}
+          className="nk-hero-grid"
+        >
+          <div style={{ opacity: heroInView ? 1 : 0, transform: heroInView ? "translateY(0)" : "translateY(20px)", transition: "opacity .8s ease, transform .8s ease" }}>
+            <Eyebrow color={NK.greenAlt}>Empowering youth, one climate solution at a time</Eyebrow>
+            <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.4vw,84px)", color: NK.ink, lineHeight: 1.02, letterSpacing: "-0.02em", margin: 0 }}>
+              Kenya Youth <span style={{ color: NK.green }}>Climate Hub.</span>
+            </GrowHeading>
 
-        {/* Content */}
-        <div className="relative z-20 w-full px-6 md:px-16" style={{ maxWidth: 1280, margin: "0 auto", paddingTop: "10rem", paddingBottom: "6rem" }}>
-          <div style={{ maxWidth: "700px" }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentSlide}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div style={{ fontSize: "0.7rem", letterSpacing: "0.22em", color: "rgba(255,255,255,0.75)", textTransform: "uppercase", marginBottom: "1.25rem", fontWeight: 700, fontFamily: "Montserrat, sans-serif", display: "flex", alignItems: "center", gap: "1rem" }}>
-                  <span style={{ width: "2.5rem", height: "2px", background: "#5dba2f", display: "inline-block", flexShrink: 0 }} />
-                  {heroSlides[currentSlide].subtitle}
+            <div style={{ display: "flex", alignItems: "center", gap: ".6rem", marginTop: "1.5rem", flexWrap: "wrap" }}>
+              <span style={{ fontFamily: "var(--fm)", fontSize: 13, color: NK.muted, textTransform: "uppercase", letterSpacing: "0.06em" }}>Built for</span>
+              <span style={{ overflow: "hidden", display: "inline-block", height: "1.4em", verticalAlign: "bottom" }}>
+                <span key={wordIdx} style={{ display: "inline-block", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 15, color: NK.greenAlt, borderBottom: `2px solid ${NK.green}`, animation: "nkRollIn .55s cubic-bezier(.16,.84,.3,1)" }}>
+                  {HERO_WORDS[wordIdx]}
+                </span>
+              </span>
+            </div>
+
+            <p style={{ fontFamily: "var(--fb)", fontSize: "1.1rem", color: NK.muted, lineHeight: 1.75, marginTop: "1.5rem", maxWidth: 560 }}>
+              Join a community of young innovators addressing climate challenges and building a sustainable future for Kenya. Funding, skills, policy spaces and innovation, across all 47 counties.
+            </p>
+
+            <div style={{ display: "flex", gap: "1rem", marginTop: "2.25rem", flexWrap: "wrap" }}>
+              <HeroButton href="/opportunities" primary>Find Funding</HeroButton>
+              <HeroButton href="/programs">View Programs</HeroButton>
+            </div>
+
+            <div style={{ display: "flex", gap: "2.5rem", marginTop: "3rem", flexWrap: "wrap" }}>
+              {[["47", "Counties"], ["15–35", "Age focus"], ["2020", "Founded"]].map(([n, l]) => (
+                <div key={l}>
+                  <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.6rem", color: NK.green }}>{n}</div>
+                  <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 2 }}>{l}</div>
                 </div>
-                <h1
-                  className="font-extrabold leading-tight"
-                  style={{ fontFamily: "Montserrat, sans-serif", fontSize: "clamp(42px, 6.5vw, 88px)", color: "#fff", letterSpacing: "-0.02em", lineHeight: 1.05, marginBottom: "1.5rem" }}
-                >
-                  {heroSlides[currentSlide].title}
-                </h1>
-                <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "clamp(16px,1.8vw,20px)", lineHeight: 1.75, marginBottom: "2.5rem", maxWidth: "580px", fontFamily: "Montserrat, sans-serif" }}>
-                  {heroSlides[currentSlide].desc}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="flex flex-wrap gap-4"
-            >
-              <Link
-                href="/opportunities"
-                className="flex items-center gap-2 font-black uppercase transition-all"
-                style={{ background: "#5dba2f", color: "#0A0A0A", padding: "16px 32px", borderRadius: "6px", fontSize: "12px", letterSpacing: "0.12em", fontFamily: "Montserrat, sans-serif", textDecoration: "none", boxShadow: "0 0 20px rgba(93,186,47,0.3)" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#4aa324"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#5dba2f"; (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}
-              >
-                <DollarSign size={16} /> Find Funding
-              </Link>
-              <Link
-                href="/programs"
-                className="flex items-center gap-2 font-black uppercase transition-all"
-                style={{ background: "rgba(255,255,255,0.1)", color: "#fff", padding: "16px 32px", borderRadius: "6px", fontSize: "12px", letterSpacing: "0.12em", fontFamily: "Montserrat, sans-serif", textDecoration: "none", border: "1px solid rgba(255,255,255,0.2)", backdropFilter: "blur(8px)" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.2)"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}
-              >
-                <Trophy size={16} /> View Programs
-              </Link>
-            </motion.div>
-          </div>
-
-          {/* Slide controls */}
-          <div className="absolute bottom-10 right-6 md:right-16 z-30 flex items-center gap-6">
-            <div className="hidden md:flex gap-2 mr-4">
-              {heroSlides.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentSlide(idx)}
-                  style={{ height: "6px", width: currentSlide === idx ? "3rem" : "0.75rem", borderRadius: "9999px", background: currentSlide === idx ? "#5dba2f" : "rgba(255,255,255,0.35)", border: "none", cursor: "pointer", transition: "all 0.5s" }}
-                  aria-label={`Slide ${idx + 1}`}
-                />
               ))}
             </div>
-            <div className="flex gap-3">
-              <button onClick={prevSlide} style={{ width: 48, height: 48, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.2)", background: "transparent", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.2s" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#5dba2f"; (e.currentTarget as HTMLElement).style.borderColor = "#5dba2f"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.2)"; }}>
-                <ChevronLeft size={22} />
-              </button>
-              <button onClick={nextSlide} style={{ width: 48, height: 48, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.2)", background: "transparent", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.2s" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#5dba2f"; (e.currentTarget as HTMLElement).style.borderColor = "#5dba2f"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.2)"; }}>
-                <ChevronRight size={22} />
-              </button>
+          </div>
+
+          <div style={{ position: "relative", display: "flex", alignItems: "stretch", gap: "1rem", opacity: heroInView ? 1 : 0, transform: heroInView ? "translateX(0)" : "translateX(40px)", transition: "opacity .9s ease .1s, transform .9s ease .1s" }} className="nk-hero-visual">
+            {/* Green accent bar */}
+            <div style={{ width: 36, background: NK.green, flexShrink: 0 }} />
+
+            <div style={{ position: "relative", flex: 1 }}>
+              <div style={{ position: "relative", height: 470, overflow: "hidden", border: `2px solid ${NK.ink}` }}>
+                <img src="/nk/hero1.jpg" alt="Youth climate action in Kenya" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%" }} />
+                <div style={{ position: "absolute", top: 14, right: 14, background: NK.navyDeep, color: "#fff", padding: "1rem 1.25rem" }}>
+                  <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.4rem", color: NK.green }}>47</div>
+                  <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: NK.mutedOnDark, textTransform: "uppercase" }}>Counties connected</div>
+                </div>
+              </div>
+              <div style={{ position: "absolute", left: -20, bottom: -30, width: 190, height: 190, border: `8px solid ${NK.bg}`, overflow: "hidden", boxShadow: nkShadow(NK.ink, 10) }}>
+                <img src="/nk/sheria.jpg" alt="Climate innovators" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+            </div>
+
+            {/* Rotated label */}
+            <div style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
+              <span style={{
+                writingMode: "vertical-rl", transform: "rotate(180deg)",
+                fontFamily: "var(--fm)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: NK.mutedLabel,
+                whiteSpace: "nowrap",
+              }}>
+                Youth-led since 2020
+              </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════
-          PARTNERS MARQUEE
-          ════════════════════════════════════════════════════ */}
-      <div className="marq-bar">
-        <div className="marq-track">
-          {[...partners, ...partners].map((p, i) => (
-            <div key={i} className="m-chip" style={{ padding: "0.5rem 1rem", border: "none", gap: 0, background: "transparent" }}>
-              <img src={p.logo} alt={p.name} style={{ height: "40px", maxWidth: "140px", objectFit: "contain" }} />
-            </div>
-          ))}
-        </div>
-      </div>
+      <PartnerBoard />
 
-      {/* ════════════════════════════════════════════════════
-          ABOUT — dark navy split
-          ════════════════════════════════════════════════════ */}
-      <section className="py-32 px-6 md:px-16 overflow-hidden" style={{ background: "var(--section-dark)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            {/* Image */}
-            <div
-              ref={aboutRef}
-              className="relative transition-all duration-1000"
-              style={{ opacity: aboutInView ? 1 : 0, transform: aboutInView ? "translateX(0)" : "translateX(-60px)" }}
-            >
-              <div className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: "4/5" }}>
-                <img src="/kych_hero.jpg" alt="Kenya Youth Climate Hub" className="w-full h-full object-cover" style={{ objectPosition: "center 20%" }} />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(15,23,42,0.6) 0%, transparent 50%)" }} />
+      {/* ── WHO WE ARE ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "7rem 2.5rem 2.5rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4.75rem", alignItems: "center" }} className="nk-2col">
+          <RevealDiv>
+            <div style={{ position: "relative" }}>
+              <img src="/nk/hero2.jpg" alt="Kenya Youth Climate Hub" style={{ width: "100%", height: 480, objectFit: "cover", objectPosition: "center 20%", border: `2px solid ${NK.ink}` }} />
+              <div style={{ position: "absolute", bottom: -18, left: -18, background: NK.navyDeep, color: "#fff", padding: "1rem 1.25rem" }}>
+                <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.5rem", color: NK.green }}>2020</div>
+                <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: NK.mutedOnDark, textTransform: "uppercase" }}>Founded</div>
               </div>
-              <div className="absolute -bottom-6 -right-6 rounded-xl p-5" style={{ background: "#5dba2f" }}>
-                <div className="font-black leading-none" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "28px", color: "#fff" }}>2020</div>
-                <div style={{ fontFamily: "Montserrat, sans-serif", fontSize: "10px", color: "rgba(255,255,255,0.8)", marginTop: "4px", letterSpacing: "0.1em", textTransform: "uppercase" }}>Founded</div>
-              </div>
-              <div className="absolute -top-4 -left-4 rounded-xl px-4 py-3" style={{ background: "var(--card-dark)", border: "1px solid rgba(93,186,47,0.2)" }}>
-                <div style={{ fontFamily: "Montserrat, sans-serif", fontSize: "9px", color: "#5dba2f", letterSpacing: "0.15em", textTransform: "uppercase" }}>Powered by</div>
-                <div className="font-black" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "14px", color: "#fff" }}>Afosi</div>
+              <div style={{ position: "absolute", top: -18, right: -18, background: NK.white, border: `2px solid ${NK.ink}`, boxShadow: nkShadow(NK.ink, 6), padding: ".9rem 1.1rem" }}>
+                <div style={{ fontFamily: "var(--fm)", fontSize: 9, color: NK.greenAlt, textTransform: "uppercase", letterSpacing: "0.1em" }}>Powered by</div>
+                <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".95rem", color: NK.ink }}>Afosi</div>
               </div>
             </div>
-
-            {/* Text */}
-            <div
-              className="transition-all duration-1000 delay-200"
-              style={{ opacity: aboutInView ? 1 : 0, transform: aboutInView ? "translateX(0)" : "translateX(60px)" }}
-            >
-              <span className="uppercase font-black" style={{ color: "#5dba2f", fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.25em" }}>Who We Are</span>
-              <h2 className="font-extrabold tracking-tight leading-none mt-4 mb-8" style={{ fontSize: "clamp(36px, 5vw, 64px)", color: "var(--text-on-dark)" }}>
-                MORE THAN<br />A HUB, <span style={{ color: "#5dba2f" }}>A</span><br />MOVEMENT
-              </h2>
-              <div className="h-px w-20 mb-8" style={{ background: "#5dba2f" }} />
-              <p className="mb-4" style={{ color: "var(--muted-foreground)", fontSize: "17px", lineHeight: "1.8", fontFamily: "Montserrat, sans-serif" }}>
-                KYCH serves as a national digital platform for Kenya's youth climate movement, connecting ambition to systems change. It operates under <strong style={{ color: "var(--muted-foreground)" }}>Afosi — Action for Sustainability Initiative</strong>, blending over a decade of evidence-based development with youth-first design.
+          </RevealDiv>
+          <RevealDiv delay={0.1}>
+            <Eyebrow>Who We Are</Eyebrow>
+            <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(32px,3.8vw,54px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", lineHeight: 1.08, margin: "0 0 1.5rem" }}>
+              More than a hub, <span style={{ color: NK.green }}>a movement.</span>
+            </GrowHeading>
+            <p style={{ fontFamily: "var(--fb)", fontSize: "1.02rem", color: NK.muted, lineHeight: 1.8, marginBottom: "1.5rem" }}>
+              KYCH serves as a national digital platform for Kenya&apos;s youth climate movement, connecting ambition to systems change. It operates under <strong style={{ color: NK.ink }}>Afosi, Action for Sustainability Initiative</strong>, blending over a decade of evidence-based development with youth-first design.
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1.75rem" }} className="nk-2col-tight">
+              {[["Mission", "Equip every young Kenyan to lead climate action."], ["Vision", "A Kenya where young people lead the response."]].map(([label, text]) => (
+                <div key={label} style={{ border: `2px solid ${NK.ink}`, padding: "1.25rem" }}>
+                  <div style={{ fontFamily: "var(--fm)", fontSize: 10, color: NK.greenAlt, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: ".5rem" }}>{label}</div>
+                  <p style={{ fontFamily: "var(--fb)", fontSize: ".82rem", color: NK.muted, lineHeight: 1.6, margin: 0 }}>{text}</p>
+                </div>
+              ))}
+            </div>
+            <blockquote style={{ borderLeft: `3px solid ${NK.green}`, background: NK.tintGreen, padding: "1rem 1.25rem", margin: "0 0 2rem" }}>
+              <p style={{ fontFamily: "var(--fb)", fontSize: ".95rem", color: NK.muted, lineHeight: 1.7, fontStyle: "italic", margin: 0 }}>
+                &quot;Afosi generates the evidence. Youth generate the solutions. The Hub connects them to scale.&quot;
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
-                {[
-                  { label: "Mission", text: "\"Equip every young Kenyan to lead climate action.\"" },
-                  { label: "Vision", text: "\"A Kenya where young people don't just adapt to climate change — they lead the response.\"" },
-                ].map((item) => (
-                  <div key={item.label} className="p-5 rounded-xl" style={{ background: "rgba(93,186,47,0.07)", border: "1px solid rgba(93,186,47,0.15)" }}>
-                    <div className="font-black uppercase mb-2" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "9px", letterSpacing: "0.2em", color: "#5dba2f" }}>{item.label}</div>
-                    <p style={{ fontFamily: "Montserrat, sans-serif", fontSize: "13px", color: "var(--muted-foreground)", lineHeight: "1.6", fontStyle: "italic" }}>{item.text}</p>
-                  </div>
-                ))}
-              </div>
-              <blockquote className="mb-10 pl-5" style={{ borderLeft: "3px solid #5dba2f" }}>
-                <p style={{ color: "var(--muted-foreground)", fontSize: "15px", lineHeight: "1.7", fontFamily: "Montserrat, sans-serif", fontStyle: "italic" }}>
-                  "Afosi generates the evidence. Youth generate the solutions. The Hub connects them to scale."
-                </p>
-              </blockquote>
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-3 font-black uppercase transition-all duration-300"
-                style={{ background: "#5dba2f", color: "#fff", padding: "16px 32px", borderRadius: "4px", fontSize: "12px", letterSpacing: "0.12em", fontFamily: "Montserrat, sans-serif", textDecoration: "none" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#4aa324"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#5dba2f"; }}
-              >
-                Our Story & Team <ArrowRight size={14} />
-              </Link>
+            </blockquote>
+            <HeroButton href="/about" primary>Our Story &amp; Team</HeroButton>
+          </RevealDiv>
+        </div>
+      </section>
+
+      {/* ── CORE VALUES ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "6.25rem 2.5rem 1.5rem" }}>
+          <div ref={valuesRef} style={{ marginBottom: "3rem", opacity: valuesInView ? 1 : 0, transform: valuesInView ? "translateY(0)" : "translateY(24px)", transition: "opacity .7s ease, transform .7s ease" }}>
+            <Eyebrow>What Drives Us</Eyebrow>
+            <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
+              Our core <span style={{ color: NK.green }}>values.</span>
+            </GrowHeading>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
+            {VALUES.map((v, i) => <ValueCard key={v.title} v={v} index={i} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PLATFORM TOOLS ── */}
+      <section style={{ background: NK.navyDeep, marginTop: "6.25rem" }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "6.25rem 2.5rem" }}>
+          <div ref={toolsRef} style={{ marginBottom: "3rem", display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "2rem", flexWrap: "wrap", opacity: toolsInView ? 1 : 0, transform: toolsInView ? "translateY(0)" : "translateY(24px)", transition: "opacity .7s ease, transform .7s ease" }}>
+            <div>
+              <Eyebrow>Platform Tools</Eyebrow>
+              <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: "#fff", textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
+                Everything you need to <span style={{ color: NK.green }}>act.</span>
+              </GrowHeading>
             </div>
+            <p style={{ fontFamily: "var(--fb)", fontSize: ".95rem", color: NK.mutedOnDark, lineHeight: 1.7, maxWidth: 320, margin: 0 }}>
+              One platform connecting Kenya&apos;s youth to funding, knowledge, programs, and climate expertise.
+            </p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
+            {PLATFORM_TOOLS.map((t, i) => <ToolCard key={t.num} tool={t} index={i} onChatOpen={openChat} />)}
           </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════
-          VALUES — cream grid with borders
-          ════════════════════════════════════════════════════ */}
-      <section className="py-32 px-6 md:px-16" style={{ background: "var(--section-light)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div
-            ref={valuesRef}
-            className="mb-20 transition-all duration-1000"
-            style={{ opacity: valuesInView ? 1 : 0, transform: valuesInView ? "translateY(0)" : "translateY(30px)" }}
-          >
-            <span className="uppercase font-black" style={{ color: "#5dba2f", fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.25em" }}>What Drives Us</span>
-            <h2 className="font-extrabold tracking-tight leading-none mt-3" style={{ fontSize: "clamp(36px,5.5vw,68px)", color: "var(--foreground)" }}>
-              OUR <span style={{ color: "#5dba2f" }}>CORE</span><br />VALUES
-            </h2>
+      {/* ── FIVE PILLARS ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "6.25rem 2.5rem 2.5rem" }}>
+          <div ref={pillarsRef} style={{ marginBottom: "2.5rem", opacity: pillarsInView ? 1 : 0, transform: pillarsInView ? "translateY(0)" : "translateY(24px)", transition: "opacity .7s ease, transform .7s ease" }}>
+            <Eyebrow>What We Do</Eyebrow>
+            <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
+              Five pillars of <span style={{ color: NK.green }}>climate action.</span>
+            </GrowHeading>
+            <p style={{ fontFamily: "var(--fb)", fontSize: "1rem", color: NK.muted, marginTop: ".75rem", maxWidth: 620 }}>
+              Focused strategic areas designed to accelerate climate action through youth-led innovation across all 47 counties.
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {values.map((v, i) => {
-              const isLastRow = i >= values.length - (values.length % 3 || 3);
-              const isRightCol = (i % 3) === 2;
-              return (
-                <ValueRow key={v.num} value={v} index={i} isLastRow={isLastRow} isRightCol={isRightCol} inView={valuesInView} />
-              );
-            })}
+          <div>
+            {PILLARS.map((p, i) => <PillarRow key={p.title} p={p} index={i} />)}
           </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════
-          PLATFORM TOOLS — dark navy cards
-          ════════════════════════════════════════════════════ */}
-      <section className="py-32 px-6 md:px-16" style={{ background: "var(--section-dark)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div
-            ref={toolsRef}
-            className="mb-16 transition-all duration-1000"
-            style={{ opacity: toolsInView ? 1 : 0, transform: toolsInView ? "translateY(0)" : "translateY(30px)" }}
-          >
-            <div className="flex items-end justify-between flex-wrap gap-8">
-              <div>
-                <span className="uppercase font-black" style={{ color: "#5dba2f", fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.25em" }}>Platform Tools</span>
-                <h2 className="font-extrabold tracking-tight leading-none mt-3" style={{ fontSize: "clamp(36px,5vw,64px)", color: "var(--text-on-dark)" }}>
-                  EVERYTHING YOU<br />NEED TO <span style={{ color: "#5dba2f" }}>ACT</span>
-                </h2>
-              </div>
-              <p style={{ color: "var(--muted-foreground)", fontSize: "16px", lineHeight: "1.7", maxWidth: "360px", fontFamily: "Montserrat, sans-serif" }}>
-                One platform connecting Kenya's youth to funding, knowledge, programs, and climate expertise.
-              </p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {features.map((t, i) => <ToolCard key={t.num} tool={t} index={i} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════
-          FIVE PILLARS — pinned note cards with tilt
-          ════════════════════════════════════════════════════ */}
-      <section className="py-32 px-6 md:px-16" style={{ background: "var(--section-light)", overflow: "hidden" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div
-            ref={pillarsRef}
-            className="mb-20 transition-all duration-1000"
-            style={{ opacity: pillarsInView ? 1 : 0, transform: pillarsInView ? "translateY(0)" : "translateY(30px)" }}
-          >
-            <div className="flex items-end justify-between flex-wrap gap-8">
-              <div>
-                <span className="uppercase font-black" style={{ color: "#5dba2f", fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.25em" }}>What We Do</span>
-                <h2 className="font-extrabold tracking-tight leading-none mt-3" style={{ fontSize: "clamp(36px,5.5vw,68px)", color: "var(--foreground)" }}>
-                  FIVE PILLARS<br />OF <span style={{ color: "#5dba2f" }}>CLIMATE</span><br />ACTION
-                </h2>
-              </div>
-              <p style={{ color: "#6b7280", fontSize: "16px", lineHeight: "1.7", maxWidth: "340px", fontFamily: "Montserrat, sans-serif" }}>
-                Focused strategic areas designed to accelerate climate action through youth-led innovation across all 47 counties.
-              </p>
-            </div>
-          </div>
-          {/* Cards with padding-top for pins + perspective */}
-          <div style={{ paddingTop: 24, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2rem", alignItems: "center" }}>
-            {programs.map((p, i) => <PillarCard key={p.num} pillar={p} index={i} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════
-          VIDEO SECTION (preserved)
-          ════════════════════════════════════════════════════ */}
-      <section style={{ position: "relative", width: "100%", height: "55vh", minHeight: 380, background: "#000", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <video key={PREVIEW_VIDEOS[currentVideoIndex]} src={PREVIEW_VIDEOS[currentVideoIndex]} autoPlay loop muted playsInline style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }} />
-        <button onClick={handlePrevVideo} style={{ position: "absolute", left: "2rem", zIndex: 20, width: 50, height: 50, borderRadius: "50%", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "background 0.3s" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.25)"} onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.12)"}><ChevronLeft size={26} /></button>
-        <button onClick={handleNextVideo} style={{ position: "absolute", right: "2rem", zIndex: 20, width: 50, height: 50, borderRadius: "50%", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "background 0.3s" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.25)"} onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.12)"}><ChevronRight size={26} /></button>
-        <div style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", gap: "1.25rem" }}>
-          <button onClick={() => setIsVideoModalOpen(true)} style={{ width: 76, height: 76, borderRadius: "50%", background: "#5dba2f", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 0 12px rgba(93,186,47,0.25)", transition: "transform 0.3s" }} onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.1)"} onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}>
-            <div style={{ width: 0, height: 0, borderTop: "11px solid transparent", borderBottom: "11px solid transparent", borderLeft: "18px solid #fff", marginLeft: "5px" }} />
+      {/* ── IMMERSIVE VIDEO (kept from previous build) ── */}
+      <section style={{ position: "relative", width: "100%", height: "55vh", minHeight: 380, background: "#000", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "6.25rem" }}>
+        <video key={PREVIEW_VIDEOS[videoIdx]} src={PREVIEW_VIDEOS[videoIdx]} autoPlay loop muted playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }} />
+        <button onClick={() => setVideoIdx((p) => (p - 1 + PREVIEW_VIDEOS.length) % PREVIEW_VIDEOS.length)} style={{ position: "absolute", left: "2rem", zIndex: 2, width: 50, height: 50, background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.25)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          <ChevronLeft size={24} />
+        </button>
+        <button onClick={() => setVideoIdx((p) => (p + 1) % PREVIEW_VIDEOS.length)} style={{ position: "absolute", right: "2rem", zIndex: 2, width: 50, height: 50, background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.25)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          <ChevronRight size={24} />
+        </button>
+        <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: "1.1rem" }}>
+          <button onClick={() => setVideoModal(true)} style={{ width: 76, height: 76, background: NK.green, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 0 12px rgba(76,184,44,0.25)" }}>
+            <div style={{ width: 0, height: 0, borderTop: "11px solid transparent", borderBottom: "11px solid transparent", borderLeft: "18px solid #fff", marginLeft: 5 }} />
           </button>
-          <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: "1.4rem", color: "#fff", letterSpacing: "-0.02em", textAlign: "center" }}>
-            See Our Impact in Action<br /><span style={{ fontSize: "0.75rem", fontWeight: 400, opacity: 0.7 }}>Video {currentVideoIndex + 1} of {PREVIEW_VIDEOS.length}</span>
+          <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.3rem", color: "#fff", textAlign: "center" }}>
+            See our impact in action<br /><span style={{ fontSize: ".7rem", fontWeight: 400, opacity: 0.7 }}>Video {videoIdx + 1} of {PREVIEW_VIDEOS.length}</span>
           </div>
         </div>
       </section>
-      {isVideoModalOpen && (
-        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <button onClick={() => setIsVideoModalOpen(false)} style={{ position: "absolute", top: "2rem", right: "2rem", background: "none", border: "none", color: "#fff", fontSize: "2.5rem", cursor: "pointer", zIndex: 10000, lineHeight: 1 }}>&times;</button>
-          <button onClick={handlePrevVideo} style={{ position: "absolute", left: "2rem", zIndex: 10000, background: "none", border: "none", color: "#fff", cursor: "pointer", opacity: 0.7 }} onMouseEnter={(e) => e.currentTarget.style.opacity = "1"} onMouseLeave={(e) => e.currentTarget.style.opacity = "0.7"}><ChevronLeft size={48} /></button>
-          <button onClick={handleNextVideo} style={{ position: "absolute", right: "2rem", zIndex: 10000, background: "none", border: "none", color: "#fff", cursor: "pointer", opacity: 0.7 }} onMouseEnter={(e) => e.currentTarget.style.opacity = "1"} onMouseLeave={(e) => e.currentTarget.style.opacity = "0.7"}><ChevronRight size={48} /></button>
-          <video key={PREVIEW_VIDEOS[currentVideoIndex]} src={PREVIEW_VIDEOS[currentVideoIndex]} autoPlay controls playsInline style={{ width: "90%", maxWidth: 1000, maxHeight: "80vh", borderRadius: 12, boxShadow: "0 20px 50px rgba(0,0,0,0.5)" }} />
+      {videoModal && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <button onClick={() => setVideoModal(false)} style={{ position: "absolute", top: "2rem", right: "2rem", background: "none", border: "none", color: "#fff", fontSize: "2.5rem", cursor: "pointer" }}>&times;</button>
+          <video key={PREVIEW_VIDEOS[videoIdx]} src={PREVIEW_VIDEOS[videoIdx]} autoPlay controls playsInline style={{ width: "90%", maxWidth: 1000, maxHeight: "80vh" }} />
         </div>
       )}
 
-      {/* ════════════════════════════════════════════════════
-          SUCCESS STORIES — cream, horizontal scroll
-          ════════════════════════════════════════════════════ */}
-      <section className="py-32 overflow-hidden" style={{ background: "var(--section-light)" }}>
-        <div className="px-6 md:px-16" style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div
-            ref={storiesRef}
-            className="flex items-end justify-between mb-16 flex-wrap gap-8 transition-all duration-1000"
-            style={{ opacity: storiesInView ? 1 : 0, transform: storiesInView ? "translateY(0)" : "translateY(30px)" }}
-          >
-            <div>
-              <span className="uppercase font-black" style={{ color: "#5dba2f", fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.25em" }}>Featured</span>
-              <h2 className="font-extrabold tracking-tight leading-none mt-3" style={{ fontSize: "clamp(36px,5vw,64px)", color: "var(--foreground)" }}>
-                CLIMATE<br /><span style={{ color: "#5dba2f" }}>STARTUP</span><br />STORIES
-              </h2>
+      {/* ── SUCCESS STORIES ── */}
+      <section style={{ background: NK.tintGreen, marginTop: "5rem" }}>
+        <div style={{ padding: "6.25rem 0" }}>
+          <div className="px-6 md:px-16" style={{ maxWidth: 1320, margin: "0 auto", paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
+            <div ref={storiesRef} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "2rem", flexWrap: "wrap", marginBottom: "3rem", opacity: storiesInView ? 1 : 0, transform: storiesInView ? "translateY(0)" : "translateY(24px)", transition: "opacity .7s ease, transform .7s ease" }}>
+              <div>
+                <Eyebrow>Featured</Eyebrow>
+                <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
+                  Climate startup <span style={{ color: NK.green }}>stories.</span>
+                </GrowHeading>
+              </div>
+              <Link href="/success-stories" style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", color: NK.ink, textDecoration: "none", borderBottom: `2px solid ${NK.ink}`, paddingBottom: 2 }}>
+                See All Stories <ArrowRight size={14} />
+              </Link>
             </div>
-            <Link
-              href="/success-stories"
-              className="flex items-center gap-2 font-black uppercase transition-all duration-300"
-              style={{ color: "var(--foreground)", fontSize: "12px", letterSpacing: "0.1em", fontFamily: "Montserrat, sans-serif", textDecoration: "none", borderBottom: "2px solid #0f172a", paddingBottom: "2px" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#5dba2f"; (e.currentTarget as HTMLElement).style.borderBottomColor = "#5dba2f"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "#0f172a"; (e.currentTarget as HTMLElement).style.borderBottomColor = "#0f172a"; }}
-            >
-              See All Stories <ArrowRight size={14} />
-            </Link>
           </div>
-        </div>
-        {/* Horizontal scroll */}
-        <div
-          className="flex gap-6 overflow-x-auto px-6 md:px-16 pb-4"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
-        >
-          {successStories.map((s, i) => <StoryCard key={s.id} story={s} index={i} />)}
-        </div>
-      </section>
-
-
-
-      {/* ════════════════════════════════════════════════════
-          PARTNERS — cream, real logos
-          ════════════════════════════════════════════════════ */}
-      <section className="py-24 px-6 md:px-16" style={{ background: "var(--section-light)", borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div className="flex items-center gap-4 mb-12">
-            <div className="h-px flex-1" style={{ background: "rgba(0,0,0,0.1)" }} />
-            <span className="uppercase font-black flex-shrink-0" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.25em", color: "#9ca3af" }}>Trusted Partners & Collaborators</span>
-            <div className="h-px flex-1" style={{ background: "rgba(0,0,0,0.1)" }} />
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-            {partners.map((p, i) => <PartnerBadge key={p.name} partner={p} index={i} />)}
+          <div className="hide-scrollbar" style={{ display: "flex", gap: "1.5rem", overflowX: "auto", paddingLeft: "2.5rem", paddingRight: "2.5rem", paddingBottom: "1rem" }}>
+            {successStories.map((s, i) => <StoryCard key={s.id} story={s} index={i} />)}
           </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════════════
-          NEWS — dark navy
-          ════════════════════════════════════════════════════ */}
-      <section className="py-32 px-6 md:px-16" style={{ background: "var(--section-dark)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div
-            ref={newsRef}
-            className="flex items-end justify-between mb-16 flex-wrap gap-8 transition-all duration-1000"
-            style={{ opacity: newsInView ? 1 : 0, transform: newsInView ? "translateY(0)" : "translateY(30px)" }}
-          >
-            <div>
-              <span className="uppercase font-black" style={{ color: "#5dba2f", fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.25em" }}>Latest</span>
-              <h2 className="font-extrabold tracking-tight leading-none mt-3" style={{ fontSize: "clamp(36px,5vw,64px)", color: "var(--text-on-dark)" }}>
-                NEWS, EVENTS<br />& <span style={{ color: "#5dba2f" }}>RESOURCES</span>
-              </h2>
+      {/* ── PARTNERS MARQUEE ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "6.25rem 2.5rem" }}>
+          <div style={{ marginBottom: "2rem" }}>
+            <Eyebrow>Trusted Partners &amp; Collaborators</Eyebrow>
+          </div>
+          <div style={{ border: `2px solid ${NK.ink}`, background: NK.white, overflow: "hidden" }}>
+            <div style={{ display: "flex", width: "max-content", animation: "nkPartnerScroll 42s linear infinite" }}>
+              {[...PARTNERS, ...PARTNERS].map((p, i) => (
+                <div key={p.name + i} style={{
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  width: 260, height: 140, flexShrink: 0, padding: "2rem",
+                  borderRight: "1px solid rgba(16,28,51,0.16)",
+                }}>
+                  <img src={p.logo} alt={p.name} style={{ height: 38, maxWidth: 140, objectFit: "contain" }} />
+                </div>
+              ))}
             </div>
-            <Link
-              href="/news"
-              className="flex items-center gap-2 font-black uppercase transition-all duration-300"
-              style={{ color: "#ffffff", fontSize: "12px", letterSpacing: "0.1em", fontFamily: "Montserrat, sans-serif", textDecoration: "none", borderBottom: "2px solid rgba(255,255,255,0.3)", paddingBottom: "2px" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#5dba2f"; (e.currentTarget as HTMLElement).style.borderBottomColor = "#5dba2f"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "#ffffff"; (e.currentTarget as HTMLElement).style.borderBottomColor = "rgba(255,255,255,0.3)"; }}
-            >
+          </div>
+        </div>
+      </section>
+
+      {/* ── NEWS ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "2.5rem 2.5rem 6.25rem" }}>
+          <div ref={newsRef} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "2rem", flexWrap: "wrap", marginBottom: "3rem", opacity: newsInView ? 1 : 0, transform: newsInView ? "translateY(0)" : "translateY(24px)", transition: "opacity .7s ease, transform .7s ease" }}>
+            <div>
+              <Eyebrow>Latest</Eyebrow>
+              <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
+                News, events &amp; <span style={{ color: NK.green }}>resources.</span>
+              </GrowHeading>
+            </div>
+            <Link href="/news" style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", color: NK.ink, textDecoration: "none", borderBottom: `2px solid ${NK.ink}`, paddingBottom: 2 }}>
               View All <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {newsCards}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
+            {newsLoading
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} style={{ ...nkCard, boxShadow: nkShadow(NK.ink), height: 320 }}>
+                    <div style={{ height: 160, background: "rgba(16,28,51,0.06)" }} />
+                    <div style={{ padding: "1.5rem" }}>
+                      <div style={{ height: 14, background: "rgba(16,28,51,0.08)", width: "70%", marginBottom: 10 }} />
+                      <div style={{ height: 14, background: "rgba(16,28,51,0.08)" }} />
+                    </div>
+                  </div>
+                ))
+              : newsError
+              ? <div style={{ gridColumn: "1/-1", padding: "2rem", textAlign: "center", color: NK.muted, fontFamily: "var(--fb)" }}>Unable to load news right now. Please try again later.</div>
+              : liveNews.length === 0
+              ? <div style={{ gridColumn: "1/-1", padding: "2rem", textAlign: "center", color: NK.muted, fontFamily: "var(--fb)" }}>No news articles available right now. Check back soon.</div>
+              : liveNews.slice(0, 3).map((n, i) => <NewsCard key={n.id} article={n} index={i} />)}
           </div>
         </div>
       </section>
 
-      <Newsletter />
+      <NewsletterCTA />
     </>
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// VALUE ROW component (extracted to avoid inline complexity)
-// ─────────────────────────────────────────────────────────────
-function ValueRow({ value, index, isLastRow, isRightCol, inView }: {
-  value: typeof values[0]; index: number; isLastRow: boolean; isRightCol: boolean; inView: boolean;
-}) {
-  const [hovered, setHovered] = useState(false);
+function RevealDiv({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref);
   return (
-    <div
-      className="flex items-start gap-6 p-8 transition-all duration-700 cursor-default"
-      style={{
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(30px)",
-        transitionDelay: `${(index % 3) * 100}ms`,
-        borderBottom: isLastRow ? "none" : "1px solid rgba(0,0,0,0.08)",
-        borderRight: isRightCol ? "none" : "1px solid rgba(0,0,0,0.08)",
-        background: hovered ? "rgba(93,186,47,0.04)" : "transparent",
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <span className="font-black flex-shrink-0 pt-1" style={{ fontFamily: "Montserrat, sans-serif", fontSize: "11px", letterSpacing: "0.15em", color: hovered ? "#5dba2f" : "#9ca3af", transition: "color 0.3s" }}>
-        {value.num}
-      </span>
-      <div>
-        <h3 className="font-extrabold tracking-tight" style={{ fontSize: "20px", color: "var(--foreground)", marginBottom: "6px" }}>{value.title}</h3>
-        <p style={{ fontFamily: "Montserrat, sans-serif", fontSize: "14px", color: "#6b7280", lineHeight: "1.6" }}>{value.desc}</p>
-      </div>
+    <div ref={ref} style={{ opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(24px)", transition: `opacity .8s ease ${delay}s, transform .8s ease ${delay}s` }}>
+      {children}
     </div>
+  );
+}
+
+function HeroButton({ href, primary, children }: { href: string; primary?: boolean; children: React.ReactNode }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <Link
+      href={href as any}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: ".5rem",
+        padding: "16px 32px", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase",
+        textDecoration: "none", transition: "background .2s, color .2s",
+        background: primary ? (hov ? NK.greenAlt : NK.green) : (hov ? NK.ink : "transparent"),
+        color: primary ? NK.navyDeep : (hov ? "#fff" : NK.ink),
+        border: primary ? "none" : `2px solid ${NK.ink}`,
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function NewsCard({ article, index }: { article: any; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref);
+  const [hov, setHov] = useState(false);
+  return (
+    <a
+      ref={ref as any}
+      href={article.url} target="_blank" rel="noopener noreferrer"
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{
+        ...nkCard, display: "block", textDecoration: "none",
+        opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(30px)",
+        transition: `opacity .5s ease ${index * 0.08}s, transform .5s ease ${index * 0.08}s, box-shadow .2s, translate .2s`,
+        boxShadow: hov ? nkShadow(NK.green) : nkShadow(NK.ink),
+        translate: hov ? "0 -4px" : "0 0",
+      }}
+    >
+      <div style={{ height: 170, overflow: "hidden", borderBottom: `2px solid ${NK.ink}`, background: GRADIENT_MAP[article.category] || NK.green }}>
+        {article.image_url && (
+          <img src={article.image_url} alt={article.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        )}
+      </div>
+      <div style={{ padding: "1.5rem" }}>
+        <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", padding: "4px 9px", background: NK.green, color: NK.navyDeep }}>
+          {article.category}
+        </span>
+        <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".95rem", color: NK.ink, marginTop: ".9rem", lineHeight: 1.35 }}>{article.title}</div>
+        <div style={{ fontFamily: "var(--fb)", fontSize: ".8rem", color: NK.muted, marginTop: ".5rem", lineHeight: 1.55 }}>{article.excerpt}</div>
+      </div>
+    </a>
   );
 }

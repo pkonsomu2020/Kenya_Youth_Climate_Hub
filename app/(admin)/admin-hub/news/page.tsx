@@ -73,7 +73,7 @@ function EditModal({
       padding: "1rem",
     }}>
       <div style={{
-        background: "var(--card)", borderRadius: 14, padding: "1.75rem",
+        background: "var(--card)", borderRadius: 0, padding: "1.75rem",
         width: "100%", maxWidth: 560, maxHeight: "90vh", overflowY: "auto",
         boxShadow: "0 20px 60px rgba(0,0,0,.2)",
       }}>
@@ -92,7 +92,7 @@ function EditModal({
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               rows={2}
-              style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit", resize: "vertical" }}
+              style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit", resize: "vertical" }}
             />
           </div>
 
@@ -103,7 +103,7 @@ function EditModal({
               value={form.excerpt}
               onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
               rows={3}
-              style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit", resize: "vertical" }}
+              style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit", resize: "vertical" }}
             />
           </div>
 
@@ -113,7 +113,7 @@ function EditModal({
             <select
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
-              style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit" }}
+              style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit" }}
             >
               {CATS.filter((c) => c !== "All").map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -127,7 +127,7 @@ function EditModal({
             <input
               value={form.source}
               onChange={(e) => setForm({ ...form, source: e.target.value })}
-              style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit" }}
+              style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit" }}
             />
           </div>
 
@@ -138,13 +138,13 @@ function EditModal({
               value={form.image_url}
               onChange={(e) => setForm({ ...form, image_url: e.target.value })}
               placeholder="https://example.com/image.jpg"
-              style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit" }}
+              style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit" }}
             />
             {form.image_url && (
               <img
                 src={form.image_url}
                 alt="preview"
-                style={{ marginTop: ".5rem", width: "100%", height: 120, objectFit: "cover", borderRadius: 8, border: "1px solid var(--border)" }}
+                style={{ marginTop: ".5rem", width: "100%", height: 120, objectFit: "cover", borderRadius: 0, border: "1px solid var(--border)" }}
                 onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
               />
             )}
@@ -291,7 +291,7 @@ export default function NewsAdmin() {
               key={c}
               onClick={() => setCat(c)}
               style={{
-                padding: ".3rem .75rem", borderRadius: 20, fontSize: ".72rem",
+                padding: ".3rem .75rem", borderRadius: 0, fontSize: ".72rem",
                 fontFamily: "var(--fs)", fontWeight: 600, cursor: "pointer",
                 border: "1px solid",
                 borderColor: cat === c ? "var(--green)" : "var(--border)",
@@ -314,7 +314,7 @@ export default function NewsAdmin() {
             placeholder="Search articles…"
             style={{
               paddingLeft: "2rem", paddingRight: ".75rem", paddingTop: ".4rem", paddingBottom: ".4rem",
-              border: "1px solid var(--border)", borderRadius: 8, fontSize: ".82rem",
+              border: "1px solid var(--border)", borderRadius: 0, fontSize: ".82rem",
               fontFamily: "inherit", width: 220,
             }}
           />
@@ -323,7 +323,7 @@ export default function NewsAdmin() {
 
       {/* Error */}
       {error && (
-        <div style={{ padding: "1rem", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, marginBottom: "1rem", fontSize: ".85rem", color: "#991B1B" }}>
+        <div style={{ padding: "1rem", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 0, marginBottom: "1rem", fontSize: ".85rem", color: "#991B1B" }}>
           <strong>API error:</strong> {error}
         </div>
       )}
@@ -346,13 +346,13 @@ export default function NewsAdmin() {
                 display: "flex", gap: "1rem", alignItems: "flex-start",
                 padding: ".9rem 1rem", background: "var(--card)",
                 border: `1px solid ${article.is_approved ? "var(--border)" : "#FECACA"}`,
-                borderRadius: 10,
+                borderRadius: 0,
                 opacity: article.is_approved ? 1 : 0.65,
                 transition: "all .2s",
               }}
             >
               {/* Thumbnail */}
-              <div style={{ flexShrink: 0, width: 72, height: 52, borderRadius: 8, overflow: "hidden", background: GRADIENTS[article.category] || "#059669", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ flexShrink: 0, width: 72, height: 52, borderRadius: 0, overflow: "hidden", background: GRADIENTS[article.category] || "#059669", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {article.image_url ? (
                   <img
                     src={article.image_url}
@@ -368,19 +368,19 @@ export default function NewsAdmin() {
               {/* Content */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "flex-start", gap: ".5rem", flexWrap: "wrap" }}>
-                  <span style={{ fontSize: ".65rem", padding: ".15rem .45rem", background: GRADIENTS[article.category] || "#059669", color: "#fff", borderRadius: 4, fontFamily: "var(--fm)", fontWeight: 600, flexShrink: 0 }}>
+                  <span style={{ fontSize: ".65rem", padding: ".15rem .45rem", background: GRADIENTS[article.category] || "#059669", color: "#fff", borderRadius: 0, fontFamily: "var(--fm)", fontWeight: 600, flexShrink: 0 }}>
                     {article.category}
                   </span>
                   <span style={{ fontSize: ".65rem", color: "var(--muted-foreground)", fontFamily: "var(--fm)" }}>
                     {article.source} · {article.date}
                   </span>
                   {article.ai_score >= 0.85 && (
-                    <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#ECFDF5", color: "#065F46", borderRadius: 4, fontFamily: "var(--fm)" }}>
+                    <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#ECFDF5", color: "#065F46", borderRadius: 0, fontFamily: "var(--fm)" }}>
                       AI {(article.ai_score * 100).toFixed(0)}%
                     </span>
                   )}
                   {!article.is_approved && (
-                    <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#FEF2F2", color: "#991B1B", borderRadius: 4, fontFamily: "var(--fm)" }}>
+                    <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#FEF2F2", color: "#991B1B", borderRadius: 0, fontFamily: "var(--fm)" }}>
                       Hidden
                     </span>
                   )}
@@ -403,7 +403,7 @@ export default function NewsAdmin() {
                   target="_blank"
                   rel="noopener noreferrer"
                   title="Open article"
-                  style={{ padding: ".35rem", borderRadius: 6, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", display: "flex", alignItems: "center", cursor: "pointer", textDecoration: "none" }}
+                  style={{ padding: ".35rem", borderRadius: 0, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", display: "flex", alignItems: "center", cursor: "pointer", textDecoration: "none" }}
                 >
                   <ExternalLink size={14} />
                 </a>
@@ -412,7 +412,7 @@ export default function NewsAdmin() {
                 <button
                   onClick={() => setEditArticle(article)}
                   title="Edit article"
-                  style={{ padding: ".35rem", borderRadius: 6, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", cursor: "pointer", display: "flex", alignItems: "center" }}
+                  style={{ padding: ".35rem", borderRadius: 0, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", cursor: "pointer", display: "flex", alignItems: "center" }}
                 >
                   <Pencil size={14} />
                 </button>
@@ -422,7 +422,7 @@ export default function NewsAdmin() {
                   onClick={() => toggleApprove(article)}
                   title={article.is_approved ? "Hide from site" : "Show on site"}
                   style={{
-                    padding: ".35rem", borderRadius: 6, cursor: "pointer", display: "flex", alignItems: "center",
+                    padding: ".35rem", borderRadius: 0, cursor: "pointer", display: "flex", alignItems: "center",
                     border: "1px solid",
                     borderColor: article.is_approved ? "#A7F3D0" : "#FECACA",
                     background: article.is_approved ? "#ECFDF5" : "#FEF2F2",
@@ -436,7 +436,7 @@ export default function NewsAdmin() {
                 <button
                   onClick={() => deleteArticle(article.id)}
                   title="Delete permanently"
-                  style={{ padding: ".35rem", borderRadius: 6, border: "1px solid #FECACA", background: "#FEF2F2", color: "#991B1B", cursor: "pointer", display: "flex", alignItems: "center" }}
+                  style={{ padding: ".35rem", borderRadius: 0, border: "1px solid #FECACA", background: "#FEF2F2", color: "#991B1B", cursor: "pointer", display: "flex", alignItems: "center" }}
                 >
                   <Trash2 size={14} />
                 </button>

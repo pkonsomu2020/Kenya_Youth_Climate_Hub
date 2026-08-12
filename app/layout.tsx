@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
 
   title: {
-    default: "Kenya Youth Climate Hub — Youth-led Climate Action",
+    default: "Kenya Youth Climate Hub",
     template: "%s | Kenya Youth Climate Hub",
   },
 

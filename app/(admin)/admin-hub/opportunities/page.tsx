@@ -58,22 +58,22 @@ function AddModal({ onSave, onClose }: { onSave: (data: any) => Promise<void>; o
       </label>
       {options ? (
         <select value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit", background: "var(--card)", color: "var(--dark)" }}>
+          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit", background: "var(--card)", color: "var(--dark)" }}>
           {options.map((o) => <option key={o} value={o}>{o}</option>)}
         </select>
       ) : type === "textarea" ? (
         <textarea value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} rows={3}
-          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit", resize: "vertical", background: "var(--card)", color: "var(--dark)" }} />
+          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit", resize: "vertical", background: "var(--card)", color: "var(--dark)" }} />
       ) : (
         <input type={type} value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit", background: "var(--card)", color: "var(--dark)" }} />
+          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit", background: "var(--card)", color: "var(--dark)" }} />
       )}
     </div>
   );
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-      <div style={{ background: "var(--card)", borderRadius: 14, padding: "1.75rem", width: "100%", maxWidth: 560, maxHeight: "90vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,.25)" }}>
+      <div style={{ background: "var(--card)", borderRadius: 0, padding: "1.75rem", width: "100%", maxWidth: 560, maxHeight: "90vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,.25)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
           <div>
             <h2 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: "var(--dark)" }}>Add Opportunity Manually</h2>
@@ -127,22 +127,22 @@ function EditModal({ opp, onSave, onClose }: { opp: Opportunity; onSave: (u: Par
       <label style={{ fontSize: ".78rem", fontWeight: 600, color: "var(--dark)", display: "block", marginBottom: ".3rem" }}>{label}</label>
       {options ? (
         <select value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit" }}>
+          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit" }}>
           {options.map((o) => <option key={o} value={o}>{o}</option>)}
         </select>
       ) : type === "textarea" ? (
         <textarea value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} rows={3}
-          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit", resize: "vertical" }} />
+          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit", resize: "vertical" }} />
       ) : (
         <input value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit" }} />
+          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit" }} />
       )}
     </div>
   );
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-      <div style={{ background: "var(--card)", borderRadius: 14, padding: "1.75rem", width: "100%", maxWidth: 540, maxHeight: "90vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,.2)" }}>
+      <div style={{ background: "var(--card)", borderRadius: 0, padding: "1.75rem", width: "100%", maxWidth: 540, maxHeight: "90vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,.2)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
           <h2 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem" }}>Edit Opportunity</h2>
           <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--muted-foreground)" }}><X size={20} /></button>
@@ -288,7 +288,7 @@ export default function OppsAdmin() {
         <div style={{ display: "flex", gap: ".35rem", flexWrap: "wrap" }}>
           {TYPES.map((t) => (
             <button key={t} onClick={() => setType(t)}
-              style={{ padding: ".3rem .75rem", borderRadius: 20, fontSize: ".72rem", fontFamily: "var(--fs)", fontWeight: 600, cursor: "pointer", border: "1px solid", borderColor: type === t ? "var(--green)" : "var(--border)", background: type === t ? "var(--green)" : "#fff", color: type === t ? "#fff" : "var(--muted-foreground)", transition: "all .15s" }}>
+              style={{ padding: ".3rem .75rem", borderRadius: 0, fontSize: ".72rem", fontFamily: "var(--fs)", fontWeight: 600, cursor: "pointer", border: "1px solid", borderColor: type === t ? "var(--green)" : "var(--border)", background: type === t ? "var(--green)" : "#fff", color: type === t ? "#fff" : "var(--muted-foreground)", transition: "all .15s" }}>
               {t}
             </button>
           ))}
@@ -296,13 +296,13 @@ export default function OppsAdmin() {
         <div style={{ position: "relative", marginLeft: "auto" }}>
           <Search size={14} style={{ position: "absolute", left: ".6rem", top: "50%", transform: "translateY(-50%)", color: "var(--muted-foreground)" }} />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…"
-            style={{ paddingLeft: "2rem", paddingRight: ".75rem", paddingTop: ".4rem", paddingBottom: ".4rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".82rem", fontFamily: "inherit", width: 200 }} />
+            style={{ paddingLeft: "2rem", paddingRight: ".75rem", paddingTop: ".4rem", paddingBottom: ".4rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".82rem", fontFamily: "inherit", width: 200 }} />
         </div>
       </div>
 
       {/* Error */}
       {error && (
-        <div style={{ padding: "1rem", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, marginBottom: "1rem", fontSize: ".85rem", color: "#991B1B" }}>
+        <div style={{ padding: "1rem", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 0, marginBottom: "1rem", fontSize: ".85rem", color: "#991B1B" }}>
           <strong>API error:</strong> {error}
         </div>
       )}
@@ -319,21 +319,21 @@ export default function OppsAdmin() {
       {!loading && filtered.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: ".6rem" }}>
           {filtered.map((opp) => (
-            <div key={opp.id} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", padding: ".9rem 1rem", background: "var(--card)", border: `1px solid ${opp.is_approved ? "var(--border)" : "#FECACA"}`, borderRadius: 10, opacity: opp.is_approved ? 1 : 0.65 }}>
+            <div key={opp.id} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", padding: ".9rem 1rem", background: "var(--card)", border: `1px solid ${opp.is_approved ? "var(--border)" : "#FECACA"}`, borderRadius: 0, opacity: opp.is_approved ? 1 : 0.65 }}>
               {/* Color dot */}
-              <div style={{ flexShrink: 0, width: 10, height: 10, borderRadius: "50%", background: TYPE_COLORS[opp.type] || "#059669", marginTop: 6 }} />
+              <div style={{ flexShrink: 0, width: 10, height: 10, borderRadius: 0, background: TYPE_COLORS[opp.type] || "#059669", marginTop: 6 }} />
 
               {/* Content */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: ".5rem", flexWrap: "wrap", marginBottom: ".25rem" }}>
-                  <span style={{ fontSize: ".65rem", padding: ".15rem .45rem", background: TYPE_COLORS[opp.type] || "#059669", color: "#fff", borderRadius: 4, fontFamily: "var(--fm)", fontWeight: 600 }}>{opp.type}</span>
-                  <span style={{ fontSize: ".65rem", padding: ".15rem .45rem", background: "var(--cd)", color: "var(--muted-foreground)", borderRadius: 4, fontFamily: "var(--fm)", border: "1px solid var(--border)" }}>{opp.topic}</span>
+                  <span style={{ fontSize: ".65rem", padding: ".15rem .45rem", background: TYPE_COLORS[opp.type] || "#059669", color: "#fff", borderRadius: 0, fontFamily: "var(--fm)", fontWeight: 600 }}>{opp.type}</span>
+                  <span style={{ fontSize: ".65rem", padding: ".15rem .45rem", background: "var(--cd)", color: "var(--muted-foreground)", borderRadius: 0, fontFamily: "var(--fm)", border: "1px solid var(--border)" }}>{opp.topic}</span>
                   {opp.amount && (
                     <span style={{ fontSize: ".65rem", color: "var(--green)", fontWeight: 700, fontFamily: "var(--fs)", display: "flex", alignItems: "center", gap: ".2rem" }}>
                       <DollarSign size={11} />{opp.amount}
                     </span>
                   )}
-                  {!opp.is_approved && <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#FEF2F2", color: "#991B1B", borderRadius: 4, fontFamily: "var(--fm)" }}>Hidden</span>}
+                  {!opp.is_approved && <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#FEF2F2", color: "#991B1B", borderRadius: 0, fontFamily: "var(--fm)" }}>Hidden</span>}
                 </div>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".88rem", color: "var(--dark)", lineHeight: 1.3 }}>{opp.name || opp.title}</div>
                 <div style={{ fontSize: ".72rem", color: "var(--muted-foreground)", marginTop: ".15rem" }}>{opp.provider}</div>
@@ -351,17 +351,17 @@ export default function OppsAdmin() {
 
               {/* Actions */}
               <div style={{ display: "flex", gap: ".4rem", flexShrink: 0, alignItems: "center" }}>
-                <a href={opp.url} target="_blank" rel="noopener noreferrer" title="Open" style={{ padding: ".35rem", borderRadius: 6, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", display: "flex", alignItems: "center", textDecoration: "none" }}>
+                <a href={opp.url} target="_blank" rel="noopener noreferrer" title="Open" style={{ padding: ".35rem", borderRadius: 0, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", display: "flex", alignItems: "center", textDecoration: "none" }}>
                   <ExternalLink size={14} />
                 </a>
-                <button onClick={() => setEditOpp(opp)} title="Edit" style={{ padding: ".35rem", borderRadius: 6, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", cursor: "pointer", display: "flex", alignItems: "center" }}>
+                <button onClick={() => setEditOpp(opp)} title="Edit" style={{ padding: ".35rem", borderRadius: 0, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", cursor: "pointer", display: "flex", alignItems: "center" }}>
                   <Pencil size={14} />
                 </button>
                 <button onClick={() => toggleApprove(opp)} title={opp.is_approved ? "Hide" : "Show"}
-                  style={{ padding: ".35rem", borderRadius: 6, cursor: "pointer", display: "flex", alignItems: "center", border: "1px solid", borderColor: opp.is_approved ? "#A7F3D0" : "#FECACA", background: opp.is_approved ? "#ECFDF5" : "#FEF2F2", color: opp.is_approved ? "#065F46" : "#991B1B" }}>
+                  style={{ padding: ".35rem", borderRadius: 0, cursor: "pointer", display: "flex", alignItems: "center", border: "1px solid", borderColor: opp.is_approved ? "#A7F3D0" : "#FECACA", background: opp.is_approved ? "#ECFDF5" : "#FEF2F2", color: opp.is_approved ? "#065F46" : "#991B1B" }}>
                   {opp.is_approved ? <Check size={14} /> : <X size={14} />}
                 </button>
-                <button onClick={() => deleteOpp(opp.id)} title="Delete" style={{ padding: ".35rem", borderRadius: 6, border: "1px solid #FECACA", background: "#FEF2F2", color: "#991B1B", cursor: "pointer", display: "flex", alignItems: "center" }}>
+                <button onClick={() => deleteOpp(opp.id)} title="Delete" style={{ padding: ".35rem", borderRadius: 0, border: "1px solid #FECACA", background: "#FEF2F2", color: "#991B1B", cursor: "pointer", display: "flex", alignItems: "center" }}>
                   <Trash2 size={14} />
                 </button>
               </div>

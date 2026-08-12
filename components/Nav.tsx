@@ -1,9 +1,9 @@
 "use client";
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { X, Menu } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
+import { NK } from "@/lib/nkTheme";
 
 const links = [
   { to: "/about",           label: "About"           },
@@ -15,211 +15,192 @@ const links = [
   { to: "/success-stories", label: "Success Stories" },
 ] as const;
 
+function isActive(path: string, to: string) {
+  return path === to || path.startsWith(to + "/");
+}
+
 export function Nav() {
-  const [open, setOpen]       = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [showNav, setShowNav]   = useState(true);
-  const path     = usePathname() || '';
+  const [open, setOpen] = useState(false);
+  const [scrollPct, setScrollPct] = useState(0);
+  const [ctaHov, setCtaHov] = useState(false);
+  const [burgerHov, setBurgerHov] = useState(false);
+  const path = usePathname() || "";
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { setOpen(false); }, [path]);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 900);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  useEffect(() => {
-    let lastY = window.scrollY;
     const onScroll = () => {
       const y = window.scrollY;
-      setShowNav(!(y > lastY && y > 80));
-      lastY = y;
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollPct(h > 0 ? Math.min(1, y / h) * 100 : 0);
     };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    document.body.classList.toggle("nav-open", open);
-    return () => {
-      document.body.style.overflow = "";
-      document.body.classList.remove("nav-open");
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
-
-  useEffect(() => {
-    if (!open) return;
-    const h = (e: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
-  }, [open]);
-
-  /* ── Panel style: full-screen dark overlay ── */
-  const panelStyle: React.CSSProperties = isMobile
-    ? {
-        position: "fixed", inset: 0, zIndex: 400,
-        background: "#1a1f2c",
-        display: "flex", flexDirection: "column",
-        transform: open ? "translateX(0)" : "translateX(100%)",
-        transition: "transform .45s cubic-bezier(0.4,0,0.2,1)",
-        overflow: "hidden",
-      }
-    : {
-        position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 400,
-        width: 480, maxWidth: "90vw",
-        background: "#1a1f2c",
-        display: "flex", flexDirection: "column",
-        transform: open ? "translateX(0)" : "translateX(100%)",
-        transition: "transform .45s cubic-bezier(0.4,0,0.2,1)",
-        overflow: "hidden",
-      };
 
   return (
     <>
-      {/* ── Pill navbar ─────────────────────────────────── */}
-      <nav className={`knav-pill ${showNav ? "" : "knav-hidden"}`}>
-        <div className="n-left">
-          <Link href="/" className="n-logo-pill">
-            <img src="/kych_logo.png" alt="KYCH Logo" style={{ height: "80px", width: "auto" }} />
-          </Link>
-        </div>
-
-        <ul className="n-links-pill">
-          {links.map((l) => {
-            const active = path === l.to || path.startsWith(l.to + "/");
-            return (
-              <li key={l.to}>
-                <Link href={l.to as any} className={`n-link-item ${active ? "active" : ""}`}>
-                  {l.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div className="n-right" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <ThemeToggle />
-          <button
-            className="n-burger-pill"
-            aria-label="Open menu"
-            onClick={() => setOpen(true)}
-          >
-            <Menu size={20} color="#fff" />
-          </button>
-        </div>
-      </nav>
-
-      {/* ── Backdrop ────────────────────────────────────── */}
-      <div
+      <header
         style={{
-          position: "fixed", inset: 0, zIndex: 399,
-          background: open ? "rgba(0,0,0,.7)" : "rgba(0,0,0,0)",
-          pointerEvents: open ? "all" : "none",
-          transition: "background .4s ease",
+          position: "sticky", top: 0, zIndex: 300,
+          background: "rgba(246,248,244,0.9)",
+          backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(16,28,51,0.12)",
         }}
-        onClick={() => setOpen(false)}
-        aria-hidden="true"
-      />
+      >
+        {/* Scroll progress bar */}
+        <div style={{ height: 4, background: "rgba(76,184,44,0.18)" }}>
+          <div style={{ height: "100%", width: `${scrollPct}%`, background: NK.green, transition: "width 0.1s linear" }} />
+        </div>
 
-      {/* ── Full-screen dark panel ───────────────────────── */}
-      <div ref={panelRef} style={panelStyle}>
-
-        {/* Header */}
         <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "1.5rem 2rem",
-          borderBottom: "1px solid rgba(255,255,255,.06)",
-          flexShrink: 0,
+          maxWidth: 1320, margin: "0 auto", padding: "14px 40px",
+          display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem",
         }}>
-          {/* Logo + brand */}
-          <div style={{ display: "flex", alignItems: "center", gap: ".75rem" }}>
-            <img src="/kych_logo.png" alt="KYCH" style={{ height: 44, width: "auto" }} />
-            <span style={{
-              fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1rem",
-              color: "#fff", letterSpacing: "-.01em",
-            }}>
-              KYCH
-            </span>
-          </div>
+          {/* Logo */}
+          <Link href="/" style={{ textDecoration: "none", flexShrink: 0, display: "flex", alignItems: "center" }}>
+            <img src="/kych_logo.png" alt="Kenya Youth Climate Hub" style={{ height: 76, width: "auto" }} />
+          </Link>
 
-          {/* Theme toggle + close */}
-          <div style={{ display: "flex", alignItems: "center", gap: ".75rem" }}>
-            <ThemeToggle />
-            <button
-              onClick={() => setOpen(false)}
-              aria-label="Close menu"
+          {/* Desktop links */}
+          <nav style={{ display: "flex", alignItems: "center", gap: "1.75rem" }} className="nk-nav-links">
+            <Link
+              href="/"
               style={{
-                width: 40, height: 40, borderRadius: 10,
-                background: "rgba(255,255,255,.08)",
-                border: "1px solid rgba(255,255,255,.1)",
-                cursor: "pointer", display: "flex",
-                alignItems: "center", justifyContent: "center",
-                color: "#fff", transition: "all .2s",
+                fontFamily: "var(--fs)", fontWeight: 600, fontSize: 14, textDecoration: "none",
+                color: isActive(path, "/") && path === "/" ? NK.green : NK.ink,
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,.15)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,.08)")}
             >
-              <X size={18} />
+              Home
+            </Link>
+            {links.map((l) => (
+              <Link
+                key={l.to}
+                href={l.to as any}
+                style={{
+                  fontFamily: "var(--fs)", fontWeight: 600, fontSize: 14, textDecoration: "none",
+                  color: isActive(path, l.to) ? NK.green : NK.ink,
+                }}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <Link
+              href="/opportunities"
+              className="nk-nav-cta"
+              onMouseEnter={() => setCtaHov(true)}
+              onMouseLeave={() => setCtaHov(false)}
+              style={{
+                fontFamily: "var(--fs)", fontWeight: 700, fontSize: 14, textDecoration: "none",
+                padding: "11px 20px",
+                background: ctaHov ? NK.green : NK.ink,
+                color: ctaHov ? NK.navyDeep : "#F6F8F4",
+                transition: "background .2s, color .2s",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Find funding
+            </Link>
+
+            <button
+              className="nk-nav-burger"
+              aria-label="Open menu"
+              onClick={() => setOpen(true)}
+              onMouseEnter={() => setBurgerHov(true)}
+              onMouseLeave={() => setBurgerHov(false)}
+              style={{
+                display: "none",
+                width: 44, height: 44,
+                border: `2px solid ${NK.ink}`,
+                background: burgerHov ? NK.green : "transparent",
+                borderColor: burgerHov ? NK.green : NK.ink,
+                cursor: "pointer",
+                flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
+                transition: "background .2s, border-color .2s",
+              }}
+            >
+              <span style={{ width: 20, height: 2, background: NK.ink }} />
+              <span style={{ width: 20, height: 2, background: NK.ink }} />
+              <span style={{ width: 12, height: 2, background: NK.green }} />
             </button>
           </div>
         </div>
+      </header>
 
-        {/* ── Big nav links ── */}
-        <nav style={{ flex: 1, padding: "2rem 2rem 1rem", display: "flex", flexDirection: "column", justifyContent: "center", gap: ".25rem", overflowY: "auto" }}>
-          {links.map((l, i) => {
-            const active = path === l.to || path.startsWith(l.to + "/");
+      {/* Mobile menu overlay */}
+      <div
+        onClick={() => setOpen(false)}
+        style={{
+          position: "fixed", inset: 0, zIndex: 399,
+          background: open ? "rgba(16,28,51,0.4)" : "rgba(16,28,51,0)",
+          pointerEvents: open ? "all" : "none",
+          transition: "background .3s ease",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Mobile menu panel */}
+      <div
+        ref={panelRef}
+        style={{
+          position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 400,
+          width: 380, maxWidth: "90vw",
+          background: NK.bg, borderLeft: `2px solid ${NK.ink}`,
+          transform: open ? "translateX(0)" : "translateX(100%)",
+          transition: "transform .4s cubic-bezier(0.4,0,0.2,1)",
+          display: "flex", flexDirection: "column",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.5rem" }}>
+          <img src="/kych_logo.png" alt="Kenya Youth Climate Hub" style={{ height: 52, width: "auto" }} />
+          <button
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+            style={{ width: 40, height: 40, border: `2px solid ${NK.ink}`, background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: NK.ink }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <nav style={{ flex: 1, padding: "0.5rem 1.5rem", display: "flex", flexDirection: "column", overflowY: "auto" }}>
+          {[{ to: "/", label: "Home" }, ...links].map((l, i) => {
+            const active = l.to === "/" ? path === "/" : isActive(path, l.to);
             return (
               <Link
                 key={l.to}
                 href={l.to as any}
                 onClick={() => setOpen(false)}
                 style={{
-                  display: "block",
-                  fontFamily: "var(--fs)",
-                  fontWeight: 800,
-                  fontSize: "clamp(2rem, 6vw, 3rem)",
-                  lineHeight: 1.15,
-                  color: active ? "#5dba2f" : "rgba(255,255,255,.92)",
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  padding: "16px 0",
+                  borderBottom: "1px solid rgba(16,28,51,0.1)",
+                  fontFamily: "var(--fs)", fontWeight: 700, fontSize: 19,
+                  color: active ? NK.green : NK.ink,
                   textDecoration: "none",
-                  padding: ".5rem 0",
-                  borderBottom: "1px solid rgba(255,255,255,.06)",
-                  transition: "color .2s, padding-left .2s",
-                  animationDelay: open ? `${i * 0.05}s` : "0s",
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.color = "#5dba2f";
-                  (e.currentTarget as HTMLElement).style.paddingLeft = "8px";
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.color = active ? "#5dba2f" : "rgba(255,255,255,.92)";
-                  (e.currentTarget as HTMLElement).style.paddingLeft = "0";
+                  animation: open ? `slide-in-up 0.3s ease ${i * 0.04}s both` : "none",
                 }}
               >
                 {l.label}
+                <span style={{ width: 18, height: 2, background: active ? NK.green : "rgba(16,28,51,0.25)" }} />
               </Link>
             );
           })}
         </nav>
 
-        {/* ── Bottom padding ── */}
-        <div style={{ padding: "1.5rem 2rem 2rem", flexShrink: 0, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontFamily: "Montserrat, sans-serif", fontSize: "10px", color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Kenya Youth Climate Hub</span>
-          <div style={{ display: "flex", gap: "0.5rem" }}>
-            {[{l:"FB", h:"https://www.facebook.com/profile.php?id=61581202055325"},{l:"LI",h:"https://www.linkedin.com/company/kenya-youth-climate-hub/posts/?feedView=all"}].map((s)=>(
-              <a key={s.l} href={s.h} target="_blank" rel="noopener noreferrer"
-                style={{ width: 30, height: 30, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: "#5dba2f", fontFamily: "Montserrat, sans-serif", fontSize: "9px", fontWeight: 700, textDecoration: "none", transition: "all 0.2s" }}
-                onMouseEnter={(e)=>{(e.currentTarget as HTMLElement).style.background="#5dba2f";(e.currentTarget as HTMLElement).style.color="#fff";}}
-                onMouseLeave={(e)=>{(e.currentTarget as HTMLElement).style.background="rgba(255,255,255,0.08)";(e.currentTarget as HTMLElement).style.color="#5dba2f";}}>
-                {s.l}
-              </a>
-            ))}
-          </div>
+        <div style={{ padding: "1.25rem 1.5rem", borderTop: "1px solid rgba(16,28,51,0.1)" }}>
+          <span style={{ fontFamily: "var(--fm)", fontSize: 10.5, letterSpacing: "0.18em", textTransform: "uppercase", color: NK.muted }}>
+            Youth-led climate action
+          </span>
         </div>
       </div>
     </>

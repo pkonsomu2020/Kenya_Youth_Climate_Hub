@@ -1,17 +1,58 @@
 "use client";
 
-import { PageHeader } from "@/components/PageHeader";
 import { successStories } from "@/lib/data/successStories";
 import { notFound } from "next/navigation";
 import { Trees, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { use, useState } from "react";
+import { NK, nkShadow, nkCard } from "@/lib/nkTheme";
+import { GrowHeading } from "@/components/GrowHeading";
+import { CTABand } from "@/components/CTABand";
 
 interface StoryPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function StoryPage({ params }: StoryPageProps) {
-  const { id } = await params;
+function normalizeTag(tag: string): string {
+  if (/renew/i.test(tag)) return "Renewable Energy";
+  return tag;
+}
+
+function RelatedCard({ story }: { story: typeof successStories[0] }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <Link
+      href={`/success-stories/${story.id}`}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        ...nkCard, display: "flex", flexDirection: "column", textDecoration: "none",
+        boxShadow: hov ? nkShadow(NK.green) : nkShadow(NK.ink),
+        translate: hov ? "0 -4px" : "0 0",
+        transition: "box-shadow .2s, translate .2s",
+      }}
+    >
+      {story.photo && (
+        <div style={{ height: 180, overflow: "hidden", borderBottom: `2px solid ${NK.ink}` }}>
+          <img src={story.photo} alt={story.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
+        </div>
+      )}
+      <div style={{ padding: "1.5rem" }}>
+        <span style={{ display: "inline-block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", padding: "4px 9px", background: NK.green, color: NK.navyDeep, marginBottom: ".75rem" }}>
+          {normalizeTag(story.tag)}
+        </span>
+        <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.05rem", color: NK.ink, marginBottom: ".3rem" }}>{story.company}</div>
+        <div style={{ fontSize: ".82rem", color: NK.muted, marginBottom: ".85rem" }}>By {story.name}</div>
+        <span style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".85rem", color: NK.ink, borderBottom: `2px solid ${NK.green}`, paddingBottom: 2 }}>
+          Read story →
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+export default function StoryPage({ params }: StoryPageProps) {
+  const { id } = use(params);
   const story = successStories.find((s) => s.id === id);
 
   if (!story) {
@@ -20,21 +61,30 @@ export default async function StoryPage({ params }: StoryPageProps) {
 
   return (
     <>
-      <PageHeader
-        eyebrow="Success Story"
-        title={story.company}
-        subtitle={`By ${story.name}`}
-      />
+      {/* ── HERO ── */}
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
+          <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>
+            Success Story
+          </span>
+          <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(38px,5vw,72px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.05, margin: 0 }}>
+            {story.company}
+          </GrowHeading>
+          <p style={{ fontFamily: "var(--fb)", fontSize: "1.15rem", color: NK.muted, marginTop: "1rem" }}>
+            By {story.name}
+          </p>
+        </div>
+      </section>
 
-      <section className="sec" style={{ background: "var(--cream)", paddingBottom: "6rem" }}>
-        <div className="sec-in" style={{ maxWidth: 900, margin: "0 auto" }}>
-          <Link href="/success-stories" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", color: "var(--green)", textDecoration: "none", fontWeight: 700, marginBottom: "2rem", transition: "all 0.3s" }} className="animate-on-scroll">
-            <ArrowLeft size={18} /> Back to all stories
+      <section style={{ background: NK.bg }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 2.5rem 5.5rem" }}>
+          <Link href="/success-stories" style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", color: NK.ink, textDecoration: "none", fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".85rem", marginBottom: "2.5rem" }}>
+            <ArrowLeft size={16} /> Back to all stories
           </Link>
 
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr]" style={{ gap: "2rem", alignItems: "start", marginBottom: "3rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr", gap: "3rem", alignItems: "start", marginBottom: "4rem" }} className="nk-2col">
             {/* Photo */}
-            <div style={{ position: "relative", width: "100%", aspectRatio: "1/1.2", borderRadius: 16, overflow: "hidden", background: story.gradient }}>
+            <div style={{ position: "relative", width: "100%", aspectRatio: "1/1.2", overflow: "hidden", border: `2px solid ${NK.ink}`, background: story.gradient }}>
               {story.photo ? (
                 <img src={story.photo} alt={story.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
               ) : (
@@ -42,80 +92,41 @@ export default async function StoryPage({ params }: StoryPageProps) {
                   <Trees size={80} color="rgba(255,255,255,0.3)" />
                 </div>
               )}
-              <span style={{ position: "absolute", top: "1rem", left: "1rem", background: "var(--green)", color: "#fff", padding: "0.5rem 1rem", borderRadius: 999, fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.05em" }}>
-                {story.tag}
+              <span style={{ position: "absolute", top: "1rem", left: "1rem", background: NK.green, color: NK.navyDeep, padding: "6px 12px", fontSize: ".7rem", fontWeight: 700, fontFamily: "var(--fm)", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                {normalizeTag(story.tag)}
               </span>
             </div>
 
             {/* Content */}
             <div>
-              <h1 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "clamp(1.8rem, 4vw, 2.6rem)", color: "var(--dark)", marginBottom: "0.5rem", lineHeight: 1.1 }}>
-                {story.company}
-              </h1>
-              <div style={{ fontSize: "0.95rem", color: "var(--green)", fontFamily: "var(--fm)", fontWeight: 700, marginBottom: "1.5rem", letterSpacing: "0.02em" }}>
-                FOUNDED BY <strong>{story.name.toUpperCase()}</strong>
+              <div style={{ display: "flex", alignItems: "center", gap: ".85rem", marginBottom: "1.5rem" }}>
+                <div style={{ width: 44, height: 44, background: NK.ink, color: NK.green, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".9rem", flexShrink: 0 }}>
+                  {story.name.split(" ").map((n) => n[0]).join("")}
+                </div>
+                <div>
+                  <div style={{ fontFamily: "var(--fm)", fontSize: 10, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.1em" }}>Founder</div>
+                  <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".95rem", color: NK.ink }}>{story.name}</div>
+                </div>
               </div>
-
-              <p style={{ color: "var(--muted-foreground)", fontSize: "1.05rem", lineHeight: 1.8, margin: 0 }}>
+              <p style={{ color: NK.muted, fontSize: "1.05rem", lineHeight: 1.8, margin: 0 }}>
                 {story.fullText}
               </p>
             </div>
           </div>
 
           {/* Related Stories */}
-          <div style={{ marginTop: "4rem", paddingTop: "2rem", borderTop: "1px solid var(--border)" }}>
-            <h2 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.5rem", color: "var(--dark)", marginBottom: "2rem" }}>
+          <div style={{ paddingTop: "2.5rem", borderTop: `2px solid ${NK.ink}` }}>
+            <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.6rem", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.01em", marginBottom: "2rem" }}>
               Other Success Stories
-            </h2>
+            </GrowHeading>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
-              {successStories.filter((s) => s.id !== id).map((s) => (
-                <Link
-                  key={s.id}
-                  href={`/success-stories/${s.id}`}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    background: "white",
-                    borderRadius: 16,
-                    overflow: "hidden",
-                    border: "1px solid var(--border)",
-                    textDecoration: "none",
-                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "0 20px 40px rgba(5, 150, 105, 0.15)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "0 10px 30px rgba(0,0,0,0.05)";
-                  }}
-                >
-                  <div style={{ height: 200, background: s.gradient, overflow: "hidden" }}>
-                    {s.photo ? (
-                      <img src={s.photo} alt={s.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
-                    ) : null}
-                  </div>
-                  <div style={{ padding: "1.2rem" }}>
-                    <div style={{ fontSize: "0.7rem", color: "var(--green)", fontWeight: 700, marginBottom: "0.4rem", letterSpacing: "0.05em" }}>
-                      {s.tag.toUpperCase()}
-                    </div>
-                    <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1rem", color: "var(--dark)", marginBottom: "0.5rem", lineHeight: 1.2 }}>
-                      {s.company}
-                    </div>
-                    <div style={{ fontSize: "0.85rem", color: "var(--muted-foreground)", marginBottom: "0.8rem" }}>
-                      By {s.name}
-                    </div>
-                    <div style={{ color: "var(--green)", fontWeight: 700, fontSize: "0.9rem" }}>
-                      Read story →
-                    </div>
-                  </div>
-                </Link>
-              ))}
+              {successStories.filter((s) => s.id !== id).map((s) => <RelatedCard key={s.id} story={s} />)}
             </div>
           </div>
         </div>
       </section>
+
+      <CTABand title="Your solution could be next." buttonLabel="Apply to the challenge →" href="/opportunities" />
     </>
   );
 }

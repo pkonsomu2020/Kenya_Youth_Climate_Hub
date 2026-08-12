@@ -56,22 +56,22 @@ function EditModal({ tool, onSave, onClose }: { tool: LibraryTool; onSave: (u: P
       <label style={{ fontSize: ".78rem", fontWeight: 600, color: "var(--dark)", display: "block", marginBottom: ".3rem" }}>{label}</label>
       {options ? (
         <select value={String(form[key])} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit" }}>
+          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit" }}>
           {options.map((o) => <option key={o} value={o}>{o}</option>)}
         </select>
       ) : type === "textarea" ? (
         <textarea value={String(form[key])} onChange={(e) => setForm({ ...form, [key]: e.target.value })} rows={3}
-          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit", resize: "vertical" }} />
+          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit", resize: "vertical" }} />
       ) : (
         <input value={String(form[key])} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".88rem", fontFamily: "inherit" }} />
+          style={{ width: "100%", padding: ".6rem .8rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".88rem", fontFamily: "inherit" }} />
       )}
     </div>
   );
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-      <div style={{ background: "var(--card)", borderRadius: 14, padding: "1.75rem", width: "100%", maxWidth: 540, maxHeight: "90vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,.2)" }}>
+      <div style={{ background: "var(--card)", borderRadius: 0, padding: "1.75rem", width: "100%", maxWidth: 540, maxHeight: "90vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,.2)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
           <h2 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem" }}>Edit Tool</h2>
           <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--muted-foreground)" }}><X size={20} /></button>
@@ -207,7 +207,7 @@ export default function ResourcesAdmin() {
         <div style={{ display: "flex", gap: ".35rem", flexWrap: "wrap" }}>
           {CATEGORIES.map((c) => (
             <button key={c} onClick={() => setCatFilter(c)}
-              style={{ padding: ".3rem .75rem", borderRadius: 20, fontSize: ".72rem", fontFamily: "var(--fs)", fontWeight: 600, cursor: "pointer", border: "1px solid", borderColor: catFilter === c ? "var(--green)" : "var(--border)", background: catFilter === c ? "var(--green)" : "#fff", color: catFilter === c ? "#fff" : "var(--muted-foreground)", transition: "all .15s" }}>
+              style={{ padding: ".3rem .75rem", borderRadius: 0, fontSize: ".72rem", fontFamily: "var(--fs)", fontWeight: 600, cursor: "pointer", border: "1px solid", borderColor: catFilter === c ? "var(--green)" : "var(--border)", background: catFilter === c ? "var(--green)" : "#fff", color: catFilter === c ? "#fff" : "var(--muted-foreground)", transition: "all .15s" }}>
               {c}
             </button>
           ))}
@@ -215,12 +215,12 @@ export default function ResourcesAdmin() {
         <div style={{ position: "relative", marginLeft: "auto" }}>
           <Search size={14} style={{ position: "absolute", left: ".6rem", top: "50%", transform: "translateY(-50%)", color: "var(--muted-foreground)" }} />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search tools…"
-            style={{ paddingLeft: "2rem", paddingRight: ".75rem", paddingTop: ".4rem", paddingBottom: ".4rem", border: "1px solid var(--border)", borderRadius: 8, fontSize: ".82rem", fontFamily: "inherit", width: 200 }} />
+            style={{ paddingLeft: "2rem", paddingRight: ".75rem", paddingTop: ".4rem", paddingBottom: ".4rem", border: "1px solid var(--border)", borderRadius: 0, fontSize: ".82rem", fontFamily: "inherit", width: 200 }} />
         </div>
       </div>
 
       {error && (
-        <div style={{ padding: "1rem", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, marginBottom: "1rem", fontSize: ".85rem", color: "#991B1B" }}>
+        <div style={{ padding: "1rem", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 0, marginBottom: "1rem", fontSize: ".85rem", color: "#991B1B" }}>
           <strong>API error:</strong> {error}
         </div>
       )}
@@ -235,18 +235,18 @@ export default function ResourcesAdmin() {
       {!loading && filtered.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: ".6rem" }}>
           {filtered.map((tool) => (
-            <div key={tool.id} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", padding: ".9rem 1rem", background: "var(--card)", border: `1px solid ${tool.is_approved ? "var(--border)" : "#FECACA"}`, borderRadius: 10, opacity: tool.is_approved ? 1 : 0.65 }}>
+            <div key={tool.id} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", padding: ".9rem 1rem", background: "var(--card)", border: `1px solid ${tool.is_approved ? "var(--border)" : "#FECACA"}`, borderRadius: 0, opacity: tool.is_approved ? 1 : 0.65 }}>
               {/* Color dot */}
-              <div style={{ flexShrink: 0, width: 10, height: 10, borderRadius: "50%", background: tool.color || "#059669", marginTop: 6 }} />
+              <div style={{ flexShrink: 0, width: 10, height: 10, borderRadius: 0, background: tool.color || "#059669", marginTop: 6 }} />
 
               {/* Content */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: ".5rem", flexWrap: "wrap", marginBottom: ".25rem" }}>
-                  <span style={{ fontSize: ".65rem", padding: ".15rem .45rem", background: tool.color || "#059669", color: "#fff", borderRadius: 4, fontFamily: "var(--fm)", fontWeight: 600 }}>{tool.badge || tool.category}</span>
-                  <span style={{ fontSize: ".65rem", padding: ".15rem .45rem", background: "var(--cd)", color: "var(--muted-foreground)", borderRadius: 4, fontFamily: "var(--fm)", border: "1px solid var(--border)" }}>{tool.topic}</span>
-                  {tool.is_free && <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#ECFDF5", color: "#065F46", borderRadius: 4, fontFamily: "var(--fm)" }}>Free</span>}
-                  {tool.trending_score >= 8 && <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#FEF9C3", color: "#92400E", borderRadius: 4, fontFamily: "var(--fm)", display: "flex", alignItems: "center", gap: ".2rem" }}><Flame size={9} />Trending</span>}
-                  {!tool.is_approved && <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#FEF2F2", color: "#991B1B", borderRadius: 4, fontFamily: "var(--fm)" }}>Hidden</span>}
+                  <span style={{ fontSize: ".65rem", padding: ".15rem .45rem", background: tool.color || "#059669", color: "#fff", borderRadius: 0, fontFamily: "var(--fm)", fontWeight: 600 }}>{tool.badge || tool.category}</span>
+                  <span style={{ fontSize: ".65rem", padding: ".15rem .45rem", background: "var(--cd)", color: "var(--muted-foreground)", borderRadius: 0, fontFamily: "var(--fm)", border: "1px solid var(--border)" }}>{tool.topic}</span>
+                  {tool.is_free && <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#ECFDF5", color: "#065F46", borderRadius: 0, fontFamily: "var(--fm)" }}>Free</span>}
+                  {tool.trending_score >= 8 && <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#FEF9C3", color: "#92400E", borderRadius: 0, fontFamily: "var(--fm)", display: "flex", alignItems: "center", gap: ".2rem" }}><Flame size={9} />Trending</span>}
+                  {!tool.is_approved && <span style={{ fontSize: ".6rem", padding: ".1rem .4rem", background: "#FEF2F2", color: "#991B1B", borderRadius: 0, fontFamily: "var(--fm)" }}>Hidden</span>}
                 </div>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".88rem", color: "var(--dark)", lineHeight: 1.3 }}>{tool.title}</div>
                 {(tool.use_case || tool.description) && (
@@ -263,17 +263,17 @@ export default function ResourcesAdmin() {
 
               {/* Actions */}
               <div style={{ display: "flex", gap: ".4rem", flexShrink: 0, alignItems: "center" }}>
-                <a href={tool.url} target="_blank" rel="noopener noreferrer" title="Open" style={{ padding: ".35rem", borderRadius: 6, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", display: "flex", alignItems: "center", textDecoration: "none" }}>
+                <a href={tool.url} target="_blank" rel="noopener noreferrer" title="Open" style={{ padding: ".35rem", borderRadius: 0, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", display: "flex", alignItems: "center", textDecoration: "none" }}>
                   <ExternalLink size={14} />
                 </a>
-                <button onClick={() => setEditTool(tool)} title="Edit" style={{ padding: ".35rem", borderRadius: 6, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", cursor: "pointer", display: "flex", alignItems: "center" }}>
+                <button onClick={() => setEditTool(tool)} title="Edit" style={{ padding: ".35rem", borderRadius: 0, border: "1px solid var(--border)", background: "var(--card)", color: "var(--muted-foreground)", cursor: "pointer", display: "flex", alignItems: "center" }}>
                   <Pencil size={14} />
                 </button>
                 <button onClick={() => toggleApprove(tool)} title={tool.is_approved ? "Hide" : "Show"}
-                  style={{ padding: ".35rem", borderRadius: 6, cursor: "pointer", display: "flex", alignItems: "center", border: "1px solid", borderColor: tool.is_approved ? "#A7F3D0" : "#FECACA", background: tool.is_approved ? "#ECFDF5" : "#FEF2F2", color: tool.is_approved ? "#065F46" : "#991B1B" }}>
+                  style={{ padding: ".35rem", borderRadius: 0, cursor: "pointer", display: "flex", alignItems: "center", border: "1px solid", borderColor: tool.is_approved ? "#A7F3D0" : "#FECACA", background: tool.is_approved ? "#ECFDF5" : "#FEF2F2", color: tool.is_approved ? "#065F46" : "#991B1B" }}>
                   {tool.is_approved ? <Check size={14} /> : <X size={14} />}
                 </button>
-                <button onClick={() => deleteTool(tool.id)} title="Delete" style={{ padding: ".35rem", borderRadius: 6, border: "1px solid #FECACA", background: "#FEF2F2", color: "#991B1B", cursor: "pointer", display: "flex", alignItems: "center" }}>
+                <button onClick={() => deleteTool(tool.id)} title="Delete" style={{ padding: ".35rem", borderRadius: 0, border: "1px solid #FECACA", background: "#FEF2F2", color: "#991B1B", cursor: "pointer", display: "flex", alignItems: "center" }}>
                   <Trash2 size={14} />
                 </button>
               </div>

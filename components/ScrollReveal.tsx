@@ -16,14 +16,16 @@ export function ScrollReveal() {
       { threshold: 0.15, rootMargin: "0px 0px -80px 0px" },
     );
 
+    const REVEAL_SELECTOR = ".animate-on-scroll, .nk-reveal";
+
     const observeElement = (el: Element) => {
-      if (el instanceof HTMLElement && el.classList.contains("animate-on-scroll") && !el.classList.contains("visible")) {
+      if (el instanceof HTMLElement && el.matches(REVEAL_SELECTOR) && !el.classList.contains("visible")) {
         observer.observe(el);
       }
     };
 
     const observeAll = () => {
-      document.querySelectorAll<HTMLElement>(".animate-on-scroll").forEach(observeElement);
+      document.querySelectorAll<HTMLElement>(REVEAL_SELECTOR).forEach(observeElement);
     };
 
     observeAll();
@@ -33,7 +35,7 @@ export function ScrollReveal() {
         mutation.addedNodes.forEach((node) => {
           if (node instanceof HTMLElement) {
             observeElement(node);
-            node.querySelectorAll<HTMLElement>(".animate-on-scroll").forEach(observeElement);
+            node.querySelectorAll<HTMLElement>(REVEAL_SELECTOR).forEach(observeElement);
           }
         });
       });
