@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { NK, nkShadow, nkCard } from "@/lib/nkTheme";
+import { NK } from "@/lib/nkTheme";
 import { GrowHeading } from "@/components/GrowHeading";
 import { CTABand } from "@/components/CTABand";
 
@@ -33,13 +33,6 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
-const TEAM = [
-  { name: "Adelaide Wairimu", role: "Founder & Executive Director", bio: "Climate justice advocate with a decade in youth-centred development across East Africa.", initials: "AW" },
-  { name: "Brian Kipkoech", role: "Programs Director", bio: "Designs KYCH's incubation, capacity-building and challenge programs.", initials: "BK" },
-  { name: "Faith Achieng", role: "Head of Partnerships", bio: "Builds bridges between youth, government and development partners.", initials: "FA" },
-  { name: "Daniel Mwangi", role: "Innovation Lead", bio: "Mentors green-tech founders from prototype to early revenue.", initials: "DM" },
-];
-
 const VALUES = [
   { title: "Climate Justice", desc: "Fair outcomes for frontline communities" },
   { title: "Youth Inclusion", desc: "Ages 15–35 at the centre of every decision" },
@@ -48,33 +41,6 @@ const VALUES = [
   { title: "Evidence-Based", desc: "Data-driven, research-backed action" },
   { title: "Systems Change", desc: "Beyond symptoms, changing root causes" },
 ];
-
-function TeamCard({ member, index }: { member: typeof TEAM[0]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref);
-  const [hov, setHov] = useState(false);
-  return (
-    <div
-      ref={ref}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        ...nkCard, padding: "2rem",
-        opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(30px)",
-        transition: `opacity .5s ease ${index * 0.08}s, transform .5s ease ${index * 0.08}s, box-shadow .2s, translate .2s`,
-        boxShadow: hov ? nkShadow(NK.green) : nkShadow(NK.ink),
-        translate: hov ? "0 -4px" : "0 0",
-      }}
-    >
-      <div style={{ width: 56, height: 56, background: NK.ink, color: NK.green, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.05rem", marginBottom: "1.25rem" }}>
-        {member.initials}
-      </div>
-      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1rem", color: NK.ink, marginBottom: ".3rem" }}>{member.name}</div>
-      <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, fontWeight: 700, color: NK.greenAlt, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".75rem" }}>{member.role}</div>
-      <p style={{ fontSize: ".85rem", color: NK.muted, lineHeight: 1.65, margin: 0 }}>{member.bio}</p>
-    </div>
-  );
-}
 
 export default function About() {
   return (
@@ -162,23 +128,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── TEAM ── */}
-      <section style={{ background: NK.bg }}>
-        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "6.25rem 2.5rem" }}>
-          <Reveal>
-            <div style={{ marginBottom: "3rem" }}>
-              <Eyebrow>The Team</Eyebrow>
-              <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
-                People behind <span style={{ color: NK.green }}>the hub.</span>
-              </GrowHeading>
-            </div>
-          </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "1.25rem" }} className="nk-grid-4">
-            {TEAM.map((m, i) => <TeamCard key={m.name} member={m} index={i} />)}
-          </div>
-        </div>
-      </section>
-
       {/* ── PULL QUOTE ── */}
       <section style={{ background: NK.bg }}>
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "5.5rem 2.5rem", textAlign: "center" }}>
@@ -198,3 +147,4 @@ export default function About() {
     </>
   );
 }
+
