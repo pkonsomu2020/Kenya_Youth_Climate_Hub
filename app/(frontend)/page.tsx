@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
-import { DollarSign, Trophy, BookOpen, Rocket, CalendarDays, Bot, ArrowRight, ChevronLeft, ChevronRight, Sun } from "lucide-react";
+import { DollarSign, Trophy, BookOpen, Rocket, CalendarDays, Bot, ArrowRight, ChevronLeft, ChevronRight, Sun, CloudRain } from "lucide-react";
 import { useNews } from "@/lib/useNews";
 import { successStories } from "@/lib/data/successStories";
 import { NK, nkShadow, nkCard } from "@/lib/nkTheme";
@@ -37,7 +37,8 @@ const PLATFORM_TOOLS = [
   { num: "02", icon: DollarSign, label: "Funding & Opportunities", desc: "A live board of grants, fellowships, and internships with deadline alerts.", cta: "Find Funding →", href: "/opportunities" },
   { num: "03", icon: Rocket, label: "Programs & Challenges", desc: "Apply for incubators like the Youth Climate Innovation Challenge and mentorship programs.", cta: "View Programs →", href: "/programs" },
   { num: "04", icon: CalendarDays, label: "Events & Workshops", desc: "Register for bootcamps, policy dialogues, and webinars from KYCH and partners.", cta: "View Calendar →", href: "/events" },
-  { num: "05", icon: Bot, label: "Climate AI Assistant", desc: "A 24/7 AI guide trained on Kenya's climate data, opportunities and resources.", cta: "Ask AI Now →", href: null },
+  { num: "05", icon: CloudRain, label: "Climate Watch & Weather Focus", desc: "Live 47-county flood radar, rainfall advisories, and official 23-point El Niño preparedness guide.", cta: "View Weather Radar →", href: "/weather" },
+  { num: "06", icon: Bot, label: "Climate AI Assistant", desc: "A 24/7 AI guide trained on Kenya's climate data, opportunities and resources.", cta: "Ask AI Now →", href: null },
 ];
 
 const PILLARS = [
@@ -347,6 +348,29 @@ export default function Home() {
 
   return (
     <>
+      {/* ── LIVE EL NINO WEATHER ALERT TICKER BAR ── */}
+      <div style={{ background: NK.navyDeep, color: "#fff", borderBottom: `2px solid ${NK.green}`, padding: ".65rem 1.5rem" }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: ".6rem", fontFamily: "var(--fm)", fontSize: 12 }}>
+            <span style={{ padding: "2px 8px", background: "#dc2626", color: "#fff", fontWeight: 700, textTransform: "uppercase", fontSize: 10 }}>
+              ⚠️ EL NIÑO ALERT
+            </span>
+            <span style={{ color: NK.offWhiteOnDark }}>
+              Heavy rains &amp; flood advisories active across Western, Coast, Rift Valley &amp; North Eastern counties.
+            </span>
+          </div>
+          <Link
+            href="/weather"
+            style={{
+              fontFamily: "var(--fs)", fontWeight: 700, fontSize: 12, color: NK.green, textDecoration: "none",
+              display: "inline-flex", alignItems: "center", gap: "4px", borderBottom: `1.5px solid ${NK.green}`
+            }}
+          >
+            Check County Radar &amp; 23-Point Protection Guide →
+          </Link>
+        </div>
+      </div>
+
       {/* ── HERO ── */}
       <section style={{ background: NK.bg, position: "relative", overflow: "hidden" }}>
         <div
@@ -497,6 +521,41 @@ export default function Home() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
             {PLATFORM_TOOLS.map((t, i) => <ToolCard key={t.num} tool={t} index={i} onChatOpen={openChat} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ── UPCOMING 2026 CLIMATE CALENDAR SPOTLIGHT ── */}
+      <section style={{ background: NK.bg, padding: "5rem 2.5rem 0" }}>
+        <div style={{ maxWidth: 1320, margin: "0 auto", background: NK.white, border: `2px solid ${NK.ink}`, padding: "2.5rem", boxShadow: nkShadow(NK.green) }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1.5rem", marginBottom: "2rem" }}>
+            <div>
+              <Eyebrow color={NK.greenAlt}>Official Calendar 2026</Eyebrow>
+              <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(28px,3.2vw,46px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
+                Upcoming <span style={{ color: NK.green }}>Key Climate Dates.</span>
+              </GrowHeading>
+            </div>
+            <Link href="/events" style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", color: NK.ink, textDecoration: "none", borderBottom: `2px solid ${NK.green}`, paddingBottom: 2 }}>
+              Explore Full Calendar →
+            </Link>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
+            <div style={{ background: NK.navyDeep, color: "#fff", padding: "1.5rem", border: `1.5px solid ${NK.ink}` }}>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.green, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>10TH OCT 2026</div>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", marginBottom: ".5rem" }}>Mazingira Day</div>
+              <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.5, margin: 0 }}>Kenya National Environmental Day &amp; nationwide youth tree restoration.</p>
+            </div>
+            <div style={{ background: NK.navyDeep, color: "#fff", padding: "1.5rem", border: `1.5px solid ${NK.ink}` }}>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.green, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>5TH – 8TH OCT 2026</div>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", marginBottom: ".5rem" }}>Pre-COP 31 Summit</div>
+              <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.5, margin: 0 }}>Ministerial &amp; youth negotiation strategy meeting ahead of COP31.</p>
+            </div>
+            <div style={{ background: NK.navyDeep, color: "#fff", padding: "1.5rem", border: `1.5px solid ${NK.ink}` }}>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.green, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>9TH – 20TH NOV 2026</div>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", marginBottom: ".5rem" }}>COP31 UN Climate Summit</div>
+              <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.5, margin: 0 }}>Global UN Climate Change Conference taking place in Türkiye.</p>
+            </div>
           </div>
         </div>
       </section>

@@ -7,6 +7,7 @@ import { NK } from "@/lib/nkTheme";
 
 const links = [
   { to: "/about",           label: "About"           },
+  { to: "/weather",         label: "Climate Watch"   },
   { to: "/e-library",       label: "E-Library"       },
   { to: "/opportunities",   label: "Opportunities"   },
   { to: "/programs",        label: "Programs"        },
@@ -71,15 +72,6 @@ export function Nav() {
 
           {/* Desktop links */}
           <nav style={{ display: "flex", alignItems: "center", gap: "1.75rem" }} className="nk-nav-links">
-            <Link
-              href="/"
-              style={{
-                fontFamily: "var(--fs)", fontWeight: 600, fontSize: 14, textDecoration: "none",
-                color: isActive(path, "/") && path === "/" ? NK.green : NK.ink,
-              }}
-            >
-              Home
-            </Link>
             {links.map((l) => (
               <Link
                 key={l.to}
@@ -119,19 +111,13 @@ export function Nav() {
               onMouseEnter={() => setBurgerHov(true)}
               onMouseLeave={() => setBurgerHov(false)}
               style={{
-                display: "none",
-                width: 44, height: 44,
-                border: `2px solid ${NK.ink}`,
-                background: burgerHov ? NK.green : "transparent",
-                borderColor: burgerHov ? NK.green : NK.ink,
-                cursor: "pointer",
-                flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
-                transition: "background .2s, border-color .2s",
+                border: `2px solid ${NK.ink}`, background: burgerHov ? NK.ink : "transparent",
+                color: burgerHov ? "#fff" : NK.ink, width: 44, height: 44,
+                cursor: "pointer", display: "none", alignItems: "center", justifyContent: "center",
+                transition: "background .2s, color .2s",
               }}
             >
-              <span style={{ width: 20, height: 2, background: NK.ink }} />
-              <span style={{ width: 20, height: 2, background: NK.ink }} />
-              <span style={{ width: 12, height: 2, background: NK.green }} />
+              <Menu size={20} />
             </button>
           </div>
         </div>
@@ -173,8 +159,8 @@ export function Nav() {
         </div>
 
         <nav style={{ flex: 1, padding: "0.5rem 1.5rem", display: "flex", flexDirection: "column", overflowY: "auto" }}>
-          {[{ to: "/", label: "Home" }, ...links].map((l, i) => {
-            const active = l.to === "/" ? path === "/" : isActive(path, l.to);
+          {links.map((l, i) => {
+            const active = isActive(path, l.to);
             return (
               <Link
                 key={l.to}
