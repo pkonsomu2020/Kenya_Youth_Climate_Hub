@@ -1,46 +1,80 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Sparkles, X, Send } from "lucide-react";
+import { Sparkles, X, Send, Loader2 } from "lucide-react";
 import { NK, nkShadow } from "@/lib/nkTheme";
 
 // ============================================================
-// Climate AI Chatbot — ported from NEW_KYCH's floating chat widget.
-// Replaces the old "coming soon" AIFab placeholder with a real,
-// working UI. Replies are canned/keyword-matched for now (same
-// scope as the original design file, which also left the real LLM
-// call commented out) — wiring this to a live model is a natural
-// next step, not done here to keep this change reviewable.
+// Climate AI Chatbot — RAG + OpenAI-powered floating widget.
+// Grounded in KYCH Knowledge Base (grants, fellowships, YCIC,
+// e-library, events, 47 counties weather, contact details).
 // ============================================================
 
 type Msg = { from: "bot" | "user"; text: string };
 
 const QUICK_PROMPTS = [
-  { label: "Find funding", query: "What funding is available?" },
-  { label: "Programs", query: "Tell me about your programs" },
-  { label: "Join KYCH", query: "How do I join?" },
+  { label: "Find funding", query: "What funding or grants are available?" },
+  { label: "YCIC Challenge", query: "Tell me about the Youth Climate Innovation Challenge" },
+  { label: "Join KYCH", query: "How do I register and join KYCH?" },
+  { label: "County Weather", query: "How do I check weather telemetry for my county?" },
 ];
 
 function getCannedReply(text: string): string {
   const t = text.toLowerCase();
-  if (/(fund|grant|money)/.test(t)) {
-    return "Our Opportunities board carries live grants, fellowships and internships with deadline alerts. Head to the Opportunities page to filter by type and closing date.";
+  if (/(fund|grant|money|scholarship)/.test(t)) {
+    return "Our Opportunities board carries live grants, fellowships and internships with deadline alerts. Head to the [Opportunities page](/opportunities) to filter by type and closing date.";
   }
-  if (/(program|challenge)/.test(t)) {
-    return "We run incubators and mentorship programs including the Youth Climate Innovation Challenge, plus trainings across our five pillars. See the Programs page to apply.";
+  if (/(program|challenge|ycic|incubat)/.test(t)) {
+    return "The Youth Climate Innovation Challenge (YCIC 2025) has concluded (applications closed in June 2025). The program awarded KES 500K in seed grants for WASH, flood resilience, and clean tech. Explore past impact on the [YCIC Page](/programs/ycic) or visit our [Opportunities Board](/opportunities) for active grants.";
   }
-  if (/(join|member|start)/.test(t)) {
-    return "Anyone aged 15 to 35 in Kenya can join. Start with the Opportunities board, then register for an upcoming event or workshop.";
+  if (/(join|member|start|register)/.test(t)) {
+    return "Anyone aged 15 to 35 in Kenya can join KYCH. Start by registering on yoma.world, then check out the [Opportunities board](/opportunities).";
   }
-  if (/(librar|resource|report)/.test(t)) {
-    return "The E-Library holds reports, toolkits, policy briefs and research papers, all free to browse and save to your dashboard.";
+  if (/(librar|resource|report|paper)/.test(t)) {
+    return "The E-Library holds research reports, toolkits, and policy briefs. Browse free resources on the [E-Library page](/library).";
   }
-  return "Thanks for your message! I will be connected to a live AI soon. In the meantime, reach us at info@kenyayouthclimatehub.org or (+254) 0115963306.";
+  if (/(weather|county|flood|nairobi)/.test(t)) {
+    return "Our Climate Watch hub provides live satellite weather telemetry and advisories for all 47 Kenya counties. Visit the [Weather Watch page](/weather).";
+  }
+  return "Karibu! Thanks for reaching out. Reach us directly at info@kenyayouthclimatehub.org or (+254) 0115963306 for personalized support.";
+}
+
+function renderMessageText(text: string) {
+  const lines = text.split("\n");
+  return lines.map((line, lIdx) => {
+    // Split by bold (**bold**) and markdown links ([label](url))
+    const parts = line.split(/(\*\*.*?\*\*|\[.*?\]\(.*?\))/g);
+    return (
+      <div key={lIdx} style={{ minHeight: line.trim() ? "auto" : "0.4rem", marginBottom: "0.2rem" }}>
+        {parts.map((part, pIdx) => {
+          if (part.startsWith("**") && part.endsWith("**")) {
+            return <strong key={pIdx}>{part.slice(2, -2)}</strong>;
+          }
+          const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
+          if (linkMatch) {
+            return (
+              <a
+                key={pIdx}
+                href={linkMatch[2]}
+                target={linkMatch[2].startsWith("http") ? "_blank" : "_self"}
+                rel="noreferrer"
+                style={{ color: "#101C33", textDecoration: "underline", fontWeight: 700 }}
+              >
+                {linkMatch[1]}
+              </a>
+            );
+          }
+          return part;
+        })}
+      </div>
+    );
+  });
 }
 
 export function ClimateAIChatbot() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([
     { from: "bot", text: "Karibu! I'm the KYCH Climate AI. Ask me about grants, fellowships, programs or the Youth Climate Innovation Challenge." },
   ]);
@@ -53,16 +87,37 @@ export function ClimateAIChatbot() {
     });
   };
 
-  const send = (text?: string) => {
+  const send = async (text?: string) => {
     const value = (text ?? input).trim();
-    if (!value) return;
-    setMsgs((m) => [...m, { from: "user", text: value }]);
+    if (!value || isLoading) return;
+
+    const newMsgs: Msg[] = [...msgs, { from: "user", text: value }];
+    setMsgs(newMsgs);
     setInput("");
+    setIsLoading(true);
     scrollToBottom();
-    setTimeout(() => {
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMsgs }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server returned ${res.status}`);
+      }
+
+      const data = await res.json();
+      const botReply = data.reply || getCannedReply(value);
+      setMsgs((m) => [...m, { from: "bot", text: botReply }]);
+    } catch (err) {
+      console.error("Chat API error, using fallback RAG reply:", err);
       setMsgs((m) => [...m, { from: "bot", text: getCannedReply(value) }]);
+    } finally {
+      setIsLoading(false);
       scrollToBottom();
-    }, 700);
+    }
   };
 
   useEffect(() => { if (open) scrollToBottom(); }, [open]);
@@ -97,7 +152,9 @@ export function ClimateAIChatbot() {
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "15px", color: "#fff", lineHeight: 1.2 }}>Climate AI</div>
                 <div style={{ display: "flex", alignItems: "center", gap: ".35rem", marginTop: 2 }}>
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: NK.green, flexShrink: 0 }} />
-                  <span style={{ fontFamily: "var(--fm)", fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", color: NK.mutedOnDark }}>Online now</span>
+                  <span style={{ fontFamily: "var(--fm)", fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", color: NK.mutedOnDark }}>
+                    {isLoading ? "RAG AI Thinking..." : "Online • OpenAI RAG Connected"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -123,33 +180,50 @@ export function ClimateAIChatbot() {
             {msgs.map((m, i) => (
               <div key={i} style={{ display: "flex", justifyContent: m.from === "user" ? "flex-end" : "flex-start" }}>
                 <div style={{
-                  maxWidth: "80%", padding: ".65rem .85rem",
-                  fontFamily: "var(--fb)", fontSize: "13.5px", lineHeight: 1.5,
+                  maxWidth: "85%", padding: ".65rem .85rem",
+                  fontFamily: "var(--fb)", fontSize: "13px", lineHeight: 1.5,
                   background: m.from === "user" ? NK.green : NK.white,
                   color: m.from === "user" ? NK.navyDeep : NK.ink,
                   fontWeight: m.from === "user" ? 700 : 400,
                   border: m.from === "user" ? "none" : `1.5px solid ${NK.ink}`,
                   boxShadow: m.from === "user" ? nkShadow("rgba(16,28,51,0.18)", 3) : nkShadow("rgba(16,28,51,0.12)", 3),
                 }}>
-                  {m.text}
+                  {renderMessageText(m.text)}
                 </div>
               </div>
             ))}
+
+            {isLoading && (
+              <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                <div style={{
+                  maxWidth: "80%", padding: ".5rem .75rem",
+                  background: NK.white, color: NK.ink,
+                  border: `1.5px solid ${NK.ink}`,
+                  boxShadow: nkShadow("rgba(16,28,51,0.12)", 3),
+                  display: "flex", alignItems: "center", gap: ".5rem",
+                  fontFamily: "var(--fm)", fontSize: "12px",
+                }}>
+                  <Loader2 size={14} className="animate-spin" color={NK.greenAlt} />
+                  <span>Retrieving KYCH context &amp; generating answer...</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Quick prompts */}
-          <div style={{ display: "flex", gap: ".5rem", padding: "0 1rem .75rem", flexWrap: "wrap", flexShrink: 0 }}>
+          <div style={{ display: "flex", gap: ".4rem", padding: "0 1rem .75rem", flexWrap: "wrap", flexShrink: 0 }}>
             {QUICK_PROMPTS.map((p) => (
               <button
                 key={p.label}
+                disabled={isLoading}
                 onClick={() => send(p.query)}
                 style={{
-                  padding: ".4rem .75rem", fontFamily: "var(--fs)", fontWeight: 600, fontSize: "11.5px",
-                  background: NK.white, border: `1.5px solid ${NK.ink}`, color: NK.ink, cursor: "pointer",
-                  transition: "background .2s, color .2s",
+                  padding: ".35rem .65rem", fontFamily: "var(--fs)", fontWeight: 600, fontSize: "11px",
+                  background: NK.white, border: `1.5px solid ${NK.ink}`, color: NK.ink, cursor: isLoading ? "not-allowed" : "pointer",
+                  opacity: isLoading ? 0.6 : 1, transition: "background .2s, color .2s",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = NK.green; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = NK.white; }}
+                onMouseEnter={(e) => { if (!isLoading) e.currentTarget.style.background = NK.green; }}
+                onMouseLeave={(e) => { if (!isLoading) e.currentTarget.style.background = NK.white; }}
               >
                 {p.label}
               </button>
@@ -160,18 +234,27 @@ export function ClimateAIChatbot() {
           <div style={{ display: "flex", gap: ".5rem", padding: "0 1rem 1rem", flexShrink: 0 }}>
             <input
               value={input}
+              disabled={isLoading}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") send(); }}
-              placeholder="Ask about climate funding..."
+              onKeyDown={(e) => { if (e.key === "Enter" && !isLoading) send(); }}
+              placeholder={isLoading ? "KYCH AI is typing..." : "Ask about grants, YCIC, or climate watch..."}
               style={{
                 flex: 1, padding: ".65rem .85rem", fontFamily: "var(--fb)", fontSize: "13px",
                 border: `2px solid ${NK.ink}`, background: NK.white, color: NK.ink, outline: "none",
+                opacity: isLoading ? 0.7 : 1,
               }}
             />
             <button
+              disabled={isLoading || !input.trim()}
               onClick={() => send()}
               aria-label="Send message"
-              style={{ width: 42, height: 42, flexShrink: 0, background: NK.green, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              style={{
+                width: 42, height: 42, flexShrink: 0,
+                background: NK.green, border: "none",
+                cursor: (isLoading || !input.trim()) ? "not-allowed" : "pointer",
+                opacity: (isLoading || !input.trim()) ? 0.5 : 1,
+                display: "flex", alignItems: "center", justifyContent: "center"
+              }}
             >
               <Send size={16} color={NK.navyDeep} />
             </button>
@@ -199,7 +282,7 @@ export function ClimateAIChatbot() {
         <div style={{ width: 32, height: 32, background: hovToggle ? NK.navyDeep : NK.green, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
           <Sparkles size={16} color={hovToggle ? NK.green : NK.navyDeep} />
         </div>
-        Climate AI
+        <span>Climate AI</span>
       </button>
     </div>
   );

@@ -221,7 +221,7 @@ export default function WeatherPage() {
           <div className="flex items-center justify-between gap-2 mb-4">
             <div className="flex items-center gap-2 flex-wrap">
               <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.12em", color: NK.navyDeep }}>
-                MON 14 SEPTEMBER 2026
+                {new Date().toLocaleDateString("en-US", { weekday: "short", day: "numeric", month: "long", year: "numeric" }).toUpperCase()}
               </span>
               <span className="hidden sm:inline" style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedLabel }}>
                 · Time-of-Day Forecast Breakdown
@@ -511,7 +511,7 @@ export default function WeatherPage() {
                 📅 Weekly Climate Focus
               </div>
               <h3 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "clamp(1.2rem, 2.2vw, 1.6rem)", color: NK.ink, margin: 0 }}>
-                7-Day Weather Focus for {selectedLocation} (14th – 20th September 2026)
+                7-Day Weather Focus for {selectedLocation} ({weatherData?.dailyForecasts[0]?.dateStr || "Today"} – {weatherData?.dailyForecasts[6]?.dateStr || "Next 7 Days"})
               </h3>
             </div>
 
@@ -573,7 +573,7 @@ export default function WeatherPage() {
                     Selected Day Spotlight
                   </div>
                   <h4 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.4rem", color: "#fff", margin: "4px 0" }}>
-                    {activeDay.dayName}, {activeDay.dateStr} September 2026
+                    {activeDay.dayName}, {activeDay.dateStr}
                   </h4>
                   <div style={{ fontFamily: "var(--fm)", fontSize: 12, color: NK.mutedOnDark }}>
                     Daytime: {activeDay.dayCondition} · Nighttime: {activeDay.nightCondition}
