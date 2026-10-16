@@ -29,6 +29,8 @@ export function CTABand({ title, buttonLabel, href, external }: Props) {
     cursor: "pointer",
     transition: "background .2s, color .2s",
     flexShrink: 0,
+    // Longer Kiswahili/French labels wrap instead of pushing past the screen edge on phones.
+    maxWidth: "100%",
   };
 
   return (

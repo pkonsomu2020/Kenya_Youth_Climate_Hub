@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { retrieveRelevantContext } from "@/lib/rag/knowledgeBase";
+import { getTranslations } from "next-intl/server";
+import { defaultLocale, isLocale, type Locale } from "@/i18n/config";
+
+const REPLY_LANGUAGE = { en: "English", sw: "Kiswahili (Swahili)", fr: "French" } as const;
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { messages } = body;
+    const locale: Locale = isLocale(body.locale) ? body.locale : defaultLocale;
+    const t = await getTranslations({ locale, namespace: "chatApi" });
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: "Invalid messages format" }, { status: 400 });
@@ -31,7 +37,7 @@ export async function POST(req: NextRequest) {
     if (!apiKey || apiKey.trim() === "" || apiKey.startsWith("sk-proj-placeholder")) {
       const topChunk = contextChunks[0];
       return NextResponse.json({
-        reply: `Karibu! ${topChunk.content}\n\nFor further details, visit [${topChunk.title}](${topChunk.url || "/programs"}) or contact us at info@kenyayouthclimatehub.org / (+254) 0115963306.`,
+        reply: t("fallback", { content: topChunk.content, title: topChunk.title, url: topChunk.url || "/programs" }),
       });
     }
 
@@ -49,7 +55,8 @@ Formatting & Tone Guidelines:
 2. Structure your answers cleanly using markdown bullet points and bold headers when helpful.
 3. Highlight key eligibility criteria, deadlines, contact info (info@kenyayouthclimatehub.org, (+254) 0115963306), and relevant page paths (e.g., /programs/ycic, /opportunities, /library, /weather) when appropriate.
 4. Keep responses concise, clear, and actionable (under 250 words unless detailed explanation is requested).
-5. CRITICAL YCIC STATUS DIRECTIVE: The Youth Climate Innovation Challenge (YCIC 2025) has CONCLUDED and applications are CLOSED. Never suggest or invite users to apply or join YCIC now. State clearly that the 2025 cohort has concluded, summarize its past impact/partners (Flarehub, Yoma, KES 500K awarded at KICC), and guide users to the Opportunities Board (/opportunities) for current active calls and future cohorts.`;
+5. LANGUAGE: Always reply in ${REPLY_LANGUAGE[locale]}, the language the user selected on the site, even though the context above is in English. Keep names of programmes, organisations and URLs unchanged.
+6. CRITICAL YCIC STATUS DIRECTIVE: The Youth Climate Innovation Challenge (YCIC 2025) has CONCLUDED and applications are CLOSED. Never suggest or invite users to apply or join YCIC now. State clearly that the 2025 cohort has concluded, summarize its past impact/partners (Flarehub, Yoma, KES 500K awarded at KICC), and guide users to the Opportunities Board (/opportunities) for current active calls and future cohorts.`;
 
     // 4. Format messages for OpenAI completion API
     const apiMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
@@ -81,12 +88,12 @@ Formatting & Tone Guidelines:
       // Fallback: Use RAG context content directly if OpenAI call fails (e.g. quota limit)
       const topChunk = contextChunks[0];
       return NextResponse.json({
-        reply: `Karibu! ${topChunk.content}\n\nFor more details, visit [${topChunk.title}](${topChunk.url || "/programs"}) or reach us directly at info@kenyayouthclimatehub.org or (+254) 0115963306.`,
+        reply: t("fallback", { content: topChunk.content, title: topChunk.title, url: topChunk.url || "/programs" }),
       });
     }
 
     return NextResponse.json({
-      reply: "Thanks for reaching out! In the meantime, you can reach us at info@kenyayouthclimatehub.org or (+254) 0115963306.",
+      reply: t("noReply"),
     });
   } catch (err: unknown) {
     console.error("Error in /api/chat route:", err);

@@ -7,6 +7,8 @@ import { useNews } from "@/lib/useNews";
 import { successStories } from "@/lib/data/successStories";
 import { NK, nkShadow, nkCard } from "@/lib/nkTheme";
 import { GrowHeading } from "@/components/GrowHeading";
+import { useTranslations } from "next-intl";
+import { useLocalizedStories } from "@/lib/data/useLocalizedStories";
 
 function useInView(ref: React.RefObject<Element | null>, threshold = 0.12) {
   const [inView, setInView] = useState(false);
@@ -19,7 +21,8 @@ function useInView(ref: React.RefObject<Element | null>, threshold = 0.12) {
 }
 
 // ── Data ──────────────────────────────────────────────────────
-const HERO_WORDS = ["climate innovators", "county changemakers", "green founders", "policy advocates"];
+// Green highlight used inside translated rich-text headings: "Kenya Youth <g>Climate Hub.</g>"
+const g = (chunks: React.ReactNode) => <span style={{ color: NK.green }}>{chunks}</span>;
 
 const PARTNERS = [
   { name: "UNICEF", logo: "/PARTNERS/UNICEF_Logo.png" },
@@ -33,30 +36,18 @@ const PARTNERS = [
 ];
 
 const PLATFORM_TOOLS = [
-  { num: "01", icon: BookOpen, label: "E-Library & Resource Hub", desc: "Reports, toolkits, policy briefs, and research papers. Save them to your dashboard.", cta: "Browse Library →", href: "/e-library" },
-  { num: "02", icon: DollarSign, label: "Funding & Opportunities", desc: "A live board of grants, fellowships, and internships with deadline alerts.", cta: "Find Funding →", href: "/opportunities" },
-  { num: "03", icon: Rocket, label: "Programs & Challenges", desc: "Apply for incubators like the Youth Climate Innovation Challenge and mentorship programs.", cta: "View Programs →", href: "/programs" },
-  { num: "04", icon: CalendarDays, label: "Events & Workshops", desc: "Register for bootcamps, policy dialogues, and webinars from KYCH and partners.", cta: "View Calendar →", href: "/events" },
-  { num: "05", icon: CloudRain, label: "Climate Watch & Weather Focus", desc: "Live 47-county flood radar, rainfall advisories, and official 23-point El Niño preparedness guide.", cta: "View Weather Radar →", href: "/weather" },
-  { num: "06", icon: Bot, label: "Climate AI Assistant", desc: "A 24/7 AI guide trained on Kenya's climate data, opportunities and resources.", cta: "Ask AI Now →", href: null },
+  { num: "01", icon: BookOpen, key: "library", href: "/e-library" },
+  { num: "02", icon: DollarSign, key: "funding", href: "/opportunities" },
+  { num: "03", icon: Rocket, key: "programs", href: "/programs" },
+  { num: "04", icon: CalendarDays, key: "events", href: "/events" },
+  { num: "05", icon: CloudRain, key: "weather", href: "/weather" },
+  { num: "06", icon: Bot, key: "ai", href: null },
 ];
 
-const PILLARS = [
-  { title: "Youth Climate Leadership & Advocacy", desc: "Training Kenya's next climate negotiators, county advocates, and movement leaders to influence policy at every level." },
-  { title: "Climate Innovation & Entrepreneurship", desc: "Incubating youth-led green startups, from clean energy to waste tech, through the Youth Climate Innovation Challenge." },
-  { title: "Climate Finance & Opportunity Access", desc: "Connecting young Kenyans to grants, fellowships, competitions, and jobs that match their climate ambitions." },
-  { title: "Capacity Building & Knowledge", desc: "Equipping young people with the skills, data, and tools to lead climate action through trainings and digital resources." },
-  { title: "Partnerships & Ecosystem Building", desc: "Building bridges between youth, government, NGOs, development partners, and the private sector." },
-];
+// Text for these lives in messages under home.pillars.* / home.values.*
+const PILLARS = ["leadership", "innovation", "finance", "capacity", "partnerships"] as const;
 
-const VALUES = [
-  { title: "Climate Justice", desc: "Fair outcomes for frontline communities" },
-  { title: "Youth Inclusion", desc: "Ages 15–35 at the centre of every decision" },
-  { title: "Gender Equity", desc: "Equal voice, equal access, equal impact" },
-  { title: "Innovation", desc: "Kenyan solutions for Kenyan challenges" },
-  { title: "Evidence-Based", desc: "Data-driven, research-backed action" },
-  { title: "Systems Change", desc: "Beyond symptoms, changing root causes" },
-];
+const VALUES = ["justice", "inclusion", "gender", "innovation", "evidence", "systems"] as const;
 
 const GRADIENT_MAP: Record<string, string> = {
   News: NK.green, "Climate Insights": NK.greenAlt, "Success Stories": NK.green, "Events Recap": NK.greenAlt, "Partner Updates": NK.green,
@@ -75,6 +66,7 @@ function Eyebrow({ children, color = NK.greenAlt }: { children: React.ReactNode;
 
 // ── Partner flip-board ───────────────────────────────────────
 function PartnerBoard() {
+  const t = useTranslations("home");
   const [idx, setIdx] = useState(0);
   const [barKey, setBarKey] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -94,7 +86,7 @@ function PartnerBoard() {
   return (
     <div style={{ background: NK.ink, padding: "1.5rem 2.5rem", display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap" }}>
       <div style={{ flexShrink: 0 }}>
-        <div style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: NK.green }}>Backed by</div>
+        <div style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: NK.green }}>{t("backedBy")}</div>
         <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedOnDark, marginTop: 4 }}>{String(idx + 1).padStart(2, "0")} / {String(PARTNERS.length).padStart(2, "0")}</div>
       </div>
       <div style={{ flex: 1, minWidth: 200, overflow: "hidden" }}>
@@ -112,7 +104,7 @@ function PartnerBoard() {
           <button
             key={p.name}
             onClick={() => restart(i)}
-            aria-label={`Show ${p.name}`}
+            aria-label={t("showPartner", { name: p.name })}
             style={{
               width: i === idx ? 26 : 6, height: 6, border: "none", cursor: "pointer",
               background: i === idx ? NK.green : "#2B3A57", transition: "width .3s, background .3s",
@@ -125,7 +117,8 @@ function PartnerBoard() {
 }
 
 // ── Value card ────────────────────────────────────────────────
-function ValueCard({ v, index }: { v: typeof VALUES[0]; index: number }) {
+function ValueCard({ v, index }: { v: typeof VALUES[number]; index: number }) {
+  const t = useTranslations("home.values");
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
   const [hov, setHov] = useState(false);
@@ -145,8 +138,8 @@ function ValueCard({ v, index }: { v: typeof VALUES[0]; index: number }) {
       }}
     >
       <div style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, color: NK.green, marginBottom: ".75rem" }}>{String(index + 1).padStart(2, "0")}</div>
-      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", color: NK.ink, marginBottom: ".5rem" }}>{v.title}</div>
-      <p style={{ fontSize: ".9rem", color: NK.muted, lineHeight: 1.6, margin: 0 }}>{v.desc}</p>
+      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", color: NK.ink, marginBottom: ".5rem" }}>{t(`${v}.title`)}</div>
+      <p style={{ fontSize: ".9rem", color: NK.muted, lineHeight: 1.6, margin: 0 }}>{t(`${v}.desc`)}</p>
     </div>
   );
 }
@@ -156,6 +149,7 @@ function ToolCard({ tool, index, onChatOpen }: { tool: typeof PLATFORM_TOOLS[0];
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
   const [hov, setHov] = useState(false);
+  const t = useTranslations("home.tools");
   const Icon = tool.icon;
   const content = (
     <>
@@ -163,9 +157,9 @@ function ToolCard({ tool, index, onChatOpen }: { tool: typeof PLATFORM_TOOLS[0];
         <Icon size={22} />
       </div>
       <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedOnDark, marginBottom: ".5rem" }}>{tool.num}</div>
-      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.05rem", color: "#fff", marginBottom: ".6rem", lineHeight: 1.25 }}>{tool.label}</div>
-      <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.6, marginBottom: "1.25rem" }}>{tool.desc}</p>
-      <span style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".82rem", color: hov ? NK.green : NK.offWhiteOnDark }}>{tool.cta}</span>
+      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.05rem", color: "#fff", marginBottom: ".6rem", lineHeight: 1.25 }}>{t(`${tool.key}.label`)}</div>
+      <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.6, marginBottom: "1.25rem" }}>{t(`${tool.key}.desc`)}</p>
+      <span style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".82rem", color: hov ? NK.green : NK.offWhiteOnDark }}>{t(`${tool.key}.cta`)} →</span>
     </>
   );
   const sharedStyle: React.CSSProperties = {
@@ -181,7 +175,8 @@ function ToolCard({ tool, index, onChatOpen }: { tool: typeof PLATFORM_TOOLS[0];
 }
 
 // ── Pillar row ────────────────────────────────────────────────
-function PillarRow({ p, index }: { p: typeof PILLARS[0]; index: number }) {
+function PillarRow({ p, index }: { p: typeof PILLARS[number]; index: number }) {
+  const t = useTranslations("home.pillars");
   const [hov, setHov] = useState(false);
   return (
     <div
@@ -198,11 +193,11 @@ function PillarRow({ p, index }: { p: typeof PILLARS[0]; index: number }) {
     >
       <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "2.75rem", color: NK.green, minWidth: 80, lineHeight: 1 }}>{String(index + 1).padStart(2, "0")}</div>
       <div style={{ flex: 1, minWidth: 260 }}>
-        <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.4rem", color: NK.ink, marginBottom: ".5rem" }}>{p.title}</div>
-        <p style={{ fontSize: ".92rem", color: NK.muted, lineHeight: 1.65, margin: 0, maxWidth: 640 }}>{p.desc}</p>
+        <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.4rem", color: NK.ink, marginBottom: ".5rem" }}>{t(`${p}.title`)}</div>
+        <p style={{ fontSize: ".92rem", color: NK.muted, lineHeight: 1.65, margin: 0, maxWidth: 640 }}>{t(`${p}.desc`)}</p>
       </div>
       <div style={{ fontFamily: "var(--fm)", fontSize: 11.5, color: NK.mutedLabel, alignSelf: "center", whiteSpace: "nowrap" }}>
-        PILLAR {String(index + 1).padStart(2, "0")} / 05
+        {t("counter", { n: String(index + 1).padStart(2, "0"), total: "05" })}
       </div>
     </div>
   );
@@ -210,6 +205,7 @@ function PillarRow({ p, index }: { p: typeof PILLARS[0]; index: number }) {
 
 // ── Success story card ───────────────────────────────────────
 function StoryCard({ story, index }: { story: typeof successStories[0]; index: number }) {
+  const t = useTranslations("home");
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
   const [hov, setHov] = useState(false);
@@ -241,7 +237,7 @@ function StoryCard({ story, index }: { story: typeof successStories[0]; index: n
           {story.name.split(" ").map((n) => n[0]).join("")}
         </div>
         <div>
-          <div style={{ fontFamily: "var(--fm)", fontSize: 9, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.1em" }}>Founder</div>
+          <div style={{ fontFamily: "var(--fm)", fontSize: 9, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.1em" }}>{t("founder")}</div>
           <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".85rem", color: NK.ink }}>{story.name}</div>
         </div>
       </div>
@@ -251,6 +247,7 @@ function StoryCard({ story, index }: { story: typeof successStories[0]; index: n
 
 // ── CTA / Newsletter with sun toggle ────────────────────────────
 function NewsletterCTA() {
+  const t = useTranslations("home.newsletter");
   const [sunOn, setSunOn] = useState(false);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -266,30 +263,30 @@ function NewsletterCTA() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "2rem", flexWrap: "wrap" }}>
           <div style={{ maxWidth: 640 }}>
             <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: sunOn ? NK.navyDeep : NK.green, display: "block", marginBottom: "1rem" }}>
-              Stay in the Loop
+              {t("eyebrow")}
             </span>
             <h2 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(36px,5.5vw,72px)", color: sunOn ? NK.navyDeep : "#fff", textTransform: "uppercase", letterSpacing: "-0.02em", lineHeight: 1.05, margin: 0 }}>
-              Ready to join the <span style={{ color: sunOn ? NK.navyDeep : NK.green }}>movement?</span>
+              {t.rich("title", { g: (c) => <span style={{ color: sunOn ? NK.navyDeep : NK.green }}>{c}</span> })}
             </h2>
             <p style={{ fontFamily: "var(--fb)", fontSize: 15, color: ctaColor, marginTop: "1rem", lineHeight: 1.7, opacity: 0.85 }}>
-              Weekly climate opportunities, news, and challenge updates, straight to your inbox.
+              {t("body")}
             </p>
           </div>
           <button
             onClick={() => setSunOn((s) => !s)}
-            title="Bring the sun up"
+            title={t("sunTitle")}
             style={{ background: "none", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: ".4rem", flexShrink: 0 }}
           >
             <Sun size={40} color={sunOn ? "#F6F8F4" : NK.green} style={{ animation: sunOn ? "none" : "nkSunSway 5s ease-in-out infinite" }} />
             <span style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: ctaColor, textTransform: "uppercase", letterSpacing: "0.1em", opacity: 0.7 }}>
-              {sunOn ? "sun's up" : "bring the sun up"}
+              {sunOn ? t("sunOn") : t("sunOff")}
             </span>
           </button>
         </div>
 
         {submitted ? (
           <div style={{ marginTop: "2rem", padding: "1rem 1.25rem", background: "rgba(76,184,44,0.15)", border: `1px solid ${NK.green}`, maxWidth: 440 }}>
-            <p style={{ fontFamily: "var(--fb)", fontSize: 13, fontWeight: 700, color: NK.green, margin: 0 }}>You&apos;re subscribed! ✓</p>
+            <p style={{ fontFamily: "var(--fb)", fontSize: 13, fontWeight: 700, color: NK.green, margin: 0 }}>{t("subscribed")} ✓</p>
           </div>
         ) : (
           <form
@@ -298,17 +295,18 @@ function NewsletterCTA() {
           >
             <input
               type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@email.com"
+              placeholder={t("emailPlaceholder")}
+              aria-label={t("emailLabel")}
               style={{ flex: 1, minWidth: 220, padding: "14px 16px", background: "rgba(255,255,255,0.06)", border: `2px solid ${sunOn ? NK.navyDeep : "rgba(255,255,255,0.15)"}`, color: ctaColor, fontFamily: "var(--fb)", fontSize: 14, outline: "none" }}
             />
             <button type="submit" style={{ padding: "14px 28px", background: btnBg, color: btnFg, border: "none", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase", cursor: "pointer", transition: "background .3s, color .3s" }}>
-              Subscribe →
+              {t("subscribe")} →
             </button>
           </form>
         )}
 
         <Link href="/opportunities" style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", marginTop: "1.5rem", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", color: ctaColor, textDecoration: "none", borderBottom: `2px solid ${sunOn ? NK.navyDeep : "rgba(255,255,255,0.3)"}`, paddingBottom: 2 }}>
-          Get Started Today <ArrowRight size={14} />
+          {t("getStarted")} <ArrowRight size={14} />
         </Link>
       </div>
     </section>
@@ -317,15 +315,18 @@ function NewsletterCTA() {
 
 // ── Main page ─────────────────────────────────────────────────
 export default function Home() {
+  const t = useTranslations("home");
+  const stories = useLocalizedStories();
+  const heroWords = t.raw("hero.words") as string[];
   const { articles: liveNews, loading: newsLoading, error: newsError } = useNews({ limit: 3 });
   const [wordIdx, setWordIdx] = useState(0);
   const [videoModal, setVideoModal] = useState(false);
   const [videoIdx, setVideoIdx] = useState(0);
 
   useEffect(() => {
-    const t = setInterval(() => setWordIdx((p) => (p + 1) % HERO_WORDS.length), 2600);
-    return () => clearInterval(t);
-  }, []);
+    const timer = setInterval(() => setWordIdx((p) => (p + 1) % heroWords.length), 2600);
+    return () => clearInterval(timer);
+  }, [heroWords.length]);
 
   const openChat = () => {
     // The floating ClimateAIChatbot manages its own open state; dispatch a
@@ -353,10 +354,10 @@ export default function Home() {
         <div style={{ maxWidth: 1320, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: ".6rem", fontFamily: "var(--fm)", fontSize: 12 }}>
             <span style={{ padding: "2px 8px", background: "#dc2626", color: "#fff", fontWeight: 700, textTransform: "uppercase", fontSize: 10 }}>
-              ⚠️ EL NIÑO ALERT
+              ⚠️ {t("alert.badge")}
             </span>
             <span style={{ color: NK.offWhiteOnDark }}>
-              Heavy rains &amp; flood advisories active across Western, Coast, Rift Valley &amp; North Eastern counties.
+              {t("alert.body")}
             </span>
           </div>
           <Link
@@ -366,7 +367,7 @@ export default function Home() {
               display: "inline-flex", alignItems: "center", gap: "4px", borderBottom: `1.5px solid ${NK.green}`
             }}
           >
-            Check County Radar &amp; 23-Point Protection Guide →
+            {t("alert.cta")} →
           </Link>
         </div>
       </div>
@@ -382,31 +383,31 @@ export default function Home() {
           className="nk-hero-grid"
         >
           <div style={{ opacity: heroInView ? 1 : 0, transform: heroInView ? "translateY(0)" : "translateY(20px)", transition: "opacity .8s ease, transform .8s ease" }}>
-            <Eyebrow color={NK.greenAlt}>Empowering youth, one climate solution at a time</Eyebrow>
+            <Eyebrow color={NK.greenAlt}>{t("hero.eyebrow")}</Eyebrow>
             <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.4vw,84px)", color: NK.ink, lineHeight: 1.02, letterSpacing: "-0.02em", margin: 0 }}>
-              Kenya Youth <span style={{ color: NK.green }}>Climate Hub.</span>
+              {t.rich("hero.title", { g })}
             </GrowHeading>
 
             <div style={{ display: "flex", alignItems: "center", gap: ".6rem", marginTop: "1.5rem", flexWrap: "wrap" }}>
-              <span style={{ fontFamily: "var(--fm)", fontSize: 13, color: NK.muted, textTransform: "uppercase", letterSpacing: "0.06em" }}>Built for</span>
+              <span style={{ fontFamily: "var(--fm)", fontSize: 13, color: NK.muted, textTransform: "uppercase", letterSpacing: "0.06em" }}>{t("hero.builtFor")}</span>
               <span style={{ overflow: "hidden", display: "inline-block", height: "1.4em", verticalAlign: "bottom" }}>
                 <span key={wordIdx} style={{ display: "inline-block", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 15, color: NK.greenAlt, borderBottom: `2px solid ${NK.green}`, animation: "nkRollIn .55s cubic-bezier(.16,.84,.3,1)" }}>
-                  {HERO_WORDS[wordIdx]}
+                  {heroWords[wordIdx % heroWords.length]}
                 </span>
               </span>
             </div>
 
             <p style={{ fontFamily: "var(--fb)", fontSize: "1.1rem", color: NK.muted, lineHeight: 1.75, marginTop: "1.5rem", maxWidth: 560 }}>
-              Join a community of young innovators addressing climate challenges and building a sustainable future for Kenya. Funding, skills, policy spaces and innovation, across all 47 counties.
+              {t("hero.body")}
             </p>
 
             <div style={{ display: "flex", gap: "1rem", marginTop: "2.25rem", flexWrap: "wrap" }}>
-              <HeroButton href="/opportunities" primary>Find Funding</HeroButton>
-              <HeroButton href="/programs">View Programs</HeroButton>
+              <HeroButton href="/opportunities" primary>{t("hero.ctaFunding")}</HeroButton>
+              <HeroButton href="/programs">{t("hero.ctaPrograms")}</HeroButton>
             </div>
 
             <div style={{ display: "flex", gap: "2.5rem", marginTop: "3rem", flexWrap: "wrap" }}>
-              {[["47", "Counties"], ["15–35", "Age focus"], ["2020", "Founded"]].map(([n, l]) => (
+              {[["47", t("hero.statCounties")], ["15–35", t("hero.statAge")], ["2020", t("hero.statFounded")]].map(([n, l]) => (
                 <div key={l}>
                   <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.6rem", color: NK.green }}>{n}</div>
                   <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 2 }}>{l}</div>
@@ -421,14 +422,14 @@ export default function Home() {
 
             <div style={{ position: "relative", flex: 1 }}>
               <div style={{ position: "relative", height: 470, overflow: "hidden", border: `2px solid ${NK.ink}` }}>
-                <img src="/nk/hero1.jpg" alt="Youth climate action in Kenya" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%" }} />
+                <img src="/nk/hero1.jpg" alt={t("hero.imgAlt")} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%" }} />
                 <div style={{ position: "absolute", top: 14, right: 14, background: NK.navyDeep, color: "#fff", padding: "1rem 1.25rem" }}>
                   <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.4rem", color: NK.green }}>47</div>
-                  <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: NK.mutedOnDark, textTransform: "uppercase" }}>Counties connected</div>
+                  <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: NK.mutedOnDark, textTransform: "uppercase" }}>{t("hero.countiesConnected")}</div>
                 </div>
               </div>
               <div style={{ position: "absolute", left: -20, bottom: -30, width: 190, height: 190, border: `8px solid ${NK.bg}`, overflow: "hidden", boxShadow: nkShadow(NK.ink, 10) }}>
-                <img src="/nk/sheria.jpg" alt="Climate innovators" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <img src="/nk/sheria.jpg" alt={t("hero.imgAlt2")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
             </div>
 
@@ -439,7 +440,7 @@ export default function Home() {
                 fontFamily: "var(--fm)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: NK.mutedLabel,
                 whiteSpace: "nowrap",
               }}>
-                Youth-led since 2020
+                {t("hero.since")}
               </span>
             </div>
           </div>
@@ -456,24 +457,24 @@ export default function Home() {
               <img src="/nk/hero2.jpg" alt="Kenya Youth Climate Hub" style={{ width: "100%", height: 480, objectFit: "cover", objectPosition: "center 20%", border: `2px solid ${NK.ink}` }} />
               <div style={{ position: "absolute", bottom: -18, left: -18, background: NK.navyDeep, color: "#fff", padding: "1rem 1.25rem" }}>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.5rem", color: NK.green }}>2020</div>
-                <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: NK.mutedOnDark, textTransform: "uppercase" }}>Founded</div>
+                <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: NK.mutedOnDark, textTransform: "uppercase" }}>{t("hero.statFounded")}</div>
               </div>
               <div style={{ position: "absolute", top: -18, right: -18, background: NK.white, border: `2px solid ${NK.ink}`, boxShadow: nkShadow(NK.ink, 6), padding: ".9rem 1.1rem" }}>
-                <div style={{ fontFamily: "var(--fm)", fontSize: 9, color: NK.greenAlt, textTransform: "uppercase", letterSpacing: "0.1em" }}>Powered by</div>
+                <div style={{ fontFamily: "var(--fm)", fontSize: 9, color: NK.greenAlt, textTransform: "uppercase", letterSpacing: "0.1em" }}>{t("about.poweredBy")}</div>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".95rem", color: NK.ink }}>Afosi</div>
               </div>
             </div>
           </RevealDiv>
           <RevealDiv delay={0.1}>
-            <Eyebrow>Who We Are</Eyebrow>
+            <Eyebrow>{t("about.eyebrow")}</Eyebrow>
             <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(32px,3.8vw,54px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", lineHeight: 1.08, margin: "0 0 1.5rem" }}>
-              More than a hub, <span style={{ color: NK.green }}>a movement.</span>
+              {t.rich("about.title", { g })}
             </GrowHeading>
             <p style={{ fontFamily: "var(--fb)", fontSize: "1.02rem", color: NK.muted, lineHeight: 1.8, marginBottom: "1.5rem" }}>
-              KYCH serves as a national digital platform for Kenya&apos;s youth climate movement, connecting ambition to systems change. It operates under <strong style={{ color: NK.ink }}>Afosi, Action for Sustainability Initiative</strong>, blending over a decade of evidence-based development with youth-first design.
+              {t.rich("about.body", { b: (c) => <strong style={{ color: NK.ink }}>{c}</strong> })}
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1.75rem" }} className="nk-2col-tight">
-              {[["Mission", "Equip every young Kenyan to lead climate action."], ["Vision", "A Kenya where young people lead the response."]].map(([label, text]) => (
+              {[[t("about.mission"), t("about.missionText")], [t("about.vision"), t("about.visionText")]].map(([label, text]) => (
                 <div key={label} style={{ border: `2px solid ${NK.ink}`, padding: "1.25rem" }}>
                   <div style={{ fontFamily: "var(--fm)", fontSize: 10, color: NK.greenAlt, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: ".5rem" }}>{label}</div>
                   <p style={{ fontFamily: "var(--fb)", fontSize: ".82rem", color: NK.muted, lineHeight: 1.6, margin: 0 }}>{text}</p>
@@ -482,10 +483,10 @@ export default function Home() {
             </div>
             <blockquote style={{ borderLeft: `3px solid ${NK.green}`, background: NK.tintGreen, padding: "1rem 1.25rem", margin: "0 0 2rem" }}>
               <p style={{ fontFamily: "var(--fb)", fontSize: ".95rem", color: NK.muted, lineHeight: 1.7, fontStyle: "italic", margin: 0 }}>
-                &quot;Afosi generates the evidence. Youth generate the solutions. The Hub connects them to scale.&quot;
+                &quot;{t("about.quote")}&quot;
               </p>
             </blockquote>
-            <HeroButton href="/about" primary>Our Story &amp; Team</HeroButton>
+            <HeroButton href="/about" primary>{t("about.cta")}</HeroButton>
           </RevealDiv>
         </div>
       </section>
@@ -494,13 +495,13 @@ export default function Home() {
       <section style={{ background: NK.bg }}>
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "6.25rem 2.5rem 1.5rem" }}>
           <div ref={valuesRef} style={{ marginBottom: "3rem", opacity: valuesInView ? 1 : 0, transform: valuesInView ? "translateY(0)" : "translateY(24px)", transition: "opacity .7s ease, transform .7s ease" }}>
-            <Eyebrow>What Drives Us</Eyebrow>
+            <Eyebrow>{t("values.eyebrow")}</Eyebrow>
             <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
-              Our core <span style={{ color: NK.green }}>values.</span>
+              {t.rich("values.title", { g })}
             </GrowHeading>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
-            {VALUES.map((v, i) => <ValueCard key={v.title} v={v} index={i} />)}
+            {VALUES.map((v, i) => <ValueCard key={v} v={v} index={i} />)}
           </div>
         </div>
       </section>
@@ -510,17 +511,17 @@ export default function Home() {
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "6.25rem 2.5rem" }}>
           <div ref={toolsRef} style={{ marginBottom: "3rem", display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "2rem", flexWrap: "wrap", opacity: toolsInView ? 1 : 0, transform: toolsInView ? "translateY(0)" : "translateY(24px)", transition: "opacity .7s ease, transform .7s ease" }}>
             <div>
-              <Eyebrow>Platform Tools</Eyebrow>
+              <Eyebrow>{t("tools.eyebrow")}</Eyebrow>
               <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: "#fff", textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
-                Everything you need to <span style={{ color: NK.green }}>act.</span>
+                {t.rich("tools.title", { g })}
               </GrowHeading>
             </div>
             <p style={{ fontFamily: "var(--fb)", fontSize: ".95rem", color: NK.mutedOnDark, lineHeight: 1.7, maxWidth: 320, margin: 0 }}>
-              One platform connecting Kenya&apos;s youth to funding, knowledge, programs, and climate expertise.
+              {t("tools.body")}
             </p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
-            {PLATFORM_TOOLS.map((t, i) => <ToolCard key={t.num} tool={t} index={i} onChatOpen={openChat} />)}
+            {PLATFORM_TOOLS.map((tool, i) => <ToolCard key={tool.num} tool={tool} index={i} onChatOpen={openChat} />)}
           </div>
         </div>
       </section>
@@ -530,31 +531,31 @@ export default function Home() {
         <div style={{ maxWidth: 1320, margin: "0 auto", background: NK.white, border: `2px solid ${NK.ink}`, padding: "2.5rem", boxShadow: nkShadow(NK.green) }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1.5rem", marginBottom: "2rem" }}>
             <div>
-              <Eyebrow color={NK.greenAlt}>Official Calendar 2026</Eyebrow>
+              <Eyebrow color={NK.greenAlt}>{t("calendar.eyebrow")}</Eyebrow>
               <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(28px,3.2vw,46px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
-                Upcoming <span style={{ color: NK.green }}>Key Climate Dates.</span>
+                {t.rich("calendar.title", { g })}
               </GrowHeading>
             </div>
             <Link href="/events" style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", color: NK.ink, textDecoration: "none", borderBottom: `2px solid ${NK.green}`, paddingBottom: 2 }}>
-              Explore Full Calendar →
+              {t("calendar.cta")} →
             </Link>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
             <div style={{ background: NK.navyDeep, color: "#fff", padding: "1.5rem", border: `1.5px solid ${NK.ink}` }}>
-              <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.green, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>10TH OCT 2026</div>
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", marginBottom: ".5rem" }}>Mazingira Day</div>
-              <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.5, margin: 0 }}>Kenya National Environmental Day &amp; nationwide youth tree restoration.</p>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.green, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>{t("calendar.e1.date")}</div>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", marginBottom: ".5rem" }}>{t("calendar.e1.title")}</div>
+              <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.5, margin: 0 }}>{t("calendar.e1.desc")}</p>
             </div>
             <div style={{ background: NK.navyDeep, color: "#fff", padding: "1.5rem", border: `1.5px solid ${NK.ink}` }}>
-              <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.green, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>5TH – 8TH OCT 2026</div>
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", marginBottom: ".5rem" }}>Pre-COP 31 Summit</div>
-              <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.5, margin: 0 }}>Ministerial &amp; youth negotiation strategy meeting ahead of COP31.</p>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.green, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>{t("calendar.e2.date")}</div>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", marginBottom: ".5rem" }}>{t("calendar.e2.title")}</div>
+              <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.5, margin: 0 }}>{t("calendar.e2.desc")}</p>
             </div>
             <div style={{ background: NK.navyDeep, color: "#fff", padding: "1.5rem", border: `1.5px solid ${NK.ink}` }}>
-              <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.green, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>9TH – 20TH NOV 2026</div>
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", marginBottom: ".5rem" }}>COP31 UN Climate Summit</div>
-              <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.5, margin: 0 }}>Global UN Climate Change Conference taking place in Türkiye.</p>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.green, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>{t("calendar.e3.date")}</div>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", marginBottom: ".5rem" }}>{t("calendar.e3.title")}</div>
+              <p style={{ fontSize: ".85rem", color: NK.mutedOnDark, lineHeight: 1.5, margin: 0 }}>{t("calendar.e3.desc")}</p>
             </div>
           </div>
         </div>
@@ -564,16 +565,16 @@ export default function Home() {
       <section style={{ background: NK.bg }}>
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "6.25rem 2.5rem 2.5rem" }}>
           <div ref={pillarsRef} style={{ marginBottom: "2.5rem", opacity: pillarsInView ? 1 : 0, transform: pillarsInView ? "translateY(0)" : "translateY(24px)", transition: "opacity .7s ease, transform .7s ease" }}>
-            <Eyebrow>What We Do</Eyebrow>
+            <Eyebrow>{t("pillars.eyebrow")}</Eyebrow>
             <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
-              Five pillars of <span style={{ color: NK.green }}>climate action.</span>
+              {t.rich("pillars.title", { g })}
             </GrowHeading>
             <p style={{ fontFamily: "var(--fb)", fontSize: "1rem", color: NK.muted, marginTop: ".75rem", maxWidth: 620 }}>
-              Focused strategic areas designed to accelerate climate action through youth-led innovation across all 47 counties.
+              {t("pillars.body")}
             </p>
           </div>
           <div>
-            {PILLARS.map((p, i) => <PillarRow key={p.title} p={p} index={i} />)}
+            {PILLARS.map((p, i) => <PillarRow key={p} p={p} index={i} />)}
           </div>
         </div>
       </section>
@@ -581,24 +582,24 @@ export default function Home() {
       {/* ── IMMERSIVE VIDEO (kept from previous build) ── */}
       <section style={{ position: "relative", width: "100%", height: "55vh", minHeight: 380, background: "#000", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "6.25rem" }}>
         <video key={PREVIEW_VIDEOS[videoIdx]} src={PREVIEW_VIDEOS[videoIdx]} autoPlay loop muted playsInline style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }} />
-        <button onClick={() => setVideoIdx((p) => (p - 1 + PREVIEW_VIDEOS.length) % PREVIEW_VIDEOS.length)} style={{ position: "absolute", left: "2rem", zIndex: 2, width: 50, height: 50, background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.25)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+        <button aria-label={t("video.prev")} onClick={() => setVideoIdx((p) => (p - 1 + PREVIEW_VIDEOS.length) % PREVIEW_VIDEOS.length)} style={{ position: "absolute", left: "2rem", zIndex: 2, width: 50, height: 50, background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.25)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <ChevronLeft size={24} />
         </button>
-        <button onClick={() => setVideoIdx((p) => (p + 1) % PREVIEW_VIDEOS.length)} style={{ position: "absolute", right: "2rem", zIndex: 2, width: 50, height: 50, background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.25)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+        <button aria-label={t("video.next")} onClick={() => setVideoIdx((p) => (p + 1) % PREVIEW_VIDEOS.length)} style={{ position: "absolute", right: "2rem", zIndex: 2, width: 50, height: 50, background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.25)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <ChevronRight size={24} />
         </button>
         <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: "1.1rem" }}>
-          <button onClick={() => setVideoModal(true)} style={{ width: 76, height: 76, background: NK.green, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 0 12px rgba(76,184,44,0.25)" }}>
+          <button aria-label={t("video.play")} onClick={() => setVideoModal(true)} style={{ width: 76, height: 76, background: NK.green, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 0 12px rgba(76,184,44,0.25)" }}>
             <div style={{ width: 0, height: 0, borderTop: "11px solid transparent", borderBottom: "11px solid transparent", borderLeft: "18px solid #fff", marginLeft: 5 }} />
           </button>
           <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.3rem", color: "#fff", textAlign: "center" }}>
-            See our impact in action<br /><span style={{ fontSize: ".7rem", fontWeight: 400, opacity: 0.7 }}>Video {videoIdx + 1} of {PREVIEW_VIDEOS.length}</span>
+            {t("video.title")}<br /><span style={{ fontSize: ".7rem", fontWeight: 400, opacity: 0.7 }}>{t("video.counter", { n: videoIdx + 1, total: PREVIEW_VIDEOS.length })}</span>
           </div>
         </div>
       </section>
       {videoModal && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <button onClick={() => setVideoModal(false)} style={{ position: "absolute", top: "2rem", right: "2rem", background: "none", border: "none", color: "#fff", fontSize: "2.5rem", cursor: "pointer" }}>&times;</button>
+          <button aria-label={t("video.close")} onClick={() => setVideoModal(false)} style={{ position: "absolute", top: "2rem", right: "2rem", background: "none", border: "none", color: "#fff", fontSize: "2.5rem", cursor: "pointer" }}>&times;</button>
           <video key={PREVIEW_VIDEOS[videoIdx]} src={PREVIEW_VIDEOS[videoIdx]} autoPlay controls playsInline style={{ width: "90%", maxWidth: 1000, maxHeight: "80vh" }} />
         </div>
       )}
@@ -609,18 +610,18 @@ export default function Home() {
           <div className="px-6 md:px-16" style={{ maxWidth: 1320, margin: "0 auto", paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
             <div ref={storiesRef} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "2rem", flexWrap: "wrap", marginBottom: "3rem", opacity: storiesInView ? 1 : 0, transform: storiesInView ? "translateY(0)" : "translateY(24px)", transition: "opacity .7s ease, transform .7s ease" }}>
               <div>
-                <Eyebrow>Featured</Eyebrow>
+                <Eyebrow>{t("stories.eyebrow")}</Eyebrow>
                 <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
-                  Climate startup <span style={{ color: NK.green }}>stories.</span>
+                  {t.rich("stories.title", { g })}
                 </GrowHeading>
               </div>
               <Link href="/success-stories" style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", color: NK.ink, textDecoration: "none", borderBottom: `2px solid ${NK.ink}`, paddingBottom: 2 }}>
-                See All Stories <ArrowRight size={14} />
+                {t("stories.cta")} <ArrowRight size={14} />
               </Link>
             </div>
           </div>
           <div className="hide-scrollbar" style={{ display: "flex", gap: "1.5rem", overflowX: "auto", paddingLeft: "2.5rem", paddingRight: "2.5rem", paddingBottom: "1rem" }}>
-            {successStories.map((s, i) => <StoryCard key={s.id} story={s} index={i} />)}
+            {stories.map((s, i) => <StoryCard key={s.id} story={s} index={i} />)}
           </div>
         </div>
       </section>
@@ -629,7 +630,7 @@ export default function Home() {
       <section style={{ background: NK.bg }}>
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "6.25rem 2.5rem" }}>
           <div style={{ marginBottom: "2rem" }}>
-            <Eyebrow>Trusted Partners &amp; Collaborators</Eyebrow>
+            <Eyebrow>{t("partners.eyebrow")}</Eyebrow>
           </div>
           <div style={{ border: `2px solid ${NK.ink}`, background: NK.white, overflow: "hidden" }}>
             <div style={{ display: "flex", width: "max-content", animation: "nkPartnerScroll 42s linear infinite" }}>
@@ -652,13 +653,13 @@ export default function Home() {
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "2.5rem 2.5rem 6.25rem" }}>
           <div ref={newsRef} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "2rem", flexWrap: "wrap", marginBottom: "3rem", opacity: newsInView ? 1 : 0, transform: newsInView ? "translateY(0)" : "translateY(24px)", transition: "opacity .7s ease, transform .7s ease" }}>
             <div>
-              <Eyebrow>Latest</Eyebrow>
+              <Eyebrow>{t("news.eyebrow")}</Eyebrow>
               <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(34px,4vw,56px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
-                News, events &amp; <span style={{ color: NK.green }}>resources.</span>
+                {t.rich("news.title", { g })}
               </GrowHeading>
             </div>
             <Link href="/news" style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.06em", textTransform: "uppercase", color: NK.ink, textDecoration: "none", borderBottom: `2px solid ${NK.ink}`, paddingBottom: 2 }}>
-              View All <ArrowRight size={14} />
+              {t("news.cta")} <ArrowRight size={14} />
             </Link>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
@@ -673,9 +674,9 @@ export default function Home() {
                   </div>
                 ))
               : newsError
-              ? <div style={{ gridColumn: "1/-1", padding: "2rem", textAlign: "center", color: NK.muted, fontFamily: "var(--fb)" }}>Unable to load news right now. Please try again later.</div>
+              ? <div style={{ gridColumn: "1/-1", padding: "2rem", textAlign: "center", color: NK.muted, fontFamily: "var(--fb)" }}>{t("news.error")}</div>
               : liveNews.length === 0
-              ? <div style={{ gridColumn: "1/-1", padding: "2rem", textAlign: "center", color: NK.muted, fontFamily: "var(--fb)" }}>No news articles available right now. Check back soon.</div>
+              ? <div style={{ gridColumn: "1/-1", padding: "2rem", textAlign: "center", color: NK.muted, fontFamily: "var(--fb)" }}>{t("news.empty")}</div>
               : liveNews.slice(0, 3).map((n, i) => <NewsCard key={n.id} article={n} index={i} />)}
           </div>
         </div>

@@ -3,17 +3,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { X, Menu } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { NK } from "@/lib/nkTheme";
+import { LanguageSwitcher, LanguageSwitcherInline } from "@/components/LanguageSwitcher";
 
 const links = [
-  { to: "/about",           label: "About"           },
-  { to: "/weather",         label: "Climate Watch"   },
-  { to: "/e-library",       label: "E-Library"       },
-  { to: "/opportunities",   label: "Opportunities"   },
-  { to: "/programs",        label: "Programs"        },
-  { to: "/events",          label: "Events"          },
-  { to: "/news",            label: "News"            },
-  { to: "/success-stories", label: "Success Stories" },
+  { to: "/about",           key: "about"          },
+  { to: "/weather",         key: "climateWatch"   },
+  { to: "/e-library",       key: "eLibrary"       },
+  { to: "/opportunities",   key: "opportunities"  },
+  { to: "/programs",        key: "programs"       },
+  { to: "/events",          key: "events"         },
+  { to: "/news",            key: "news"           },
+  { to: "/success-stories", key: "successStories" },
 ] as const;
 
 function isActive(path: string, to: string) {
@@ -21,6 +23,7 @@ function isActive(path: string, to: string) {
 }
 
 export function Nav() {
+  const t = useTranslations("nav");
   const [open, setOpen] = useState(false);
   const [scrollPct, setScrollPct] = useState(0);
   const [ctaHov, setCtaHov] = useState(false);
@@ -81,12 +84,13 @@ export function Nav() {
                   color: isActive(path, l.to) ? NK.green : NK.ink,
                 }}
               >
-                {l.label}
+                {t(l.key)}
               </Link>
             ))}
           </nav>
 
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <LanguageSwitcher />
             <Link
               href="/opportunities"
               className="nk-nav-cta"
@@ -101,12 +105,12 @@ export function Nav() {
                 whiteSpace: "nowrap",
               }}
             >
-              Find funding
+              {t("findFunding")}
             </Link>
 
             <button
               className="nk-nav-burger"
-              aria-label="Open menu"
+              aria-label={t("openMenu")}
               onClick={() => setOpen(true)}
               onMouseEnter={() => setBurgerHov(true)}
               onMouseLeave={() => setBurgerHov(false)}
@@ -151,7 +155,7 @@ export function Nav() {
           <img src="/kych_logo.png" alt="Kenya Youth Climate Hub" style={{ height: 52, width: "auto" }} />
           <button
             onClick={() => setOpen(false)}
-            aria-label="Close menu"
+            aria-label={t("closeMenu")}
             style={{ width: 40, height: 40, border: `2px solid ${NK.ink}`, background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: NK.ink }}
           >
             <X size={18} />
@@ -176,16 +180,17 @@ export function Nav() {
                   animation: open ? `slide-in-up 0.3s ease ${i * 0.04}s both` : "none",
                 }}
               >
-                {l.label}
+                {t(l.key)}
                 <span style={{ width: 18, height: 2, background: active ? NK.green : "rgba(16,28,51,0.25)" }} />
               </Link>
             );
           })}
         </nav>
 
-        <div style={{ padding: "1.25rem 1.5rem", borderTop: "1px solid rgba(16,28,51,0.1)" }}>
+        <div style={{ padding: "1.25rem 1.5rem", borderTop: "1px solid rgba(16,28,51,0.1)", display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <LanguageSwitcherInline />
           <span style={{ fontFamily: "var(--fm)", fontSize: 10.5, letterSpacing: "0.18em", textTransform: "uppercase", color: NK.muted }}>
-            Youth-led climate action
+            {t("tagline")}
           </span>
         </div>
       </div>

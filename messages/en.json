@@ -1,0 +1,1141 @@
+{
+  "nav": {
+    "about": "About",
+    "climateWatch": "Climate Watch",
+    "eLibrary": "E-Library",
+    "opportunities": "Opportunities",
+    "programs": "Programs",
+    "events": "Events",
+    "news": "News",
+    "successStories": "Success Stories",
+    "findFunding": "Find funding",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "tagline": "Youth-led climate action",
+    "language": "Language"
+  },
+  "footer": {
+    "blurb": "Empowering youth, one climate solution at a time. Kenya's national digital platform for the youth climate movement.",
+    "quickLinks": "Quick Links",
+    "platform": "Platform",
+    "contactUs": "Contact Us",
+    "poweredByAfosi": "Powered by Afosi",
+    "copyright": "© {year} Kenya Youth Climate Hub. All rights reserved.",
+    "tagline": "Youth-led climate action.",
+    "getStarted": "Get started"
+  },
+  "home": {
+    "backedBy": "Backed by",
+    "showPartner": "Show {name}",
+    "founder": "Founder",
+    "alert": {
+      "badge": "EL NIÑO ALERT",
+      "body": "Heavy rains & flood advisories active across Western, Coast, Rift Valley & North Eastern counties.",
+      "cta": "Check County Radar & 23-Point Protection Guide"
+    },
+    "hero": {
+      "eyebrow": "Empowering youth, one climate solution at a time",
+      "title": "Kenya Youth <g>Climate Hub.</g>",
+      "builtFor": "Built for",
+      "words": [
+        "climate innovators",
+        "county changemakers",
+        "green founders",
+        "policy advocates"
+      ],
+      "body": "Join a community of young innovators addressing climate challenges and building a sustainable future for Kenya. Funding, skills, policy spaces and innovation, across all 47 counties.",
+      "ctaFunding": "Find Funding",
+      "ctaPrograms": "View Programs",
+      "statCounties": "Counties",
+      "statAge": "Age focus",
+      "statFounded": "Founded",
+      "imgAlt": "Youth climate action in Kenya",
+      "imgAlt2": "Climate innovators",
+      "countiesConnected": "Counties connected",
+      "since": "Youth-led since 2020"
+    },
+    "about": {
+      "poweredBy": "Powered by",
+      "eyebrow": "Who We Are",
+      "title": "More than a hub, <g>a movement.</g>",
+      "body": "KYCH serves as a national digital platform for Kenya's youth climate movement, connecting ambition to systems change. It operates under <b>Afosi, Action for Sustainability Initiative</b>, blending over a decade of evidence-based development with youth-first design.",
+      "mission": "Mission",
+      "missionText": "Equip every young Kenyan to lead climate action.",
+      "vision": "Vision",
+      "visionText": "A Kenya where young people lead the response.",
+      "quote": "Afosi generates the evidence. Youth generate the solutions. The Hub connects them to scale.",
+      "cta": "Our Story & Team"
+    },
+    "values": {
+      "eyebrow": "What Drives Us",
+      "title": "Our core <g>values.</g>",
+      "justice": {
+        "title": "Climate Justice",
+        "desc": "Fair outcomes for frontline communities"
+      },
+      "inclusion": {
+        "title": "Youth Inclusion",
+        "desc": "Ages 15–35 at the centre of every decision"
+      },
+      "gender": {
+        "title": "Gender Equity",
+        "desc": "Equal voice, equal access, equal impact"
+      },
+      "innovation": {
+        "title": "Innovation",
+        "desc": "Kenyan solutions for Kenyan challenges"
+      },
+      "evidence": {
+        "title": "Evidence-Based",
+        "desc": "Data-driven, research-backed action"
+      },
+      "systems": {
+        "title": "Systems Change",
+        "desc": "Beyond symptoms, changing root causes"
+      }
+    },
+    "tools": {
+      "eyebrow": "Platform Tools",
+      "title": "Everything you need to <g>act.</g>",
+      "body": "One platform connecting Kenya's youth to funding, knowledge, programs, and climate expertise.",
+      "library": {
+        "label": "E-Library & Resource Hub",
+        "desc": "Reports, toolkits, policy briefs, and research papers. Save them to your dashboard.",
+        "cta": "Browse Library"
+      },
+      "funding": {
+        "label": "Funding & Opportunities",
+        "desc": "A live board of grants, fellowships, and internships with deadline alerts.",
+        "cta": "Find Funding"
+      },
+      "programs": {
+        "label": "Programs & Challenges",
+        "desc": "Apply for incubators like the Youth Climate Innovation Challenge and mentorship programs.",
+        "cta": "View Programs"
+      },
+      "events": {
+        "label": "Events & Workshops",
+        "desc": "Register for bootcamps, policy dialogues, and webinars from KYCH and partners.",
+        "cta": "View Calendar"
+      },
+      "weather": {
+        "label": "Climate Watch & Weather Focus",
+        "desc": "Live 47-county flood radar, rainfall advisories, and official 23-point El Niño preparedness guide.",
+        "cta": "View Weather Radar"
+      },
+      "ai": {
+        "label": "Climate AI Assistant",
+        "desc": "A 24/7 AI guide trained on Kenya's climate data, opportunities and resources.",
+        "cta": "Ask AI Now"
+      }
+    },
+    "calendar": {
+      "eyebrow": "Official Calendar 2026",
+      "title": "Upcoming <g>Key Climate Dates.</g>",
+      "cta": "Explore Full Calendar",
+      "e1": {
+        "date": "10TH OCT 2026",
+        "title": "Mazingira Day",
+        "desc": "Kenya National Environmental Day & nationwide youth tree restoration."
+      },
+      "e2": {
+        "date": "5TH – 8TH OCT 2026",
+        "title": "Pre-COP 31 Summit",
+        "desc": "Ministerial & youth negotiation strategy meeting ahead of COP31."
+      },
+      "e3": {
+        "date": "9TH – 20TH NOV 2026",
+        "title": "COP31 UN Climate Summit",
+        "desc": "Global UN Climate Change Conference taking place in Türkiye."
+      }
+    },
+    "pillars": {
+      "eyebrow": "What We Do",
+      "title": "Five pillars of <g>climate action.</g>",
+      "body": "Focused strategic areas designed to accelerate climate action through youth-led innovation across all 47 counties.",
+      "counter": "PILLAR {n} / {total}",
+      "leadership": {
+        "title": "Youth Climate Leadership & Advocacy",
+        "desc": "Training Kenya's next climate negotiators, county advocates, and movement leaders to influence policy at every level."
+      },
+      "innovation": {
+        "title": "Climate Innovation & Entrepreneurship",
+        "desc": "Incubating youth-led green startups, from clean energy to waste tech, through the Youth Climate Innovation Challenge."
+      },
+      "finance": {
+        "title": "Climate Finance & Opportunity Access",
+        "desc": "Connecting young Kenyans to grants, fellowships, competitions, and jobs that match their climate ambitions."
+      },
+      "capacity": {
+        "title": "Capacity Building & Knowledge",
+        "desc": "Equipping young people with the skills, data, and tools to lead climate action through trainings and digital resources."
+      },
+      "partnerships": {
+        "title": "Partnerships & Ecosystem Building",
+        "desc": "Building bridges between youth, government, NGOs, development partners, and the private sector."
+      }
+    },
+    "video": {
+      "title": "See our impact in action",
+      "counter": "Video {n} of {total}",
+      "prev": "Previous video",
+      "next": "Next video",
+      "play": "Play video",
+      "close": "Close video"
+    },
+    "stories": {
+      "eyebrow": "Featured",
+      "title": "Climate startup <g>stories.</g>",
+      "cta": "See All Stories"
+    },
+    "partners": {
+      "eyebrow": "Trusted Partners & Collaborators"
+    },
+    "news": {
+      "eyebrow": "Latest",
+      "title": "News, events & <g>resources.</g>",
+      "cta": "View All",
+      "error": "Unable to load news right now. Please try again later.",
+      "empty": "No news articles available right now. Check back soon."
+    },
+    "newsletter": {
+      "eyebrow": "Stay in the Loop",
+      "title": "Ready to join the <g>movement?</g>",
+      "body": "Weekly climate opportunities, news, and challenge updates, straight to your inbox.",
+      "sunTitle": "Bring the sun up",
+      "sunOn": "sun's up",
+      "sunOff": "bring the sun up",
+      "subscribed": "You're subscribed!",
+      "emailPlaceholder": "you@email.com",
+      "emailLabel": "Email address",
+      "subscribe": "Subscribe",
+      "getStarted": "Get Started Today"
+    }
+  },
+  "about": {
+    "eyebrow": "About KYCH",
+    "title": "More than a hub, <g>a movement.</g>",
+    "intro": "KYCH serves as a national digital platform for Kenya's youth climate movement, connecting ambition to systems change across all 47 counties.",
+    "imgAlt": "Kenya Youth Climate Hub team in action",
+    "badge": "Founded 2020 · Powered by Afosi",
+    "storyEyebrow": "Our Story",
+    "storyTitle": "Ambition, connected to systems change.",
+    "story1": "KYCH operates under <b>Afosi, Action for Sustainability Initiative</b>, blending over a decade of evidence-based development with youth-first design.",
+    "story2": "We connect young Kenyans aged 15 to 35 to climate finance, skills, policy spaces and innovation opportunities in every county.",
+    "mission": "Mission",
+    "missionText": "Equip every young Kenyan to lead climate action.",
+    "vision": "Vision",
+    "visionText": "A Kenya where young people don't just adapt to climate change, they lead the response.",
+    "valuesTitle": "Our core values.",
+    "quote": "Afosi generates the evidence. Youth generate the solutions. The Hub connects them to scale.",
+    "ctaTitle": "Ready to join the movement?",
+    "ctaButton": "Get started today"
+  },
+  "contact": {
+    "eyebrow": "Get In Touch",
+    "title": "We'd love to <g>hear from you</g>",
+    "subtitle": "Partner with us, post an opportunity, share a resource, or ask anything.",
+    "label": "Contact",
+    "heading": "LET'S BUILD <g>TOGETHER</g>",
+    "email": "Email",
+    "phone": "Phone",
+    "location": "Location",
+    "donorsTitle": "For donors & media",
+    "donorsBody": "Our partnerships team responds within 2 business days. Press kit available on request.",
+    "sentTitle": "Message sent!",
+    "sentBody": "Thanks for reaching out. We'll be in touch within 2 business days.",
+    "formTitle": "Send us a message",
+    "nameLabel": "Full Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "your@email.com",
+    "typeLabel": "I am a…",
+    "types": {
+      "youth": "Young Kenyan",
+      "partner": "Partner Organization",
+      "donor": "Donor / Funder",
+      "media": "Media / Press",
+      "other": "Other"
+    },
+    "messageLabel": "Message",
+    "messagePlaceholder": "Tell us how we can help...",
+    "send": "Send Message"
+  },
+  "dashboard": {
+    "eyebrow": "Your Dashboard",
+    "title": "Welcome to <g>KYCH Platform</g>",
+    "subtitle": "Your personal hub for climate opportunities, resources, and tools.",
+    "aiTitle": "Climate AI Assistant",
+    "aiBody": "A 24/7 AI guide trained on Kenya's climate data, opportunities and resources. Coming soon.",
+    "comingSoon": "Coming Soon",
+    "quickAccess": "Quick Access",
+    "links": {
+      "opportunities": {
+        "label": "Opportunities",
+        "desc": "Browse open grants & fellowships"
+      },
+      "library": {
+        "label": "E-Library",
+        "desc": "Reports, toolkits & resources"
+      },
+      "events": {
+        "label": "Events",
+        "desc": "Upcoming summits & workshops"
+      },
+      "programs": {
+        "label": "Programs",
+        "desc": "Apply to innovation programs"
+      }
+    }
+  },
+  "register": {
+    "eyebrow": "Join the Movement",
+    "title": "Create Your <g>Youth Profile</g>",
+    "subtitle": "Register to access funding opportunities, events, resources and the KYCH community — all in one place.",
+    "doneTitle": "You're on the list!",
+    "doneBody": "Thanks for registering. We'll be in touch with your profile details and next steps shortly.",
+    "formTitle": "Youth Registration",
+    "name": "Full Name",
+    "namePh": "Your full name",
+    "email": "Email Address",
+    "emailPh": "your@email.com",
+    "county": "County",
+    "countyPh": "e.g. Nairobi, Kisumu, Mombasa…",
+    "age": "Age",
+    "interests": "Climate Interests",
+    "interestsPh": "e.g. Clean energy, water, agriculture, policy…",
+    "submit": "Create My Profile"
+  },
+  "taxonomy": {
+    "All": "All",
+    "News": "News",
+    "ClimateInsights": "Climate Insights",
+    "SuccessStories": "Success Stories",
+    "EventsRecap": "Events Recap",
+    "PartnerUpdates": "Partner Updates",
+    "Grant": "Grant",
+    "Fellowship": "Fellowship",
+    "Internship": "Internship",
+    "Competition": "Competition",
+    "Job": "Job",
+    "Accelerator": "Accelerator",
+    "Opportunity": "Opportunity",
+    "Energy": "Energy",
+    "Water": "Water",
+    "Agriculture": "Agriculture",
+    "Policy": "Policy",
+    "Finance": "Finance",
+    "Innovation": "Innovation",
+    "Resilience": "Resilience",
+    "Advocacy": "Advocacy",
+    "Waste": "Waste",
+    "RenewableEnergy": "Renewable Energy",
+    "WASH": "WASH",
+    "AllSDGs": "All SDGs",
+    "AllRegions": "All Regions",
+    "AllFormats": "All Formats",
+    "Kenya": "Kenya",
+    "AfricaRegional": "Africa / Regional",
+    "Global": "Global",
+    "Inperson": "In-person",
+    "Online": "Online",
+    "Hybrid": "Hybrid",
+    "SDG4QualityEducation": "SDG 4: Quality Education",
+    "SDG10ReducedInequalities": "SDG 10: Reduced Inequalities",
+    "SDG11SustainableCities": "SDG 11: Sustainable Cities",
+    "SDG12ResponsibleConsumption": "SDG 12: Responsible Consumption",
+    "SDG13ClimateAction": "SDG 13: Climate Action",
+    "SDG14LifeBelowWater": "SDG 14: Life Below Water",
+    "SDG15LifeonLand": "SDG 15: Life on Land",
+    "SDG17Partnerships": "SDG 17: Partnerships",
+    "All23Steps": "All 23 Steps",
+    "HomeInfrastructure": "Home & Infrastructure",
+    "HealthMedicine": "Health & Medicine",
+    "EmergencyKit": "Emergency Kit",
+    "WaterSanitation": "Water & Sanitation",
+    "SafetyLivestock": "Safety & Livestock"
+  },
+  "library": {
+    "eyebrow": "E-Library & Resource Hub",
+    "title": "Knowledge to <g>act on.</g>",
+    "intro": "Interactive tools built exclusively for young Kenyan climate changemakers.",
+    "launch": "LAUNCH",
+    "calcTitle": "Carbon Footprint Calculator",
+    "calcDesc": "Calculate your personal CO₂ impact in 60 seconds using Kenya-specific emission factors. Get personalised tips.",
+    "calcTags": [
+      "4 questions",
+      "60 seconds",
+      "Kenya data"
+    ],
+    "quizTitle": "Climate Readiness Quiz",
+    "quizDesc": "Test your climate knowledge. Earn a badge. Get personalised learning resources based on your results.",
+    "quizTags": [
+      "8 questions",
+      "3 minutes",
+      "4 badge tiers"
+    ],
+    "ctaTitle": "Build your climate knowledge.",
+    "ctaButton": "Explore programs"
+  },
+  "newsPage": {
+    "eyebrow": "Latest",
+    "title": "News, events <g>& resources.</g>",
+    "intro": "Stay informed on the youth climate movement in Kenya, from platform updates to new funding calls.",
+    "readMore": "Read more",
+    "offline": "Offline",
+    "live": "Live · Every 3h",
+    "emptyTitle": "No articles yet",
+    "emptyBody": "Click below to trigger a fresh fetch from our climate RSS feeds.",
+    "fetch": "Fetch News Now",
+    "ctaTitle": "Stay in the loop.",
+    "ctaButton": "Subscribe"
+  },
+  "opportunitiesPage": {
+    "eyebrow": "Funding & Opportunities",
+    "title": "Find your <g>next opportunity.</g>",
+    "intro": "A live board of grants, fellowships, competitions and internships, with deadline alerts, matched to your climate ambitions.",
+    "rolling": "Open / Rolling",
+    "closesToday": "Closes TODAY",
+    "closesIn": "Closes in {days}d",
+    "closesOn": "Closes: {date}",
+    "apply": "Apply now",
+    "details": "View details",
+    "search": "Search opportunities…",
+    "emptyTitle": "No opportunities yet",
+    "emptyBody": "Our AI is fetching climate opportunities. Check back soon.",
+    "refresh": "Refresh Now",
+    "ctaTitle": "Never miss a deadline.",
+    "ctaButton": "Subscribe for alerts",
+    "loadError": "Could not load opportunities right now. Please try again shortly."
+  },
+  "programs": {
+    "eyebrow": "Programs & Challenges",
+    "title": "Programs that <g>build leaders.</g>",
+    "intro": "Apply for incubators, mentorship programs and challenges designed to accelerate youth-led climate action across all 47 counties.",
+    "pillarsBody": "Focused strategic areas designed to accelerate climate action through youth-led innovation.",
+    "viewProgram": "View program",
+    "ctaTitle": "Build your climate solution with us.",
+    "ctaButton": "View opportunities",
+    "list": {
+      "ycic": {
+        "tag": "Flagship program",
+        "status": "Applications Closed",
+        "participants": "300 Young Innovators",
+        "prizeLabel": "Prize Pool",
+        "description": "An incubator for youth-led green startups, from clean energy to waste tech, focused on solutions for informal settlements. Winners receive seed funding, six months of expert mentorship and a route to market.",
+        "focusAreas": [
+          "Water, Sanitation & Hygiene (WASH)",
+          "Flood Resilience & Urban Drainage",
+          "Renewable Energy & Sustainable Infrastructure"
+        ]
+      },
+      "begreen": {
+        "tag": "Active program",
+        "status": "Active — Kenya Pilot",
+        "participants": "2,264 Youth Applied",
+        "prizeLabel": "Seed Funding",
+        "description": "A multi-partner green entrepreneurship programme for youth aged 18–35 in Kenya's waste management sector — 846 jobs created, ~USD 2.7M revenue generated, and 29.9M kgs of waste managed.",
+        "focusAreas": [
+          "Plastic Waste Management",
+          "Organic Waste & Biogas",
+          "E-Waste Enterprises"
+        ]
+      }
+    },
+    "begreen": {
+      "eyebrow": "Green Entrepreneurship for Kenya's Youth",
+      "title": "BeGreen Africa <g>Initiative</g>",
+      "intro": "A multi-partner programme building green entrepreneurship in waste management — simultaneously addressing youth unemployment and environmental degradation.",
+      "back": "Back to Programs",
+      "backAll": "Back to All Programs",
+      "implementing": "Implementing Partners",
+      "resultsEyebrow": "Programme Results",
+      "resultsTitle": "Exceeding Every Target",
+      "stats": [
+        {
+          "label": "Jobs Created",
+          "sub": "Nov 2023 – Jul 2025"
+        },
+        {
+          "label": "Avg Jobs / Enterprise",
+          "sub": "vs. 2.6 benchmark"
+        },
+        {
+          "label": "Revenue Growth",
+          "sub": "Nov 2023 → Jul 2025"
+        },
+        {
+          "label": "Kg Waste Managed",
+          "sub": "Plastic + Organic"
+        },
+        {
+          "label": "Youth Funded",
+          "sub": "Up to USD 5,000 each"
+        },
+        {
+          "label": "Marginalized Youth",
+          "sub": "Intentionally reached"
+        }
+      ],
+      "aboutEyebrow": "About BeGreen",
+      "aboutTitle": "What is the <g>BeGreen Initiative?</g>",
+      "about1": "The <b>BeGreen Africa Initiative</b> is a multi-partner programme implemented in Kenya by UNICEF/Generation Unlimited, the Tony Elumelu Foundation, and the IKEA Foundation, with incubation support from STEM Impact Center Kenya.",
+      "about2": "It targets youth aged <b>18–35 years</b> to build green entrepreneurship in the waste management sector — simultaneously addressing youth unemployment and environmental degradation.",
+      "about3": "The programme aligns with <b>Kenya Vision 2030</b>, the Bottom-Up Economic Transformation Agenda (BETA), and national commitments under the Paris Agreement and multiple SDGs.",
+      "problemTitle": "Problem Context",
+      "problem": [
+        "metric tons of waste generated daily in Kenya — less than 10% recycled",
+        "of youth aged 18–34 unemployed; 80% in the informal sector",
+        "of Kenyans live below the poverty line, disproportionately affecting youth",
+        "of Kenya's population is under 35 years"
+      ],
+      "focusEyebrow": "Waste Sectors",
+      "focusTitle": "Green Business <g>Focus Areas</g>",
+      "focus": [
+        {
+          "title": "Plastic Waste Management",
+          "desc": "Youth enterprises processing and recycling plastic waste across urban and rural Kenya."
+        },
+        {
+          "title": "Organic Waste & Biogas",
+          "desc": "Converting organic waste into biogas and compost, creating circular economy value chains."
+        },
+        {
+          "title": "E-Waste Enterprises",
+          "desc": "Highest-earning sub-sector — responsible collection and processing of electronic waste."
+        },
+        {
+          "title": "Waste-to-Value Innovation",
+          "desc": "Transforming waste streams into marketable products, creating jobs and reducing landfill pressure."
+        }
+      ],
+      "phasesEyebrow": "Programme Structure",
+      "phasesTitle": "8 Phases of <g>Implementation</g>",
+      "phases": [
+        {
+          "title": "Application Drive",
+          "outcome": "2,264 youth applied across Kenya"
+        },
+        {
+          "title": "Business Management Training",
+          "outcome": "759 trained; 502 completed"
+        },
+        {
+          "title": "Green Entrepreneurship Training",
+          "outcome": "502 completed both BMT & GET"
+        },
+        {
+          "title": "Business Plan Development",
+          "outcome": "320 business plans submitted"
+        },
+        {
+          "title": "Pitching Events",
+          "outcome": "207 youth pitched (Nairobi, Kisumu, Mombasa)"
+        },
+        {
+          "title": "Seed Funding Disbursement",
+          "outcome": "146 received grants up to USD 5,000"
+        },
+        {
+          "title": "Incubation & Mentorship",
+          "outcome": "146 innovations supported"
+        },
+        {
+          "title": "Acceleration Funds",
+          "outcome": "112 received USD 1,000–3,000 additional"
+        }
+      ],
+      "outcomesEyebrow": "Impact",
+      "outcomesTitle": "Key Programme <g>Outcomes</g>",
+      "outcomes": [
+        {
+          "title": "Employment Creation",
+          "items": [
+            "846 total jobs created — far exceeding the 260 projected",
+            "Average 8.1 jobs per enterprise vs. 2.6 benchmark",
+            "Each entrepreneur supports ~4.6 household members",
+            "Mentored enterprises created 531 jobs vs. 104 without mentorship"
+          ]
+        },
+        {
+          "title": "Revenue Generation",
+          "items": [
+            "~7x revenue growth from Nov 2023 to Jul 2025",
+            "Avg monthly revenue grew from KShs 81K to KShs 203K",
+            "Annualized projection ~USD 2.7M vs. USD 1M target",
+            "E-waste enterprises averaged KShs 679,000/month"
+          ]
+        },
+        {
+          "title": "Environmental Impact",
+          "items": [
+            "29.9 million kgs of waste managed total",
+            "11.6M kgs plastic + 18.4M kgs organic waste diverted",
+            "Incubated enterprises managed 27.9M kgs vs. 76K without",
+            "Significant contribution to Kenya's circular economy"
+          ]
+        }
+      ],
+      "inclusionEyebrow": "Inclusion",
+      "inclusionTitle": "Reaching <g>Marginalized Youth</g>",
+      "inclusionBody": "Between <b>74% and 90%</b> of all participants were classified as marginalized — demonstrating the programme's strong inclusion focus. Even among funded youth, marginalization rates ranged from 74.3% to 82.4%.",
+      "inclusionStats": [
+        [
+          "68.9% male",
+          "30.9% female participants"
+        ],
+        [
+          "40.5% female",
+          "among funded youth"
+        ],
+        [
+          "59% urban",
+          "39.8% rural participants"
+        ],
+        [
+          "57.6%",
+          "aged 25–30 years"
+        ]
+      ],
+      "conclusionTitle": "Conclusion",
+      "conclusion1": "The BeGreen Africa Kenya Initiative has significantly exceeded its core targets across all three programme pillars: employment creation (846 jobs vs. 260 projected), revenue generation (~USD 2.7M annually vs. USD 1M target), and waste management (29.9M kgs diverted).",
+      "conclusion2": "As Kenya advances its climate goals, the BeGreen experience affirms that youth are not only beneficiaries but <b>architects of sustainable development</b>.",
+      "partnersEyebrow": "Collaboration",
+      "partnersTitle": "Key <g>Partners</g>",
+      "partners": [
+        {
+          "name": "UNICEF / Generation Unlimited",
+          "role": "Lead implementation, youth engagement, curriculum development"
+        },
+        {
+          "name": "Tony Elumelu Foundation",
+          "role": "Entrepreneurship content, mentorship structures, seed funding"
+        },
+        {
+          "name": "IKEA Foundation",
+          "role": "Principal donor, strategic oversight and financing"
+        },
+        {
+          "name": "Kenya National Bureau of Statistics (KNBS)",
+          "role": "Technical backstopping, data integration and validation"
+        },
+        {
+          "name": "Government Agencies (SDYA, Ministry of Youth & Environment)",
+          "role": "Policy alignment, endorsement and local integration"
+        },
+        {
+          "name": "Private Sector (UBA Bank, recyclers, investors)",
+          "role": "Market linkages, funding pathways, business model vetting"
+        }
+      ]
+    },
+    "ycic": {
+      "eyebrow": "Empowering Young Kenyans to Develop Innovative Climate Solutions",
+      "title": "Youth Climate Innovation <g>Challenge</g>",
+      "intro": "For informal settlements — creating sustainable and resilient communities through innovative approaches.",
+      "back": "Back to Programs",
+      "info": [
+        {
+          "label": "Deadline",
+          "value": "9th June, 2025"
+        },
+        {
+          "label": "Participants",
+          "value": "300 Young Innovators"
+        },
+        {
+          "label": "Location",
+          "value": "Kenya (Nationwide)"
+        },
+        {
+          "label": "Prize Pool",
+          "value": "KES 500,000"
+        }
+      ],
+      "closedTitle": "Application Period Has Closed",
+      "remaining": "Time Remaining to Apply",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "closedNote": "Applications closed — check back for future cycles",
+      "overviewEyebrow": "Challenge Overview",
+      "overviewTitle": "Empowering Youth to Create <g>Climate Solutions</g>",
+      "overviewBody": "The 2025 Youth Climate Innovation Challenge aims to empower young Kenyans to develop climate solutions for informal settlements, focusing on creating sustainable and resilient communities through innovative approaches.",
+      "benefits": [
+        {
+          "title": "Seed Funding",
+          "desc": "Win up to KES 500,000 to kickstart your climate innovation and bring your solution to life."
+        },
+        {
+          "title": "Mentorship",
+          "desc": "Get 6 months of expert guidance from climate professionals and successful entrepreneurs."
+        },
+        {
+          "title": "Incubation",
+          "desc": "Access resources, networks, and support to scale your solution across Kenya."
+        },
+        {
+          "title": "National Platform",
+          "desc": "Showcase your innovation at the Climate Innovation Summit in Nairobi."
+        }
+      ],
+      "focusEyebrow": "Focus Areas",
+      "focusTitle": "Innovation Themes for <g>Informal Settlements</g>",
+      "focusArea": "Focus Area {n}",
+      "examples": "Example Solutions",
+      "focus": [
+        {
+          "title": "Water, Sanitation & Hygiene (WASH)",
+          "description": "Develop sustainable solutions for clean water access, improved sanitation facilities, and hygiene promotion that are climate-resilient and affordable.",
+          "examples": [
+            "Low-cost water filtration systems",
+            "Community sanitation facilities",
+            "Hygiene education programs"
+          ]
+        },
+        {
+          "title": "Flood Resilience & Urban Drainage",
+          "description": "Create innovative approaches to manage stormwater, prevent flooding, and improve drainage systems in densely populated informal settlements.",
+          "examples": [
+            "Permeable pavement solutions",
+            "Rainwater harvesting systems",
+            "Early warning flood systems"
+          ]
+        },
+        {
+          "title": "Renewable Energy & Sustainable Infrastructure",
+          "description": "Design affordable, clean energy solutions and sustainable building practices that reduce carbon footprints while improving living conditions.",
+          "examples": [
+            "Solar home systems",
+            "Biogas digesters",
+            "Green building materials"
+          ]
+        }
+      ],
+      "eligibilityEyebrow": "Eligibility",
+      "eligibilityTitle": "Who Can <g>Participate?</g>",
+      "eligibilityHeading": "Eligibility Requirements",
+      "eligibility": [
+        "Must have an active <yoma>yoma.world</yoma> profile",
+        "Kenyan youth aged 18–35 years",
+        "Individuals or teams of up to 4 members",
+        "Solutions must address at least one focus area",
+        "Innovations must include climate education components",
+        "Proposed solutions should be implementable within 12 months",
+        "Previous climate action experience is a plus but not required"
+      ],
+      "keyDatesTitle": "Key Dates",
+      "keyDates": [
+        {
+          "label": "Application Deadline",
+          "value": "June 9, 2025"
+        },
+        {
+          "label": "Shortlist Announced",
+          "value": "June 23, 2025"
+        },
+        {
+          "label": "Pitch Day (KICC Nairobi)",
+          "value": "July 23, 2025"
+        }
+      ],
+      "prizeTitle": "Total Prize Pool",
+      "prizeExtra": "+ 6 Months Mentorship",
+      "processEyebrow": "How to Participate",
+      "processTitle": "Application <g>Process</g>",
+      "periodClosed": "Application Period Closed",
+      "steps": [
+        {
+          "title": "Register Online",
+          "desc": "Complete the online registration form with your personal details and a brief description of your innovation idea."
+        },
+        {
+          "title": "Develop Your Concept",
+          "desc": "Work on your innovation, focusing on feasibility, sustainability, and impact. Utilize available resources and mentorship."
+        },
+        {
+          "title": "Submit Your Proposal",
+          "desc": "Submit a detailed proposal including implementation plan, budget, and expected outcomes."
+        },
+        {
+          "title": "Pitch & Showcase",
+          "desc": "Selected finalists will present their innovations to a panel of judges during the Climate Innovation Summit."
+        }
+      ],
+      "apply": "Apply on Yoma"
+    }
+  },
+  "storiesPage": {
+    "eyebrow": "Featured",
+    "title": "Climate startup <g>stories.</g>",
+    "intro": "Founders backed through the Youth Climate Innovation Challenge, turning Kenyan climate challenges into working businesses.",
+    "founder": "Founder",
+    "empty": "No stories in this category yet.",
+    "ctaTitle": "Your solution could be next.",
+    "ctaButton": "Apply to the challenge",
+    "detailEyebrow": "Success Story",
+    "by": "By {name}",
+    "back": "Back to all stories",
+    "readStory": "Read story",
+    "others": "Other Success Stories"
+  },
+  "eventsPage": {
+    "eyebrow": "IISD Knowledge Model · KYCH Calendar",
+    "title": "Climate Events <g>Calendar 2026.</g>",
+    "intro": "Click on any highlighted date in the calendar below to launch event details, sync to Google Calendar, or access official links.",
+    "schedule": "Official Climate Schedule",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "eventCount": "{count, plural, one {# Event} other {# Events}}",
+    "filters": "Filters:",
+    "sdgLabel": "Filter by SDG",
+    "regionLabel": "Filter by region",
+    "formatLabel": "Filter by format",
+    "reset": "Reset",
+    "allIn": "All Events in {month}",
+    "showing": "Showing {count, plural, one {# Event} other {# Events}}",
+    "emptyTitle": "No events found",
+    "emptyBody": "Try resetting your filter options above.",
+    "organizedBy": "Organized by: <b>{name}</b>",
+    "details": "Details Popup",
+    "googleShort": "+ Google Cal",
+    "scheduled": "{count, plural, one {# Event} other {# Events}} Scheduled",
+    "closeModal": "Close modal",
+    "close": "Close",
+    "date": "Date:",
+    "location": "Location:",
+    "organizer": "Organizer:",
+    "googleLong": "+ Add to Google Calendar",
+    "website": "Official Website",
+    "ctaTitle": "Have a climate event to submit?",
+    "ctaButton": "Partner with KYCH"
+  },
+  "weatherPage": {
+    "geoUnsupported": "Geolocation is not supported by your browser.",
+    "countyName": "{name} County",
+    "poweredUpdated": "Powered by AccuWeather Telemetry · Updated {time}",
+    "live": "Live",
+    "detecting": "Detecting Location...",
+    "autoDetect": "Auto-Detect My Location",
+    "countySelect": "Choose a county",
+    "highLow": "High {high} · Low {low}",
+    "humidity": "Humidity",
+    "windSpeed": "Wind Speed",
+    "uv": "Max UV Index",
+    "airQuality": "Air Quality",
+    "timeOfDay": "Time-of-Day Forecast Breakdown",
+    "prevPeriod": "Previous period",
+    "nextPeriod": "Next period",
+    "rain": "Rain:",
+    "wind": "Wind:",
+    "alertsTitle": "CAP Alerts & Advisories",
+    "noAlerts": "No active severe weather alerts currently",
+    "severityAlert": "{severity} Alert",
+    "alertHeadline": "CRITICAL FLOOD & WEATHER ADVISORY: {county}",
+    "hotline": "Emergency Hotline:",
+    "redCross": "Red Cross 1199",
+    "mapTitle": "Our Weather Watch Map",
+    "mapView": "Map View",
+    "satellite": "Satellite",
+    "mapFrame": "Kenya Weather Radar Map - {place}",
+    "canvas": "Telemetry Canvas: {place}",
+    "heatTitle": "Heat Map Signatures & Risk Scale",
+    "kmdSignatures": "KMD Radar Signatures",
+    "extreme": "Extreme (>100mm)",
+    "extremeDesc": "Overflow & Flash Floods",
+    "high": "High (50–100mm)",
+    "highDesc": "Urban Drain Pooling",
+    "moderate": "Moderate (20–50mm)",
+    "moderateDesc": "Thunderstorm Watch",
+    "normal": "Normal (<20mm)",
+    "normalDesc": "Low Vulnerability",
+    "countyAnalysis": "County Analysis ({name}):",
+    "riskExtreme": "EXTREME FLOOD SURGE INDEX",
+    "riskKisumu": "SEVERE LAKE NYANDO FLOOD RISK",
+    "riskUrban": "HIGH URBAN INUNDATION RISK",
+    "riskLow": "LOW/MODERATE FLOOD VULNERABILITY",
+    "selectedRegion": "Selected Region: <b>{name}</b>",
+    "guideLink": "23-Point El Niño Guide",
+    "weeklyFocus": "Weekly Climate Focus",
+    "sevenDay": "7-Day Weather Focus for {place} ({from} – {to})",
+    "today": "Today",
+    "next7": "Next 7 Days",
+    "poweredBy": "Powered by AccuWeather & KMD Telemetry",
+    "spotlight": "Selected Day Spotlight",
+    "dayNight": "Daytime: {day} · Nighttime: {night}",
+    "precipRisk": "Precipitation Risk:",
+    "recommended": "Recommended Focus",
+    "adviceHeavy": "Heavy downpour risk expected. Clear drainage pathways and avoid travelling during peak afternoon rain.",
+    "adviceModerate": "Moderate rain chance. Keep rain gear handy and inspect roof gutters.",
+    "adviceDry": "Favorable dry conditions expected. Ideal for outdoor repairs and farming preparation.",
+    "planBadge": "Official KMD & Ministry Action Plan",
+    "checklistTitle": "El Niño Preparedness <g>23-Point Checklist.</g>",
+    "checklistIntro": "Check off items as you prepare your household, school, or business before heavy rains hit.",
+    "score": "Preparedness Score",
+    "completed": "{done} of {total} Action Steps Completed",
+    "action": "Action:",
+    "agenciesEyebrow": "Official Government Disaster Agencies",
+    "agenciesTitle": "Need Emergency Relief or Rescue Services?",
+    "agenciesBody": "Disaster management, search & rescue, flood relief, and emergency evacuations are officially coordinated by Kenya Government agencies and auxiliary response units.",
+    "ndoc": "National Disaster Center (NDOC)",
+    "tollFree": "Toll-Free {number}",
+    "landline": "Landline: {number}",
+    "redCrossAmb": "Kenya Red Cross Ambulance",
+    "rescue247": "24/7 Rescue & Medical",
+    "ndmu": "Disaster Management Unit (NDMU)",
+    "mobile": "Mobile: {number}",
+    "kmd": "Kenya Met Department (KMD)",
+    "advisories": "Weather Advisories"
+  },
+  "weatherTerms": {},
+  "chat": {
+    "greeting": "Karibu! I'm the KYCH Climate AI. Ask me about grants, fellowships, programs or the Youth Climate Innovation Challenge.",
+    "thinking": "RAG AI Thinking...",
+    "online": "Online • OpenAI RAG Connected",
+    "close": "Close chat",
+    "retrieving": "Retrieving KYCH context & generating answer...",
+    "typing": "KYCH AI is typing...",
+    "placeholder": "Ask about grants, YCIC, or climate watch...",
+    "send": "Send message",
+    "prompts": {
+      "funding": {
+        "label": "Find funding",
+        "query": "What funding or grants are available?"
+      },
+      "ycic": {
+        "label": "YCIC Challenge",
+        "query": "Tell me about the Youth Climate Innovation Challenge"
+      },
+      "join": {
+        "label": "Join KYCH",
+        "query": "How do I register and join KYCH?"
+      },
+      "weather": {
+        "label": "County Weather",
+        "query": "How do I check weather telemetry for my county?"
+      }
+    },
+    "canned": {
+      "funding": "Our Opportunities board carries live grants, fellowships and internships with deadline alerts. Head to the [Opportunities page](/opportunities) to filter by type and closing date.",
+      "programs": "The Youth Climate Innovation Challenge (YCIC 2025) has concluded (applications closed in June 2025). The program awarded KES 500K in seed grants for WASH, flood resilience, and clean tech. Explore past impact on the [YCIC Page](/programs/ycic) or visit our [Opportunities Board](/opportunities) for active grants.",
+      "join": "Anyone aged 15 to 35 in Kenya can join KYCH. Start by registering on yoma.world, then check out the [Opportunities board](/opportunities).",
+      "library": "The E-Library holds research reports, toolkits, and policy briefs. Browse free resources on the [E-Library page](/e-library).",
+      "weather": "Our Climate Watch hub provides live satellite weather telemetry and advisories for all 47 Kenya counties. Visit the [Weather Watch page](/weather).",
+      "default": "Karibu! Thanks for reaching out. Reach us directly at info@kenyayouthclimatehub.org or (+254) 0115963306 for personalized support."
+    }
+  },
+  "chatApi": {
+    "fallback": "Karibu! {content}\n\nFor more details, visit [{title}]({url}) or reach us directly at info@kenyayouthclimatehub.org or (+254) 0115963306.",
+    "noReply": "Thanks for reaching out! In the meantime, you can reach us at info@kenyayouthclimatehub.org or (+254) 0115963306."
+  },
+  "calculator": {
+    "toolLabel": "KYCH Tool",
+    "title": "Carbon Footprint Calculator",
+    "subtitle": "Find out your CO₂ impact in 60 seconds",
+    "close": "Close calculator",
+    "steps": {
+      "transport": {
+        "title": "How do you get around?",
+        "subtitle": "Your main daily transport in Kenya"
+      },
+      "energy": {
+        "title": "How do you power your home?",
+        "subtitle": "Your primary energy source"
+      },
+      "food": {
+        "title": "What's your diet like?",
+        "subtitle": "Your typical eating habits"
+      },
+      "waste": {
+        "title": "How do you handle waste?",
+        "subtitle": "Your recycling & waste habits"
+      }
+    },
+    "options": {
+      "walk": "Walk / Cycle",
+      "matatu": "Matatu / Bus",
+      "boda": "Boda Boda",
+      "car": "Private Car",
+      "taxi": "Uber / Taxi",
+      "solar": "Solar only",
+      "gridSolar": "Grid + some solar",
+      "grid": "Grid only",
+      "generator": "Generator",
+      "meat": "Mostly meat",
+      "mixed": "Mixed diet",
+      "veg": "Mostly veg",
+      "vegan": "Vegan",
+      "always": "Always recycle",
+      "sometimes": "Sometimes recycle",
+      "rarely": "Rarely recycle",
+      "never": "Never recycle"
+    },
+    "tips": {
+      "transport": "Switch to matatu or cycle for short trips — saves up to 1.0t CO₂/year",
+      "energy": "Install a small solar panel — saves 0.35t CO₂/year and cuts electricity bills",
+      "food": "Reduce meat 2 days/week — saves up to 0.5t CO₂/year",
+      "waste": "Start composting food waste — reduces methane emissions significantly"
+    },
+    "score": {
+      "hero": "Climate Hero",
+      "well": "Doing Well",
+      "improve": "Room to Improve",
+      "high": "High Impact"
+    },
+    "you": "You",
+    "back": "Back",
+    "next": "Next",
+    "calculate": "Calculate My Footprint",
+    "perYear": "tonnes CO₂ per year",
+    "compare": "How you compare",
+    "kenyaAvg": "Kenya avg ({value}t)",
+    "africaAvg": "Africa avg ({value}t)",
+    "worldAvg": "World avg ({value}t)",
+    "breakdown": "Your breakdown",
+    "cat": {
+      "transport": "Transport",
+      "energy": "Energy",
+      "food": "Food",
+      "waste": "Waste"
+    },
+    "topActions": "Your top 3 actions",
+    "recalculate": "Recalculate",
+    "share": "Share My Result",
+    "shareText": "I calculated my carbon footprint with KYCH! 🌍\nMy footprint: {total}t CO₂/year\nKenya average: {kenya}t | World average: {world}t\nCalculate yours at kych.org/e-library",
+    "shareTitle": "My Carbon Footprint — KYCH",
+    "copied": "Copied to clipboard!"
+  },
+  "quiz": {
+    "toolLabel": "KYCH Tool",
+    "title": "Climate Readiness Quiz",
+    "subtitle": "Test your climate knowledge — earn your badge",
+    "close": "Close quiz",
+    "progress": "Question {n} of {total}",
+    "correctCount": "{count} correct",
+    "introTitle": "How climate-ready are you?",
+    "introBody": "8 questions covering Kenya's climate policy, renewable energy, carbon markets, and global climate action. Takes about 3 minutes.",
+    "start": "Start Quiz",
+    "back": "Back",
+    "check": "Check Answer",
+    "nextQuestion": "Next Question",
+    "seeResults": "See My Results",
+    "correct": "Correct!",
+    "wrong": "Not quite!",
+    "yourAnswers": "Your answers",
+    "recommended": "Recommended for you",
+    "retake": "Retake Quiz",
+    "share": "Share My Badge",
+    "shareText": "I scored {score}/{total} on the KYCH Climate Readiness Quiz! 🌍\nI earned the \"{badge}\" badge {emoji}\nTest your climate knowledge at kych.org/e-library",
+    "shareTitle": "My Climate Quiz Result — KYCH",
+    "copied": "Copied to clipboard!",
+    "questions": [
+      {
+        "category": "Kenya Energy",
+        "question": "What percentage of Kenya's electricity comes from renewable sources?",
+        "options": [
+          "25%",
+          "50%",
+          "75%",
+          "92%"
+        ],
+        "explanation": "Kenya is a renewable energy leader! About 92% of its electricity comes from geothermal, hydro, wind and solar — one of the highest rates in Africa."
+      },
+      {
+        "category": "Climate Finance",
+        "question": "What does 'GCF' stand for in climate finance?",
+        "options": [
+          "Global Carbon Fund",
+          "Green Climate Fund",
+          "Government Climate Finance",
+          "Global Conservation Fund"
+        ],
+        "explanation": "The Green Climate Fund (GCF) is the world's largest dedicated climate fund, helping developing countries like Kenya respond to climate change."
+      },
+      {
+        "category": "Kenya Energy",
+        "question": "Which renewable energy source generates the MOST electricity in Kenya?",
+        "options": [
+          "Solar",
+          "Wind",
+          "Geothermal",
+          "Hydro"
+        ],
+        "explanation": "Geothermal energy from the Great Rift Valley generates about 47% of Kenya's electricity. Kenya is the 8th largest geothermal producer in the world!"
+      },
+      {
+        "category": "Kenya Policy",
+        "question": "What is Kenya's NDC target for reducing greenhouse gas emissions by 2030?",
+        "options": [
+          "15%",
+          "32%",
+          "45%",
+          "60%"
+        ],
+        "explanation": "Kenya's Nationally Determined Contribution (NDC) commits to a 32% reduction in greenhouse gas emissions by 2030, conditional on international support."
+      },
+      {
+        "category": "Climate Impact",
+        "question": "Which Kenyan county is MOST vulnerable to drought and climate stress?",
+        "options": [
+          "Nairobi",
+          "Mombasa",
+          "Turkana",
+          "Kisumu"
+        ],
+        "explanation": "Turkana County in northern Kenya is one of the most climate-vulnerable areas in Africa, facing severe droughts, food insecurity, and water scarcity."
+      },
+      {
+        "category": "Global Policy",
+        "question": "What does 'UNFCCC' stand for?",
+        "options": [
+          "UN Framework Convention on Climate Change",
+          "UN Fund for Climate Change Control",
+          "UN Finance Committee on Climate Change",
+          "UN Forum for Carbon Credit Control"
+        ],
+        "explanation": "The UNFCCC (UN Framework Convention on Climate Change) is the international treaty that guides global climate action, including the Paris Agreement."
+      },
+      {
+        "category": "Carbon Markets",
+        "question": "What is a 'carbon credit'?",
+        "options": [
+          "A loan for green projects",
+          "A permit to emit 1 tonne of CO₂",
+          "A government climate subsidy",
+          "A renewable energy certificate"
+        ],
+        "explanation": "A carbon credit represents the right to emit 1 tonne of CO₂. Companies can buy credits to offset their emissions or earn them by reducing emissions."
+      },
+      {
+        "category": "Youth Action",
+        "question": "What is the Paris Agreement's goal for limiting global temperature rise?",
+        "options": [
+          "1°C above pre-industrial levels",
+          "1.5°C above pre-industrial levels",
+          "2.5°C above pre-industrial levels",
+          "3°C above pre-industrial levels"
+        ],
+        "explanation": "The Paris Agreement aims to limit global warming to 1.5°C above pre-industrial levels. Every fraction of a degree matters for communities like those in Kenya!"
+      }
+    ],
+    "badges": [
+      {
+        "title": "Climate Seedling",
+        "desc": "You're just getting started — and that's great! Every expert was once a beginner."
+      },
+      {
+        "title": "Climate Changemaker",
+        "desc": "You have solid climate knowledge. Keep learning and take action in your community!"
+      },
+      {
+        "title": "Climate Champion",
+        "desc": "Impressive! You know your climate facts. You're ready to lead climate action."
+      },
+      {
+        "title": "Climate Expert",
+        "desc": "Outstanding! You're a climate knowledge leader. Share your expertise with others!"
+      }
+    ]
+  }
+}

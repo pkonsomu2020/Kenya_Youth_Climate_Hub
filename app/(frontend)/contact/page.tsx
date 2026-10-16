@@ -4,6 +4,16 @@ import { useState, useRef, useEffect } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { useContent, newId } from "@/lib/contentStore";
 import { MapPin, Mail, Phone, ArrowRight, CheckCircle2 } from "lucide-react";
+import { useTranslations } from "next-intl";
+
+// Stored in English for the admin inbox; only the visible labels are translated.
+const SENDER_TYPES = [
+  { value: "Young Kenyan", key: "youth" },
+  { value: "Partner Organization", key: "partner" },
+  { value: "Donor / Funder", key: "donor" },
+  { value: "Media / Press", key: "media" },
+  { value: "Other", key: "other" },
+] as const;
 
 function useInView(ref: React.RefObject<Element | null>) {
   const [v, setV] = useState(false);
@@ -16,6 +26,7 @@ function useInView(ref: React.RefObject<Element | null>) {
 }
 
 export default function Contact() {
+  const t = useTranslations("contact");
   const [sent, setSent] = useState(false);
   const { content, update } = useContent();
   const [form, setForm] = useState({ name: "", email: "", type: "Young Kenyan", body: "" });
@@ -31,9 +42,9 @@ export default function Contact() {
   return (
     <>
       <PageHeader
-        eyebrow="Get In Touch"
-        title={<>We'd love to <span style={{ color: "#5dba2f" }}>hear from you</span></>}
-        subtitle="Partner with us, post an opportunity, share a resource, or ask anything."
+        eyebrow={t("eyebrow")}
+        title={t.rich("title", { g: (c) => <span style={{ color: "#5dba2f" }}>{c}</span> })}
+        subtitle={t("subtitle")}
       />
 
       <section className="py-32 px-6 md:px-16" style={{ background: "var(--section-light)" }}>
@@ -43,16 +54,16 @@ export default function Contact() {
         >
           {/* ── Contact info ── */}
           <div style={{ opacity: inView ? 1 : 0, transform: inView ? "translateX(0)" : "translateX(-40px)", transition: "opacity 0.8s ease, transform 0.8s ease" }}>
-            <span style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "11px", letterSpacing: "0.25em", textTransform: "uppercase", color: "#5dba2f" }}>Contact</span>
+            <span style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "11px", letterSpacing: "0.25em", textTransform: "uppercase", color: "#5dba2f" }}>{t("label")}</span>
             <h2 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "clamp(2rem,4vw,3rem)", color: "var(--foreground)", letterSpacing: "-0.03em", lineHeight: 1.1, marginTop: "1rem", marginBottom: "2.5rem" }}>
-              LET'S BUILD <span style={{ color: "#5dba2f" }}>TOGETHER</span>
+              {t.rich("heading", { g: (c) => <span style={{ color: "#5dba2f" }}>{c}</span> })}
             </h2>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
               {[
-                { icon: <Mail size={20} />, label: "Email", value: "info@kenyayouthclimatehub.org", href: "mailto:info@kenyayouthclimatehub.org" },
-                { icon: <Phone size={20} />, label: "Phone", value: "+254 712 345 678", href: "tel:+254712345678" },
-                { icon: <MapPin size={20} />, label: "Location", value: "Ngong Road, Nairobi, Kenya", href: undefined },
+                { icon: <Mail size={20} />, label: t("email"), value: "info@kenyayouthclimatehub.org", href: "mailto:info@kenyayouthclimatehub.org" },
+                { icon: <Phone size={20} />, label: t("phone"), value: "+254 712 345 678", href: "tel:+254712345678" },
+                { icon: <MapPin size={20} />, label: t("location"), value: "Ngong Road, Nairobi, Kenya", href: undefined },
               ].map(({ icon, label, value, href }) => (
                 <div key={label} style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
                   <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(93,186,47,.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "#5dba2f", flexShrink: 0 }}>
@@ -74,9 +85,9 @@ export default function Contact() {
             </div>
 
             <div style={{ marginTop: "3rem", padding: "1.5rem 2rem", background: "var(--section-dark)", borderRadius: 16, border: "1px solid rgba(93,186,47,.15)" }}>
-              <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: ".9rem", color: "var(--text-on-dark)", marginBottom: ".5rem" }}>For donors & media</div>
+              <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: ".9rem", color: "var(--text-on-dark)", marginBottom: ".5rem" }}>{t("donorsTitle")}</div>
               <p style={{ fontSize: ".85rem", color: "var(--muted-foreground)", lineHeight: 1.65 }}>
-                Our partnerships team responds within 2 business days. Press kit available on request.
+                {t("donorsBody")}
               </p>
             </div>
           </div>
@@ -89,20 +100,21 @@ export default function Contact() {
               {sent ? (
                 <div style={{ textAlign: "center", padding: "3rem 1rem" }}>
                   <CheckCircle2 size={56} color="#5dba2f" style={{ margin: "0 auto 1.25rem" }} />
-                  <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "1.3rem", color: "var(--text-on-dark)", marginBottom: ".75rem" }}>Message sent!</div>
-                  <p style={{ color: "var(--muted-foreground)", lineHeight: 1.65 }}>Thanks for reaching out. We'll be in touch within 2 business days.</p>
+                  <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "1.3rem", color: "var(--text-on-dark)", marginBottom: ".75rem" }}>{t("sentTitle")}</div>
+                  <p style={{ color: "var(--muted-foreground)", lineHeight: 1.65 }}>{t("sentBody")}</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                  <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "1.1rem", color: "var(--text-on-dark)", marginBottom: ".25rem" }}>Send us a message</div>
+                  <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "1.1rem", color: "var(--text-on-dark)", marginBottom: ".25rem" }}>{t("formTitle")}</div>
 
                   {[
-                    { label: "Full Name", key: "name", type: "text", placeholder: "Your name" },
-                    { label: "Email Address", key: "email", type: "email", placeholder: "your@email.com" },
+                    { label: t("nameLabel"), key: "name", type: "text", placeholder: t("namePlaceholder") },
+                    { label: t("emailLabel"), key: "email", type: "email", placeholder: t("emailPlaceholder") },
                   ].map(({ label, key, type, placeholder }) => (
                     <div key={key}>
-                      <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".4rem" }}>{label}</label>
+                      <label htmlFor={`contact-${key}`} style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".4rem" }}>{label}</label>
                       <input
+                        id={`contact-${key}`}
                         type={type} required placeholder={placeholder}
                         value={(form as any)[key]}
                         onChange={e => setForm({ ...form, [key]: e.target.value })}
@@ -114,16 +126,16 @@ export default function Contact() {
                   ))}
 
                   <div>
-                    <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".4rem" }}>I am a…</label>
-                    <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}
+                    <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".4rem" }}>{t("typeLabel")}</label>
+                    <select aria-label={t("typeLabel")} value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}
                       style={{ width: "100%", padding: ".85rem 1rem", borderRadius: 10, border: "1px solid rgba(255,255,255,.1)", background: "rgba(255,255,255,.05)", color: "var(--text-on-dark)", fontFamily: "Montserrat, sans-serif", fontSize: ".9rem", outline: "none" }}>
-                      <option>Young Kenyan</option><option>Partner Organization</option><option>Donor / Funder</option><option>Media / Press</option><option>Other</option>
+                      {SENDER_TYPES.map((s) => <option key={s.key} value={s.value}>{t(`types.${s.key}`)}</option>)}
                     </select>
                   </div>
 
                   <div>
-                    <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".4rem" }}>Message</label>
-                    <textarea required rows={5} value={form.body} onChange={e => setForm({ ...form, body: e.target.value })} placeholder="Tell us how we can help..."
+                    <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".4rem" }}>{t("messageLabel")}</label>
+                    <textarea aria-label={t("messageLabel")} required rows={5} value={form.body} onChange={e => setForm({ ...form, body: e.target.value })} placeholder={t("messagePlaceholder")}
                       style={{ width: "100%", padding: ".85rem 1rem", borderRadius: 10, border: "1px solid rgba(255,255,255,.1)", background: "rgba(255,255,255,.05)", color: "var(--text-on-dark)", fontFamily: "Montserrat, sans-serif", fontSize: ".9rem", outline: "none", resize: "vertical", boxSizing: "border-box" }}
                       onFocus={e => (e.target.style.borderColor = "#5dba2f")}
                       onBlur={e => (e.target.style.borderColor = "rgba(255,255,255,.1)")}
@@ -135,7 +147,7 @@ export default function Contact() {
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#4aa324"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#5dba2f"; (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}
                   >
-                    Send Message <ArrowRight size={16} />
+                    {t("send")} <ArrowRight size={16} />
                   </button>
                 </form>
               )}

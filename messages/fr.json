@@ -1,0 +1,1169 @@
+{
+  "nav": {
+    "about": "À propos",
+    "climateWatch": "Veille climatique",
+    "eLibrary": "Bibliothèque",
+    "opportunities": "Opportunités",
+    "programs": "Programmes",
+    "events": "Événements",
+    "news": "Actualités",
+    "successStories": "Réussites",
+    "findFunding": "Financements",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "tagline": "L'action climatique menée par les jeunes",
+    "language": "Langue"
+  },
+  "footer": {
+    "blurb": "Donner du pouvoir aux jeunes, une solution climatique à la fois. La plateforme numérique nationale du mouvement climatique des jeunes au Kenya.",
+    "quickLinks": "Liens rapides",
+    "platform": "Plateforme",
+    "contactUs": "Nous contacter",
+    "poweredByAfosi": "Propulsé par Afosi",
+    "copyright": "© {year} Kenya Youth Climate Hub. Tous droits réservés.",
+    "tagline": "L'action climatique menée par les jeunes.",
+    "getStarted": "Commencer"
+  },
+  "home": {
+    "backedBy": "Soutenu par",
+    "showPartner": "Afficher {name}",
+    "founder": "Fondateur·rice",
+    "alert": {
+      "badge": "ALERTE EL NIÑO",
+      "body": "Fortes pluies et alertes aux inondations en vigueur dans les comtés de l'Ouest, de la Côte, de la vallée du Rift et du Nord-Est.",
+      "cta": "Voir le radar des comtés et le guide de protection en 23 points"
+    },
+    "hero": {
+      "eyebrow": "Donner du pouvoir aux jeunes, une solution climatique à la fois",
+      "title": "Kenya Youth <g>Climate Hub.</g>",
+      "builtFor": "Conçu pour les",
+      "words": [
+        "innovateurs du climat",
+        "acteurs du changement local",
+        "fondateurs verts",
+        "défenseurs des politiques"
+      ],
+      "body": "Rejoignez une communauté de jeunes innovateurs qui relèvent les défis climatiques et construisent un avenir durable pour le Kenya. Financements, compétences, espaces politiques et innovation, dans les 47 comtés.",
+      "ctaFunding": "Trouver un financement",
+      "ctaPrograms": "Voir les programmes",
+      "statCounties": "Comtés",
+      "statAge": "Tranche d'âge",
+      "statFounded": "Création",
+      "imgAlt": "Des jeunes en action pour le climat au Kenya",
+      "imgAlt2": "Innovateurs du climat",
+      "countiesConnected": "Comtés connectés",
+      "since": "Mené par les jeunes depuis 2020"
+    },
+    "about": {
+      "poweredBy": "Propulsé par",
+      "eyebrow": "Qui sommes-nous",
+      "title": "Plus qu'un hub, <g>un mouvement.</g>",
+      "body": "KYCH est la plateforme numérique nationale du mouvement climatique des jeunes au Kenya, qui relie l'ambition au changement systémique. Elle fonctionne sous l'égide d'<b>Afosi, Action for Sustainability Initiative</b>, alliant plus de dix ans de développement fondé sur des données probantes à une conception pensée d'abord pour les jeunes.",
+      "mission": "Mission",
+      "missionText": "Permettre à chaque jeune Kényan de mener l'action climatique.",
+      "vision": "Vision",
+      "visionText": "Un Kenya où les jeunes mènent la riposte.",
+      "quote": "Afosi produit les données. Les jeunes produisent les solutions. Le Hub les relie pour changer d'échelle.",
+      "cta": "Notre histoire et notre équipe"
+    },
+    "values": {
+      "eyebrow": "Ce qui nous anime",
+      "title": "Nos valeurs <g>fondamentales.</g>",
+      "justice": {
+        "title": "Justice climatique",
+        "desc": "Des résultats équitables pour les communautés en première ligne"
+      },
+      "inclusion": {
+        "title": "Inclusion des jeunes",
+        "desc": "Les 15–35 ans au cœur de chaque décision"
+      },
+      "gender": {
+        "title": "Égalité des genres",
+        "desc": "Même voix, même accès, même impact"
+      },
+      "innovation": {
+        "title": "Innovation",
+        "desc": "Des solutions kényanes aux défis du Kenya"
+      },
+      "evidence": {
+        "title": "Fondé sur les preuves",
+        "desc": "Une action guidée par les données et la recherche"
+      },
+      "systems": {
+        "title": "Changement systémique",
+        "desc": "Au-delà des symptômes, s'attaquer aux causes profondes"
+      }
+    },
+    "tools": {
+      "eyebrow": "Outils de la plateforme",
+      "title": "Tout ce qu'il faut pour <g>agir.</g>",
+      "body": "Une seule plateforme qui relie la jeunesse kényane aux financements, aux connaissances, aux programmes et à l'expertise climatique.",
+      "library": {
+        "label": "Bibliothèque et centre de ressources",
+        "desc": "Rapports, boîtes à outils, notes politiques et articles de recherche. Enregistrez-les dans votre tableau de bord.",
+        "cta": "Parcourir la bibliothèque"
+      },
+      "funding": {
+        "label": "Financements et opportunités",
+        "desc": "Un tableau en direct de subventions, bourses et stages, avec alertes d'échéance.",
+        "cta": "Trouver un financement"
+      },
+      "programs": {
+        "label": "Programmes et défis",
+        "desc": "Postulez à des incubateurs comme le Youth Climate Innovation Challenge et à des programmes de mentorat.",
+        "cta": "Voir les programmes"
+      },
+      "events": {
+        "label": "Événements et ateliers",
+        "desc": "Inscrivez-vous aux bootcamps, dialogues politiques et webinaires de KYCH et de ses partenaires.",
+        "cta": "Voir le calendrier"
+      },
+      "weather": {
+        "label": "Veille climatique et météo",
+        "desc": "Radar des inondations en direct pour les 47 comtés, alertes de pluie et guide officiel de préparation à El Niño en 23 points.",
+        "cta": "Voir le radar météo"
+      },
+      "ai": {
+        "label": "Assistant IA climat",
+        "desc": "Un guide IA disponible 24h/24 et 7j/7, formé sur les données climatiques, les opportunités et les ressources du Kenya.",
+        "cta": "Demander à l'IA"
+      }
+    },
+    "calendar": {
+      "eyebrow": "Calendrier officiel 2026",
+      "title": "Prochaines <g>dates clés du climat.</g>",
+      "cta": "Voir tout le calendrier",
+      "e1": {
+        "date": "10 OCT. 2026",
+        "title": "Journée Mazingira",
+        "desc": "Journée nationale de l'environnement du Kenya et reboisement par les jeunes dans tout le pays."
+      },
+      "e2": {
+        "date": "5 – 8 OCT. 2026",
+        "title": "Sommet pré-COP 31",
+        "desc": "Réunion ministérielle et des jeunes sur la stratégie de négociation avant la COP31."
+      },
+      "e3": {
+        "date": "9 – 20 NOV. 2026",
+        "title": "Sommet climat de l'ONU COP31",
+        "desc": "Conférence mondiale des Nations unies sur les changements climatiques, organisée en Türkiye."
+      }
+    },
+    "pillars": {
+      "eyebrow": "Ce que nous faisons",
+      "title": "Cinq piliers de <g>l'action climatique.</g>",
+      "body": "Des axes stratégiques ciblés pour accélérer l'action climatique grâce à l'innovation menée par les jeunes dans les 47 comtés.",
+      "counter": "PILIER {n} / {total}",
+      "leadership": {
+        "title": "Leadership et plaidoyer climatique des jeunes",
+        "desc": "Former la prochaine génération de négociateurs climat, de défenseurs locaux et de leaders du mouvement pour influencer les politiques à tous les niveaux."
+      },
+      "innovation": {
+        "title": "Innovation et entrepreneuriat climatique",
+        "desc": "Incuber des startups vertes menées par des jeunes, de l'énergie propre aux technologies des déchets, grâce au Youth Climate Innovation Challenge."
+      },
+      "finance": {
+        "title": "Finance climat et accès aux opportunités",
+        "desc": "Relier les jeunes Kényans aux subventions, bourses, concours et emplois qui correspondent à leurs ambitions climatiques."
+      },
+      "capacity": {
+        "title": "Renforcement des capacités et savoirs",
+        "desc": "Donner aux jeunes les compétences, les données et les outils pour mener l'action climatique, via des formations et des ressources numériques."
+      },
+      "partnerships": {
+        "title": "Partenariats et écosystème",
+        "desc": "Créer des ponts entre les jeunes, le gouvernement, les ONG, les partenaires au développement et le secteur privé."
+      }
+    },
+    "video": {
+      "title": "Notre impact en action",
+      "counter": "Vidéo {n} sur {total}",
+      "prev": "Vidéo précédente",
+      "next": "Vidéo suivante",
+      "play": "Lire la vidéo",
+      "close": "Fermer la vidéo"
+    },
+    "stories": {
+      "eyebrow": "À la une",
+      "title": "Histoires de startups <g>climat.</g>",
+      "cta": "Voir toutes les histoires"
+    },
+    "partners": {
+      "eyebrow": "Partenaires et collaborateurs de confiance"
+    },
+    "news": {
+      "eyebrow": "À la une",
+      "title": "Actualités, événements et <g>ressources.</g>",
+      "cta": "Tout voir",
+      "error": "Impossible de charger les actualités pour le moment. Veuillez réessayer plus tard.",
+      "empty": "Aucune actualité pour le moment. Revenez bientôt."
+    },
+    "newsletter": {
+      "eyebrow": "Restez informé·e",
+      "title": "Prêt·e à rejoindre <g>le mouvement ?</g>",
+      "body": "Chaque semaine, des opportunités climat, des actualités et des nouvelles des défis, directement dans votre boîte mail.",
+      "sunTitle": "Faire lever le soleil",
+      "sunOn": "le soleil est levé",
+      "sunOff": "faire lever le soleil",
+      "subscribed": "Vous êtes inscrit·e !",
+      "emailPlaceholder": "vous@email.com",
+      "emailLabel": "Adresse e-mail",
+      "subscribe": "S'abonner",
+      "getStarted": "Commencer dès aujourd'hui"
+    }
+  },
+  "about": {
+    "eyebrow": "À propos de KYCH",
+    "title": "Plus qu'un hub, <g>un mouvement.</g>",
+    "intro": "KYCH est la plateforme numérique nationale du mouvement climatique des jeunes au Kenya, qui relie l'ambition au changement systémique dans les 47 comtés.",
+    "imgAlt": "L'équipe du Kenya Youth Climate Hub en action",
+    "badge": "Créé en 2020 · Propulsé par Afosi",
+    "storyEyebrow": "Notre histoire",
+    "storyTitle": "L'ambition, reliée au changement systémique.",
+    "story1": "KYCH fonctionne sous l'égide d'<b>Afosi, Action for Sustainability Initiative</b>, alliant plus de dix ans de développement fondé sur des données probantes à une conception pensée d'abord pour les jeunes.",
+    "story2": "Nous relions les jeunes Kényans de 15 à 35 ans à la finance climat, aux compétences, aux espaces politiques et aux opportunités d'innovation dans chaque comté.",
+    "mission": "Mission",
+    "missionText": "Permettre à chaque jeune Kényan de mener l'action climatique.",
+    "vision": "Vision",
+    "visionText": "Un Kenya où les jeunes ne se contentent pas de s'adapter au changement climatique : ils mènent la riposte.",
+    "valuesTitle": "Nos valeurs fondamentales.",
+    "quote": "Afosi produit les données. Les jeunes produisent les solutions. Le Hub les relie pour changer d'échelle.",
+    "ctaTitle": "Prêt·e à rejoindre le mouvement ?",
+    "ctaButton": "Commencer dès aujourd'hui"
+  },
+  "contact": {
+    "eyebrow": "Nous contacter",
+    "title": "Nous serions ravis <g>de vous lire</g>",
+    "subtitle": "Devenez partenaire, publiez une opportunité, partagez une ressource ou posez-nous une question.",
+    "label": "Contact",
+    "heading": "CONSTRUISONS <g>ENSEMBLE</g>",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "location": "Adresse",
+    "donorsTitle": "Donateurs et médias",
+    "donorsBody": "Notre équipe partenariats répond sous 2 jours ouvrés. Dossier de presse disponible sur demande.",
+    "sentTitle": "Message envoyé !",
+    "sentBody": "Merci de nous avoir écrit. Nous vous répondrons sous 2 jours ouvrés.",
+    "formTitle": "Envoyez-nous un message",
+    "nameLabel": "Nom complet",
+    "namePlaceholder": "Votre nom",
+    "emailLabel": "Adresse e-mail",
+    "emailPlaceholder": "vous@email.com",
+    "typeLabel": "Je suis…",
+    "types": {
+      "youth": "Jeune Kényan·e",
+      "partner": "Organisation partenaire",
+      "donor": "Donateur / Bailleur",
+      "media": "Média / Presse",
+      "other": "Autre"
+    },
+    "messageLabel": "Message",
+    "messagePlaceholder": "Dites-nous comment nous pouvons vous aider...",
+    "send": "Envoyer le message"
+  },
+  "dashboard": {
+    "eyebrow": "Votre tableau de bord",
+    "title": "Bienvenue sur <g>la plateforme KYCH</g>",
+    "subtitle": "Votre espace personnel pour les opportunités, ressources et outils climat.",
+    "aiTitle": "Assistant IA climat",
+    "aiBody": "Un guide IA disponible 24h/24 et 7j/7, formé sur les données climatiques, les opportunités et les ressources du Kenya. Bientôt disponible.",
+    "comingSoon": "Bientôt disponible",
+    "quickAccess": "Accès rapide",
+    "links": {
+      "opportunities": {
+        "label": "Opportunités",
+        "desc": "Parcourir les subventions et bourses ouvertes"
+      },
+      "library": {
+        "label": "Bibliothèque",
+        "desc": "Rapports, boîtes à outils et ressources"
+      },
+      "events": {
+        "label": "Événements",
+        "desc": "Sommets et ateliers à venir"
+      },
+      "programs": {
+        "label": "Programmes",
+        "desc": "Postuler aux programmes d'innovation"
+      }
+    }
+  },
+  "register": {
+    "eyebrow": "Rejoignez le mouvement",
+    "title": "Créez votre <g>profil jeune</g>",
+    "subtitle": "Inscrivez-vous pour accéder aux financements, événements, ressources et à la communauté KYCH, le tout au même endroit.",
+    "doneTitle": "Vous êtes inscrit·e !",
+    "doneBody": "Merci pour votre inscription. Nous vous contacterons très bientôt avec les détails de votre profil et les prochaines étapes.",
+    "formTitle": "Inscription des jeunes",
+    "name": "Nom complet",
+    "namePh": "Votre nom complet",
+    "email": "Adresse e-mail",
+    "emailPh": "vous@email.com",
+    "county": "Comté",
+    "countyPh": "ex. Nairobi, Kisumu, Mombasa…",
+    "age": "Âge",
+    "interests": "Centres d'intérêt climat",
+    "interestsPh": "ex. Énergie propre, eau, agriculture, politiques…",
+    "submit": "Créer mon profil"
+  },
+  "taxonomy": {
+    "All": "Tout",
+    "News": "Actualités",
+    "ClimateInsights": "Analyses climat",
+    "SuccessStories": "Réussites",
+    "EventsRecap": "Retour sur les événements",
+    "PartnerUpdates": "Nouvelles des partenaires",
+    "Grant": "Subvention",
+    "Fellowship": "Bourse",
+    "Internship": "Stage",
+    "Competition": "Concours",
+    "Job": "Emploi",
+    "Accelerator": "Accélérateur",
+    "Opportunity": "Opportunité",
+    "Energy": "Énergie",
+    "Water": "Eau",
+    "Agriculture": "Agriculture",
+    "Policy": "Politiques",
+    "Finance": "Finance",
+    "Innovation": "Innovation",
+    "Resilience": "Résilience",
+    "Advocacy": "Plaidoyer",
+    "Waste": "Déchets",
+    "RenewableEnergy": "Énergies renouvelables",
+    "WASH": "Eau, assainissement et hygiène (WASH)",
+    "AllSDGs": "Tous les ODD",
+    "AllRegions": "Toutes les régions",
+    "AllFormats": "Tous les formats",
+    "Kenya": "Kenya",
+    "AfricaRegional": "Afrique / Régional",
+    "Global": "Mondial",
+    "Inperson": "En présentiel",
+    "Online": "En ligne",
+    "Hybrid": "Hybride",
+    "SDG4QualityEducation": "ODD 4 : Éducation de qualité",
+    "SDG10ReducedInequalities": "ODD 10 : Inégalités réduites",
+    "SDG11SustainableCities": "ODD 11 : Villes durables",
+    "SDG12ResponsibleConsumption": "ODD 12 : Consommation responsable",
+    "SDG13ClimateAction": "ODD 13 : Action climatique",
+    "SDG14LifeBelowWater": "ODD 14 : Vie aquatique",
+    "SDG15LifeonLand": "ODD 15 : Vie terrestre",
+    "SDG17Partnerships": "ODD 17 : Partenariats",
+    "All23Steps": "Les 23 étapes",
+    "HomeInfrastructure": "Maison et infrastructures",
+    "HealthMedicine": "Santé et médicaments",
+    "EmergencyKit": "Kit d'urgence",
+    "WaterSanitation": "Eau et assainissement",
+    "SafetyLivestock": "Sécurité et bétail"
+  },
+  "library": {
+    "eyebrow": "Bibliothèque et centre de ressources",
+    "title": "Des savoirs pour <g>agir.</g>",
+    "intro": "Des outils interactifs conçus spécialement pour les jeunes Kényans qui font bouger les lignes du climat.",
+    "launch": "LANCER",
+    "calcTitle": "Calculateur d'empreinte carbone",
+    "calcDesc": "Calculez votre impact CO₂ personnel en 60 secondes grâce à des facteurs d'émission propres au Kenya. Recevez des conseils personnalisés.",
+    "calcTags": [
+      "4 questions",
+      "60 secondes",
+      "Données Kenya"
+    ],
+    "quizTitle": "Quiz de préparation climatique",
+    "quizDesc": "Testez vos connaissances sur le climat. Gagnez un badge. Recevez des ressources adaptées à vos résultats.",
+    "quizTags": [
+      "8 questions",
+      "3 minutes",
+      "4 niveaux de badge"
+    ],
+    "ctaTitle": "Développez vos connaissances climat.",
+    "ctaButton": "Découvrir les programmes"
+  },
+  "newsPage": {
+    "eyebrow": "À la une",
+    "title": "Actualités, événements <g>et ressources.</g>",
+    "intro": "Suivez le mouvement climatique des jeunes au Kenya, des nouveautés de la plateforme aux nouveaux appels à financement.",
+    "readMore": "Lire la suite",
+    "offline": "Hors ligne",
+    "live": "En direct · Toutes les 3 h",
+    "emptyTitle": "Aucun article pour l'instant",
+    "emptyBody": "Cliquez ci-dessous pour récupérer les dernières actualités de nos flux RSS climat.",
+    "fetch": "Récupérer les actualités",
+    "ctaTitle": "Restez informé·e.",
+    "ctaButton": "S'abonner"
+  },
+  "opportunitiesPage": {
+    "eyebrow": "Financements et opportunités",
+    "title": "Trouvez votre <g>prochaine opportunité.</g>",
+    "intro": "Un tableau en direct de subventions, bourses, concours et stages, avec alertes d'échéance, adapté à vos ambitions climatiques.",
+    "rolling": "Ouvert / En continu",
+    "closesToday": "Clôture AUJOURD'HUI",
+    "closesIn": "Clôture dans {days} j",
+    "closesOn": "Clôture : {date}",
+    "apply": "Postuler",
+    "details": "Voir les détails",
+    "search": "Rechercher des opportunités…",
+    "emptyTitle": "Aucune opportunité pour l'instant",
+    "emptyBody": "Notre IA recherche des opportunités climat. Revenez bientôt.",
+    "refresh": "Actualiser",
+    "ctaTitle": "Ne manquez plus aucune échéance.",
+    "ctaButton": "Recevoir les alertes",
+    "loadError": "Impossible de charger les opportunités pour le moment. Veuillez réessayer dans un instant."
+  },
+  "programs": {
+    "eyebrow": "Programmes et défis",
+    "title": "Des programmes qui <g>forment des leaders.</g>",
+    "intro": "Postulez à des incubateurs, des programmes de mentorat et des défis conçus pour accélérer l'action climatique menée par les jeunes dans les 47 comtés.",
+    "pillarsBody": "Des axes stratégiques ciblés pour accélérer l'action climatique grâce à l'innovation menée par les jeunes.",
+    "viewProgram": "Voir le programme",
+    "ctaTitle": "Construisez votre solution climat avec nous.",
+    "ctaButton": "Voir les opportunités",
+    "list": {
+      "ycic": {
+        "tag": "Programme phare",
+        "status": "Candidatures closes",
+        "participants": "300 jeunes innovateurs",
+        "prizeLabel": "Dotation totale",
+        "description": "Un incubateur pour les startups vertes menées par des jeunes, de l'énergie propre aux technologies des déchets, axé sur des solutions pour les quartiers informels. Les lauréats reçoivent un financement d'amorçage, six mois de mentorat d'experts et un accès au marché.",
+        "focusAreas": [
+          "Eau, assainissement et hygiène (WASH)",
+          "Résilience aux inondations et drainage urbain",
+          "Énergies renouvelables et infrastructures durables"
+        ]
+      },
+      "begreen": {
+        "tag": "Programme en cours",
+        "status": "En cours — Pilote au Kenya",
+        "participants": "2 264 candidatures de jeunes",
+        "prizeLabel": "Financement d'amorçage",
+        "description": "Un programme d'entrepreneuriat vert multipartenaire pour les 18–35 ans dans le secteur de la gestion des déchets au Kenya : 846 emplois créés, environ 2,7 M USD de revenus générés et 29,9 millions de kg de déchets gérés.",
+        "focusAreas": [
+          "Gestion des déchets plastiques",
+          "Déchets organiques et biogaz",
+          "Entreprises de déchets électroniques"
+        ]
+      }
+    },
+    "begreen": {
+      "eyebrow": "Entrepreneuriat vert pour la jeunesse kényane",
+      "title": "BeGreen Africa <g>Initiative</g>",
+      "intro": "Un programme multipartenaire qui développe l'entrepreneuriat vert dans la gestion des déchets, en s'attaquant à la fois au chômage des jeunes et à la dégradation de l'environnement.",
+      "back": "Retour aux programmes",
+      "backAll": "Retour à tous les programmes",
+      "implementing": "Partenaires de mise en œuvre",
+      "resultsEyebrow": "Résultats du programme",
+      "resultsTitle": "Tous les objectifs dépassés",
+      "stats": [
+        {
+          "label": "Emplois créés",
+          "sub": "Nov. 2023 – juil. 2025"
+        },
+        {
+          "label": "Emplois moyens / entreprise",
+          "sub": "contre 2,6 en référence"
+        },
+        {
+          "label": "Croissance du chiffre d'affaires",
+          "sub": "Nov. 2023 → juil. 2025"
+        },
+        {
+          "label": "Kg de déchets gérés",
+          "sub": "Plastiques + organiques"
+        },
+        {
+          "label": "Jeunes financés",
+          "sub": "Jusqu'à 5 000 USD chacun"
+        },
+        {
+          "label": "Jeunes marginalisés",
+          "sub": "Atteints délibérément"
+        }
+      ],
+      "aboutEyebrow": "À propos de BeGreen",
+      "aboutTitle": "Qu'est-ce que <g>l'initiative BeGreen ?</g>",
+      "about1": "La <b>BeGreen Africa Initiative</b> est un programme multipartenaire mis en œuvre au Kenya par l'UNICEF/Generation Unlimited, la Tony Elumelu Foundation et la IKEA Foundation, avec l'appui à l'incubation du STEM Impact Center Kenya.",
+      "about2": "Il cible les jeunes de <b>18 à 35 ans</b> afin de développer l'entrepreneuriat vert dans le secteur de la gestion des déchets, en s'attaquant à la fois au chômage des jeunes et à la dégradation de l'environnement.",
+      "about3": "Le programme s'inscrit dans la <b>Vision 2030 du Kenya</b>, l'Agenda de transformation économique par la base (BETA) et les engagements nationaux au titre de l'Accord de Paris et de plusieurs ODD.",
+      "problemTitle": "Contexte du problème",
+      "problem": [
+        "tonnes de déchets produites chaque jour au Kenya — moins de 10 % recyclées",
+        "des 18–34 ans sont au chômage ; 80 % travaillent dans le secteur informel",
+        "des Kényans vivent sous le seuil de pauvreté, ce qui touche particulièrement les jeunes",
+        "de la population kényane a moins de 35 ans"
+      ],
+      "focusEyebrow": "Filières des déchets",
+      "focusTitle": "Domaines prioritaires <g>des entreprises vertes</g>",
+      "focus": [
+        {
+          "title": "Gestion des déchets plastiques",
+          "desc": "Des entreprises de jeunes qui traitent et recyclent les déchets plastiques en ville comme en zone rurale."
+        },
+        {
+          "title": "Déchets organiques et biogaz",
+          "desc": "Transformer les déchets organiques en biogaz et en compost pour créer des chaînes de valeur circulaires."
+        },
+        {
+          "title": "Entreprises de déchets électroniques",
+          "desc": "Le sous-secteur le plus rémunérateur : collecte et traitement responsables des déchets électroniques."
+        },
+        {
+          "title": "Valorisation des déchets",
+          "desc": "Transformer les flux de déchets en produits commercialisables, créer des emplois et réduire la pression sur les décharges."
+        }
+      ],
+      "phasesEyebrow": "Structure du programme",
+      "phasesTitle": "8 phases de <g>mise en œuvre</g>",
+      "phases": [
+        {
+          "title": "Campagne de candidatures",
+          "outcome": "2 264 jeunes ont postulé dans tout le Kenya"
+        },
+        {
+          "title": "Formation à la gestion d'entreprise",
+          "outcome": "759 formés ; 502 ont terminé"
+        },
+        {
+          "title": "Formation à l'entrepreneuriat vert",
+          "outcome": "502 ont terminé BMT et GET"
+        },
+        {
+          "title": "Élaboration de plans d'affaires",
+          "outcome": "320 plans d'affaires soumis"
+        },
+        {
+          "title": "Séances de pitch",
+          "outcome": "207 jeunes ont pitché (Nairobi, Kisumu, Mombasa)"
+        },
+        {
+          "title": "Versement des fonds d'amorçage",
+          "outcome": "146 ont reçu jusqu'à 5 000 USD"
+        },
+        {
+          "title": "Incubation et mentorat",
+          "outcome": "146 innovations accompagnées"
+        },
+        {
+          "title": "Fonds d'accélération",
+          "outcome": "112 ont reçu 1 000 à 3 000 USD supplémentaires"
+        }
+      ],
+      "outcomesEyebrow": "Impact",
+      "outcomesTitle": "Principaux <g>résultats du programme</g>",
+      "outcomes": [
+        {
+          "title": "Création d'emplois",
+          "items": [
+            "846 emplois créés au total — bien au-delà des 260 prévus",
+            "8,1 emplois en moyenne par entreprise contre 2,6 en référence",
+            "Chaque entrepreneur fait vivre environ 4,6 membres du foyer",
+            "Les entreprises mentorées ont créé 531 emplois contre 104 sans mentorat"
+          ]
+        },
+        {
+          "title": "Génération de revenus",
+          "items": [
+            "Chiffre d'affaires multiplié par ~7 entre nov. 2023 et juil. 2025",
+            "Revenu mensuel moyen passé de 81 000 à 203 000 KShs",
+            "Projection annuelle d'environ 2,7 M USD contre un objectif de 1 M USD",
+            "Les entreprises de déchets électroniques ont réalisé en moyenne 679 000 KShs par mois"
+          ]
+        },
+        {
+          "title": "Impact environnemental",
+          "items": [
+            "29,9 millions de kg de déchets gérés au total",
+            "11,6 M kg de plastique + 18,4 M kg de déchets organiques détournés",
+            "Les entreprises incubées ont géré 27,9 M kg contre 76 000 sans incubation",
+            "Une contribution majeure à l'économie circulaire du Kenya"
+          ]
+        }
+      ],
+      "inclusionEyebrow": "Inclusion",
+      "inclusionTitle": "Atteindre <g>les jeunes marginalisés</g>",
+      "inclusionBody": "Entre <b>74 % et 90 %</b> des participants étaient considérés comme marginalisés, signe de la forte orientation inclusive du programme. Même parmi les jeunes financés, les taux de marginalisation allaient de 74,3 % à 82,4 %.",
+      "inclusionStats": [
+        [
+          "68,9 % d'hommes",
+          "30,9 % de participantes"
+        ],
+        [
+          "40,5 % de femmes",
+          "parmi les jeunes financés"
+        ],
+        [
+          "59 % urbains",
+          "39,8 % de participants ruraux"
+        ],
+        [
+          "57,6 %",
+          "âgés de 25 à 30 ans"
+        ]
+      ],
+      "conclusionTitle": "Conclusion",
+      "conclusion1": "L'initiative BeGreen Africa Kenya a largement dépassé ses objectifs sur les trois piliers du programme : création d'emplois (846 contre 260 prévus), génération de revenus (~2,7 M USD par an contre un objectif de 1 M USD) et gestion des déchets (29,9 M kg détournés).",
+      "conclusion2": "Alors que le Kenya poursuit ses objectifs climatiques, l'expérience BeGreen confirme que les jeunes ne sont pas seulement des bénéficiaires, mais de véritables <b>architectes du développement durable</b>.",
+      "partnersEyebrow": "Collaboration",
+      "partnersTitle": "Partenaires <g>clés</g>",
+      "partners": [
+        {
+          "name": "UNICEF / Generation Unlimited",
+          "role": "Pilotage de la mise en œuvre, mobilisation des jeunes, conception des programmes"
+        },
+        {
+          "name": "Tony Elumelu Foundation",
+          "role": "Contenus entrepreneuriaux, dispositifs de mentorat, fonds d'amorçage"
+        },
+        {
+          "name": "IKEA Foundation",
+          "role": "Principal bailleur, supervision stratégique et financement"
+        },
+        {
+          "name": "Bureau national des statistiques du Kenya (KNBS)",
+          "role": "Appui technique, intégration et validation des données"
+        },
+        {
+          "name": "Agences gouvernementales (SDYA, ministère de la Jeunesse et de l'Environnement)",
+          "role": "Alignement des politiques, soutien officiel et intégration locale"
+        },
+        {
+          "name": "Secteur privé (UBA Bank, recycleurs, investisseurs)",
+          "role": "Accès aux marchés, voies de financement, évaluation des modèles d'affaires"
+        }
+      ]
+    },
+    "ycic": {
+      "eyebrow": "Aider les jeunes Kényans à créer des solutions climatiques innovantes",
+      "title": "Youth Climate Innovation <g>Challenge</g>",
+      "intro": "Pour les quartiers informels : bâtir des communautés durables et résilientes grâce à des approches innovantes.",
+      "back": "Retour aux programmes",
+      "info": [
+        {
+          "label": "Date limite",
+          "value": "9 juin 2025"
+        },
+        {
+          "label": "Participants",
+          "value": "300 jeunes innovateurs"
+        },
+        {
+          "label": "Lieu",
+          "value": "Kenya (tout le pays)"
+        },
+        {
+          "label": "Dotation",
+          "value": "500 000 KES"
+        }
+      ],
+      "closedTitle": "La période de candidature est close",
+      "remaining": "Temps restant pour postuler",
+      "days": "Jours",
+      "hours": "Heures",
+      "minutes": "Minutes",
+      "seconds": "Secondes",
+      "closedNote": "Candidatures closes — revenez pour les prochaines éditions",
+      "overviewEyebrow": "Présentation du défi",
+      "overviewTitle": "Aider les jeunes à créer <g>des solutions climatiques</g>",
+      "overviewBody": "Le Youth Climate Innovation Challenge 2025 vise à permettre aux jeunes Kényans de concevoir des solutions climatiques pour les quartiers informels, afin de bâtir des communautés durables et résilientes grâce à des approches innovantes.",
+      "benefits": [
+        {
+          "title": "Financement d'amorçage",
+          "desc": "Gagnez jusqu'à 500 000 KES pour lancer votre innovation climatique et concrétiser votre solution."
+        },
+        {
+          "title": "Mentorat",
+          "desc": "Bénéficiez de 6 mois d'accompagnement par des experts du climat et des entrepreneurs aguerris."
+        },
+        {
+          "title": "Incubation",
+          "desc": "Accédez à des ressources, des réseaux et un soutien pour déployer votre solution dans tout le Kenya."
+        },
+        {
+          "title": "Plateforme nationale",
+          "desc": "Présentez votre innovation lors du Climate Innovation Summit à Nairobi."
+        }
+      ],
+      "focusEyebrow": "Domaines prioritaires",
+      "focusTitle": "Thèmes d'innovation pour <g>les quartiers informels</g>",
+      "focusArea": "Domaine {n}",
+      "examples": "Exemples de solutions",
+      "focus": [
+        {
+          "title": "Eau, assainissement et hygiène (WASH)",
+          "description": "Concevoir des solutions durables pour l'accès à l'eau potable, de meilleures installations sanitaires et la promotion de l'hygiène, résilientes au climat et abordables.",
+          "examples": [
+            "Systèmes de filtration d'eau à bas coût",
+            "Installations sanitaires communautaires",
+            "Programmes d'éducation à l'hygiène"
+          ]
+        },
+        {
+          "title": "Résilience aux inondations et drainage urbain",
+          "description": "Inventer de nouvelles façons de gérer les eaux pluviales, prévenir les inondations et améliorer le drainage dans les quartiers informels densément peuplés.",
+          "examples": [
+            "Revêtements perméables",
+            "Systèmes de récupération d'eau de pluie",
+            "Systèmes d'alerte précoce aux inondations"
+          ]
+        },
+        {
+          "title": "Énergies renouvelables et infrastructures durables",
+          "description": "Concevoir des solutions d'énergie propre abordables et des pratiques de construction durables qui réduisent l'empreinte carbone tout en améliorant les conditions de vie.",
+          "examples": [
+            "Kits solaires domestiques",
+            "Digesteurs de biogaz",
+            "Matériaux de construction écologiques"
+          ]
+        }
+      ],
+      "eligibilityEyebrow": "Éligibilité",
+      "eligibilityTitle": "Qui peut <g>participer ?</g>",
+      "eligibilityHeading": "Conditions d'éligibilité",
+      "eligibility": [
+        "Avoir un profil actif sur <yoma>yoma.world</yoma>",
+        "Jeunes Kényans de 18 à 35 ans",
+        "À titre individuel ou en équipe de 4 membres maximum",
+        "La solution doit couvrir au moins un domaine prioritaire",
+        "L'innovation doit inclure un volet d'éducation au climat",
+        "La solution proposée doit pouvoir être mise en œuvre en 12 mois",
+        "Une expérience préalable de l'action climatique est un plus, mais n'est pas obligatoire"
+      ],
+      "keyDatesTitle": "Dates clés",
+      "keyDates": [
+        {
+          "label": "Date limite de candidature",
+          "value": "9 juin 2025"
+        },
+        {
+          "label": "Annonce de la présélection",
+          "value": "23 juin 2025"
+        },
+        {
+          "label": "Journée de pitch (KICC Nairobi)",
+          "value": "23 juillet 2025"
+        }
+      ],
+      "prizeTitle": "Dotation totale",
+      "prizeExtra": "+ 6 mois de mentorat",
+      "processEyebrow": "Comment participer",
+      "processTitle": "Processus <g>de candidature</g>",
+      "periodClosed": "Période de candidature close",
+      "steps": [
+        {
+          "title": "Inscrivez-vous en ligne",
+          "desc": "Remplissez le formulaire d'inscription avec vos informations personnelles et une brève description de votre idée."
+        },
+        {
+          "title": "Développez votre concept",
+          "desc": "Travaillez votre innovation en misant sur la faisabilité, la durabilité et l'impact. Profitez des ressources et du mentorat disponibles."
+        },
+        {
+          "title": "Soumettez votre proposition",
+          "desc": "Envoyez une proposition détaillée comprenant un plan de mise en œuvre, un budget et les résultats attendus."
+        },
+        {
+          "title": "Pitch et présentation",
+          "desc": "Les finalistes sélectionnés présenteront leur innovation à un jury lors du Climate Innovation Summit."
+        }
+      ],
+      "apply": "Postuler sur Yoma"
+    }
+  },
+  "storiesPage": {
+    "eyebrow": "À la une",
+    "title": "Histoires de startups <g>climat.</g>",
+    "intro": "Des fondateurs soutenus par le Youth Climate Innovation Challenge, qui transforment les défis climatiques du Kenya en entreprises viables.",
+    "founder": "Fondateur·rice",
+    "empty": "Aucune histoire dans cette catégorie pour l'instant.",
+    "ctaTitle": "Votre solution pourrait être la prochaine.",
+    "ctaButton": "Participer au défi",
+    "detailEyebrow": "Histoire de réussite",
+    "by": "Par {name}",
+    "back": "Retour à toutes les histoires",
+    "readStory": "Lire l'histoire",
+    "others": "Autres histoires de réussite"
+  },
+  "eventsPage": {
+    "eyebrow": "Modèle de connaissances IISD · Calendrier KYCH",
+    "title": "Calendrier des événements <g>climat 2026.</g>",
+    "intro": "Cliquez sur une date en surbrillance dans le calendrier ci-dessous pour afficher les détails, l'ajouter à Google Agenda ou accéder aux liens officiels.",
+    "schedule": "Calendrier officiel du climat",
+    "prevMonth": "Mois précédent",
+    "nextMonth": "Mois suivant",
+    "eventCount": "{count, plural, one {# événement} other {# événements}}",
+    "filters": "Filtres :",
+    "sdgLabel": "Filtrer par ODD",
+    "regionLabel": "Filtrer par région",
+    "formatLabel": "Filtrer par format",
+    "reset": "Réinitialiser",
+    "allIn": "Tous les événements de {month}",
+    "showing": "{count, plural, one {# événement affiché} other {# événements affichés}}",
+    "emptyTitle": "Aucun événement trouvé",
+    "emptyBody": "Essayez de réinitialiser les filtres ci-dessus.",
+    "organizedBy": "Organisé par : <b>{name}</b>",
+    "details": "Voir les détails",
+    "googleShort": "+ Google Agenda",
+    "scheduled": "{count, plural, one {# événement prévu} other {# événements prévus}}",
+    "closeModal": "Fermer la fenêtre",
+    "close": "Fermer",
+    "date": "Date :",
+    "location": "Lieu :",
+    "organizer": "Organisateur :",
+    "googleLong": "+ Ajouter à Google Agenda",
+    "website": "Site officiel",
+    "ctaTitle": "Vous avez un événement climat à proposer ?",
+    "ctaButton": "Devenir partenaire de KYCH"
+  },
+  "weatherPage": {
+    "geoUnsupported": "La géolocalisation n'est pas prise en charge par votre navigateur.",
+    "countyName": "Comté de {name}",
+    "poweredUpdated": "Données AccuWeather · Mis à jour à {time}",
+    "live": "En direct",
+    "detecting": "Localisation en cours...",
+    "autoDetect": "Me localiser automatiquement",
+    "countySelect": "Choisir un comté",
+    "highLow": "Max {high} · Min {low}",
+    "humidity": "Humidité",
+    "windSpeed": "Vitesse du vent",
+    "uv": "Indice UV max",
+    "airQuality": "Qualité de l'air",
+    "timeOfDay": "Prévisions selon le moment de la journée",
+    "prevPeriod": "Période précédente",
+    "nextPeriod": "Période suivante",
+    "rain": "Pluie :",
+    "wind": "Vent :",
+    "alertsTitle": "Alertes et avis CAP",
+    "noAlerts": "Aucune alerte météo grave en cours",
+    "severityAlert": "Alerte {severity}",
+    "alertHeadline": "AVIS CRITIQUE INONDATIONS ET MÉTÉO : {county}",
+    "hotline": "Numéro d'urgence :",
+    "redCross": "Croix-Rouge 1199",
+    "mapTitle": "Notre carte de veille météo",
+    "mapView": "Vue carte",
+    "satellite": "Satellite",
+    "mapFrame": "Carte radar météo du Kenya - {place}",
+    "canvas": "Zone observée : {place}",
+    "heatTitle": "Signatures thermiques et échelle de risque",
+    "kmdSignatures": "Signatures radar KMD",
+    "extreme": "Extrême (>100 mm)",
+    "extremeDesc": "Débordements et crues soudaines",
+    "high": "Élevé (50–100 mm)",
+    "highDesc": "Accumulation dans les égouts urbains",
+    "moderate": "Modéré (20–50 mm)",
+    "moderateDesc": "Vigilance orages",
+    "normal": "Normal (<20 mm)",
+    "normalDesc": "Faible vulnérabilité",
+    "countyAnalysis": "Analyse du comté ({name}) :",
+    "riskExtreme": "INDICE DE CRUE EXTRÊME",
+    "riskKisumu": "RISQUE GRAVE D'INONDATION À NYANDO",
+    "riskUrban": "RISQUE ÉLEVÉ D'INONDATION URBAINE",
+    "riskLow": "VULNÉRABILITÉ FAIBLE/MODÉRÉE AUX INONDATIONS",
+    "selectedRegion": "Région sélectionnée : <b>{name}</b>",
+    "guideLink": "Guide El Niño en 23 points",
+    "weeklyFocus": "Le climat de la semaine",
+    "sevenDay": "Météo sur 7 jours pour {place} ({from} – {to})",
+    "today": "Aujourd'hui",
+    "next7": "7 prochains jours",
+    "poweredBy": "Données AccuWeather et KMD",
+    "spotlight": "Zoom sur le jour sélectionné",
+    "dayNight": "Jour : {day} · Nuit : {night}",
+    "precipRisk": "Risque de précipitations :",
+    "recommended": "Notre conseil",
+    "adviceHeavy": "Fortes averses attendues. Dégagez les voies d'écoulement et évitez de vous déplacer pendant les pluies de l'après-midi.",
+    "adviceModerate": "Risque de pluie modéré. Gardez vos vêtements de pluie à portée de main et inspectez les gouttières.",
+    "adviceDry": "Temps sec et favorable attendu. Idéal pour les réparations extérieures et la préparation des cultures.",
+    "planBadge": "Plan d'action officiel du KMD et du ministère",
+    "checklistTitle": "Préparation à El Niño : <g>la liste en 23 points.</g>",
+    "checklistIntro": "Cochez chaque étape au fur et à mesure que vous préparez votre foyer, votre école ou votre entreprise avant les fortes pluies.",
+    "score": "Score de préparation",
+    "completed": "{done} étapes sur {total} réalisées",
+    "action": "Action :",
+    "agenciesEyebrow": "Agences gouvernementales de gestion des catastrophes",
+    "agenciesTitle": "Besoin de secours ou d'aide d'urgence ?",
+    "agenciesBody": "La gestion des catastrophes, la recherche et le sauvetage, l'aide aux sinistrés et les évacuations d'urgence sont officiellement coordonnés par les agences du gouvernement kényan et leurs unités d'appui.",
+    "ndoc": "Centre national des catastrophes (NDOC)",
+    "tollFree": "Numéro gratuit {number}",
+    "landline": "Fixe : {number}",
+    "redCrossAmb": "Ambulances de la Croix-Rouge du Kenya",
+    "rescue247": "Secours et soins 24h/24",
+    "ndmu": "Unité de gestion des catastrophes (NDMU)",
+    "mobile": "Mobile : {number}",
+    "kmd": "Service météorologique du Kenya (KMD)",
+    "advisories": "Bulletins météo"
+  },
+  "weatherTerms": {
+    "Morning": "Matin",
+    "Afternoon": "Après-midi",
+    "Evening": "Soirée",
+    "Night": "Nuit",
+    "Severe": "grave",
+    "ActiveNow": "En cours",
+    "High": "Élevé",
+    "Good": "Bonne",
+    "ClearSunny": "Dégagé et ensoleillé",
+    "PartlyCloudySpells": "Passages nuageux",
+    "MostlyOvercast": "Très nuageux",
+    "MorningFogMist": "Brouillard matinal",
+    "LightDrizzleSpells": "Bruine légère",
+    "RainShowers": "Averses",
+    "HeavyRainBurst": "Fortes pluies soudaines",
+    "ThunderstormAlert": "Alerte orages",
+    "PartlyCloudy": "Partiellement nuageux",
+    "ScatteredDownpours": "Averses éparses",
+    "PartlySunnySpells": "Éclaircies",
+    "SunnyMildClouds": "Ensoleillé, quelques nuages",
+    "LightRain": "Pluie légère",
+    "ClearMild": "Dégagé et doux",
+    "PartlySunnyCoolSpells": "Éclaircies et fraîcheur",
+    "PartlySunnyMist": "Éclaircies et brume",
+    "SunnyIntervalsClouds": "Alternance soleil et nuages",
+    "MildBreezes": "Brises légères",
+    "ClearSky": "Ciel dégagé"
+  },
+  "chat": {
+    "greeting": "Karibu ! Je suis Climate AI de KYCH. Posez-moi vos questions sur les subventions, les bourses, les programmes ou le Youth Climate Innovation Challenge.",
+    "thinking": "L'IA réfléchit...",
+    "online": "En ligne • Connecté à OpenAI",
+    "close": "Fermer la discussion",
+    "retrieving": "Recherche dans la base KYCH et rédaction de la réponse...",
+    "typing": "KYCH AI écrit...",
+    "placeholder": "Posez une question sur les subventions, le YCIC ou la météo...",
+    "send": "Envoyer le message",
+    "prompts": {
+      "funding": {
+        "label": "Trouver un financement",
+        "query": "Quels financements ou subventions sont disponibles ?"
+      },
+      "ycic": {
+        "label": "Défi YCIC",
+        "query": "Parlez-moi du Youth Climate Innovation Challenge"
+      },
+      "join": {
+        "label": "Rejoindre KYCH",
+        "query": "Comment m'inscrire et rejoindre KYCH ?"
+      },
+      "weather": {
+        "label": "Météo du comté",
+        "query": "Comment consulter la météo de mon comté ?"
+      }
+    },
+    "canned": {
+      "funding": "Notre tableau des opportunités recense en direct des subventions, bourses et stages, avec alertes d'échéance. Rendez-vous sur la [page Opportunités](/opportunities) pour filtrer par type et date de clôture.",
+      "programs": "Le Youth Climate Innovation Challenge (YCIC 2025) est terminé (candidatures closes en juin 2025). Le programme a attribué 500 000 KES de subventions d'amorçage pour l'eau et l'assainissement, la résilience aux inondations et les technologies propres. Découvrez son impact sur la [page YCIC](/programs/ycic) ou consultez le [tableau des opportunités](/opportunities) pour les appels en cours.",
+      "join": "Tout jeune de 15 à 35 ans au Kenya peut rejoindre KYCH. Commencez par vous inscrire sur yoma.world, puis consultez le [tableau des opportunités](/opportunities).",
+      "library": "La bibliothèque propose des rapports de recherche, des boîtes à outils et des notes politiques. Parcourez les ressources gratuites sur la [page Bibliothèque](/e-library).",
+      "weather": "Notre espace Veille climatique fournit des données satellites en direct et des alertes pour les 47 comtés du Kenya. Consultez la [page Météo](/weather).",
+      "default": "Karibu ! Merci de nous avoir écrit. Contactez-nous directement à info@kenyayouthclimatehub.org ou au (+254) 0115963306 pour un accompagnement personnalisé."
+    }
+  },
+  "chatApi": {
+    "fallback": "Karibu ! {content}\n\nPour en savoir plus, consultez [{title}]({url}) ou contactez-nous directement à info@kenyayouthclimatehub.org ou au (+254) 0115963306.",
+    "noReply": "Merci de nous avoir écrit ! En attendant, vous pouvez nous joindre à info@kenyayouthclimatehub.org ou au (+254) 0115963306."
+  },
+  "calculator": {
+    "toolLabel": "Outil KYCH",
+    "title": "Calculateur d'empreinte carbone",
+    "subtitle": "Découvrez votre impact CO₂ en 60 secondes",
+    "close": "Fermer le calculateur",
+    "steps": {
+      "transport": {
+        "title": "Comment vous déplacez-vous ?",
+        "subtitle": "Votre principal moyen de transport au quotidien au Kenya"
+      },
+      "energy": {
+        "title": "Comment alimentez-vous votre logement ?",
+        "subtitle": "Votre principale source d'énergie"
+      },
+      "food": {
+        "title": "Quelle est votre alimentation ?",
+        "subtitle": "Vos habitudes alimentaires"
+      },
+      "waste": {
+        "title": "Que faites-vous de vos déchets ?",
+        "subtitle": "Vos habitudes de tri et de recyclage"
+      }
+    },
+    "options": {
+      "walk": "Marche / Vélo",
+      "matatu": "Matatu / Bus",
+      "boda": "Boda boda (moto-taxi)",
+      "car": "Voiture personnelle",
+      "taxi": "Uber / Taxi",
+      "solar": "Solaire uniquement",
+      "gridSolar": "Réseau + un peu de solaire",
+      "grid": "Réseau uniquement",
+      "generator": "Groupe électrogène",
+      "meat": "Surtout de la viande",
+      "mixed": "Alimentation variée",
+      "veg": "Surtout des légumes",
+      "vegan": "Végane",
+      "always": "Je recycle toujours",
+      "sometimes": "Je recycle parfois",
+      "rarely": "Je recycle rarement",
+      "never": "Je ne recycle jamais"
+    },
+    "tips": {
+      "transport": "Prenez le matatu ou le vélo pour les trajets courts — jusqu'à 1,0 t de CO₂ économisée par an",
+      "energy": "Installez un petit panneau solaire — 0,35 t de CO₂ économisée par an et des factures allégées",
+      "food": "Réduisez la viande 2 jours par semaine — jusqu'à 0,5 t de CO₂ économisée par an",
+      "waste": "Compostez vos déchets alimentaires — cela réduit fortement les émissions de méthane"
+    },
+    "score": {
+      "hero": "Héros du climat",
+      "well": "Sur la bonne voie",
+      "improve": "Peut mieux faire",
+      "high": "Impact élevé"
+    },
+    "you": "Vous",
+    "back": "Retour",
+    "next": "Suivant",
+    "calculate": "Calculer mon empreinte",
+    "perYear": "tonnes de CO₂ par an",
+    "compare": "Votre position",
+    "kenyaAvg": "Moyenne Kenya ({value} t)",
+    "africaAvg": "Moyenne Afrique ({value} t)",
+    "worldAvg": "Moyenne mondiale ({value} t)",
+    "breakdown": "Votre répartition",
+    "cat": {
+      "transport": "Transport",
+      "energy": "Énergie",
+      "food": "Alimentation",
+      "waste": "Déchets"
+    },
+    "topActions": "Vos 3 actions prioritaires",
+    "recalculate": "Recalculer",
+    "share": "Partager mon résultat",
+    "shareText": "J'ai calculé mon empreinte carbone avec KYCH ! 🌍\nMon empreinte : {total} t de CO₂ par an\nMoyenne Kenya : {kenya} t | Moyenne mondiale : {world} t\nCalculez la vôtre sur kych.org/e-library",
+    "shareTitle": "Mon empreinte carbone — KYCH",
+    "copied": "Copié dans le presse-papiers !"
+  },
+  "quiz": {
+    "toolLabel": "Outil KYCH",
+    "title": "Quiz de préparation climatique",
+    "subtitle": "Testez vos connaissances climat — gagnez votre badge",
+    "close": "Fermer le quiz",
+    "progress": "Question {n} sur {total}",
+    "correctCount": "{count, plural, one {# bonne réponse} other {# bonnes réponses}}",
+    "introTitle": "Êtes-vous prêt·e face au climat ?",
+    "introBody": "8 questions sur la politique climatique du Kenya, les énergies renouvelables, les marchés du carbone et l'action climatique mondiale. Environ 3 minutes.",
+    "start": "Commencer le quiz",
+    "back": "Retour",
+    "check": "Vérifier",
+    "nextQuestion": "Question suivante",
+    "seeResults": "Voir mes résultats",
+    "correct": "Bonne réponse !",
+    "wrong": "Pas tout à fait !",
+    "yourAnswers": "Vos réponses",
+    "recommended": "Recommandé pour vous",
+    "retake": "Refaire le quiz",
+    "share": "Partager mon badge",
+    "shareText": "J'ai obtenu {score}/{total} au quiz de préparation climatique de KYCH ! 🌍\nJ'ai gagné le badge « {badge} » {emoji}\nTestez vos connaissances sur kych.org/e-library",
+    "shareTitle": "Mon résultat au quiz climat — KYCH",
+    "copied": "Copié dans le presse-papiers !",
+    "questions": [
+      {
+        "category": "Énergie au Kenya",
+        "question": "Quel pourcentage de l'électricité du Kenya provient de sources renouvelables ?",
+        "options": [
+          "25 %",
+          "50 %",
+          "75 %",
+          "92 %"
+        ],
+        "explanation": "Le Kenya est un leader des énergies renouvelables ! Environ 92 % de son électricité provient de la géothermie, de l'hydroélectricité, de l'éolien et du solaire — l'un des taux les plus élevés d'Afrique."
+      },
+      {
+        "category": "Finance climat",
+        "question": "Que signifie « GCF » dans la finance climat ?",
+        "options": [
+          "Global Carbon Fund",
+          "Green Climate Fund (Fonds vert pour le climat)",
+          "Government Climate Finance",
+          "Global Conservation Fund"
+        ],
+        "explanation": "Le Fonds vert pour le climat (GCF) est le plus grand fonds au monde dédié au climat ; il aide les pays en développement comme le Kenya à faire face au changement climatique."
+      },
+      {
+        "category": "Énergie au Kenya",
+        "question": "Quelle source d'énergie renouvelable produit le PLUS d'électricité au Kenya ?",
+        "options": [
+          "Solaire",
+          "Éolien",
+          "Géothermie",
+          "Hydroélectricité"
+        ],
+        "explanation": "La géothermie de la vallée du Grand Rift produit environ 47 % de l'électricité du Kenya. Le Kenya est le 8e producteur géothermique mondial !"
+      },
+      {
+        "category": "Politiques du Kenya",
+        "question": "Quel est l'objectif de la CDN du Kenya pour réduire les émissions de gaz à effet de serre d'ici 2030 ?",
+        "options": [
+          "15 %",
+          "32 %",
+          "45 %",
+          "60 %"
+        ],
+        "explanation": "La contribution déterminée au niveau national (CDN) du Kenya prévoit une réduction de 32 % des émissions de gaz à effet de serre d'ici 2030, sous réserve d'un soutien international."
+      },
+      {
+        "category": "Impacts climatiques",
+        "question": "Quel comté kényan est le PLUS vulnérable à la sécheresse et au stress climatique ?",
+        "options": [
+          "Nairobi",
+          "Mombasa",
+          "Turkana",
+          "Kisumu"
+        ],
+        "explanation": "Le comté de Turkana, dans le nord du Kenya, est l'une des zones les plus vulnérables au climat en Afrique, confrontée à de graves sécheresses, à l'insécurité alimentaire et à la pénurie d'eau."
+      },
+      {
+        "category": "Politiques mondiales",
+        "question": "Que signifie « CCNUCC » (UNFCCC) ?",
+        "options": [
+          "Convention-cadre des Nations unies sur les changements climatiques",
+          "Fonds des Nations unies pour le contrôle du changement climatique",
+          "Comité financier des Nations unies sur le changement climatique",
+          "Forum des Nations unies pour le contrôle des crédits carbone"
+        ],
+        "explanation": "La CCNUCC (Convention-cadre des Nations unies sur les changements climatiques) est le traité international qui guide l'action climatique mondiale, y compris l'Accord de Paris."
+      },
+      {
+        "category": "Marchés du carbone",
+        "question": "Qu'est-ce qu'un « crédit carbone » ?",
+        "options": [
+          "Un prêt pour des projets verts",
+          "Un permis d'émettre 1 tonne de CO₂",
+          "Une subvention climatique publique",
+          "Un certificat d'énergie renouvelable"
+        ],
+        "explanation": "Un crédit carbone représente le droit d'émettre 1 tonne de CO₂. Les entreprises peuvent acheter des crédits pour compenser leurs émissions ou en obtenir en réduisant leurs émissions."
+      },
+      {
+        "category": "Action des jeunes",
+        "question": "Quel est l'objectif de l'Accord de Paris pour limiter la hausse des températures mondiales ?",
+        "options": [
+          "1 °C au-dessus des niveaux préindustriels",
+          "1,5 °C au-dessus des niveaux préindustriels",
+          "2,5 °C au-dessus des niveaux préindustriels",
+          "3 °C au-dessus des niveaux préindustriels"
+        ],
+        "explanation": "L'Accord de Paris vise à limiter le réchauffement à 1,5 °C au-dessus des niveaux préindustriels. Chaque fraction de degré compte pour des communautés comme celles du Kenya !"
+      }
+    ],
+    "badges": [
+      {
+        "title": "Jeune pousse du climat",
+        "desc": "Vous débutez — et c'est très bien ! Tout expert a commencé un jour."
+      },
+      {
+        "title": "Acteur·rice du changement",
+        "desc": "Vous avez de bonnes bases sur le climat. Continuez à apprendre et agissez dans votre communauté !"
+      },
+      {
+        "title": "Champion·ne du climat",
+        "desc": "Impressionnant ! Vous maîtrisez les faits climatiques. Vous êtes prêt·e à mener l'action climatique."
+      },
+      {
+        "title": "Expert·e du climat",
+        "desc": "Remarquable ! Vous êtes une référence en matière de climat. Partagez votre savoir !"
+      }
+    ]
+  }
+}

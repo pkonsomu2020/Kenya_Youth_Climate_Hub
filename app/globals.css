@@ -1241,6 +1241,7 @@ html, body { max-width: 100vw; }
 @media (max-width: 1040px) {
   .nk-nav-links { display: none !important; }
   .nk-nav-burger { display: flex !important; }
+  .nk-lang-switch { display: none !important; }
 }
 
 /* Footer grid collapses on tablet/mobile */
