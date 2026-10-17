@@ -1,6 +1,7 @@
 "use client";
 
 import { PageHead } from "@/components/admin/AdminUI";
+import { TranslationFields, initTranslations, cleanTranslations, type Translations, type TranslationField } from "@/components/admin/TranslationFields";
 import { useState, useEffect, useCallback } from "react";
 import {
   RefreshCw, ExternalLink, Check, X, Pencil,
@@ -25,7 +26,14 @@ type LibraryTool = {
   color: string;
   badge: string;
   is_approved: boolean;
+  translations?: Translations | null;
 };
+
+const TR_FIELDS: TranslationField[] = [
+  { key: "title", label: "Title" },
+  { key: "description", label: "Description", multiline: true },
+  { key: "use_case", label: "Use Case", multiline: true },
+];
 
 const CATEGORIES = ["All", "Open Source Tool", "Dataset", "Data Platform", "Calculator", "AI Tool", "API", "Framework", "Toolkit", "Report", "Guide"];
 const TOPICS     = ["Carbon", "Energy", "Water", "Agriculture", "Climate Modeling", "Biodiversity", "Policy", "Finance", "Innovation"];
@@ -42,11 +50,21 @@ function EditModal({ tool, onSave, onClose }: { tool: LibraryTool; onSave: (u: P
     tech_stack: tool.tech_stack || "",
     is_free: tool.is_free,
   });
+  const [tr, setTr] = useState(() => initTranslations(tool.translations, TR_FIELDS));
+  const [trDirty, setTrDirty] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
     setSaving(true);
-    await onSave({ ...form, use_case: form.use_case || null, tech_stack: form.tech_stack || null });
+    // English text is only sent when changed, so an untouched save doesn't trigger re-translation;
+    // translations are only sent when edited, so changed English without edits gets re-translated.
+    const { title, description, use_case, ...rest } = form;
+    const changes: Partial<LibraryTool> = { ...rest, tech_stack: form.tech_stack || null };
+    if (title !== tool.title) changes.title = title;
+    if (description !== (tool.description || "")) changes.description = description;
+    if (use_case !== (tool.use_case || "")) changes.use_case = use_case || null;
+    if (trDirty) changes.translations = cleanTranslations(tr);
+    await onSave(changes);
     setSaving(false);
     onClose();
   };
@@ -95,6 +113,7 @@ function EditModal({ tool, onSave, onClose }: { tool: LibraryTool; onSave: (u: P
               ))}
             </div>
           </div>
+          <TranslationFields fields={TR_FIELDS} value={tr} onChange={(v) => { setTr(v); setTrDirty(true); }} />
         </div>
         <div style={{ display: "flex", gap: ".75rem", marginTop: "1.5rem", justifyContent: "flex-end" }}>
           <button onClick={onClose} className="btn-g">Cancel</button>
@@ -121,7 +140,7 @@ export default function ResourcesAdmin() {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ limit: "100", sort: "trending" });
+      const params = new URLSearchParams({ limit: "100", sort: "trending", lang: "all" });
       if (catFilter !== "All") params.set("category", catFilter);
       const res = await fetch(`/api/library?${params}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -153,8 +172,9 @@ export default function ResourcesAdmin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(changes),
       });
-      if (!res.ok) throw new Error("Update failed");
-      setTools((prev) => prev.map((t) => (t.id === id ? { ...t, ...changes } : t)));
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || json.success === false) throw new Error(json.error || "Update failed");
+      setTools((prev) => prev.map((t) => (t.id === id ? { ...t, ...changes, ...(json.data || {}) } : t)));
     } catch (err: any) { alert("Failed to update: " + err.message); }
   };
 

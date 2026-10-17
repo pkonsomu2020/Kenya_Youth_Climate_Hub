@@ -6,8 +6,8 @@ import { TRANSLATABLE_FIELDS, translateRows } from '@/lib/i18n/contentTranslatio
 const TABLE_MAP = {
   news: 'news_articles',
   events: 'events_live',
-  opportunities: 'opportunities_live',
-  library: 'library_resources'
+  opportunities: 'opportunities',
+  library: 'library_tools'
 };
 
 export async function PATCH(request, { params }) {

@@ -7,7 +7,7 @@ const TABLE_MAP = {
   news: 'news_articles',
   events: 'events_live',
   opportunities: 'opportunities',
-  library: 'library_resources'
+  library: 'library_tools'
 };
 
 export async function PATCH(request, { params }) {

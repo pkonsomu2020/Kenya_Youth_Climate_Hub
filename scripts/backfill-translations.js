@@ -34,8 +34,10 @@ async function backfillTable(table) {
     let progressed = 0;
     for (let i = 0; i < rows.length; i++) {
       if (!translations[i]) { failed++; continue; }
-      const { error: upErr } = await supabase.from(table).update({ translations: translations[i] }).eq("id", rows[i].id);
-      if (upErr) { failed++; continue; }
+      const { data: updated, error: upErr } = await supabase
+        .from(table).update({ translations: translations[i] }).eq("id", rows[i].id).select("id");
+      // RLS silently blocks writes with a non-service key: no error, zero rows updated.
+      if (upErr || !updated?.length) { failed++; continue; }
       done++;
       progressed++;
     }
@@ -50,6 +52,10 @@ async function backfillTable(table) {
 async function main() {
   if (!process.env.OPENAI_API_KEY) {
     console.error("❌ OPENAI_API_KEY is not set — nothing can be translated.");
+    process.exit(1);
+  }
+  if ((process.env.SUPABASE_SERVICE_KEY || "").startsWith("sb_publishable_")) {
+    console.error("❌ SUPABASE_SERVICE_KEY is the public publishable key — writes would be blocked. Use the service role key.");
     process.exit(1);
   }
   const only = process.argv[2];

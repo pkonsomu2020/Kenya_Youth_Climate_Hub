@@ -1,6 +1,7 @@
 "use client";
 
 import { PageHead } from "@/components/admin/AdminUI";
+import { TranslationFields, initTranslations, cleanTranslations, type Translations, type TranslationField } from "@/components/admin/TranslationFields";
 import { useState, useEffect, useCallback } from "react";
 import {
   Globe, RefreshCw, ExternalLink, Check, X, Pencil,
@@ -22,7 +23,13 @@ type Article = {
   gradient: string;
   icon: string;
   is_approved: boolean;
+  translations?: Translations | null;
 };
+
+const TR_FIELDS: TranslationField[] = [
+  { key: "title", label: "Title", multiline: true },
+  { key: "excerpt", label: "Excerpt / Summary", multiline: true },
+];
 
 const CATS = ["All", "News", "Climate Insights", "Success Stories", "Events Recap", "Partner Updates"];
 
@@ -51,17 +58,23 @@ function EditModal({
     source: article.source,
     image_url: article.image_url || "",
   });
+  const [tr, setTr] = useState(() => initTranslations(article.translations, TR_FIELDS));
+  const [trDirty, setTrDirty] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
     setSaving(true);
-    await onSave({
-      title: form.title,
-      excerpt: form.excerpt,
+    // English text is only sent when changed, so an untouched save doesn't trigger re-translation;
+    // translations are only sent when edited, so changed English without edits gets re-translated.
+    const changes: Partial<Article> = {
       category: form.category,
       source: form.source,
       image_url: form.image_url || null,
-    });
+    };
+    if (form.title !== article.title) changes.title = form.title;
+    if (form.excerpt !== (article.excerpt || "")) changes.excerpt = form.excerpt;
+    if (trDirty) changes.translations = cleanTranslations(tr);
+    await onSave(changes);
     setSaving(false);
     onClose();
   };
@@ -149,6 +162,8 @@ function EditModal({
               />
             )}
           </div>
+
+          <TranslationFields fields={TR_FIELDS} value={tr} onChange={(v) => { setTr(v); setTrDirty(true); }} />
         </div>
 
         <div style={{ display: "flex", gap: ".75rem", marginTop: "1.5rem", justifyContent: "flex-end" }}>
@@ -183,7 +198,7 @@ export default function NewsAdmin() {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ limit: "100" });
+      const params = new URLSearchParams({ limit: "100", lang: "all" });
       if (cat !== "All") params.set("category", cat);
       const res = await fetch(`/api/news?${params}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -220,8 +235,9 @@ export default function NewsAdmin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(changes),
       });
-      if (!res.ok) throw new Error("Update failed");
-      setArticles((prev) => prev.map((a) => (a.id === id ? { ...a, ...changes } : a)));
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || json.success === false) throw new Error(json.error || "Update failed");
+      setArticles((prev) => prev.map((a) => (a.id === id ? { ...a, ...changes, ...(json.data || {}) } : a)));
     } catch (err: any) {
       alert("Failed to update: " + err.message);
     }
