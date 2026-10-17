@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { OFFICIAL_EVENTS_2026, OfficialEvent, getGoogleCalendarUrl } from "@/lib/data/officialEvents";
+import { OfficialEvent, getGoogleCalendarUrl } from "@/lib/data/officialEvents";
+import { useLocalizedEvents } from "@/lib/data/useLocalizedEvents";
+import { useLocale, useTranslations } from "next-intl";
+import { useTaxonomy } from "@/i18n/useTaxonomy";
+import { intlLocale, type Locale } from "@/i18n/config";
 import { Calendar as CalendarIcon, MapPin, Search, CalendarPlus, ChevronLeft, ChevronRight, Filter, Globe, X, ExternalLink, Tag, Building2 } from "lucide-react";
 import { NK, nkShadow, nkCard } from "@/lib/nkTheme";
 import { GrowHeading } from "@/components/GrowHeading";
@@ -28,6 +32,19 @@ const REGIONS = ["All Regions", "Kenya", "Africa / Regional", "Global"];
 const FORMATS = ["All Formats", "In-person", "Online", "Hybrid"];
 
 export default function EventsPage() {
+  const t = useTranslations("eventsPage");
+  const tax = useTaxonomy();
+  const locale = useLocale() as Locale;
+  const OFFICIAL_EVENTS_2026 = useLocalizedEvents();
+  const monthLabel = (year: number, monthIdx: number) =>
+    new Intl.DateTimeFormat(intlLocale[locale], { month: "long", year: "numeric" }).format(new Date(year, monthIdx, 1));
+  const monthShort = (year: number, monthIdx: number) =>
+    new Intl.DateTimeFormat(intlLocale[locale], { month: "long" }).format(new Date(year, monthIdx, 1));
+  const dayLabel = (year: number, monthIdx: number, day: number) =>
+    new Intl.DateTimeFormat(intlLocale[locale], { day: "numeric", month: "long", year: "numeric" }).format(new Date(year, monthIdx, day));
+  // 2026-02-01 is a Sunday, so day i of that week gives weekday names Sun..Sat.
+  const weekdays = Array.from({ length: 7 }, (_, i) =>
+    new Intl.DateTimeFormat(intlLocale[locale], { weekday: "short" }).format(new Date(2026, 1, 1 + i)).toUpperCase());
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0); // 0 = Sep, 1 = Oct, 2 = Nov
   const [selectedSdg, setSelectedSdg] = useState("All SDGs");
   const [selectedRegion, setSelectedRegion] = useState("All Regions");
@@ -85,7 +102,7 @@ export default function EventsPage() {
       }
       return true;
     });
-  }, [currentMonthIndex, selectedSdg, selectedRegion, selectedFormat, searchQuery]);
+  }, [OFFICIAL_EVENTS_2026, currentMonthIndex, selectedSdg, selectedRegion, selectedFormat, searchQuery]);
 
   // Handle clicking a calendar day box
   const handleDayClick = (day: number) => {
@@ -101,13 +118,13 @@ export default function EventsPage() {
       <section style={{ background: NK.bg, borderBottom: `2px solid ${NK.ink}` }}>
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3rem 1.5rem 2rem" }}>
           <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "0.75rem" }}>
-            IISD Knowledge Model · KYCH Calendar
+            {t("eyebrow")}
           </span>
           <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(32px,5vw,76px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.05, margin: 0 }}>
-            Climate Events <span style={{ color: NK.green }}>Calendar 2026.</span>
+            {t.rich("title", { g: (c) => <span style={{ color: NK.green }}>{c}</span> })}
           </GrowHeading>
           <p style={{ fontFamily: "var(--fb)", fontSize: "clamp(0.95rem, 1.8vw, 1.15rem)", color: NK.muted, lineHeight: 1.65, marginTop: "1rem", maxWidth: 740 }}>
-            Click on any highlighted date in the calendar below to launch event details, sync to Google Calendar, or access official links.
+            {t("intro")}
           </p>
         </div>
       </section>
@@ -124,10 +141,10 @@ export default function EventsPage() {
               </div>
               <div>
                 <h2 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(1.2rem, 2.5vw, 1.5rem)", color: "#fff", margin: 0, lineHeight: 1.1 }}>
-                  {currentMonth.name}
+                  {monthLabel(currentMonth.year, currentMonth.monthIdx)}
                 </h2>
                 <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedOnDark, textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 2 }}>
-                  Official Climate Schedule
+                  {t("schedule")}
                 </div>
               </div>
             </div>
@@ -145,14 +162,14 @@ export default function EventsPage() {
                     border: "none", cursor: "pointer", transition: "all .2s", whiteSpace: "nowrap"
                   }}
                 >
-                  {mConfig.monthName}
+                  {monthShort(mConfig.year, mConfig.monthIdx)}
                 </button>
               ))}
               <div style={{ display: "flex", gap: "4px", marginLeft: ".25rem", flexShrink: 0 }}>
                 <button
                   disabled={currentMonthIndex === 0}
                   onClick={() => { setCurrentMonthIndex((p) => p - 1); }}
-                  aria-label="Previous month"
+                  aria-label={t("prevMonth")}
                   style={{ width: 32, height: 32, background: "rgba(255,255,255,0.15)", border: "none", color: "#fff", cursor: currentMonthIndex === 0 ? "not-allowed" : "pointer", opacity: currentMonthIndex === 0 ? 0.4 : 1, display: "flex", alignItems: "center", justifyContent: "center" }}
                 >
                   <ChevronLeft size={16} />
@@ -160,7 +177,7 @@ export default function EventsPage() {
                 <button
                   disabled={currentMonthIndex === MONTH_CONFIGS.length - 1}
                   onClick={() => { setCurrentMonthIndex((p) => p + 1); }}
-                  aria-label="Next month"
+                  aria-label={t("nextMonth")}
                   style={{ width: 32, height: 32, background: "rgba(255,255,255,0.15)", border: "none", color: "#fff", cursor: currentMonthIndex === MONTH_CONFIGS.length - 1 ? "not-allowed" : "pointer", opacity: currentMonthIndex === MONTH_CONFIGS.length - 1 ? 0.4 : 1, display: "flex", alignItems: "center", justifyContent: "center" }}
                 >
                   <ChevronRight size={16} />
@@ -170,8 +187,8 @@ export default function EventsPage() {
           </div>
 
           {/* Days of Week Row */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", background: NK.ink, color: NK.green, borderBottom: `2px solid ${NK.ink}` }}>
-            {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((dayName) => (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", background: NK.ink, color: NK.green, borderBottom: `2px solid ${NK.ink}` }}>
+            {weekdays.map((dayName) => (
               <div key={dayName} style={{ padding: ".6rem 2px", textAlign: "center", fontFamily: "var(--fm)", fontWeight: 700, fontSize: "clamp(10px, 1.5vw, 12px)", letterSpacing: "0.05em" }}>
                 {dayName}
               </div>
@@ -179,7 +196,7 @@ export default function EventsPage() {
           </div>
 
           {/* Month Days Grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", background: "rgba(16,28,51,0.06)", gap: "1px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", background: "rgba(16,28,51,0.06)", gap: "1px" }}>
             {calendarGrid.map((day, cellIdx) => {
               if (day === null) {
                 return <div key={`empty-${cellIdx}`} style={{ minHeight: "clamp(60px, 10vw, 115px)", background: NK.white, opacity: 0.3 }} />;
@@ -213,7 +230,7 @@ export default function EventsPage() {
                     </span>
                     {hasEvents && (
                       <span className="hidden sm:inline-block" style={{ fontFamily: "var(--fm)", fontSize: 9.5, fontWeight: 700, color: NK.greenAlt, background: NK.white, padding: "1px 5px", border: `1px solid ${NK.green}` }}>
-                        {dayEvents.length} Event{dayEvents.length > 1 ? "s" : ""}
+                        {t("eventCount", { count: dayEvents.length })}
                       </span>
                     )}
                   </div>
@@ -247,11 +264,12 @@ export default function EventsPage() {
         <div style={{ maxWidth: 1320, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap", background: NK.white, padding: "1rem 1.25rem", border: `2px solid ${NK.ink}`, boxShadow: nkShadow(NK.ink) }}>
           <div style={{ display: "flex", alignItems: "center", gap: ".75rem", flexWrap: "wrap", width: "100%", maxWidth: "100%" }}>
             <div style={{ display: "flex", alignItems: "center", gap: ".4rem", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: NK.mutedLabel }}>
-              <Filter size={14} color={NK.greenAlt} /> Filters:
+              <Filter size={14} color={NK.greenAlt} /> {t("filters")}
             </div>
 
             {/* SDG Filter */}
             <select
+              aria-label={t("sdgLabel")}
               value={selectedSdg}
               onChange={(e) => setSelectedSdg(e.target.value)}
               style={{
@@ -259,11 +277,12 @@ export default function EventsPage() {
                 background: NK.bg, border: `1.5px solid ${NK.ink}`, color: NK.ink, cursor: "pointer", outline: "none"
               }}
             >
-              {SDGS.map((sdg) => <option key={sdg} value={sdg}>{sdg}</option>)}
+              {SDGS.map((sdg) => <option key={sdg} value={sdg}>{tax(sdg)}</option>)}
             </select>
 
             {/* Region Filter */}
             <select
+              aria-label={t("regionLabel")}
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
               style={{
@@ -271,11 +290,12 @@ export default function EventsPage() {
                 background: NK.bg, border: `1.5px solid ${NK.ink}`, color: NK.ink, cursor: "pointer", outline: "none"
               }}
             >
-              {REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
+              {REGIONS.map((r) => <option key={r} value={r}>{tax(r)}</option>)}
             </select>
 
             {/* Format Filter */}
             <select
+              aria-label={t("formatLabel")}
               value={selectedFormat}
               onChange={(e) => setSelectedFormat(e.target.value)}
               style={{
@@ -283,7 +303,7 @@ export default function EventsPage() {
                 background: NK.bg, border: `1.5px solid ${NK.ink}`, color: NK.ink, cursor: "pointer", outline: "none"
               }}
             >
-              {FORMATS.map((f) => <option key={f} value={f}>{f}</option>)}
+              {FORMATS.map((f) => <option key={f} value={f}>{tax(f)}</option>)}
             </select>
 
             {(selectedSdg !== "All SDGs" || selectedRegion !== "All Regions" || selectedFormat !== "All Formats" || searchQuery) && (
@@ -291,7 +311,7 @@ export default function EventsPage() {
                 onClick={() => { setSelectedSdg("All SDGs"); setSelectedRegion("All Regions"); setSelectedFormat("All Formats"); setSearchQuery(""); }}
                 style={{ padding: ".45rem .75rem", fontFamily: "var(--fm)", fontSize: 11, fontWeight: 700, background: "transparent", border: `1px solid ${NK.ink}`, color: NK.ink, cursor: "pointer" }}
               >
-                Reset ✕
+                {t("reset")} ✕
               </button>
             )}
           </div>
@@ -303,18 +323,18 @@ export default function EventsPage() {
         <div style={{ maxWidth: 1320, margin: "0 auto" }}>
           <div style={{ marginBottom: "1.25rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: ".5rem" }}>
             <h3 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(1.15rem, 2vw, 1.35rem)", color: NK.ink, margin: 0 }}>
-              All Events in {currentMonth.name}
+              {t("allIn", { month: monthLabel(currentMonth.year, currentMonth.monthIdx) })}
             </h3>
             <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11.5, color: NK.greenAlt, textTransform: "uppercase" }}>
-              Showing {filteredEvents.length} Event{filteredEvents.length !== 1 ? "s" : ""}
+              {t("showing", { count: filteredEvents.length })}
             </span>
           </div>
 
           {filteredEvents.length === 0 ? (
             <div style={{ textAlign: "center", padding: "3rem 1.5rem", background: NK.white, border: `2px solid ${NK.ink}`, boxShadow: nkShadow(NK.ink) }}>
               <CalendarIcon size={40} color={NK.mutedLabel} style={{ marginBottom: ".75rem" }} />
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.25rem", color: NK.ink, marginBottom: ".4rem" }}>No events found</div>
-              <p style={{ fontSize: ".9rem", color: NK.muted }}>Try resetting your filter options above.</p>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.25rem", color: NK.ink, marginBottom: ".4rem" }}>{t("emptyTitle")}</div>
+              <p style={{ fontSize: ".9rem", color: NK.muted }}>{t("emptyBody")}</p>
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
@@ -332,7 +352,7 @@ export default function EventsPage() {
                   {/* Left Date Block */}
                   <div style={{ background: NK.navyDeep, color: "#fff", padding: "1rem", textAlign: "center", border: `1.5px solid ${NK.ink}` }}>
                     <div style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10.5, letterSpacing: "0.12em", textTransform: "uppercase", color: NK.green, marginBottom: 2 }}>
-                      {evt.month} 2026
+                      {monthLabel(2026, MONTH_CONFIGS.find((m) => m.monthName === evt.month)?.monthIdx ?? 0)}
                     </div>
                     <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.25rem", lineHeight: 1.15, color: "#fff" }}>
                       {evt.dateDisplay}
@@ -347,14 +367,14 @@ export default function EventsPage() {
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: ".4rem", marginBottom: ".5rem" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: ".4rem", flexWrap: "wrap" }}>
                         <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10.5, padding: "2px 7px", background: "rgba(93,186,47,0.15)", color: NK.greenAlt, textTransform: "uppercase" }}>
-                          {evt.region}
+                          {tax(evt.region)}
                         </span>
                         <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10.5, padding: "2px 7px", background: "rgba(16,28,51,0.08)", color: NK.ink, textTransform: "uppercase" }}>
-                          {evt.format}
+                          {tax(evt.format)}
                         </span>
                       </div>
                       <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedLabel }}>
-                        Organized by: <strong style={{ color: NK.ink }}>{evt.organizer}</strong>
+                        {t.rich("organizedBy", { name: evt.organizer, b: (c) => <strong style={{ color: NK.ink }}>{c}</strong> })}
                       </div>
                     </div>
 
@@ -372,7 +392,7 @@ export default function EventsPage() {
                       <div style={{ display: "flex", alignItems: "center", gap: ".35rem", flexWrap: "wrap" }}>
                         {evt.sdgs.map((sdg) => (
                           <span key={sdg} style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10, padding: "2px 7px", background: NK.ink, color: NK.green }}>
-                            {sdg}
+                            {tax(sdg)}
                           </span>
                         ))}
                       </div>
@@ -386,7 +406,7 @@ export default function EventsPage() {
                             background: NK.ink, color: "#fff", border: "none", cursor: "pointer", flex: "1 1 auto"
                           }}
                         >
-                          Details Popup ↗
+                          {t("details")} ↗
                         </button>
                         <a
                           href={getGoogleCalendarUrl(evt)}
@@ -399,7 +419,7 @@ export default function EventsPage() {
                             border: `1.5px solid ${NK.ink}`, flex: "1 1 auto"
                           }}
                         >
-                          <CalendarPlus size={14} /> + Google Cal
+                          <CalendarPlus size={14} /> {t("googleShort")}
                         </a>
                       </div>
                     </div>
@@ -436,22 +456,22 @@ export default function EventsPage() {
             <div style={{ background: NK.navyDeep, color: "#fff", padding: "1rem 1.25rem", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: `2px solid ${NK.ink}` }}>
               <div style={{ display: "flex", alignItems: "center", gap: ".6rem" }}>
                 <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, padding: "4px 9px", background: NK.green, color: NK.navyDeep, textTransform: "uppercase" }}>
-                  {currentMonth.monthName} {modalEvents.day}, 2026
+                  {dayLabel(currentMonth.year, currentMonth.monthIdx, modalEvents.day)}
                 </span>
                 <span className="hidden sm:inline" style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedOnDark }}>
-                  {modalEvents.events.length} Event{modalEvents.events.length > 1 ? "s" : ""} Scheduled
+                  {t("scheduled", { count: modalEvents.events.length })}
                 </span>
               </div>
               <button
                 onClick={() => setModalEvents(null)}
-                aria-label="Close modal"
+                aria-label={t("closeModal")}
                 style={{
                   padding: "4px 10px", background: NK.green, color: NK.navyDeep,
                   border: `1.5px solid ${NK.ink}`, cursor: "pointer", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 12,
                   display: "flex", alignItems: "center", gap: "4px", flexShrink: 0
                 }}
               >
-                Close <X size={16} />
+                {t("close")} <X size={16} />
               </button>
             </div>
 
@@ -466,7 +486,7 @@ export default function EventsPage() {
                       {evt.eventType}
                     </span>
                     <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10, padding: "3px 8px", background: NK.navyDeep, color: "#fff", textTransform: "uppercase" }}>
-                      {evt.region} · {evt.format}
+                      {tax(evt.region)} · {tax(evt.format)}
                     </span>
                   </div>
 
@@ -479,15 +499,15 @@ export default function EventsPage() {
                   <div style={{ background: NK.bg, border: `1.5px solid ${NK.ink}`, padding: "1rem", display: "flex", flexDirection: "column", gap: ".5rem", marginBottom: "1.1rem", fontFamily: "var(--fm)", fontSize: 12, color: NK.ink }}>
                     <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
                       <CalendarIcon size={14} color={NK.greenAlt} style={{ flexShrink: 0 }} /> 
-                      <span><strong>Date:</strong> {evt.dateDisplay}</span>
+                      <span><strong>{t("date")}</strong> {evt.dateDisplay}</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
                       <MapPin size={14} color={NK.greenAlt} style={{ flexShrink: 0 }} /> 
-                      <span><strong>Location:</strong> {evt.location}</span>
+                      <span><strong>{t("location")}</strong> {evt.location}</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
                       <Building2 size={14} color={NK.greenAlt} style={{ flexShrink: 0 }} /> 
-                      <span><strong>Organizer:</strong> {evt.organizer}</span>
+                      <span><strong>{t("organizer")}</strong> {evt.organizer}</span>
                     </div>
                   </div>
 
@@ -501,7 +521,7 @@ export default function EventsPage() {
                     <Tag size={13} color={NK.greenAlt} />
                     {evt.sdgs.map((sdg) => (
                       <span key={sdg} style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10, padding: "3px 8px", background: NK.ink, color: NK.green }}>
-                        {sdg}
+                        {tax(sdg)}
                       </span>
                     ))}
                   </div>
@@ -519,7 +539,7 @@ export default function EventsPage() {
                         border: `2px solid ${NK.ink}`, textAlign: "center"
                       }}
                     >
-                      <CalendarPlus size={15} /> + Add to Google Calendar
+                      <CalendarPlus size={15} /> {t("googleLong")}
                     </a>
                     {evt.link && (
                       <a
@@ -533,7 +553,7 @@ export default function EventsPage() {
                           border: `2px solid ${NK.ink}`, textAlign: "center"
                         }}
                       >
-                        Official Website <ExternalLink size={13} />
+                        {t("website")} <ExternalLink size={13} />
                       </a>
                     )}
                   </div>
@@ -544,7 +564,7 @@ export default function EventsPage() {
         </div>
       )}
 
-      <CTABand title="Have a climate event to submit?" buttonLabel="Partner with KYCH →" href="/contact" />
+      <CTABand title={t("ctaTitle")} buttonLabel={`${t("ctaButton")} →`} href="/contact" />
     </>
   );
 }

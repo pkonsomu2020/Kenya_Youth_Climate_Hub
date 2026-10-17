@@ -3,6 +3,7 @@
 // from the backend API
 // ============================================================
 import { useState, useEffect, useCallback } from "react";
+import { useLocale } from "next-intl";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -42,6 +43,7 @@ export function useOpportunities({
   type = "All",
   topic = "All",
 }: UseOpportunitiesOptions = {}): UseOpportunitiesResult {
+  const locale = useLocale(); // content comes back translated when available
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +56,7 @@ export function useOpportunities({
 
     const params = new URLSearchParams({ limit: String(limit) });
     params.set("_t", Date.now().toString());
+    params.set("lang", locale);
     if (type && type !== "All") params.set("type", type);
     if (topic && topic !== "All") params.set("topic", topic);
 
@@ -78,7 +81,7 @@ export function useOpportunities({
       });
 
     return () => { cancelled = true; };
-  }, [limit, type, topic, tick]);
+  }, [limit, type, topic, tick, locale]);
 
   const refetch = useCallback(() => setTick((t) => t + 1), []);
 

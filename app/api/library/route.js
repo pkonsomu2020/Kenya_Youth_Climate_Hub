@@ -1,6 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import { getLibraryItems } from '@/lib/services/libraryStorage';
+import { localizeRow } from '@/lib/i18n/contentTranslation';
 
 export async function GET(request) {
   try {
@@ -10,7 +11,9 @@ export async function GET(request) {
     const page = parseInt(searchParams.get('page')) || 1;
     const offset = parseInt(searchParams.get('offset')) || (page - 1) * limit;
     
-    const items = await getLibraryItems({ limit, category, type: category, format: searchParams.get('format') || 'All', offset });
+    const lang = searchParams.get('lang') || 'en';
+    const items = (await getLibraryItems({ limit, category, type: category, format: searchParams.get('format') || 'All', offset }))
+      .map((row) => localizeRow(row, lang));
     
     return NextResponse.json({ success: true, data: items, meta: { count: items.length, limit, offset } });
   } catch (err) {

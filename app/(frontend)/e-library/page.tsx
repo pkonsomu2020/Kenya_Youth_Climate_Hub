@@ -7,6 +7,7 @@ import { Globe, Brain } from "lucide-react";
 import { NK, nkShadow } from "@/lib/nkTheme";
 import { GrowHeading } from "@/components/GrowHeading";
 import { CTABand } from "@/components/CTABand";
+import { useTranslations } from "next-intl";
 
 function useInView(ref: React.RefObject<Element | null>, threshold = 0.1) {
   const [v, setV] = useState(false);
@@ -24,6 +25,7 @@ function ToolCard({ gradient, icon, title, desc, tags, onClick, index }: {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
   const [hov, setHov] = useState(false);
+  const t = useTranslations("library");
   return (
     <button
       ref={ref as any}
@@ -42,16 +44,17 @@ function ToolCard({ gradient, icon, title, desc, tags, onClick, index }: {
       <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.2rem", color: "#fff", marginBottom: ".6rem" }}>{title}</div>
       <div style={{ fontSize: ".88rem", color: "rgba(255,255,255,0.8)", lineHeight: 1.65, marginBottom: "1.5rem" }}>{desc}</div>
       <div style={{ display: "flex", alignItems: "center", gap: ".6rem", flexWrap: "wrap" }}>
-        {tags.map((t) => (
-          <span key={t} style={{ fontSize: ".68rem", padding: "3px 10px", background: "rgba(255,255,255,0.15)", color: "#fff", fontFamily: "var(--fb)", fontWeight: 600 }}>{t}</span>
+        {tags.map((tag) => (
+          <span key={tag} style={{ fontSize: ".68rem", padding: "3px 10px", background: "rgba(255,255,255,0.15)", color: "#fff", fontFamily: "var(--fb)", fontWeight: 600 }}>{tag}</span>
         ))}
-        <span style={{ marginLeft: "auto", fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".8rem", color: "#fff" }}>LAUNCH →</span>
+        <span style={{ marginLeft: "auto", fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".8rem", color: "#fff" }}>{t("launch")} →</span>
       </div>
     </button>
   );
 }
 
 export default function ELibrary() {
+  const t = useTranslations("library");
   const [openTool, setOpenTool] = useState<"calculator" | "quiz" | null>(null);
 
   return (
@@ -59,13 +62,13 @@ export default function ELibrary() {
       <section style={{ background: NK.bg }}>
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
           <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>
-            E-Library &amp; Resource Hub
+            {t("eyebrow")}
           </span>
           <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.6vw,86px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.02, margin: 0 }}>
-            Knowledge to <span style={{ color: NK.green }}>act on.</span>
+            {t.rich("title", { g: (c) => <span style={{ color: NK.green }}>{c}</span> })}
           </GrowHeading>
           <p style={{ fontFamily: "var(--fb)", fontSize: "1.25rem", color: NK.muted, lineHeight: 1.7, marginTop: "1.5rem", maxWidth: 660 }}>
-            Interactive tools built exclusively for young Kenyan climate changemakers.
+            {t("intro")}
           </p>
         </div>
       </section>
@@ -76,18 +79,18 @@ export default function ELibrary() {
             <ToolCard
               gradient="linear-gradient(135deg, #059669 0%, #047857 60%, #065f46 100%)"
               icon={<Globe size={24} />}
-              title="Carbon Footprint Calculator"
-              desc="Calculate your personal CO₂ impact in 60 seconds using Kenya-specific emission factors. Get personalised tips."
-              tags={["4 questions", "60 seconds", "Kenya data"]}
+              title={t("calcTitle")}
+              desc={t("calcDesc")}
+              tags={t.raw("calcTags") as string[]}
               onClick={() => setOpenTool("calculator")}
               index={0}
             />
             <ToolCard
               gradient={`linear-gradient(135deg, ${NK.navyDeep} 0%, ${NK.panelNavy} 60%, ${NK.navyDeep} 100%)`}
               icon={<Brain size={24} />}
-              title="Climate Readiness Quiz"
-              desc="Test your climate knowledge. Earn a badge. Get personalised learning resources based on your results."
-              tags={["8 questions", "3 minutes", "4 badge tiers"]}
+              title={t("quizTitle")}
+              desc={t("quizDesc")}
+              tags={t.raw("quizTags") as string[]}
               onClick={() => setOpenTool("quiz")}
               index={1}
             />
@@ -95,7 +98,7 @@ export default function ELibrary() {
         </div>
       </section>
 
-      <CTABand title="Build your climate knowledge." buttonLabel="Explore programs →" href="/programs" />
+      <CTABand title={t("ctaTitle")} buttonLabel={`${t("ctaButton")} →`} href="/programs" />
 
       {openTool === "calculator" && <CarbonCalculator onClose={() => setOpenTool(null)} />}
       {openTool === "quiz" && <ClimateQuiz onClose={() => setOpenTool(null)} />}

@@ -7,46 +7,15 @@ import {
 } from "lucide-react";
 import { NK, nkCard } from "@/lib/nkTheme";
 import { GrowHeading } from "@/components/GrowHeading";
+import { useTranslations } from "next-intl";
 
 // ── Key stats ─────────────────────────────────────────────────────────────────
-const stats = [
-  { value: "846",    label: "Jobs Created",         sub: "Nov 2023 – Jul 2025" },
-  { value: "8.1x",   label: "Avg Jobs / Enterprise", sub: "vs. 2.6 benchmark"  },
-  { value: "~7x",    label: "Revenue Growth",        sub: "Nov 2023 → Jul 2025" },
-  { value: "29.9M",  label: "Kg Waste Managed",      sub: "Plastic + Organic"   },
-  { value: "146",    label: "Youth Funded",          sub: "Up to USD 5,000 each"},
-  { value: "74–90%", label: "Marginalized Youth",    sub: "Intentionally reached"},
-];
-
-// ── Programme phases ──────────────────────────────────────────────────────────
-const phases = [
-  { n: 1, title: "Application Drive",              outcome: "2,264 youth applied across Kenya" },
-  { n: 2, title: "Business Management Training",   outcome: "759 trained; 502 completed" },
-  { n: 3, title: "Green Entrepreneurship Training", outcome: "502 completed both BMT & GET" },
-  { n: 4, title: "Business Plan Development",      outcome: "320 business plans submitted" },
-  { n: 5, title: "Pitching Events",                outcome: "207 youth pitched (Nairobi, Kisumu, Mombasa)" },
-  { n: 6, title: "Seed Funding Disbursement",      outcome: "146 received grants up to USD 5,000" },
-  { n: 7, title: "Incubation & Mentorship",        outcome: "146 innovations supported" },
-  { n: 8, title: "Acceleration Funds",             outcome: "112 received USD 1,000–3,000 additional" },
-];
+// Labels / subtitles: programs.begreen.stats[i]
+const statValues = ["846", "8.1x", "~7x", "29.9M", "146", "74–90%"];
 
 // ── Focus areas ───────────────────────────────────────────────────────────────
-const focusAreas = [
-  { icon: Recycle,   title: "Plastic Waste Management",  desc: "Youth enterprises processing and recycling plastic waste across urban and rural Kenya." },
-  { icon: Leaf,      title: "Organic Waste & Biogas",    desc: "Converting organic waste into biogas and compost, creating circular economy value chains." },
-  { icon: Globe,     title: "E-Waste Enterprises",       desc: "Highest-earning sub-sector — responsible collection and processing of electronic waste." },
-  { icon: Lightbulb, title: "Waste-to-Value Innovation", desc: "Transforming waste streams into marketable products, creating jobs and reducing landfill pressure." },
-];
-
-// ── Partners ──────────────────────────────────────────────────────────────────
-const partners = [
-  { name: "UNICEF / Generation Unlimited", role: "Lead implementation, youth engagement, curriculum development" },
-  { name: "Tony Elumelu Foundation", role: "Entrepreneurship content, mentorship structures, seed funding" },
-  { name: "IKEA Foundation", role: "Principal donor, strategic oversight and financing" },
-  { name: "Kenya National Bureau of Statistics (KNBS)", role: "Technical backstopping, data integration and validation" },
-  { name: "Government Agencies (SDYA, Ministry of Youth & Environment)", role: "Policy alignment, endorsement and local integration" },
-  { name: "Private Sector (UBA Bank, recyclers, investors)", role: "Market linkages, funding pathways, business model vetting" },
-];
+// Text: programs.begreen.focus[i]
+const focusIcons = [Recycle, Leaf, Globe, Lightbulb];
 
 function SectionHeader({ eyebrow, children, dark = false }: { eyebrow: string; children: React.ReactNode; dark?: boolean }) {
   return (
@@ -62,20 +31,32 @@ function SectionHeader({ eyebrow, children, dark = false }: { eyebrow: string; c
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
+type Pair = { title: string; desc: string };
+
 export default function BeGreenPage() {
+  const t = useTranslations("programs.begreen");
+  const g = (c: React.ReactNode) => <span style={{ color: NK.green }}>{c}</span>;
+  const b = (c: React.ReactNode) => <strong style={{ color: NK.ink }}>{c}</strong>;
+  const stats = t.raw("stats") as { label: string; sub: string }[];
+  const phases = t.raw("phases") as { title: string; outcome: string }[];
+  const focus = t.raw("focus") as Pair[];
+  const problem = t.raw("problem") as string[];
+  const outcomes = t.raw("outcomes") as { title: string; items: string[] }[];
+  const inclusion = t.raw("inclusionStats") as [string, string][];
+  const partners = t.raw("partners") as { name: string; role: string }[];
   return (
     <>
       {/* ── HERO ── */}
       <section style={{ background: NK.bg }}>
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
           <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>
-            Green Entrepreneurship for Kenya&apos;s Youth
+            {t("eyebrow")}
           </span>
           <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(38px,5vw,72px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.05, margin: 0 }}>
-            BeGreen Africa <span style={{ color: NK.green }}>Initiative</span>
+            {t.rich("title", { g })}
           </GrowHeading>
           <p style={{ fontFamily: "var(--fb)", fontSize: "1.15rem", color: NK.muted, lineHeight: 1.7, marginTop: "1.5rem", maxWidth: 660 }}>
-            A multi-partner programme building green entrepreneurship in waste management — simultaneously addressing youth unemployment and environmental degradation.
+            {t("intro")}
           </p>
         </div>
       </section>
@@ -83,14 +64,14 @@ export default function BeGreenPage() {
       {/* Back link */}
       <div style={{ maxWidth: 1320, margin: "0 auto", padding: "0 2.5rem 1.5rem" }}>
         <Link href="/programs" style={{ display: "inline-flex", alignItems: "center", gap: ".4rem", fontSize: ".85rem", color: NK.muted, textDecoration: "none", fontFamily: "var(--fs)", fontWeight: 600 }}>
-          <ArrowLeft size={14} /> Back to Programs
+          <ArrowLeft size={14} /> {t("back")}
         </Link>
       </div>
 
       {/* ── Partner badges ── */}
       <div style={{ background: NK.bg, borderTop: `2px solid ${NK.ink}`, borderBottom: `2px solid ${NK.ink}`, padding: "1.25rem 2.5rem" }}>
         <div style={{ maxWidth: 1320, margin: "0 auto", display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
-          <span style={{ fontSize: ".7rem", fontWeight: 700, fontFamily: "var(--fm)", letterSpacing: ".08em", textTransform: "uppercase", color: NK.muted }}>Implementing Partners</span>
+          <span style={{ fontSize: ".7rem", fontWeight: 700, fontFamily: "var(--fm)", letterSpacing: ".08em", textTransform: "uppercase", color: NK.muted }}>{t("implementing")}</span>
           {["UNICEF / GenU", "Tony Elumelu Foundation", "IKEA Foundation", "KNBS"].map((p) => (
             <span key={p} style={{ fontSize: ".75rem", padding: ".3rem .9rem", background: NK.white, border: `1.5px solid ${NK.ink}`, fontFamily: "var(--fs)", fontWeight: 600, color: NK.ink }}>{p}</span>
           ))}
@@ -101,14 +82,14 @@ export default function BeGreenPage() {
       <section style={{ background: NK.navyDeep, padding: "3.5rem 2.5rem" }}>
         <div style={{ maxWidth: 1320, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-            <div style={{ fontFamily: "var(--fm)", fontSize: ".7rem", letterSpacing: ".14em", color: NK.mutedOnDark, textTransform: "uppercase", marginBottom: ".5rem" }}>Programme Results</div>
+            <div style={{ fontFamily: "var(--fm)", fontSize: ".7rem", letterSpacing: ".14em", color: NK.mutedOnDark, textTransform: "uppercase", marginBottom: ".5rem" }}>{t("resultsEyebrow")}</div>
             <h2 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(1.4rem,2.5vw,2rem)", color: "#fff", letterSpacing: "-.02em" }}>
-              Exceeding Every Target
+              {t("resultsTitle")}
             </h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "1rem" }}>
-            {stats.map(({ value, label, sub }) => (
-              <div key={label} style={{ textAlign: "center", padding: "1.5rem 1rem", background: NK.panelNavy, border: `1px solid ${NK.borderNavy}` }}>
+            {statValues.map((value, i) => ({ value, ...stats[i] })).map(({ value, label, sub }) => (
+              <div key={value} style={{ textAlign: "center", padding: "1.5rem 1rem", background: NK.panelNavy, border: `1px solid ${NK.borderNavy}` }}>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "2rem", color: NK.green, letterSpacing: "-.03em", lineHeight: 1 }}>{value}</div>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".82rem", color: "#fff", marginTop: ".4rem" }}>{label}</div>
                 <div style={{ fontSize: ".68rem", color: NK.mutedOnDark, fontFamily: "var(--fm)", marginTop: ".2rem" }}>{sub}</div>
@@ -123,28 +104,23 @@ export default function BeGreenPage() {
         <div style={{ maxWidth: 1320, margin: "0 auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "3rem", alignItems: "start" }}>
             <div>
-              <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>About BeGreen</span>
+              <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>{t("aboutEyebrow")}</span>
               <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(28px,3.6vw,46px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", lineHeight: 1.1, margin: 0 }}>
-                What is the <span style={{ color: NK.green }}>BeGreen Initiative?</span>
+                {t.rich("aboutTitle", { g })}
               </GrowHeading>
               <p style={{ color: NK.muted, marginTop: "1.25rem", lineHeight: 1.75, fontSize: ".95rem" }}>
-                The <strong style={{ color: NK.ink }}>BeGreen Africa Initiative</strong> is a multi-partner programme implemented in Kenya by UNICEF/Generation Unlimited, the Tony Elumelu Foundation, and the IKEA Foundation, with incubation support from STEM Impact Center Kenya.
+                {t.rich("about1", { b })}
               </p>
               <p style={{ color: NK.muted, marginTop: ".75rem", lineHeight: 1.75, fontSize: ".95rem" }}>
-                It targets youth aged <strong style={{ color: NK.ink }}>18–35 years</strong> to build green entrepreneurship in the waste management sector — simultaneously addressing youth unemployment and environmental degradation.
+                {t.rich("about2", { b })}
               </p>
               <p style={{ color: NK.muted, marginTop: ".75rem", lineHeight: 1.75, fontSize: ".95rem" }}>
-                The programme aligns with <strong style={{ color: NK.ink }}>Kenya Vision 2030</strong>, the Bottom-Up Economic Transformation Agenda (BETA), and national commitments under the Paris Agreement and multiple SDGs.
+                {t.rich("about3", { b })}
               </p>
             </div>
             <div style={{ border: `2px solid ${NK.ink}`, padding: "2rem" }}>
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1rem", color: NK.ink, marginBottom: "1.25rem" }}>Problem Context</div>
-              {[
-                { stat: "22,000", desc: "metric tons of waste generated daily in Kenya — less than 10% recycled" },
-                { stat: "39%",    desc: "of youth aged 18–34 unemployed; 80% in the informal sector" },
-                { stat: "39.8%",  desc: "of Kenyans live below the poverty line, disproportionately affecting youth" },
-                { stat: "75%",    desc: "of Kenya's population is under 35 years" },
-              ].map(({ stat, desc }) => (
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1rem", color: NK.ink, marginBottom: "1.25rem" }}>{t("problemTitle")}</div>
+              {["22,000", "39%", "39.8%", "75%"].map((stat, i) => ({ stat, desc: problem[i] })).map(({ stat, desc }) => (
                 <div key={stat} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", marginBottom: "1rem" }}>
                   <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.3rem", color: NK.green, flexShrink: 0, lineHeight: 1, minWidth: 66 }}>{stat}</div>
                   <div style={{ fontSize: ".82rem", color: NK.muted, lineHeight: 1.6 }}>{desc}</div>
@@ -158,11 +134,11 @@ export default function BeGreenPage() {
       {/* ── Focus areas ── */}
       <section style={{ background: NK.tintGreen, padding: "6.25rem 2.5rem" }}>
         <div style={{ maxWidth: 1320, margin: "0 auto" }}>
-          <SectionHeader eyebrow="Waste Sectors">
-            Green Business <span style={{ color: NK.green }}>Focus Areas</span>
+          <SectionHeader eyebrow={t("focusEyebrow")}>
+            {t.rich("focusTitle", { g })}
           </SectionHeader>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "1.25rem" }}>
-            {focusAreas.map(({ icon: Icon, title, desc }) => (
+            {focus.map(({ title, desc }, i) => ({ icon: focusIcons[i] ?? Leaf, title, desc })).map(({ icon: Icon, title, desc }) => (
               <div key={title} style={{ ...nkCard, padding: "1.75rem" }}>
                 <div style={{ width: 48, height: 48, background: NK.green, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.1rem" }}>
                   <Icon size={22} color={NK.navyDeep} />
@@ -178,11 +154,11 @@ export default function BeGreenPage() {
       {/* ── Programme phases ── */}
       <section style={{ background: NK.bg, padding: "6.25rem 2.5rem" }}>
         <div style={{ maxWidth: 1320, margin: "0 auto" }}>
-          <SectionHeader eyebrow="Programme Structure">
-            8 Phases of <span style={{ color: NK.green }}>Implementation</span>
+          <SectionHeader eyebrow={t("phasesEyebrow")}>
+            {t.rich("phasesTitle", { g })}
           </SectionHeader>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: "1rem" }}>
-            {phases.map(({ n, title, outcome }) => (
+            {phases.map(({ title, outcome }, i) => ({ n: i + 1, title, outcome })).map(({ n, title, outcome }) => (
               <div key={n} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", padding: "1.1rem 1.25rem", background: NK.white, border: `1.5px solid ${NK.ink}` }}>
                 <div style={{ width: 36, height: 36, background: NK.green, color: NK.navyDeep, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".9rem", flexShrink: 0 }}>{n}</div>
                 <div>
@@ -198,39 +174,20 @@ export default function BeGreenPage() {
       {/* ── Key outcomes ── */}
       <section style={{ background: NK.navyDeep, padding: "6.25rem 2.5rem" }}>
         <div style={{ maxWidth: 1320, margin: "0 auto" }}>
-          <SectionHeader eyebrow="Impact" dark>
-            Key Programme <span style={{ color: NK.green }}>Outcomes</span>
+          <SectionHeader eyebrow={t("outcomesEyebrow")} dark>
+            {t.rich("outcomesTitle", { g })}
           </SectionHeader>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "1.5rem" }}>
-            {[
-              { icon: Users, title: "Employment Creation", items: [
-                "846 total jobs created — far exceeding the 260 projected",
-                "Average 8.1 jobs per enterprise vs. 2.6 benchmark",
-                "Each entrepreneur supports ~4.6 household members",
-                "Mentored enterprises created 531 jobs vs. 104 without mentorship",
-              ]},
-              { icon: TrendingUp, title: "Revenue Generation", items: [
-                "~7x revenue growth from Nov 2023 to Jul 2025",
-                "Avg monthly revenue grew from KShs 81K to KShs 203K",
-                "Annualized projection ~USD 2.7M vs. USD 1M target",
-                "E-waste enterprises averaged KShs 679,000/month",
-              ]},
-              { icon: Recycle, title: "Environmental Impact", items: [
-                "29.9 million kgs of waste managed total",
-                "11.6M kgs plastic + 18.4M kgs organic waste diverted",
-                "Incubated enterprises managed 27.9M kgs vs. 76K without",
-                "Significant contribution to Kenya's circular economy",
-              ]},
-            ].map(({ icon: Icon, title, items }) => (
+            {outcomes.map((o, i) => ({ icon: [Users, TrendingUp, Recycle][i] ?? Users, ...o })).map(({ icon: Icon, title, items }) => (
               <div key={title} style={{ background: NK.panelNavy, border: `1px solid ${NK.borderNavy}`, padding: "1.75rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: ".75rem", marginBottom: "1rem" }}>
                   <div style={{ width: 40, height: 40, background: NK.green, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Icon size={20} color={NK.navyDeep} /></div>
                   <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1rem", color: "#fff" }}>{title}</div>
                 </div>
-                {items.map((t) => (
-                  <div key={t} style={{ display: "flex", gap: ".5rem", alignItems: "flex-start", marginBottom: ".6rem" }}>
+                {items.map((item) => (
+                  <div key={item} style={{ display: "flex", gap: ".5rem", alignItems: "flex-start", marginBottom: ".6rem" }}>
                     <CheckCircle2 size={14} color={NK.green} style={{ flexShrink: 0, marginTop: ".15rem" }} />
-                    <span style={{ fontSize: ".82rem", color: NK.mutedOnDark, lineHeight: 1.55 }}>{t}</span>
+                    <span style={{ fontSize: ".82rem", color: NK.mutedOnDark, lineHeight: 1.55 }}>{item}</span>
                   </div>
                 ))}
               </div>
@@ -244,20 +201,15 @@ export default function BeGreenPage() {
         <div style={{ maxWidth: 1320, margin: "0 auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "3rem", alignItems: "start" }}>
             <div>
-              <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>Inclusion</span>
+              <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>{t("inclusionEyebrow")}</span>
               <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(28px,3.6vw,46px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.02em", lineHeight: 1.1, margin: 0 }}>
-                Reaching <span style={{ color: NK.green }}>Marginalized Youth</span>
+                {t.rich("inclusionTitle", { g })}
               </GrowHeading>
               <p style={{ color: NK.muted, marginTop: "1.25rem", lineHeight: 1.75, fontSize: ".95rem" }}>
-                Between <strong style={{ color: NK.ink }}>74% and 90%</strong> of all participants were classified as marginalized — demonstrating the programme&apos;s strong inclusion focus. Even among funded youth, marginalization rates ranged from 74.3% to 82.4%.
+                {t.rich("inclusionBody", { b })}
               </p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".75rem", marginTop: "1.5rem" }}>
-                {[
-                  ["68.9% male", "30.9% female participants"],
-                  ["40.5% female", "among funded youth"],
-                  ["59% urban", "39.8% rural participants"],
-                  ["57.6%", "aged 25–30 years"],
-                ].map(([n, l]) => (
+                {inclusion.map(([n, l]) => (
                   <div key={n} style={{ background: NK.tintGreen, padding: ".85rem 1rem", border: `1px solid ${NK.ink}` }}>
                     <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1rem", color: NK.green }}>{n}</div>
                     <div style={{ fontSize: ".72rem", color: NK.muted, marginTop: ".2rem" }}>{l}</div>
@@ -266,12 +218,12 @@ export default function BeGreenPage() {
               </div>
             </div>
             <div style={{ background: NK.green, padding: "2rem", color: NK.navyDeep }}>
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1rem", marginBottom: "1.25rem", opacity: 0.9 }}>Conclusion</div>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1rem", marginBottom: "1.25rem", opacity: 0.9 }}>{t("conclusionTitle")}</div>
               <p style={{ fontSize: ".9rem", lineHeight: 1.75, opacity: 0.85, marginBottom: "1rem" }}>
-                The BeGreen Africa Kenya Initiative has significantly exceeded its core targets across all three programme pillars: employment creation (846 jobs vs. 260 projected), revenue generation (~USD 2.7M annually vs. USD 1M target), and waste management (29.9M kgs diverted).
+                {t("conclusion1")}
               </p>
               <p style={{ fontSize: ".9rem", lineHeight: 1.75, opacity: 0.85 }}>
-                As Kenya advances its climate goals, the BeGreen experience affirms that youth are not only beneficiaries but <strong>architects of sustainable development</strong>.
+                {t.rich("conclusion2", { b: (c) => <strong>{c}</strong> })}
               </p>
             </div>
           </div>
@@ -281,8 +233,8 @@ export default function BeGreenPage() {
       {/* ── Partners ── */}
       <section style={{ background: NK.tintGreen, padding: "6.25rem 2.5rem" }}>
         <div style={{ maxWidth: 1320, margin: "0 auto" }}>
-          <SectionHeader eyebrow="Collaboration">
-            Key <span style={{ color: NK.green }}>Partners</span>
+          <SectionHeader eyebrow={t("partnersEyebrow")}>
+            {t.rich("partnersTitle", { g })}
           </SectionHeader>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: "1rem" }}>
             {partners.map(({ name, role }) => (
@@ -303,7 +255,7 @@ export default function BeGreenPage() {
       {/* ── Back link ── */}
       <section style={{ padding: "3rem 2.5rem", textAlign: "center" }}>
         <Link href="/programs" style={{ display: "inline-flex", alignItems: "center", gap: ".4rem", padding: ".75rem 1.75rem", background: NK.bg, border: `2px solid ${NK.ink}`, fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".88rem", color: NK.ink, textDecoration: "none" }}>
-          <ArrowLeft size={14} /> Back to All Programs
+          <ArrowLeft size={14} /> {t("backAll")}
         </Link>
       </section>
     </>

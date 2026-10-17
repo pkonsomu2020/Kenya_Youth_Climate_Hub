@@ -1,6 +1,7 @@
 "use client";
 
 import { PageHead } from "@/components/admin/AdminUI";
+import { TranslationFields, initTranslations, cleanTranslations, type Translations, type TranslationField } from "@/components/admin/TranslationFields";
 import { useState, useEffect, useCallback } from "react";
 import {
   RefreshCw, ExternalLink, Check, X, Pencil,
@@ -12,6 +13,8 @@ type Opportunity = {
   name: string;
   title: string;
   desc: string;
+  description: string;
+  translations?: Translations | null;
   url: string;
   source: string;
   provider: string;
@@ -26,6 +29,11 @@ type Opportunity = {
 
 const TYPES  = ["All", "Grant", "Fellowship", "Internship", "Competition", "Job", "Accelerator"];
 const TOPICS = ["All", "Energy", "Water", "Agriculture", "Policy", "Finance", "Innovation", "Resilience", "Advocacy"];
+
+const TR_FIELDS: TranslationField[] = [
+  { key: "title", label: "Title" },
+  { key: "description", label: "Description", multiline: true },
+];
 
 const TYPE_COLORS: Record<string, string> = {
   Grant: "#059669", Fellowship: "#047857", Internship: "#10B981",
@@ -106,18 +114,26 @@ function AddModal({ onSave, onClose }: { onSave: (data: any) => Promise<void>; o
 function EditModal({ opp, onSave, onClose }: { opp: Opportunity; onSave: (u: Partial<Opportunity>) => Promise<void>; onClose: () => void }) {
   const [form, setForm] = useState({
     title: opp.name || opp.title,
-    desc: opp.desc || "",
+    description: opp.description || opp.desc || "",
     provider: opp.provider || "",
     type: opp.type,
     topic: opp.topic,
     deadline: opp.deadline || "",
     amount: opp.amount || "",
   });
+  const [tr, setTr] = useState(() => initTranslations(opp.translations, TR_FIELDS));
+  const [trDirty, setTrDirty] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
     setSaving(true);
-    await onSave({ title: form.title, desc: form.desc, provider: form.provider, type: form.type, topic: form.topic, deadline: form.deadline, amount: form.amount || null });
+    // English text is only sent when changed, so an untouched save doesn't trigger re-translation;
+    // translations are only sent when edited, so changed English without edits gets re-translated.
+    const changes: Partial<Opportunity> = { provider: form.provider, type: form.type, topic: form.topic, deadline: form.deadline, amount: form.amount || null };
+    if (form.title !== (opp.name || opp.title)) changes.title = form.title;
+    if (form.description !== (opp.description || opp.desc || "")) changes.description = form.description;
+    if (trDirty) changes.translations = cleanTranslations(tr);
+    await onSave(changes);
     setSaving(false);
     onClose();
   };
@@ -149,12 +165,13 @@ function EditModal({ opp, onSave, onClose }: { opp: Opportunity; onSave: (u: Par
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           {field("Title", "title")}
-          {field("Description", "desc", "textarea")}
+          {field("Description", "description", "textarea")}
           {field("Provider / Organization", "provider")}
           {field("Type", "type", "select", TYPES.filter((t) => t !== "All"))}
           {field("Topic", "topic", "select", TOPICS.filter((t) => t !== "All"))}
           {field("Deadline", "deadline")}
           {field("Amount / Stipend", "amount")}
+          <TranslationFields fields={TR_FIELDS} value={tr} onChange={(v) => { setTr(v); setTrDirty(true); }} />
         </div>
         <div style={{ display: "flex", gap: ".75rem", marginTop: "1.5rem", justifyContent: "flex-end" }}>
           <button onClick={onClose} className="btn-g">Cancel</button>
@@ -183,7 +200,7 @@ export default function OppsAdmin() {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ limit: "100" });
+      const params = new URLSearchParams({ limit: "100", lang: "all" });
       if (type !== "All") params.set("type", type);
       const res = await fetch(`/api/opportunities?${params}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -228,8 +245,9 @@ export default function OppsAdmin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(changes),
       });
-      if (!res.ok) throw new Error("Update failed");
-      setOpps((prev) => prev.map((o) => (o.id === id ? { ...o, ...changes } : o)));
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || json.success === false) throw new Error(json.error || "Update failed");
+      setOpps((prev) => prev.map((o) => (o.id === id ? { ...o, ...changes, ...(json.data || {}) } : o)));
     } catch (err: any) { alert("Failed to update: " + err.message); }
   };
 
@@ -246,7 +264,7 @@ export default function OppsAdmin() {
   const filtered = opps.filter((o) => {
     if (!search) return true;
     const q = search.toLowerCase();
-    return (o.name || o.title)?.toLowerCase().includes(q) || o.provider?.toLowerCase().includes(q) || o.desc?.toLowerCase().includes(q);
+    return (o.name || o.title)?.toLowerCase().includes(q) || o.provider?.toLowerCase().includes(q) || (o.description || o.desc)?.toLowerCase().includes(q);
   });
 
   const approved = filtered.filter((o) => o.is_approved);
@@ -337,9 +355,9 @@ export default function OppsAdmin() {
                 </div>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".88rem", color: "var(--dark)", lineHeight: 1.3 }}>{opp.name || opp.title}</div>
                 <div style={{ fontSize: ".72rem", color: "var(--muted-foreground)", marginTop: ".15rem" }}>{opp.provider}</div>
-                {opp.desc && (
+                {(opp.description || opp.desc) && (
                   <div style={{ fontSize: ".75rem", color: "var(--muted-foreground)", marginTop: ".25rem", lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any }}>
-                    {opp.desc}
+                    {opp.description || opp.desc}
                   </div>
                 )}
                 {opp.deadline && (

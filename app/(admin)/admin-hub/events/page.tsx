@@ -1,6 +1,7 @@
 "use client";
 
 import { PageHead } from "@/components/admin/AdminUI";
+import { TranslationFields, initTranslations, cleanTranslations, type Translations, type TranslationField } from "@/components/admin/TranslationFields";
 import { useState, useEffect, useCallback } from "react";
 import {
   RefreshCw, ExternalLink, Check, X, Pencil,
@@ -21,11 +22,18 @@ type LiveEvent = {
   climate_score: number;
   color: string;
   is_approved: boolean;
+  translations?: Translations | null;
 };
 
 const EVENT_TYPES = ["All", "Conference", "Summit", "Hackathon", "Webinar", "Workshop", "Competition", "Bootcamp", "Dialogue"];
 const FORMATS     = ["All", "In-person", "Online", "Hybrid"];
 const TOPICS      = ["Energy", "Water", "Agriculture", "Policy", "Finance", "Innovation", "Resilience", "Advocacy", "Biodiversity"];
+
+const TR_FIELDS: TranslationField[] = [
+  { key: "title", label: "Title" },
+  { key: "description", label: "Description", multiline: true },
+  { key: "location", label: "Location" },
+];
 
 const TYPE_COLORS: Record<string, string> = {
   Conference: "#059669", Summit: "#047857", Hackathon: "#10B981",
@@ -114,11 +122,21 @@ function EditModal({ event, onSave, onClose }: { event: LiveEvent; onSave: (u: P
     location: event.location || "",
     topic: event.topic,
   });
+  const [tr, setTr] = useState(() => initTranslations(event.translations, TR_FIELDS));
+  const [trDirty, setTrDirty] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
     setSaving(true);
-    await onSave({ ...form, event_date: form.event_date || null });
+    // English text is only sent when changed, so an untouched save doesn't trigger re-translation;
+    // translations are only sent when edited, so changed English without edits gets re-translated.
+    const { title, description, location, ...rest } = form;
+    const changes: Partial<LiveEvent> = { ...rest, event_date: form.event_date || null };
+    if (title !== event.title) changes.title = title;
+    if (description !== (event.description || "")) changes.description = description;
+    if (location !== (event.location || "")) changes.location = location;
+    if (trDirty) changes.translations = cleanTranslations(tr);
+    await onSave(changes);
     setSaving(false);
     onClose();
   };
@@ -156,6 +174,7 @@ function EditModal({ event, onSave, onClose }: { event: LiveEvent; onSave: (u: P
           {field("Event Date (e.g. Jun 15, 2026)", "event_date")}
           {field("Location", "location")}
           {field("Topic", "topic", "select", TOPICS)}
+          <TranslationFields fields={TR_FIELDS} value={tr} onChange={(v) => { setTr(v); setTrDirty(true); }} />
         </div>
         <div style={{ display: "flex", gap: ".75rem", marginTop: "1.5rem", justifyContent: "flex-end" }}>
           <button onClick={onClose} className="btn-g">Cancel</button>
@@ -184,7 +203,7 @@ export default function EventsAdmin() {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ limit: "100" });
+      const params = new URLSearchParams({ limit: "100", lang: "all" });
       if (typeFilter !== "All") params.set("type", typeFilter);
       const res = await fetch(`/api/events?${params}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -229,8 +248,9 @@ export default function EventsAdmin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(changes),
       });
-      if (!res.ok) throw new Error("Update failed");
-      setEvents((prev) => prev.map((e) => (e.id === id ? { ...e, ...changes } : e)));
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || json.success === false) throw new Error(json.error || "Update failed");
+      setEvents((prev) => prev.map((e) => (e.id === id ? { ...e, ...changes, ...(json.data || {}) } : e)));
     } catch (err: any) { alert("Failed to update: " + err.message); }
   };
 

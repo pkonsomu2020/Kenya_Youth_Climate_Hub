@@ -1,0 +1,1169 @@
+{
+  "nav": {
+    "about": "Kuhusu Sisi",
+    "climateWatch": "Hali ya Hewa",
+    "eLibrary": "Maktaba",
+    "opportunities": "Fursa",
+    "programs": "Programu",
+    "events": "Matukio",
+    "news": "Habari",
+    "successStories": "Hadithi za Mafanikio",
+    "findFunding": "Pata ufadhili",
+    "openMenu": "Fungua menyu",
+    "closeMenu": "Funga menyu",
+    "tagline": "Hatua za tabianchi zinazoongozwa na vijana",
+    "language": "Lugha"
+  },
+  "footer": {
+    "blurb": "Tunawawezesha vijana, suluhisho moja la tabianchi kwa wakati mmoja. Jukwaa la kidijitali la kitaifa la vuguvugu la vijana kuhusu tabianchi nchini Kenya.",
+    "quickLinks": "Viungo vya Haraka",
+    "platform": "Jukwaa",
+    "contactUs": "Wasiliana Nasi",
+    "poweredByAfosi": "Inaendeshwa na Afosi",
+    "copyright": "© {year} Kenya Youth Climate Hub. Haki zote zimehifadhiwa.",
+    "tagline": "Hatua za tabianchi zinazoongozwa na vijana.",
+    "getStarted": "Anza sasa"
+  },
+  "home": {
+    "backedBy": "Tunaungwa mkono na",
+    "showPartner": "Onyesha {name}",
+    "founder": "Mwanzilishi",
+    "alert": {
+      "badge": "TAHADHARI YA EL NIÑO",
+      "body": "Mvua kubwa na tahadhari za mafuriko zinatumika katika kaunti za Magharibi, Pwani, Bonde la Ufa na Kaskazini Mashariki.",
+      "cta": "Angalia Rada ya Kaunti na Mwongozo wa Kinga wa Hatua 23"
+    },
+    "hero": {
+      "eyebrow": "Tunawawezesha vijana, suluhisho moja la tabianchi kwa wakati mmoja",
+      "title": "Kenya Youth <g>Climate Hub.</g>",
+      "builtFor": "Imejengwa kwa ajili ya",
+      "words": [
+        "wabunifu wa tabianchi",
+        "viongozi wa mabadiliko kaunti",
+        "waanzilishi wa biashara za kijani",
+        "watetezi wa sera"
+      ],
+      "body": "Jiunge na jumuiya ya vijana wabunifu wanaokabiliana na changamoto za tabianchi na kujenga mustakabali endelevu kwa Kenya. Ufadhili, ujuzi, nafasi za sera na ubunifu, katika kaunti zote 47.",
+      "ctaFunding": "Pata Ufadhili",
+      "ctaPrograms": "Tazama Programu",
+      "statCounties": "Kaunti",
+      "statAge": "Umri unaolengwa",
+      "statFounded": "Ilianzishwa",
+      "imgAlt": "Vijana wakichukua hatua za tabianchi nchini Kenya",
+      "imgAlt2": "Wabunifu wa tabianchi",
+      "countiesConnected": "Kaunti zilizounganishwa",
+      "since": "Inaongozwa na vijana tangu 2020"
+    },
+    "about": {
+      "poweredBy": "Inaendeshwa na",
+      "eyebrow": "Sisi ni Nani",
+      "title": "Zaidi ya kitovu, <g>ni vuguvugu.</g>",
+      "body": "KYCH ni jukwaa la kidijitali la kitaifa la vuguvugu la vijana kuhusu tabianchi nchini Kenya, linalounganisha ndoto na mabadiliko ya kimfumo. Linaendeshwa chini ya <b>Afosi, Action for Sustainability Initiative</b>, likichanganya zaidi ya muongo mmoja wa maendeleo yanayotegemea ushahidi na muundo unaowaweka vijana mbele.",
+      "mission": "Dhamira",
+      "missionText": "Kumwezesha kila kijana wa Kenya kuongoza hatua za tabianchi.",
+      "vision": "Maono",
+      "visionText": "Kenya ambayo vijana wanaongoza mapambano.",
+      "quote": "Afosi inazalisha ushahidi. Vijana wanazalisha suluhisho. Kitovu kinawaunganisha ili kukua.",
+      "cta": "Hadithi na Timu Yetu"
+    },
+    "values": {
+      "eyebrow": "Kinachotusukuma",
+      "title": "Maadili yetu <g>ya msingi.</g>",
+      "justice": {
+        "title": "Haki ya Tabianchi",
+        "desc": "Matokeo ya haki kwa jamii zilizo mstari wa mbele"
+      },
+      "inclusion": {
+        "title": "Ushirikishwaji wa Vijana",
+        "desc": "Vijana wa miaka 15–35 katikati ya kila uamuzi"
+      },
+      "gender": {
+        "title": "Usawa wa Kijinsia",
+        "desc": "Sauti sawa, fursa sawa, matokeo sawa"
+      },
+      "innovation": {
+        "title": "Ubunifu",
+        "desc": "Suluhisho za Kikenya kwa changamoto za Kenya"
+      },
+      "evidence": {
+        "title": "Kwa Msingi wa Ushahidi",
+        "desc": "Hatua zinazotegemea data na utafiti"
+      },
+      "systems": {
+        "title": "Mabadiliko ya Kimfumo",
+        "desc": "Zaidi ya dalili, tunabadilisha vyanzo vya tatizo"
+      }
+    },
+    "tools": {
+      "eyebrow": "Zana za Jukwaa",
+      "title": "Kila unachohitaji ili <g>kuchukua hatua.</g>",
+      "body": "Jukwaa moja linalowaunganisha vijana wa Kenya na ufadhili, maarifa, programu na utaalamu wa tabianchi.",
+      "library": {
+        "label": "Maktaba na Kituo cha Rasilimali",
+        "desc": "Ripoti, vifaa vya mafunzo, muhtasari wa sera na tafiti. Zihifadhi kwenye dashibodi yako.",
+        "cta": "Vinjari Maktaba"
+      },
+      "funding": {
+        "label": "Ufadhili na Fursa",
+        "desc": "Ubao hai wa ruzuku, ushirika (fellowships) na mafunzo kazini, pamoja na vikumbusho vya tarehe za mwisho.",
+        "cta": "Pata Ufadhili"
+      },
+      "programs": {
+        "label": "Programu na Mashindano",
+        "desc": "Omba kujiunga na programu za ukuzaji biashara kama Youth Climate Innovation Challenge na programu za ushauri.",
+        "cta": "Tazama Programu"
+      },
+      "events": {
+        "label": "Matukio na Warsha",
+        "desc": "Jisajili kwa kambi za mafunzo, majadiliano ya sera na mitandao (webinars) kutoka KYCH na washirika.",
+        "cta": "Tazama Kalenda"
+      },
+      "weather": {
+        "label": "Hali ya Hewa na Tahadhari",
+        "desc": "Rada hai ya mafuriko kwa kaunti 47, tahadhari za mvua, na mwongozo rasmi wa hatua 23 wa kujiandaa na El Niño.",
+        "cta": "Tazama Rada ya Hali ya Hewa"
+      },
+      "ai": {
+        "label": "Msaidizi wa AI wa Tabianchi",
+        "desc": "Mwongozo wa AI saa 24/7 uliofunzwa kwa data za tabianchi, fursa na rasilimali za Kenya.",
+        "cta": "Uliza AI Sasa"
+      }
+    },
+    "calendar": {
+      "eyebrow": "Kalenda Rasmi 2026",
+      "title": "Tarehe Muhimu <g>za Tabianchi Zijazo.</g>",
+      "cta": "Tazama Kalenda Kamili",
+      "e1": {
+        "date": "10 OKT 2026",
+        "title": "Siku ya Mazingira",
+        "desc": "Siku ya Kitaifa ya Mazingira ya Kenya na upandaji miti wa vijana kote nchini."
+      },
+      "e2": {
+        "date": "5 – 8 OKT 2026",
+        "title": "Mkutano wa Pre-COP 31",
+        "desc": "Mkutano wa mawaziri na vijana kuhusu mkakati wa majadiliano kabla ya COP31."
+      },
+      "e3": {
+        "date": "9 – 20 NOV 2026",
+        "title": "Mkutano wa UN wa Tabianchi COP31",
+        "desc": "Kongamano la Umoja wa Mataifa la Mabadiliko ya Tabianchi linalofanyika Türkiye."
+      }
+    },
+    "pillars": {
+      "eyebrow": "Tunachofanya",
+      "title": "Nguzo tano za <g>hatua za tabianchi.</g>",
+      "body": "Maeneo ya kimkakati yaliyolengwa kuharakisha hatua za tabianchi kupitia ubunifu unaoongozwa na vijana katika kaunti zote 47.",
+      "counter": "NGUZO {n} / {total}",
+      "leadership": {
+        "title": "Uongozi na Utetezi wa Vijana kuhusu Tabianchi",
+        "desc": "Kuwafunza wajadili, watetezi wa kaunti na viongozi wa vuguvugu wa kizazi kijacho ili kushawishi sera katika kila ngazi."
+      },
+      "innovation": {
+        "title": "Ubunifu na Ujasiriamali wa Tabianchi",
+        "desc": "Kukuza biashara changa za kijani zinazoongozwa na vijana, kuanzia nishati safi hadi teknolojia ya taka, kupitia Youth Climate Innovation Challenge."
+      },
+      "finance": {
+        "title": "Fedha za Tabianchi na Upatikanaji wa Fursa",
+        "desc": "Kuwaunganisha vijana wa Kenya na ruzuku, ushirika, mashindano na ajira zinazoendana na ndoto zao za tabianchi."
+      },
+      "capacity": {
+        "title": "Kujenga Uwezo na Maarifa",
+        "desc": "Kuwapa vijana ujuzi, data na zana za kuongoza hatua za tabianchi kupitia mafunzo na rasilimali za kidijitali."
+      },
+      "partnerships": {
+        "title": "Ushirikiano na Kujenga Mfumo",
+        "desc": "Kujenga madaraja kati ya vijana, serikali, mashirika yasiyo ya kiserikali, washirika wa maendeleo na sekta binafsi."
+      }
+    },
+    "video": {
+      "title": "Tazama matokeo yetu kwa vitendo",
+      "counter": "Video {n} kati ya {total}",
+      "prev": "Video iliyotangulia",
+      "next": "Video inayofuata",
+      "play": "Cheza video",
+      "close": "Funga video"
+    },
+    "stories": {
+      "eyebrow": "Zilizoangaziwa",
+      "title": "Hadithi za biashara changa <g>za tabianchi.</g>",
+      "cta": "Tazama Hadithi Zote"
+    },
+    "partners": {
+      "eyebrow": "Washirika na Wadau Wanaoaminika"
+    },
+    "news": {
+      "eyebrow": "Mpya",
+      "title": "Habari, matukio na <g>rasilimali.</g>",
+      "cta": "Tazama Zote",
+      "error": "Imeshindikana kupakia habari kwa sasa. Tafadhali jaribu tena baadaye.",
+      "empty": "Hakuna habari kwa sasa. Rudi tena hivi karibuni."
+    },
+    "newsletter": {
+      "eyebrow": "Usipitwe",
+      "title": "Uko tayari kujiunga na <g>vuguvugu?</g>",
+      "body": "Fursa za tabianchi, habari na taarifa za mashindano kila wiki, moja kwa moja kwenye barua pepe yako.",
+      "sunTitle": "Chomoza jua",
+      "sunOn": "jua limechomoza",
+      "sunOff": "chomoza jua",
+      "subscribed": "Umejisajili!",
+      "emailPlaceholder": "wewe@barua.com",
+      "emailLabel": "Barua pepe",
+      "subscribe": "Jisajili",
+      "getStarted": "Anza Leo"
+    }
+  },
+  "about": {
+    "eyebrow": "Kuhusu KYCH",
+    "title": "Zaidi ya kitovu, <g>ni vuguvugu.</g>",
+    "intro": "KYCH ni jukwaa la kidijitali la kitaifa la vuguvugu la vijana kuhusu tabianchi nchini Kenya, linalounganisha ndoto na mabadiliko ya kimfumo katika kaunti zote 47.",
+    "imgAlt": "Timu ya Kenya Youth Climate Hub kazini",
+    "badge": "Ilianzishwa 2020 · Inaendeshwa na Afosi",
+    "storyEyebrow": "Hadithi Yetu",
+    "storyTitle": "Ndoto, zilizounganishwa na mabadiliko ya kimfumo.",
+    "story1": "KYCH inaendeshwa chini ya <b>Afosi, Action for Sustainability Initiative</b>, ikichanganya zaidi ya muongo mmoja wa maendeleo yanayotegemea ushahidi na muundo unaowaweka vijana mbele.",
+    "story2": "Tunawaunganisha vijana wa Kenya wenye umri wa miaka 15 hadi 35 na fedha za tabianchi, ujuzi, nafasi za sera na fursa za ubunifu katika kila kaunti.",
+    "mission": "Dhamira",
+    "missionText": "Kumwezesha kila kijana wa Kenya kuongoza hatua za tabianchi.",
+    "vision": "Maono",
+    "visionText": "Kenya ambayo vijana hawajizoeshi tu na mabadiliko ya tabianchi, bali wanaongoza mapambano.",
+    "valuesTitle": "Maadili yetu ya msingi.",
+    "quote": "Afosi inazalisha ushahidi. Vijana wanazalisha suluhisho. Kitovu kinawaunganisha ili kukua.",
+    "ctaTitle": "Uko tayari kujiunga na vuguvugu?",
+    "ctaButton": "Anza leo"
+  },
+  "contact": {
+    "eyebrow": "Wasiliana Nasi",
+    "title": "Tungependa <g>kusikia kutoka kwako</g>",
+    "subtitle": "Shirikiana nasi, tangaza fursa, shiriki rasilimali, au uliza chochote.",
+    "label": "Mawasiliano",
+    "heading": "TUJENGE <g>PAMOJA</g>",
+    "email": "Barua pepe",
+    "phone": "Simu",
+    "location": "Mahali",
+    "donorsTitle": "Kwa wafadhili na vyombo vya habari",
+    "donorsBody": "Timu yetu ya ushirikiano hujibu ndani ya siku 2 za kazi. Vifaa vya vyombo vya habari vinapatikana ukiomba.",
+    "sentTitle": "Ujumbe umetumwa!",
+    "sentBody": "Asante kwa kuwasiliana nasi. Tutakujibu ndani ya siku 2 za kazi.",
+    "formTitle": "Tutumie ujumbe",
+    "nameLabel": "Jina Kamili",
+    "namePlaceholder": "Jina lako",
+    "emailLabel": "Barua Pepe",
+    "emailPlaceholder": "wewe@barua.com",
+    "typeLabel": "Mimi ni…",
+    "types": {
+      "youth": "Kijana wa Kenya",
+      "partner": "Shirika Mshirika",
+      "donor": "Mfadhili",
+      "media": "Mwanahabari",
+      "other": "Mwingine"
+    },
+    "messageLabel": "Ujumbe",
+    "messagePlaceholder": "Tuambie tunavyoweza kukusaidia...",
+    "send": "Tuma Ujumbe"
+  },
+  "dashboard": {
+    "eyebrow": "Dashibodi Yako",
+    "title": "Karibu kwenye <g>Jukwaa la KYCH</g>",
+    "subtitle": "Kitovu chako binafsi cha fursa, rasilimali na zana za tabianchi.",
+    "aiTitle": "Msaidizi wa AI wa Tabianchi",
+    "aiBody": "Mwongozo wa AI saa 24/7 uliofunzwa kwa data za tabianchi, fursa na rasilimali za Kenya. Inakuja hivi karibuni.",
+    "comingSoon": "Inakuja Hivi Karibuni",
+    "quickAccess": "Ufikiaji wa Haraka",
+    "links": {
+      "opportunities": {
+        "label": "Fursa",
+        "desc": "Vinjari ruzuku na ushirika ulio wazi"
+      },
+      "library": {
+        "label": "Maktaba",
+        "desc": "Ripoti, vifaa vya mafunzo na rasilimali"
+      },
+      "events": {
+        "label": "Matukio",
+        "desc": "Mikutano na warsha zijazo"
+      },
+      "programs": {
+        "label": "Programu",
+        "desc": "Omba kujiunga na programu za ubunifu"
+      }
+    }
+  },
+  "register": {
+    "eyebrow": "Jiunge na Vuguvugu",
+    "title": "Fungua <g>Wasifu Wako wa Kijana</g>",
+    "subtitle": "Jisajili ili upate fursa za ufadhili, matukio, rasilimali na jumuiya ya KYCH — yote mahali pamoja.",
+    "doneTitle": "Umeorodheshwa!",
+    "doneBody": "Asante kwa kujisajili. Tutawasiliana nawe hivi karibuni kuhusu wasifu wako na hatua zinazofuata.",
+    "formTitle": "Usajili wa Vijana",
+    "name": "Jina Kamili",
+    "namePh": "Jina lako kamili",
+    "email": "Barua Pepe",
+    "emailPh": "wewe@barua.com",
+    "county": "Kaunti",
+    "countyPh": "mf. Nairobi, Kisumu, Mombasa…",
+    "age": "Umri",
+    "interests": "Mambo ya Tabianchi Yanayokuvutia",
+    "interestsPh": "mf. Nishati safi, maji, kilimo, sera…",
+    "submit": "Fungua Wasifu Wangu"
+  },
+  "taxonomy": {
+    "All": "Zote",
+    "News": "Habari",
+    "ClimateInsights": "Maarifa ya Tabianchi",
+    "SuccessStories": "Hadithi za Mafanikio",
+    "EventsRecap": "Muhtasari wa Matukio",
+    "PartnerUpdates": "Taarifa za Washirika",
+    "Grant": "Ruzuku",
+    "Fellowship": "Ushirika",
+    "Internship": "Mafunzo Kazini",
+    "Competition": "Shindano",
+    "Job": "Kazi",
+    "Accelerator": "Kiharakishaji",
+    "Opportunity": "Fursa",
+    "Energy": "Nishati",
+    "Water": "Maji",
+    "Agriculture": "Kilimo",
+    "Policy": "Sera",
+    "Finance": "Fedha",
+    "Innovation": "Ubunifu",
+    "Resilience": "Ustahimilivu",
+    "Advocacy": "Utetezi",
+    "Waste": "Taka",
+    "RenewableEnergy": "Nishati Jadidifu",
+    "WASH": "Maji, Usafi na Afya (WASH)",
+    "AllSDGs": "SDG Zote",
+    "AllRegions": "Maeneo Yote",
+    "AllFormats": "Mifumo Yote",
+    "Kenya": "Kenya",
+    "AfricaRegional": "Afrika / Kikanda",
+    "Global": "Kimataifa",
+    "Inperson": "Ana kwa ana",
+    "Online": "Mtandaoni",
+    "Hybrid": "Mseto",
+    "SDG4QualityEducation": "SDG 4: Elimu Bora",
+    "SDG10ReducedInequalities": "SDG 10: Kupunguza Ukosefu wa Usawa",
+    "SDG11SustainableCities": "SDG 11: Miji Endelevu",
+    "SDG12ResponsibleConsumption": "SDG 12: Matumizi Yenye Uwajibikaji",
+    "SDG13ClimateAction": "SDG 13: Hatua za Tabianchi",
+    "SDG14LifeBelowWater": "SDG 14: Viumbe wa Majini",
+    "SDG15LifeonLand": "SDG 15: Viumbe wa Nchi Kavu",
+    "SDG17Partnerships": "SDG 17: Ushirikiano",
+    "All23Steps": "Hatua Zote 23",
+    "HomeInfrastructure": "Nyumba na Miundombinu",
+    "HealthMedicine": "Afya na Dawa",
+    "EmergencyKit": "Mfuko wa Dharura",
+    "WaterSanitation": "Maji na Usafi",
+    "SafetyLivestock": "Usalama na Mifugo"
+  },
+  "library": {
+    "eyebrow": "Maktaba na Kituo cha Rasilimali",
+    "title": "Maarifa ya <g>kuchukua hatua.</g>",
+    "intro": "Zana shirikishi zilizotengenezwa mahususi kwa vijana wa Kenya wanaoleta mabadiliko ya tabianchi.",
+    "launch": "ANZA",
+    "calcTitle": "Kikokotoo cha Alama ya Kaboni",
+    "calcDesc": "Kokotoa athari yako binafsi ya CO₂ kwa sekunde 60 ukitumia vipimo vya uzalishaji vya Kenya. Pata vidokezo maalum kwako.",
+    "calcTags": [
+      "Maswali 4",
+      "Sekunde 60",
+      "Data za Kenya"
+    ],
+    "quizTitle": "Jaribio la Utayari wa Tabianchi",
+    "quizDesc": "Pima maarifa yako ya tabianchi. Pata beji. Pata rasilimali za kujifunza kulingana na matokeo yako.",
+    "quizTags": [
+      "Maswali 8",
+      "Dakika 3",
+      "Viwango 4 vya beji"
+    ],
+    "ctaTitle": "Jenga maarifa yako ya tabianchi.",
+    "ctaButton": "Gundua programu"
+  },
+  "newsPage": {
+    "eyebrow": "Mpya",
+    "title": "Habari, matukio <g>na rasilimali.</g>",
+    "intro": "Pata taarifa kuhusu vuguvugu la vijana la tabianchi nchini Kenya, kuanzia taarifa za jukwaa hadi miito mipya ya ufadhili.",
+    "readMore": "Soma zaidi",
+    "offline": "Nje ya mtandao",
+    "live": "Moja kwa moja · Kila saa 3",
+    "emptyTitle": "Bado hakuna makala",
+    "emptyBody": "Bofya hapa chini kuleta habari mpya kutoka kwa vyanzo vyetu vya RSS vya tabianchi.",
+    "fetch": "Leta Habari Sasa",
+    "ctaTitle": "Usipitwe.",
+    "ctaButton": "Jisajili"
+  },
+  "opportunitiesPage": {
+    "eyebrow": "Ufadhili na Fursa",
+    "title": "Pata <g>fursa yako inayofuata.</g>",
+    "intro": "Ubao hai wa ruzuku, ushirika, mashindano na mafunzo kazini, pamoja na vikumbusho vya tarehe za mwisho, unaoendana na ndoto zako za tabianchi.",
+    "rolling": "Wazi / Endelevu",
+    "closesToday": "Inafungwa LEO",
+    "closesIn": "Inafungwa baada ya siku {days}",
+    "closesOn": "Inafungwa: {date}",
+    "apply": "Omba sasa",
+    "details": "Tazama maelezo",
+    "search": "Tafuta fursa…",
+    "emptyTitle": "Bado hakuna fursa",
+    "emptyBody": "AI yetu inatafuta fursa za tabianchi. Rudi tena hivi karibuni.",
+    "refresh": "Onyesha Upya",
+    "ctaTitle": "Usikose tarehe ya mwisho.",
+    "ctaButton": "Jisajili kupata vikumbusho",
+    "loadError": "Imeshindikana kupakia fursa kwa sasa. Tafadhali jaribu tena baada ya muda mfupi."
+  },
+  "programs": {
+    "eyebrow": "Programu na Mashindano",
+    "title": "Programu zinazojenga <g>viongozi.</g>",
+    "intro": "Omba kujiunga na programu za ukuzaji biashara, ushauri na mashindano yaliyobuniwa kuharakisha hatua za tabianchi zinazoongozwa na vijana katika kaunti zote 47.",
+    "pillarsBody": "Maeneo ya kimkakati yaliyolengwa kuharakisha hatua za tabianchi kupitia ubunifu unaoongozwa na vijana.",
+    "viewProgram": "Tazama programu",
+    "ctaTitle": "Jenga suluhisho lako la tabianchi pamoja nasi.",
+    "ctaButton": "Tazama fursa",
+    "list": {
+      "ycic": {
+        "tag": "Programu kuu",
+        "status": "Maombi Yamefungwa",
+        "participants": "Vijana Wabunifu 300",
+        "prizeLabel": "Jumla ya Zawadi",
+        "description": "Programu ya ukuzaji wa biashara changa za kijani zinazoongozwa na vijana, kuanzia nishati safi hadi teknolojia ya taka, ikilenga suluhisho kwa makazi yasiyo rasmi. Washindi hupata ufadhili wa kuanzia, miezi sita ya ushauri wa wataalamu na njia ya kufikia soko.",
+        "focusAreas": [
+          "Maji, Usafi na Afya (WASH)",
+          "Ustahimilivu wa Mafuriko na Mifereji Mijini",
+          "Nishati Jadidifu na Miundombinu Endelevu"
+        ]
+      },
+      "begreen": {
+        "tag": "Programu inayoendelea",
+        "status": "Inaendelea — Majaribio Kenya",
+        "participants": "Vijana 2,264 Waliomba",
+        "prizeLabel": "Ufadhili wa Kuanzia",
+        "description": "Programu ya ujasiriamali wa kijani inayohusisha washirika wengi kwa vijana wa miaka 18–35 katika sekta ya usimamizi wa taka nchini Kenya — ajira 846 zimebuniwa, mapato ya takriban USD milioni 2.7 yamepatikana, na kilo milioni 29.9 za taka zimesimamiwa.",
+        "focusAreas": [
+          "Usimamizi wa Taka za Plastiki",
+          "Taka za Kikaboni na Biogesi",
+          "Biashara za Taka za Kielektroniki"
+        ]
+      }
+    },
+    "begreen": {
+      "eyebrow": "Ujasiriamali wa Kijani kwa Vijana wa Kenya",
+      "title": "BeGreen Africa <g>Initiative</g>",
+      "intro": "Programu inayohusisha washirika wengi inayojenga ujasiriamali wa kijani katika usimamizi wa taka — ikikabiliana wakati mmoja na ukosefu wa ajira kwa vijana na uharibifu wa mazingira.",
+      "back": "Rudi kwenye Programu",
+      "backAll": "Rudi kwenye Programu Zote",
+      "implementing": "Washirika Watekelezaji",
+      "resultsEyebrow": "Matokeo ya Programu",
+      "resultsTitle": "Kuvuka Kila Lengo",
+      "stats": [
+        {
+          "label": "Ajira Zilizobuniwa",
+          "sub": "Nov 2023 – Jul 2025"
+        },
+        {
+          "label": "Wastani wa Ajira / Biashara",
+          "sub": "dhidi ya kipimo cha 2.6"
+        },
+        {
+          "label": "Ukuaji wa Mapato",
+          "sub": "Nov 2023 → Jul 2025"
+        },
+        {
+          "label": "Kilo za Taka Zilizosimamiwa",
+          "sub": "Plastiki + Kikaboni"
+        },
+        {
+          "label": "Vijana Waliofadhiliwa",
+          "sub": "Hadi USD 5,000 kila mmoja"
+        },
+        {
+          "label": "Vijana Waliotengwa",
+          "sub": "Waliofikiwa kwa makusudi"
+        }
+      ],
+      "aboutEyebrow": "Kuhusu BeGreen",
+      "aboutTitle": "<g>BeGreen Initiative</g> ni nini?",
+      "about1": "<b>BeGreen Africa Initiative</b> ni programu inayohusisha washirika wengi inayotekelezwa nchini Kenya na UNICEF/Generation Unlimited, Tony Elumelu Foundation na IKEA Foundation, kwa msaada wa ukuzaji biashara kutoka STEM Impact Center Kenya.",
+      "about2": "Inalenga vijana wenye umri wa <b>miaka 18–35</b> ili kujenga ujasiriamali wa kijani katika sekta ya usimamizi wa taka — ikikabiliana wakati mmoja na ukosefu wa ajira kwa vijana na uharibifu wa mazingira.",
+      "about3": "Programu hii inaendana na <b>Ruwaza ya Kenya 2030</b>, Ajenda ya Mageuzi ya Kiuchumi Kuanzia Chini (BETA), na ahadi za kitaifa chini ya Mkataba wa Paris na Malengo kadhaa ya Maendeleo Endelevu (SDGs).",
+      "problemTitle": "Muktadha wa Tatizo",
+      "problem": [
+        "tani za taka zinazozalishwa kila siku nchini Kenya — chini ya 10% zinarejelezwa",
+        "ya vijana wa miaka 18–34 hawana ajira; 80% wako katika sekta isiyo rasmi",
+        "ya Wakenya wanaishi chini ya mstari wa umaskini, hali inayowaathiri zaidi vijana",
+        "ya idadi ya watu wa Kenya wako chini ya miaka 35"
+      ],
+      "focusEyebrow": "Sekta za Taka",
+      "focusTitle": "Maeneo ya Kipaumbele ya <g>Biashara za Kijani</g>",
+      "focus": [
+        {
+          "title": "Usimamizi wa Taka za Plastiki",
+          "desc": "Biashara za vijana zinazochakata na kurejeleza taka za plastiki mijini na vijijini kote Kenya."
+        },
+        {
+          "title": "Taka za Kikaboni na Biogesi",
+          "desc": "Kubadilisha taka za kikaboni kuwa biogesi na mboji, hivyo kujenga minyororo ya thamani ya uchumi mzunguko."
+        },
+        {
+          "title": "Biashara za Taka za Kielektroniki",
+          "desc": "Sekta ndogo yenye mapato makubwa zaidi — ukusanyaji na uchakataji wa taka za kielektroniki kwa uwajibikaji."
+        },
+        {
+          "title": "Ubunifu wa Kugeuza Taka kuwa Thamani",
+          "desc": "Kubadilisha taka kuwa bidhaa zinazouzika, kubuni ajira na kupunguza shinikizo kwenye madampo."
+        }
+      ],
+      "phasesEyebrow": "Muundo wa Programu",
+      "phasesTitle": "Awamu 8 za <g>Utekelezaji</g>",
+      "phases": [
+        {
+          "title": "Kampeni ya Maombi",
+          "outcome": "Vijana 2,264 waliomba kote Kenya"
+        },
+        {
+          "title": "Mafunzo ya Usimamizi wa Biashara",
+          "outcome": "759 walifunzwa; 502 walikamilisha"
+        },
+        {
+          "title": "Mafunzo ya Ujasiriamali wa Kijani",
+          "outcome": "502 walikamilisha BMT na GET"
+        },
+        {
+          "title": "Uandaaji wa Mipango ya Biashara",
+          "outcome": "Mipango 320 ya biashara iliwasilishwa"
+        },
+        {
+          "title": "Matukio ya Kuwasilisha Mawazo",
+          "outcome": "Vijana 207 waliwasilisha (Nairobi, Kisumu, Mombasa)"
+        },
+        {
+          "title": "Utoaji wa Ufadhili wa Kuanzia",
+          "outcome": "146 walipokea ruzuku hadi USD 5,000"
+        },
+        {
+          "title": "Ukuzaji na Ushauri",
+          "outcome": "Ubunifu 146 uliungwa mkono"
+        },
+        {
+          "title": "Fedha za Kuharakisha",
+          "outcome": "112 walipokea nyongeza ya USD 1,000–3,000"
+        }
+      ],
+      "outcomesEyebrow": "Matokeo",
+      "outcomesTitle": "Matokeo Muhimu ya <g>Programu</g>",
+      "outcomes": [
+        {
+          "title": "Ubunifu wa Ajira",
+          "items": [
+            "Jumla ya ajira 846 zimebuniwa — zaidi sana ya 260 zilizotarajiwa",
+            "Wastani wa ajira 8.1 kwa kila biashara dhidi ya kipimo cha 2.6",
+            "Kila mjasiriamali anasaidia takriban wanafamilia 4.6",
+            "Biashara zilizopata ushauri zilibuni ajira 531 dhidi ya 104 bila ushauri"
+          ]
+        },
+        {
+          "title": "Uzalishaji wa Mapato",
+          "items": [
+            "Ukuaji wa mapato wa takriban mara 7 kuanzia Nov 2023 hadi Jul 2025",
+            "Wastani wa mapato ya mwezi ulipanda kutoka KShs 81K hadi KShs 203K",
+            "Makadirio ya mwaka ni takriban USD 2.7M dhidi ya lengo la USD 1M",
+            "Biashara za taka za kielektroniki zilipata wastani wa KShs 679,000 kwa mwezi"
+          ]
+        },
+        {
+          "title": "Athari kwa Mazingira",
+          "items": [
+            "Jumla ya kilo milioni 29.9 za taka zilisimamiwa",
+            "Kilo 11.6M za plastiki + kilo 18.4M za taka za kikaboni ziliepushwa na madampo",
+            "Biashara zilizokuzwa zilisimamia kilo 27.9M dhidi ya 76K bila ukuzaji",
+            "Mchango mkubwa kwa uchumi mzunguko wa Kenya"
+          ]
+        }
+      ],
+      "inclusionEyebrow": "Ujumuishaji",
+      "inclusionTitle": "Kuwafikia <g>Vijana Waliotengwa</g>",
+      "inclusionBody": "Kati ya <b>74% na 90%</b> ya washiriki wote waliainishwa kama waliotengwa — ikionyesha msisitizo mkubwa wa programu katika ujumuishaji. Hata miongoni mwa vijana waliofadhiliwa, viwango vya kutengwa vilikuwa kati ya 74.3% na 82.4%.",
+      "inclusionStats": [
+        [
+          "68.9% wanaume",
+          "30.9% washiriki wanawake"
+        ],
+        [
+          "40.5% wanawake",
+          "miongoni mwa vijana waliofadhiliwa"
+        ],
+        [
+          "59% mijini",
+          "39.8% washiriki wa vijijini"
+        ],
+        [
+          "57.6%",
+          "wenye umri wa miaka 25–30"
+        ]
+      ],
+      "conclusionTitle": "Hitimisho",
+      "conclusion1": "BeGreen Africa Kenya Initiative imevuka kwa kiasi kikubwa malengo yake makuu katika nguzo zote tatu za programu: ubunifu wa ajira (ajira 846 dhidi ya 260 zilizotarajiwa), uzalishaji wa mapato (takriban USD 2.7M kwa mwaka dhidi ya lengo la USD 1M), na usimamizi wa taka (kilo 29.9M ziliepushwa).",
+      "conclusion2": "Kenya inapoendelea kufikia malengo yake ya tabianchi, uzoefu wa BeGreen unathibitisha kuwa vijana si wanufaika tu bali ni <b>wasanifu wa maendeleo endelevu</b>.",
+      "partnersEyebrow": "Ushirikiano",
+      "partnersTitle": "Washirika <g>Wakuu</g>",
+      "partners": [
+        {
+          "name": "UNICEF / Generation Unlimited",
+          "role": "Uongozi wa utekelezaji, ushirikishaji wa vijana, uandaaji wa mtaala"
+        },
+        {
+          "name": "Tony Elumelu Foundation",
+          "role": "Maudhui ya ujasiriamali, mifumo ya ushauri, ufadhili wa kuanzia"
+        },
+        {
+          "name": "IKEA Foundation",
+          "role": "Mfadhili mkuu, usimamizi wa kimkakati na ufadhili"
+        },
+        {
+          "name": "Shirika la Kitaifa la Takwimu la Kenya (KNBS)",
+          "role": "Msaada wa kiufundi, ujumuishaji na uthibitishaji wa data"
+        },
+        {
+          "name": "Mashirika ya Serikali (SDYA, Wizara ya Vijana na Mazingira)",
+          "role": "Uwiano wa sera, uidhinishaji na ujumuishaji wa kimaeneo"
+        },
+        {
+          "name": "Sekta Binafsi (UBA Bank, warejelezaji, wawekezaji)",
+          "role": "Uunganishaji na masoko, njia za ufadhili, uhakiki wa mifumo ya biashara"
+        }
+      ]
+    },
+    "ycic": {
+      "eyebrow": "Kuwawezesha Vijana wa Kenya Kubuni Suluhisho za Tabianchi",
+      "title": "Youth Climate Innovation <g>Challenge</g>",
+      "intro": "Kwa makazi yasiyo rasmi — kujenga jamii endelevu na zenye ustahimilivu kupitia mbinu bunifu.",
+      "back": "Rudi kwenye Programu",
+      "info": [
+        {
+          "label": "Tarehe ya Mwisho",
+          "value": "9 Juni, 2025"
+        },
+        {
+          "label": "Washiriki",
+          "value": "Vijana Wabunifu 300"
+        },
+        {
+          "label": "Mahali",
+          "value": "Kenya (Kote Nchini)"
+        },
+        {
+          "label": "Jumla ya Zawadi",
+          "value": "KES 500,000"
+        }
+      ],
+      "closedTitle": "Kipindi cha Maombi Kimefungwa",
+      "remaining": "Muda Uliobaki wa Kuomba",
+      "days": "Siku",
+      "hours": "Saa",
+      "minutes": "Dakika",
+      "seconds": "Sekunde",
+      "closedNote": "Maombi yamefungwa — rudi tena kwa awamu zijazo",
+      "overviewEyebrow": "Muhtasari wa Shindano",
+      "overviewTitle": "Kuwawezesha Vijana Kubuni <g>Suluhisho za Tabianchi</g>",
+      "overviewBody": "Youth Climate Innovation Challenge ya 2025 inalenga kuwawezesha vijana wa Kenya kubuni suluhisho za tabianchi kwa makazi yasiyo rasmi, ikilenga kujenga jamii endelevu na zenye ustahimilivu kupitia mbinu bunifu.",
+      "benefits": [
+        {
+          "title": "Ufadhili wa Kuanzia",
+          "desc": "Shinda hadi KES 500,000 ili kuanzisha ubunifu wako wa tabianchi na kuleta suluhisho lako kwenye uhalisia."
+        },
+        {
+          "title": "Ushauri",
+          "desc": "Pata miezi 6 ya mwongozo wa kitaalamu kutoka kwa wataalamu wa tabianchi na wajasiriamali waliofanikiwa."
+        },
+        {
+          "title": "Ukuzaji",
+          "desc": "Pata rasilimali, mitandao na msaada wa kupanua suluhisho lako kote Kenya."
+        },
+        {
+          "title": "Jukwaa la Kitaifa",
+          "desc": "Onyesha ubunifu wako katika Kongamano la Ubunifu wa Tabianchi jijini Nairobi."
+        }
+      ],
+      "focusEyebrow": "Maeneo ya Kipaumbele",
+      "focusTitle": "Mada za Ubunifu kwa <g>Makazi Yasiyo Rasmi</g>",
+      "focusArea": "Eneo la Kipaumbele {n}",
+      "examples": "Mifano ya Suluhisho",
+      "focus": [
+        {
+          "title": "Maji, Usafi na Afya (WASH)",
+          "description": "Buni suluhisho endelevu za upatikanaji wa maji safi, vifaa bora vya usafi na uhamasishaji wa usafi, zinazostahimili tabianchi na kwa gharama nafuu.",
+          "examples": [
+            "Mifumo ya bei nafuu ya kuchuja maji",
+            "Vyoo na vifaa vya usafi vya jamii",
+            "Programu za elimu ya usafi"
+          ]
+        },
+        {
+          "title": "Ustahimilivu wa Mafuriko na Mifereji Mijini",
+          "description": "Buni mbinu mpya za kudhibiti maji ya mvua, kuzuia mafuriko na kuboresha mifereji katika makazi yasiyo rasmi yenye watu wengi.",
+          "examples": [
+            "Suluhisho za njia zinazopitisha maji",
+            "Mifumo ya kuvuna maji ya mvua",
+            "Mifumo ya tahadhari ya mapema ya mafuriko"
+          ]
+        },
+        {
+          "title": "Nishati Jadidifu na Miundombinu Endelevu",
+          "description": "Buni suluhisho za nishati safi kwa gharama nafuu na mbinu endelevu za ujenzi zinazopunguza alama ya kaboni huku zikiboresha hali ya maisha.",
+          "examples": [
+            "Mifumo ya sola ya nyumbani",
+            "Mitambo ya biogesi",
+            "Vifaa vya ujenzi rafiki kwa mazingira"
+          ]
+        }
+      ],
+      "eligibilityEyebrow": "Vigezo",
+      "eligibilityTitle": "Nani Anaweza <g>Kushiriki?</g>",
+      "eligibilityHeading": "Vigezo vya Kustahiki",
+      "eligibility": [
+        "Lazima uwe na wasifu hai kwenye <yoma>yoma.world</yoma>",
+        "Vijana wa Kenya wenye umri wa miaka 18–35",
+        "Mtu binafsi au timu ya hadi wanachama 4",
+        "Suluhisho lazima lishughulikie angalau eneo moja la kipaumbele",
+        "Ubunifu lazima ujumuishe vipengele vya elimu ya tabianchi",
+        "Suluhisho linalopendekezwa liweze kutekelezwa ndani ya miezi 12",
+        "Uzoefu wa awali wa hatua za tabianchi ni faida lakini si sharti"
+      ],
+      "keyDatesTitle": "Tarehe Muhimu",
+      "keyDates": [
+        {
+          "label": "Tarehe ya Mwisho ya Maombi",
+          "value": "9 Juni, 2025"
+        },
+        {
+          "label": "Orodha Fupi Kutangazwa",
+          "value": "23 Juni, 2025"
+        },
+        {
+          "label": "Siku ya Kuwasilisha (KICC Nairobi)",
+          "value": "23 Julai, 2025"
+        }
+      ],
+      "prizeTitle": "Jumla ya Zawadi",
+      "prizeExtra": "+ Miezi 6 ya Ushauri",
+      "processEyebrow": "Jinsi ya Kushiriki",
+      "processTitle": "Mchakato wa <g>Maombi</g>",
+      "periodClosed": "Kipindi cha Maombi Kimefungwa",
+      "steps": [
+        {
+          "title": "Jisajili Mtandaoni",
+          "desc": "Jaza fomu ya usajili mtandaoni kwa taarifa zako binafsi na maelezo mafupi ya wazo lako la ubunifu."
+        },
+        {
+          "title": "Kuza Wazo Lako",
+          "desc": "Fanyia kazi ubunifu wako ukizingatia uwezekano, uendelevu na matokeo. Tumia rasilimali na ushauri uliopo."
+        },
+        {
+          "title": "Wasilisha Pendekezo Lako",
+          "desc": "Wasilisha pendekezo la kina linalojumuisha mpango wa utekelezaji, bajeti na matokeo yanayotarajiwa."
+        },
+        {
+          "title": "Wasilisha na Onyesha",
+          "desc": "Waliofuzu fainali watawasilisha ubunifu wao mbele ya jopo la majaji wakati wa Kongamano la Ubunifu wa Tabianchi."
+        }
+      ],
+      "apply": "Omba kupitia Yoma"
+    }
+  },
+  "storiesPage": {
+    "eyebrow": "Zilizoangaziwa",
+    "title": "Hadithi za biashara changa <g>za tabianchi.</g>",
+    "intro": "Waanzilishi walioungwa mkono kupitia Youth Climate Innovation Challenge, wanaogeuza changamoto za tabianchi za Kenya kuwa biashara zinazofanya kazi.",
+    "founder": "Mwanzilishi",
+    "empty": "Bado hakuna hadithi katika kundi hili.",
+    "ctaTitle": "Suluhisho lako linaweza kuwa linalofuata.",
+    "ctaButton": "Omba kushiriki shindano",
+    "detailEyebrow": "Hadithi ya Mafanikio",
+    "by": "Na {name}",
+    "back": "Rudi kwenye hadithi zote",
+    "readStory": "Soma hadithi",
+    "others": "Hadithi Nyingine za Mafanikio"
+  },
+  "eventsPage": {
+    "eyebrow": "Mfumo wa Maarifa wa IISD · Kalenda ya KYCH",
+    "title": "Kalenda ya Matukio ya <g>Tabianchi 2026.</g>",
+    "intro": "Bofya tarehe yoyote iliyoangaziwa kwenye kalenda hapa chini ili kuona maelezo ya tukio, kuliongeza kwenye Google Calendar, au kufungua viungo rasmi.",
+    "schedule": "Ratiba Rasmi ya Tabianchi",
+    "prevMonth": "Mwezi uliopita",
+    "nextMonth": "Mwezi unaofuata",
+    "eventCount": "{count, plural, one {Tukio #} other {Matukio #}}",
+    "filters": "Vichujio:",
+    "sdgLabel": "Chuja kwa SDG",
+    "regionLabel": "Chuja kwa eneo",
+    "formatLabel": "Chuja kwa mfumo",
+    "reset": "Weka upya",
+    "allIn": "Matukio Yote ya {month}",
+    "showing": "Inaonyesha {count, plural, one {tukio #} other {matukio #}}",
+    "emptyTitle": "Hakuna matukio yaliyopatikana",
+    "emptyBody": "Jaribu kuweka upya vichujio vilivyo juu.",
+    "organizedBy": "Yameandaliwa na: <b>{name}</b>",
+    "details": "Maelezo",
+    "googleShort": "+ Google Cal",
+    "scheduled": "{count, plural, one {Tukio # limepangwa} other {Matukio # yamepangwa}}",
+    "closeModal": "Funga dirisha",
+    "close": "Funga",
+    "date": "Tarehe:",
+    "location": "Mahali:",
+    "organizer": "Mwandaaji:",
+    "googleLong": "+ Ongeza kwenye Google Calendar",
+    "website": "Tovuti Rasmi",
+    "ctaTitle": "Una tukio la tabianchi la kuwasilisha?",
+    "ctaButton": "Shirikiana na KYCH"
+  },
+  "weatherPage": {
+    "geoUnsupported": "Kivinjari chako hakitumii huduma ya kutambua mahali.",
+    "countyName": "Kaunti ya {name}",
+    "poweredUpdated": "Inaendeshwa na AccuWeather · Imesasishwa {time}",
+    "live": "Moja kwa moja",
+    "detecting": "Inatambua mahali...",
+    "autoDetect": "Tambua Mahali Nilipo",
+    "countySelect": "Chagua kaunti",
+    "highLow": "Juu {high} · Chini {low}",
+    "humidity": "Unyevu",
+    "windSpeed": "Kasi ya Upepo",
+    "uv": "Kiwango cha Juu cha UV",
+    "airQuality": "Ubora wa Hewa",
+    "timeOfDay": "Utabiri kwa Nyakati za Siku",
+    "prevPeriod": "Kipindi kilichopita",
+    "nextPeriod": "Kipindi kinachofuata",
+    "rain": "Mvua:",
+    "wind": "Upepo:",
+    "alertsTitle": "Tahadhari na Ushauri wa CAP",
+    "noAlerts": "Hakuna tahadhari za hali mbaya ya hewa kwa sasa",
+    "severityAlert": "Tahadhari {severity}",
+    "alertHeadline": "TAHADHARI MUHIMU YA MAFURIKO NA HALI YA HEWA: {county}",
+    "hotline": "Nambari ya Dharura:",
+    "redCross": "Msalaba Mwekundu 1199",
+    "mapTitle": "Ramani Yetu ya Hali ya Hewa",
+    "mapView": "Ramani",
+    "satellite": "Setilaiti",
+    "mapFrame": "Ramani ya Rada ya Hali ya Hewa Kenya - {place}",
+    "canvas": "Eneo la Uchunguzi: {place}",
+    "heatTitle": "Viwango vya Joto na Kipimo cha Hatari",
+    "kmdSignatures": "Rada ya KMD",
+    "extreme": "Kali Sana (>100mm)",
+    "extremeDesc": "Kufurika na Mafuriko ya Ghafla",
+    "high": "Juu (50–100mm)",
+    "highDesc": "Maji Kutuama Mitaroni Mijini",
+    "moderate": "Wastani (20–50mm)",
+    "moderateDesc": "Tahadhari ya Radi na Dhoruba",
+    "normal": "Kawaida (<20mm)",
+    "normalDesc": "Hatari Ndogo",
+    "countyAnalysis": "Uchambuzi wa Kaunti ({name}):",
+    "riskExtreme": "KIWANGO KIKALI CHA WIMBI LA MAFURIKO",
+    "riskKisumu": "HATARI KUBWA YA MAFURIKO NYANDO",
+    "riskUrban": "HATARI KUBWA YA MAFURIKO MIJINI",
+    "riskLow": "HATARI NDOGO/WASTANI YA MAFURIKO",
+    "selectedRegion": "Eneo Lililochaguliwa: <b>{name}</b>",
+    "guideLink": "Mwongozo wa Hatua 23 wa El Niño",
+    "weeklyFocus": "Hali ya Hewa ya Wiki",
+    "sevenDay": "Hali ya Hewa ya Siku 7 kwa {place} ({from} – {to})",
+    "today": "Leo",
+    "next7": "Siku 7 Zijazo",
+    "poweredBy": "Inaendeshwa na AccuWeather na KMD",
+    "spotlight": "Siku Iliyochaguliwa",
+    "dayNight": "Mchana: {day} · Usiku: {night}",
+    "precipRisk": "Uwezekano wa Mvua:",
+    "recommended": "Ushauri Wetu",
+    "adviceHeavy": "Kuna uwezekano wa mvua kubwa. Safisha mitaro ya maji na epuka kusafiri wakati wa mvua kubwa ya mchana.",
+    "adviceModerate": "Kuna uwezekano wa wastani wa mvua. Kuwa na mavazi ya mvua karibu na ukague mifereji ya paa.",
+    "adviceDry": "Hali nzuri ya ukavu inatarajiwa. Ni wakati mzuri wa ukarabati wa nje na maandalizi ya kilimo.",
+    "planBadge": "Mpango Rasmi wa KMD na Wizara",
+    "checklistTitle": "Orodha ya Hatua 23 za <g>Kujiandaa na El Niño.</g>",
+    "checklistIntro": "Weka alama kwa kila hatua unapoandaa nyumba, shule au biashara yako kabla ya mvua kubwa.",
+    "score": "Alama ya Utayari",
+    "completed": "Hatua {done} kati ya {total} zimekamilika",
+    "action": "Hatua:",
+    "agenciesEyebrow": "Mashirika Rasmi ya Serikali ya Majanga",
+    "agenciesTitle": "Unahitaji Msaada wa Dharura au Uokoaji?",
+    "agenciesBody": "Usimamizi wa majanga, utafutaji na uokoaji, misaada ya mafuriko na uhamishaji wa dharura huratibiwa rasmi na mashirika ya Serikali ya Kenya na vitengo saidizi vya kukabiliana na majanga.",
+    "ndoc": "Kituo cha Kitaifa cha Majanga (NDOC)",
+    "tollFree": "Bila Malipo {number}",
+    "landline": "Simu ya Mezani: {number}",
+    "redCrossAmb": "Ambulensi ya Msalaba Mwekundu Kenya",
+    "rescue247": "Uokoaji na Matibabu 24/7",
+    "ndmu": "Kitengo cha Usimamizi wa Majanga (NDMU)",
+    "mobile": "Simu ya Mkononi: {number}",
+    "kmd": "Idara ya Hali ya Hewa Kenya (KMD)",
+    "advisories": "Ushauri wa Hali ya Hewa"
+  },
+  "weatherTerms": {
+    "Morning": "Asubuhi",
+    "Afternoon": "Mchana",
+    "Evening": "Jioni",
+    "Night": "Usiku",
+    "Severe": "Kali",
+    "ActiveNow": "Inatumika Sasa",
+    "High": "Juu",
+    "Good": "Nzuri",
+    "ClearSunny": "Anga Safi na Jua",
+    "PartlyCloudySpells": "Mawingu Kiasi",
+    "MostlyOvercast": "Mawingu Mengi",
+    "MorningFogMist": "Ukungu wa Asubuhi",
+    "LightDrizzleSpells": "Manyunyu Mepesi",
+    "RainShowers": "Mvua za Rasharasha",
+    "HeavyRainBurst": "Mvua Kubwa ya Ghafla",
+    "ThunderstormAlert": "Tahadhari ya Radi",
+    "PartlyCloudy": "Mawingu Kiasi",
+    "ScatteredDownpours": "Mvua Kubwa Sehemu Fulani",
+    "PartlySunnySpells": "Jua Kiasi",
+    "SunnyMildClouds": "Jua na Mawingu Mepesi",
+    "LightRain": "Mvua Nyepesi",
+    "ClearMild": "Anga Safi na Hali Tulivu",
+    "PartlySunnyCoolSpells": "Jua Kiasi na Baridi Kidogo",
+    "PartlySunnyMist": "Jua Kiasi na Ukungu",
+    "SunnyIntervalsClouds": "Vipindi vya Jua na Mawingu",
+    "MildBreezes": "Upepo Mwanana",
+    "ClearSky": "Anga Safi"
+  },
+  "chat": {
+    "greeting": "Karibu! Mimi ni Climate AI ya KYCH. Niulize kuhusu ruzuku, ushirika, programu au Youth Climate Innovation Challenge.",
+    "thinking": "AI inafikiri...",
+    "online": "Mtandaoni • Imeunganishwa na OpenAI",
+    "close": "Funga gumzo",
+    "retrieving": "Inatafuta taarifa za KYCH na kuandaa jibu...",
+    "typing": "KYCH AI inaandika...",
+    "placeholder": "Uliza kuhusu ruzuku, YCIC au hali ya hewa...",
+    "send": "Tuma ujumbe",
+    "prompts": {
+      "funding": {
+        "label": "Pata ufadhili",
+        "query": "Kuna ufadhili au ruzuku gani zinazopatikana?"
+      },
+      "ycic": {
+        "label": "Shindano la YCIC",
+        "query": "Nieleze kuhusu Youth Climate Innovation Challenge"
+      },
+      "join": {
+        "label": "Jiunge na KYCH",
+        "query": "Ninawezaje kujisajili na kujiunga na KYCH?"
+      },
+      "weather": {
+        "label": "Hali ya hewa ya kaunti",
+        "query": "Ninawezaje kuangalia hali ya hewa ya kaunti yangu?"
+      }
+    },
+    "canned": {
+      "funding": "Ubao wetu wa Fursa una ruzuku, ushirika na mafunzo kazini yanayosasishwa moja kwa moja, pamoja na vikumbusho vya tarehe za mwisho. Nenda kwenye [ukurasa wa Fursa](/opportunities) kuchuja kwa aina na tarehe ya kufunga.",
+      "programs": "Youth Climate Innovation Challenge (YCIC 2025) imekamilika (maombi yalifungwa Juni 2025). Programu ilitoa ruzuku za kuanzia za KES 500K kwa WASH, ustahimilivu wa mafuriko na teknolojia safi. Tazama matokeo yake kwenye [Ukurasa wa YCIC](/programs/ycic) au tembelea [Ubao wa Fursa](/opportunities) kwa ruzuku zilizo wazi sasa.",
+      "join": "Kijana yeyote wa miaka 15 hadi 35 nchini Kenya anaweza kujiunga na KYCH. Anza kwa kujisajili kwenye yoma.world, kisha tazama [Ubao wa Fursa](/opportunities).",
+      "library": "Maktaba ina ripoti za utafiti, vifaa vya mafunzo na muhtasari wa sera. Vinjari rasilimali bila malipo kwenye [ukurasa wa Maktaba](/e-library).",
+      "weather": "Kitovu chetu cha Hali ya Hewa kinatoa taarifa za setilaiti na ushauri kwa kaunti zote 47 za Kenya. Tembelea [ukurasa wa Hali ya Hewa](/weather).",
+      "default": "Karibu! Asante kwa kuwasiliana nasi. Tupate moja kwa moja kupitia info@kenyayouthclimatehub.org au (+254) 0115963306 kwa msaada zaidi."
+    }
+  },
+  "chatApi": {
+    "fallback": "Karibu! {content}\n\nKwa maelezo zaidi, tembelea [{title}]({url}) au wasiliana nasi moja kwa moja kupitia info@kenyayouthclimatehub.org au (+254) 0115963306.",
+    "noReply": "Asante kwa kuwasiliana nasi! Kwa sasa unaweza kutupata kupitia info@kenyayouthclimatehub.org au (+254) 0115963306."
+  },
+  "calculator": {
+    "toolLabel": "Zana ya KYCH",
+    "title": "Kikokotoo cha Alama ya Kaboni",
+    "subtitle": "Jua athari yako ya CO₂ kwa sekunde 60",
+    "close": "Funga kikokotoo",
+    "steps": {
+      "transport": {
+        "title": "Unasafiri vipi?",
+        "subtitle": "Usafiri wako mkuu wa kila siku nchini Kenya"
+      },
+      "energy": {
+        "title": "Nyumba yako inapata umeme kutoka wapi?",
+        "subtitle": "Chanzo chako kikuu cha nishati"
+      },
+      "food": {
+        "title": "Lishe yako ikoje?",
+        "subtitle": "Tabia zako za kawaida za kula"
+      },
+      "waste": {
+        "title": "Unashughulikiaje taka?",
+        "subtitle": "Tabia zako za kurejeleza na kutupa taka"
+      }
+    },
+    "options": {
+      "walk": "Kutembea / Baiskeli",
+      "matatu": "Matatu / Basi",
+      "boda": "Boda Boda",
+      "car": "Gari Binafsi",
+      "taxi": "Uber / Teksi",
+      "solar": "Sola pekee",
+      "gridSolar": "Umeme wa gridi + sola kidogo",
+      "grid": "Umeme wa gridi pekee",
+      "generator": "Jenereta",
+      "meat": "Nyama kwa wingi",
+      "mixed": "Lishe mchanganyiko",
+      "veg": "Mboga kwa wingi",
+      "vegan": "Mlo wa mimea pekee",
+      "always": "Ninarejeleza kila mara",
+      "sometimes": "Ninarejeleza mara nyingine",
+      "rarely": "Ninarejeleza mara chache",
+      "never": "Sirejelezi kamwe"
+    },
+    "tips": {
+      "transport": "Tumia matatu au baiskeli kwa safari fupi — unaokoa hadi tani 1.0 za CO₂ kwa mwaka",
+      "energy": "Weka paneli ndogo ya sola — unaokoa tani 0.35 za CO₂ kwa mwaka na kupunguza bili ya umeme",
+      "food": "Punguza nyama siku 2 kwa wiki — unaokoa hadi tani 0.5 za CO₂ kwa mwaka",
+      "waste": "Anza kutengeneza mboji kutokana na mabaki ya chakula — kunapunguza sana uzalishaji wa methane"
+    },
+    "score": {
+      "hero": "Shujaa wa Tabianchi",
+      "well": "Unafanya Vizuri",
+      "improve": "Kuna Nafasi ya Kuboresha",
+      "high": "Athari Kubwa"
+    },
+    "you": "Wewe",
+    "back": "Rudi",
+    "next": "Endelea",
+    "calculate": "Kokotoa Alama Yangu",
+    "perYear": "tani za CO₂ kwa mwaka",
+    "compare": "Ulinganisho wako",
+    "kenyaAvg": "Wastani wa Kenya (tani {value})",
+    "africaAvg": "Wastani wa Afrika (tani {value})",
+    "worldAvg": "Wastani wa Dunia (tani {value})",
+    "breakdown": "Mgawanyo wako",
+    "cat": {
+      "transport": "Usafiri",
+      "energy": "Nishati",
+      "food": "Chakula",
+      "waste": "Taka"
+    },
+    "topActions": "Hatua zako 3 kuu",
+    "recalculate": "Kokotoa Upya",
+    "share": "Shiriki Matokeo Yangu",
+    "shareText": "Nimekokotoa alama yangu ya kaboni na KYCH! 🌍\nAlama yangu: tani {total} za CO₂ kwa mwaka\nWastani wa Kenya: tani {kenya} | Wastani wa dunia: tani {world}\nKokotoa yako kwenye kych.org/e-library",
+    "shareTitle": "Alama Yangu ya Kaboni — KYCH",
+    "copied": "Imenakiliwa!"
+  },
+  "quiz": {
+    "toolLabel": "Zana ya KYCH",
+    "title": "Jaribio la Utayari wa Tabianchi",
+    "subtitle": "Pima maarifa yako ya tabianchi — pata beji yako",
+    "close": "Funga jaribio",
+    "progress": "Swali {n} kati ya {total}",
+    "correctCount": "{count} sahihi",
+    "introTitle": "Uko tayari kiasi gani kwa tabianchi?",
+    "introBody": "Maswali 8 kuhusu sera za tabianchi za Kenya, nishati jadidifu, masoko ya kaboni na hatua za tabianchi duniani. Inachukua takriban dakika 3.",
+    "start": "Anza Jaribio",
+    "back": "Rudi",
+    "check": "Hakiki Jibu",
+    "nextQuestion": "Swali Linalofuata",
+    "seeResults": "Ona Matokeo Yangu",
+    "correct": "Sahihi!",
+    "wrong": "Si sahihi!",
+    "yourAnswers": "Majibu yako",
+    "recommended": "Tunakupendekezea",
+    "retake": "Rudia Jaribio",
+    "share": "Shiriki Beji Yangu",
+    "shareText": "Nimepata {score}/{total} kwenye Jaribio la Utayari wa Tabianchi la KYCH! 🌍\nNimepata beji ya \"{badge}\" {emoji}\nPima maarifa yako ya tabianchi kwenye kych.org/e-library",
+    "shareTitle": "Matokeo Yangu ya Jaribio la Tabianchi — KYCH",
+    "copied": "Imenakiliwa!",
+    "questions": [
+      {
+        "category": "Nishati ya Kenya",
+        "question": "Ni asilimia ngapi ya umeme wa Kenya inatoka kwenye vyanzo jadidifu?",
+        "options": [
+          "25%",
+          "50%",
+          "75%",
+          "92%"
+        ],
+        "explanation": "Kenya ni kinara wa nishati jadidifu! Takriban 92% ya umeme wake unatoka kwa jotoardhi, maji, upepo na jua — mojawapo ya viwango vya juu zaidi barani Afrika."
+      },
+      {
+        "category": "Fedha za Tabianchi",
+        "question": "Kifupisho 'GCF' kinamaanisha nini katika fedha za tabianchi?",
+        "options": [
+          "Global Carbon Fund",
+          "Green Climate Fund (Mfuko wa Kijani wa Tabianchi)",
+          "Government Climate Finance",
+          "Global Conservation Fund"
+        ],
+        "explanation": "Green Climate Fund (GCF) ndio mfuko mkubwa zaidi duniani unaojihusisha na tabianchi pekee, ukisaidia nchi zinazoendelea kama Kenya kukabiliana na mabadiliko ya tabianchi."
+      },
+      {
+        "category": "Nishati ya Kenya",
+        "question": "Ni chanzo gani cha nishati jadidifu kinachozalisha umeme MWINGI ZAIDI nchini Kenya?",
+        "options": [
+          "Jua",
+          "Upepo",
+          "Jotoardhi",
+          "Maji"
+        ],
+        "explanation": "Nishati ya jotoardhi kutoka Bonde Kuu la Ufa inazalisha takriban 47% ya umeme wa Kenya. Kenya ni mzalishaji wa 8 kwa ukubwa wa jotoardhi duniani!"
+      },
+      {
+        "category": "Sera za Kenya",
+        "question": "Lengo la NDC la Kenya la kupunguza uzalishaji wa gesi joto ifikapo 2030 ni lipi?",
+        "options": [
+          "15%",
+          "32%",
+          "45%",
+          "60%"
+        ],
+        "explanation": "Mchango wa Kitaifa wa Kenya (NDC) unaahidi kupunguza uzalishaji wa gesi joto kwa 32% ifikapo 2030, kwa sharti la kupata msaada wa kimataifa."
+      },
+      {
+        "category": "Athari za Tabianchi",
+        "question": "Ni kaunti gani ya Kenya iliyo HATARINI ZAIDI kwa ukame na msongo wa tabianchi?",
+        "options": [
+          "Nairobi",
+          "Mombasa",
+          "Turkana",
+          "Kisumu"
+        ],
+        "explanation": "Kaunti ya Turkana kaskazini mwa Kenya ni mojawapo ya maeneo yaliyo hatarini zaidi kwa tabianchi barani Afrika, ikikabiliwa na ukame mkali, uhaba wa chakula na uhaba wa maji."
+      },
+      {
+        "category": "Sera za Kimataifa",
+        "question": "Kifupisho 'UNFCCC' kinamaanisha nini?",
+        "options": [
+          "Mkataba wa Mfumo wa UN kuhusu Mabadiliko ya Tabianchi",
+          "Mfuko wa UN wa Kudhibiti Mabadiliko ya Tabianchi",
+          "Kamati ya Fedha ya UN kuhusu Mabadiliko ya Tabianchi",
+          "Jukwaa la UN la Kudhibiti Mikopo ya Kaboni"
+        ],
+        "explanation": "UNFCCC (Mkataba wa Mfumo wa Umoja wa Mataifa kuhusu Mabadiliko ya Tabianchi) ni mkataba wa kimataifa unaoongoza hatua za tabianchi duniani, ukiwemo Mkataba wa Paris."
+      },
+      {
+        "category": "Masoko ya Kaboni",
+        "question": "'Mkopo wa kaboni' (carbon credit) ni nini?",
+        "options": [
+          "Mkopo wa miradi ya kijani",
+          "Kibali cha kutoa tani 1 ya CO₂",
+          "Ruzuku ya serikali ya tabianchi",
+          "Cheti cha nishati jadidifu"
+        ],
+        "explanation": "Mkopo wa kaboni unawakilisha haki ya kutoa tani 1 ya CO₂. Kampuni zinaweza kununua mikopo ili kufidia uzalishaji wao au kuipata kwa kupunguza uzalishaji."
+      },
+      {
+        "category": "Hatua za Vijana",
+        "question": "Lengo la Mkataba wa Paris katika kudhibiti ongezeko la joto duniani ni lipi?",
+        "options": [
+          "1°C juu ya viwango vya kabla ya viwanda",
+          "1.5°C juu ya viwango vya kabla ya viwanda",
+          "2.5°C juu ya viwango vya kabla ya viwanda",
+          "3°C juu ya viwango vya kabla ya viwanda"
+        ],
+        "explanation": "Mkataba wa Paris unalenga kudhibiti ongezeko la joto duniani lisizidi 1.5°C juu ya viwango vya kabla ya viwanda. Kila sehemu ndogo ya nyuzi joto ni muhimu kwa jamii kama zile za Kenya!"
+      }
+    ],
+    "badges": [
+      {
+        "title": "Mche wa Tabianchi",
+        "desc": "Ndio unaanza — na hilo ni jambo zuri! Kila mtaalamu aliwahi kuwa mwanafunzi."
+      },
+      {
+        "title": "Mleta Mabadiliko",
+        "desc": "Una maarifa mazuri ya tabianchi. Endelea kujifunza na uchukue hatua katika jamii yako!"
+      },
+      {
+        "title": "Bingwa wa Tabianchi",
+        "desc": "Hongera! Unajua ukweli wa tabianchi. Uko tayari kuongoza hatua za tabianchi."
+      },
+      {
+        "title": "Mtaalamu wa Tabianchi",
+        "desc": "Bora kabisa! Wewe ni kiongozi wa maarifa ya tabianchi. Shiriki ujuzi wako na wengine!"
+      }
+    ]
+  }
+}

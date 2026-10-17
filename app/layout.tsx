@@ -3,6 +3,8 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -103,12 +105,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getLocale();
+
   return (
     <html
-      lang="en"
+      lang={locale}
       className={`${montserrat.variable} h-full antialiased`}
       suppressHydrationWarning
     >
@@ -121,9 +125,11 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <Providers>
-            {children}
-          </Providers>
+          <NextIntlClientProvider>
+            <Providers>
+              {children}
+            </Providers>
+          </NextIntlClientProvider>
         </ThemeProvider>
       </body>
     </html>

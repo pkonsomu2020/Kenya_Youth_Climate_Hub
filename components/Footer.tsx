@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { NK } from "@/lib/nkTheme";
 
 const socials = [
@@ -37,18 +38,19 @@ const socials = [
   },
 ];
 
+// Labels are nav.* message keys.
 const quickLinks = [
-  { label: "About", href: "/about" },
-  { label: "Programs", href: "/programs" },
-  { label: "Opportunities", href: "/opportunities" },
-  { label: "Events", href: "/events" },
-  { label: "Success Stories", href: "/success-stories" },
+  { key: "about", href: "/about" },
+  { key: "programs", href: "/programs" },
+  { key: "opportunities", href: "/opportunities" },
+  { key: "events", href: "/events" },
+  { key: "successStories", href: "/success-stories" },
 ];
 
-const platformLinks: { label: string; href: string; external?: boolean }[] = [
-  { label: "E-Library", href: "/e-library" },
-  { label: "News", href: "/news" },
-  { label: "Powered by Afosi", href: "https://afosi.org", external: true },
+const platformLinks: { key: string; href: string; external?: boolean }[] = [
+  { key: "eLibrary", href: "/e-library" },
+  { key: "news", href: "/news" },
+  { key: "poweredByAfosi", href: "https://afosi.org", external: true },
 ];
 
 const colH: React.CSSProperties = {
@@ -60,6 +62,8 @@ const colLink: React.CSSProperties = {
 };
 
 export function Footer() {
+  const t = useTranslations("footer");
+  const tn = useTranslations("nav");
   return (
     <footer style={{ background: NK.navyDeep, color: "#fff", position: "relative", overflow: "hidden" }}>
       {/* Decorative glow */}
@@ -84,7 +88,7 @@ export function Footer() {
           <div>
             <img src="/kych_logo.png" alt="Kenya Youth Climate Hub" style={{ height: 96, width: "auto", marginBottom: "1.25rem" }} />
             <p style={{ color: NK.mutedOnDark, fontFamily: "var(--fb)", fontSize: 13, lineHeight: 1.7, marginBottom: "1.5rem", maxWidth: 320 }}>
-              Empowering youth, one climate solution at a time. Kenya's national digital platform for the youth climate movement.
+              {t("blurb")}
             </p>
             <div style={{ display: "flex", gap: ".5rem" }}>
               {socials.map((s) => (
@@ -95,11 +99,11 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 style={colH}>Quick Links</h4>
+            <h4 style={colH}>{t("quickLinks")}</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: ".9rem" }}>
               {quickLinks.map((l) => (
-                <li key={l.label}>
-                  <FooterLink href={l.href} label={l.label} />
+                <li key={l.key}>
+                  <FooterLink href={l.href} label={tn(l.key)} />
                 </li>
               ))}
             </ul>
@@ -107,18 +111,18 @@ export function Footer() {
 
           {/* Platform */}
           <div>
-            <h4 style={colH}>Platform</h4>
+            <h4 style={colH}>{t("platform")}</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: ".9rem" }}>
               {platformLinks.map((l) => (
-                <li key={l.label}>
+                <li key={l.key}>
                   {l.external ? (
                     <a href={l.href} target="_blank" rel="noopener noreferrer" style={colLink}
                       onMouseEnter={(e) => (e.currentTarget.style.color = NK.green)}
                       onMouseLeave={(e) => (e.currentTarget.style.color = NK.linkMuted)}>
-                      {l.label}
+                      {t(l.key)}
                     </a>
                   ) : (
-                    <FooterLink href={l.href} label={l.label} />
+                    <FooterLink href={l.href} label={tn(l.key)} />
                   )}
                 </li>
               ))}
@@ -127,7 +131,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 style={colH}>Contact Us</h4>
+            <h4 style={colH}>{t("contactUs")}</h4>
             <div style={{ color: NK.linkMuted, fontFamily: "var(--fb)", fontSize: 13, lineHeight: 1.7, marginBottom: "1.25rem" }}>
               Manga House, Kiambere RD<br />Upper Hill, Nairobi, Kenya
             </div>
@@ -151,10 +155,10 @@ export function Footer() {
           display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap",
         }}>
           <p style={{ color: NK.faint, fontFamily: "var(--fb)", fontSize: 11, letterSpacing: "0.05em", margin: 0 }}>
-            © 2026 Kenya Youth Climate Hub. All rights reserved.
+            {t("copyright", { year: 2026 })}
           </p>
           <p style={{ color: "#fff", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", margin: 0 }}>
-            Youth-led climate action.
+            {t("tagline")}
           </p>
         </div>
       </div>
@@ -192,6 +196,7 @@ function FooterLink({ href, label }: { href: string; label: string }) {
 }
 
 function GetStartedButton() {
+  const t = useTranslations("footer");
   const [hov, setHov] = useState(false);
   return (
     <Link
@@ -207,7 +212,7 @@ function GetStartedButton() {
         textDecoration: "none", transition: "background .2s",
       }}
     >
-      Get started →
+      {t("getStarted")} →
     </Link>
   );
 }

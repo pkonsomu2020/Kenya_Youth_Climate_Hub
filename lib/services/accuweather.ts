@@ -123,7 +123,7 @@ const COUNTY_COORDINATES: Record<string, { lat: number; lon: number }> = {
 };
 
 // Generate realistic dynamic fallback telemetry with rolling dates starting from TODAY (new Date())
-function generateDynamicFallback(county: CountyWeather): AccuWeatherData {
+function generateDynamicFallback(county: CountyWeather, dateLocale: string): AccuWeatherData {
   const isHighRisk = county.riskLevel === "HIGH FLOOD RISK";
 
   const temps = county.tempRange.match(/\d+/g) || ["16", "25"];
@@ -138,8 +138,8 @@ function generateDynamicFallback(county: CountyWeather): AccuWeatherData {
     const d = new Date();
     d.setDate(today.getDate() + i);
 
-    const dayName = d.toLocaleDateString("en-US", { weekday: "short" });
-    const dateStr = d.toLocaleDateString("en-US", { day: "numeric", month: "short" });
+    const dayName = d.toLocaleDateString(dateLocale, { weekday: "short" });
+    const dateStr = d.toLocaleDateString(dateLocale, { day: "numeric", month: "short" });
 
     const isRainyDay = isHighRisk && (i === 1 || i === 4);
     const dayCondition = isRainyDay
@@ -194,14 +194,16 @@ function generateDynamicFallback(county: CountyWeather): AccuWeatherData {
         issued: "Active Now"
       }
     ] : [],
-    lastUpdated: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+    lastUpdated: new Date().toLocaleTimeString(dateLocale, { hour: "2-digit", minute: "2-digit" }),
   };
 }
 
 /**
  * Fetch Live Weather Telemetry (Open-Meteo Satellite Engine)
  */
-export async function getAccuWeatherTelemetry(locationName = "Nairobi City"): Promise<AccuWeatherData> {
+// dateLocale only affects how day names, dates and times are formatted (e.g. "sw-KE").
+// Condition strings stay English; the weather page translates them for display.
+export async function getAccuWeatherTelemetry(locationName = "Nairobi City", dateLocale = "en-US"): Promise<AccuWeatherData> {
   const searchNormalized = locationName.toLowerCase().replace(/county/g, "").trim();
 
   // 1. Look up county metadata from 47 dataset
@@ -226,8 +228,8 @@ export async function getAccuWeatherTelemetry(locationName = "Nairobi City"): Pr
       // Map dynamic 7 days from live daily API response
       const dailyForecasts: DailyForecast[] = (data.daily.time || []).slice(0, 7).map((tStr: string, idx: number) => {
         const dObj = new Date(tStr);
-        const dayName = dObj.toLocaleDateString("en-US", { weekday: "short" });
-        const dateStr = dObj.toLocaleDateString("en-US", { day: "numeric", month: "short" });
+        const dayName = dObj.toLocaleDateString(dateLocale, { weekday: "short" });
+        const dateStr = dObj.toLocaleDateString(dateLocale, { day: "numeric", month: "short" });
         const wCode = data.daily.weather_code[idx] || 1;
         const wInfo = parseWmoCode(wCode);
 
@@ -293,7 +295,7 @@ export async function getAccuWeatherTelemetry(locationName = "Nairobi City"): Pr
             issued: "Active Now"
           }
         ] : [],
-        lastUpdated: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+        lastUpdated: new Date().toLocaleTimeString(dateLocale, { hour: "2-digit", minute: "2-digit" }),
       };
     }
   } catch (err) {
@@ -301,7 +303,7 @@ export async function getAccuWeatherTelemetry(locationName = "Nairobi City"): Pr
   }
 
   // Fallback to dynamic rolling dataset
-  return generateDynamicFallback(countyObj);
+  return generateDynamicFallback(countyObj, dateLocale);
 }
 
 

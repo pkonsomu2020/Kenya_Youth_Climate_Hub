@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { localizeRow, translateRows } from '@/lib/i18n/contentTranslation';
 
 function getSupabase() {
   return createClient(
@@ -24,6 +25,7 @@ export async function GET(request) {
     const type   = searchParams.get('type')   || 'All';
     const format = searchParams.get('format') || 'All';
     const offset = parseInt(searchParams.get('offset')) || 0;
+    const lang   = searchParams.get('lang') || 'en';
 
     const sb = getSupabase();
     let query = sb
@@ -51,7 +53,7 @@ export async function GET(request) {
       for (let i = 0; i < 7 && k < kenya.length; i++) mixed.push(kenya[k++]);
       for (let i = 0; i < 3 && g < global.length; i++) mixed.push(global[g++]);
     }
-    const items = mixed.slice(offset, offset + limit);
+    const items = mixed.slice(offset, offset + limit).map((row) => localizeRow(row, lang));
 
     return NextResponse.json({ success: true, data: items, meta: { count: items.length, limit, offset } });
   } catch (err) {
@@ -68,9 +70,11 @@ export async function POST(request) {
     if (!title) return NextResponse.json({ success: false, error: 'Title is required' }, { status: 400 });
 
     const sb = getSupabase();
+    const [translations] = await translateRows('events_live', [{ title, description, location }]);
     const { data, error } = await sb
       .from('events_live')
       .insert([{
+        translations,
         title: title.slice(0, 500),
         description: (description || '').slice(0, 600),
         url: url || '',

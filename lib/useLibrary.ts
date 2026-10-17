@@ -2,6 +2,7 @@
 // useLibrary hook — fetches live climate tools from backend API
 // ============================================================
 import { useState, useEffect, useCallback } from "react";
+import { useLocale } from "next-intl";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -45,6 +46,7 @@ export function useLibrary({
   is_free = "All",
   sort = "trending",
 }: UseLibraryOptions = {}) {
+  const locale = useLocale(); // content comes back translated when available
   const [tools, setTools] = useState<LibraryTool[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,6 +59,7 @@ export function useLibrary({
 
     const params = new URLSearchParams({ limit: String(limit), sort });
     params.set("_t", Date.now().toString());
+    params.set("lang", locale);
     if (category !== "All") params.set("category", category);
     if (topic !== "All") params.set("topic", topic);
     if (difficulty !== "All") params.set("difficulty", difficulty);
@@ -83,7 +86,7 @@ export function useLibrary({
       });
 
     return () => { cancelled = true; };
-  }, [limit, category, topic, difficulty, is_free, sort, tick]);
+  }, [limit, category, topic, difficulty, is_free, sort, tick, locale]);
 
   const refetch = useCallback(() => setTick((t) => t + 1), []);
   return { tools, loading, error, refetch };

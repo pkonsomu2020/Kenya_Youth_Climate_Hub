@@ -1,0 +1,151 @@
+import type { Overrides } from "../localize";
+import type { OfficialEvent } from "../officialEvents";
+
+// region / format / month / sdgs stay English (used for filtering) and are
+// translated for display through the taxonomy messages.
+export const officialEventsI18n: Overrides<OfficialEvent> = {
+  sw: {
+    "evt-01": {
+      title: "Mkutano wa Mashauriano wa Kikanda wa UNEP",
+      dateDisplay: "16 – 18 Sept 2026",
+      description: "Mashauriano ya kikanda yanayokutanisha Makundi Makuu ya UNEP, wadau na wawakilishi wa vijana kote Afrika ili kuandaa michango muhimu kuhusu utawala wa mazingira, kukabiliana na tabianchi na bayoanuwai kabla ya mikutano ya kimataifa.",
+      location: "Addis Ababa, Ethiopia",
+      eventType: "Mkutano wa Mashauriano",
+    },
+    "evt-02": {
+      title: "Siku ya Usafi Duniani 2026",
+      dateDisplay: "20 Sept 2026",
+      description: "Vuguvugu kubwa la kiraia duniani linalounganisha mamilioni ya wajitolea katika zaidi ya nchi 190, wakiwemo makundi ya vijana katika kaunti 47 za Kenya, kwa kampeni kubwa za usimamizi wa taka na urejeshaji wa mazingira.",
+      location: "Kote Nchini na Duniani",
+      eventType: "Siku ya Hatua Duniani",
+    },
+    "evt-03": {
+      title: "Mkutano wa Ngazi ya Juu wa Pre-COP 31",
+      dateDisplay: "5 – 8 Okt 2026",
+      description: "Mkutano wa maandalizi wa mawaziri na wadau unaoweka ajenda ya kimkakati, nyaraka za msimamo wa vijana na vipaumbele muhimu vya majadiliano kabla ya Kongamano rasmi la Umoja wa Mataifa la Mabadiliko ya Tabianchi (COP31).",
+      location: "Kimataifa / Kikanda",
+      eventType: "Mkutano wa Ngazi ya Juu",
+    },
+    "evt-04": {
+      title: "Siku ya Mazingira (Siku ya Kitaifa ya Tabianchi Kenya)",
+      dateDisplay: "10 Okt 2026",
+      description: "Sikukuu rasmi ya kitaifa ya Kenya iliyotengwa kwa uhifadhi wa mazingira, upandaji miti, kampeni za uhamasishaji kuhusu tabianchi na urejeshaji wa mazingira unaoongozwa na vijana katika kaunti zote 47.",
+      location: "Kenya (Kaunti Zote 47)",
+      eventType: "Sikukuu ya Kitaifa",
+    },
+    "evt-05": {
+      title: "Programu ya Wajumbe Vijana wa UN kuhusu Tabianchi – COP31",
+      dateDisplay: "12 Okt 2026",
+      description: "Warsha maalum ya kujenga uwezo wa vijana na maelekezo kwa wajumbe, inayowawezesha wajadili vijana wa tabianchi kutoka Kenya na nchi zinazoendelea kushiriki kikamilifu katika vikao vya COP vya kiserikali.",
+      location: "Mtandaoni",
+      eventType: "Mwito kwa Wajumbe Vijana",
+    },
+    "evt-06": {
+      title: "Siku ya Kimataifa ya Kupunguza Hatari za Majanga",
+      dateDisplay: "13 Okt 2026",
+      description: "Siku ya uhamasishaji duniani inayoangazia mbinu za vijana za kukabiliana na tabianchi, mifumo ya tahadhari ya mapema ya mafuriko na ukame, na ujenzi wa ustahimilivu katika jamii zilizo mstari wa mbele wa tabianchi kote Kenya.",
+      location: "Duniani / Kenya",
+      eventType: "Maadhimisho ya Kimataifa",
+    },
+    "evt-07": {
+      title: "CBD COP17 – Kongamano la UN kuhusu Bayoanuwai",
+      dateDisplay: "19 – 30 Okt 2026",
+      description: "Mkutano wa 17 wa Nchi Wanachama wa Mkataba wa Umoja wa Mataifa kuhusu Bayoanuwai (CBD) unaoshughulikia mifumo ya bayoanuwai duniani, urejeshaji wa mifumo ikolojia, haki za jamii asilia na suluhisho zinazotegemea asili.",
+      location: "Armenia",
+      eventType: "Mkutano wa UN",
+    },
+    "evt-08": {
+      title: "Siku ya Kimataifa ya Hatua za Tabianchi",
+      dateDisplay: "24 Okt 2026",
+      description: "Siku ya kimataifa ya uanaharakati wa tabianchi wa mashinani, maandamano ya vijana, majadiliano ya sera na maonyesho ya nishati jadidifu, inayohamasisha mabingwa vijana wa tabianchi kote Afrika Mashariki.",
+      location: "Duniani na Kenya",
+      eventType: "Siku ya Hatua Duniani",
+    },
+    "evt-09": {
+      title: "Kongamano la MOP38 la Itifaki ya Montreal",
+      dateDisplay: "2 – 6 Nov 2026",
+      description: "Mkutano wa 38 wa Nchi Wanachama wa Itifaki ya Montreal unaolenga kulinda tabaka la ozoni, kupunguza matumizi ya hydrofluorocarbons (HFCs) na kuendeleza teknolojia endelevu za kupoza katika nchi zinazoendelea.",
+      location: "Kimataifa",
+      eventType: "Kongamano la Sera",
+    },
+    "evt-10": {
+      title: "COP31 – Kongamano la UN la Mabadiliko ya Tabianchi",
+      dateDisplay: "9 – 20 Nov 2026",
+      description: "Kongamano kuu la tabianchi duniani linalokutanisha viongozi wa dunia, wajumbe vijana, wanasayansi na asasi za kiraia ili kuendeleza malengo ya fedha za tabianchi duniani, mifumo ya hasara na uharibifu, na NDCs chini ya Mkataba wa Paris.",
+      location: "Türkiye",
+      eventType: "Mkutano wa UN wa Dunia",
+    },
+  },
+  fr: {
+    "evt-01": {
+      title: "Réunion consultative régionale du PNUE",
+      dateDisplay: "16 – 18 sept. 2026",
+      description: "Consultation régionale réunissant les grands groupes du PNUE, les parties prenantes et des représentants des jeunes de toute l'Afrique pour préparer des contributions clés sur la gouvernance environnementale, l'adaptation au climat et la biodiversité en amont des forums mondiaux.",
+      location: "Addis-Abeba, Éthiopie",
+      eventType: "Réunion consultative",
+    },
+    "evt-02": {
+      title: "Journée mondiale du nettoyage 2026",
+      dateDisplay: "20 sept. 2026",
+      description: "Un grand mouvement citoyen mondial qui rassemble des millions de bénévoles dans plus de 190 pays, dont des groupes de jeunes des 47 comtés du Kenya, pour de vastes opérations de gestion des déchets et de restauration de l'environnement.",
+      location: "National et mondial",
+      eventType: "Journée d'action mondiale",
+    },
+    "evt-03": {
+      title: "Sommet de haut niveau pré-COP 31",
+      dateDisplay: "5 – 8 oct. 2026",
+      description: "Réunion préparatoire ministérielle et multipartite qui fixe l'agenda stratégique, les notes de position des jeunes et les priorités de négociation avant la Conférence des Nations unies sur les changements climatiques (COP31).",
+      location: "International / Régional",
+      eventType: "Sommet de haut niveau",
+    },
+    "evt-04": {
+      title: "Journée Mazingira (Journée nationale du climat au Kenya)",
+      dateDisplay: "10 oct. 2026",
+      description: "Jour férié national officiel du Kenya consacré à la protection de l'environnement, à la plantation d'arbres, aux campagnes de sensibilisation au climat et à la restauration écologique menée par les jeunes dans les 47 comtés.",
+      location: "Kenya (les 47 comtés)",
+      eventType: "Jour férié national",
+    },
+    "evt-05": {
+      title: "Programme des jeunes délégués climat de l'ONU – COP31",
+      dateDisplay: "12 oct. 2026",
+      description: "Atelier de renforcement des capacités et d'orientation des délégations, qui permet aux jeunes négociateurs climat du Kenya et des pays en développement de participer pleinement aux travaux intergouvernementaux de la COP.",
+      location: "En ligne",
+      eventType: "Appel aux jeunes délégués",
+    },
+    "evt-06": {
+      title: "Journée internationale de la réduction des risques de catastrophe",
+      dateDisplay: "13 oct. 2026",
+      description: "Journée mondiale de sensibilisation qui met en avant les techniques d'adaptation menées par les jeunes, les systèmes d'alerte précoce aux inondations et sécheresses et le renforcement de la résilience des communautés en première ligne au Kenya.",
+      location: "Monde / Kenya",
+      eventType: "Journée internationale",
+    },
+    "evt-07": {
+      title: "CBD COP17 – Conférence des Nations unies sur la biodiversité",
+      dateDisplay: "19 – 30 oct. 2026",
+      description: "La 17e Conférence des Parties à la Convention des Nations unies sur la diversité biologique (CDB), consacrée aux cadres mondiaux pour la biodiversité, à la restauration des écosystèmes, aux droits des peuples autochtones et aux solutions fondées sur la nature.",
+      location: "Arménie",
+      eventType: "Sommet de l'ONU",
+    },
+    "evt-08": {
+      title: "Journée internationale d'action pour le climat",
+      dateDisplay: "24 oct. 2026",
+      description: "Une journée mondiale de militantisme climatique de terrain, de rassemblements de jeunes, de dialogues politiques et d'expositions sur les énergies renouvelables, qui mobilise les jeunes champions du climat dans toute l'Afrique de l'Est.",
+      location: "Monde et Kenya",
+      eventType: "Journée d'action mondiale",
+    },
+    "evt-09": {
+      title: "Conférence MOP38 du Protocole de Montréal",
+      dateDisplay: "2 – 6 nov. 2026",
+      description: "38e Réunion des Parties au Protocole de Montréal, consacrée à la protection de la couche d'ozone, à la réduction des hydrofluorocarbures (HFC) et au développement de technologies de refroidissement durables dans les pays en développement.",
+      location: "International",
+      eventType: "Conférence politique",
+    },
+    "evt-10": {
+      title: "COP31 – Conférence des Nations unies sur les changements climatiques",
+      dateDisplay: "9 – 20 nov. 2026",
+      description: "La principale conférence mondiale sur le climat, qui réunit dirigeants, délégations de jeunes, scientifiques et société civile pour faire avancer les objectifs de financement climatique, les mécanismes de pertes et dommages et les CDN au titre de l'Accord de Paris.",
+      location: "Türkiye",
+      eventType: "Sommet mondial de l'ONU",
+    },
+  },
+};

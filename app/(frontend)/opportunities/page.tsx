@@ -6,6 +6,8 @@ import { Clock, Search, ArrowRight } from "lucide-react";
 import { NK, nkShadow, nkCard, nkBadgeForKey } from "@/lib/nkTheme";
 import { GrowHeading } from "@/components/GrowHeading";
 import { CTABand } from "@/components/CTABand";
+import { useTranslations } from "next-intl";
+import { useTaxonomy } from "@/i18n/useTaxonomy";
 
 const TYPES = ["All", "Grant", "Fellowship", "Internship", "Competition", "Job", "Accelerator"];
 const TOPICS = ["All", "Energy", "Water", "Agriculture", "Policy", "Finance", "Innovation", "Resilience", "Advocacy", "Waste"];
@@ -33,9 +35,6 @@ function getDaysUntil(s: string | null): number | null {
   const t = new Date(); t.setHours(0, 0, 0, 0);
   return Math.ceil((d.getTime() - t.getTime()) / 86400000);
 }
-function ctaLabel(type: string): string {
-  return type === "Grant" ? "Apply now →" : "View details →";
-}
 
 function FilterPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
@@ -58,13 +57,15 @@ function OppCard({ o, index }: { o: any; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
   const [hov, setHov] = useState(false);
+  const t = useTranslations("opportunitiesPage");
+  const tax = useTaxonomy();
   const badge = nkBadgeForKey(o.type || "Opportunity");
   const days = getDaysUntil(o.deadline);
 
   let deadlineText: string;
-  if (!o.deadline || o.deadline === "Open" || o.deadline === "Rolling") deadlineText = "Open / Rolling";
-  else if (days !== null && days >= 0 && days <= 7) deadlineText = days === 0 ? "Closes TODAY" : `Closes in ${days}d`;
-  else deadlineText = `Closes: ${o.deadline}`;
+  if (!o.deadline || o.deadline === "Open" || o.deadline === "Rolling") deadlineText = t("rolling");
+  else if (days !== null && days >= 0 && days <= 7) deadlineText = days === 0 ? t("closesToday") : t("closesIn", { days });
+  else deadlineText = t("closesOn", { date: o.deadline });
 
   return (
     <a
@@ -81,7 +82,7 @@ function OppCard({ o, index }: { o: any; index: number }) {
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: ".75rem", marginBottom: "1.1rem" }}>
         <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 9px", background: badge.bg, color: badge.fg }}>
-          {o.type}
+          {tax(o.type)}
         </span>
         {o.amount && (
           <span style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: 12.5, color: NK.greenAlt }}>{o.amount}</span>
@@ -92,7 +93,7 @@ function OppCard({ o, index }: { o: any; index: number }) {
       <p style={{ fontSize: ".88rem", color: NK.muted, lineHeight: 1.6, flex: 1, marginBottom: "1.1rem" }}>{o.desc}</p>
       <div style={{ fontFamily: "var(--fm)", fontSize: 11.5, color: NK.mutedLabel, marginBottom: "1rem" }}>{deadlineText}</div>
       <span style={{ alignSelf: "flex-start", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 14, color: NK.ink, borderBottom: `2px solid ${NK.green}`, paddingBottom: 2 }}>
-        {ctaLabel(o.type)}
+        {o.type === "Grant" ? t("apply") : t("details")} →
       </span>
     </a>
   );
@@ -110,6 +111,8 @@ function SkeletonCard() {
 }
 
 export default function Opportunities() {
+  const t = useTranslations("opportunitiesPage");
+  const tax = useTaxonomy();
   const [type, setType] = useState("All");
   const [topic, setTopic] = useState("All");
   const [search, setSearch] = useState("");
@@ -126,13 +129,13 @@ export default function Opportunities() {
       <section style={{ background: NK.bg }}>
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
           <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>
-            Funding &amp; Opportunities
+            {t("eyebrow")}
           </span>
           <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.6vw,86px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.02, margin: 0 }}>
-            Find your <span style={{ color: NK.green }}>next opportunity.</span>
+            {t.rich("title", { g: (c) => <span style={{ color: NK.green }}>{c}</span> })}
           </GrowHeading>
           <p style={{ fontFamily: "var(--fb)", fontSize: "1.25rem", color: NK.muted, lineHeight: 1.7, marginTop: "1.5rem", maxWidth: 660 }}>
-            A live board of grants, fellowships, competitions and internships, with deadline alerts, matched to your climate ambitions.
+            {t("intro")}
           </p>
         </div>
       </section>
@@ -140,15 +143,16 @@ export default function Opportunities() {
       <section style={{ background: NK.bg }}>
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "1.5rem 2.5rem 5.5rem" }}>
           <div style={{ marginBottom: ".85rem", display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
-            {TYPES.map((t) => <FilterPill key={t} label={t} active={type === t} onClick={() => setType(t)} />)}
+            {TYPES.map((v) => <FilterPill key={v} label={tax(v)} active={type === v} onClick={() => setType(v)} />)}
           </div>
           <div style={{ marginBottom: "1rem", display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
-            {TOPICS.map((t) => <FilterPill key={t} label={t} active={topic === t} onClick={() => setTopic(t)} />)}
+            {TOPICS.map((v) => <FilterPill key={v} label={tax(v)} active={topic === v} onClick={() => setTopic(v)} />)}
           </div>
           <div style={{ position: "relative", maxWidth: 320, marginBottom: "2rem" }}>
             <Search size={14} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: NK.mutedLabel }} />
             <input
-              value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search opportunities…"
+              value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t("search")}
+              aria-label={t("search")}
               style={{ width: "100%", padding: "10px 12px 10px 34px", border: `2px solid ${NK.ink}`, fontFamily: "var(--fb)", fontSize: 13.5, outline: "none", background: NK.white, color: NK.ink }}
             />
           </div>
@@ -168,21 +172,21 @@ export default function Opportunities() {
           {!loading && !error && filtered.length === 0 && (
             <div style={{ textAlign: "center", padding: "5rem 2rem", border: `2px solid ${NK.ink}` }}>
               <Clock size={40} color={NK.green} style={{ margin: "0 auto 1rem", display: "block" }} />
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.ink, marginBottom: ".5rem" }}>No opportunities yet</div>
-              <p style={{ color: NK.muted, marginBottom: "1.5rem" }}>Our AI is fetching climate opportunities. Check back soon.</p>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.ink, marginBottom: ".5rem" }}>{t("emptyTitle")}</div>
+              <p style={{ color: NK.muted, marginBottom: "1.5rem" }}>{t("emptyBody")}</p>
               <button onClick={refetch} style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", padding: "12px 24px", background: NK.green, color: NK.navyDeep, fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, border: "none", cursor: "pointer" }}>
-                Refresh Now <ArrowRight size={14} />
+                {t("refresh")} <ArrowRight size={14} />
               </button>
             </div>
           )}
 
           {error && (
-            <div style={{ textAlign: "center", padding: "3rem 2rem", color: NK.muted, fontFamily: "var(--fb)" }}>{error}</div>
+            <div style={{ textAlign: "center", padding: "3rem 2rem", color: NK.muted, fontFamily: "var(--fb)" }}>{t("loadError")}</div>
           )}
         </div>
       </section>
 
-      <CTABand title="Never miss a deadline." buttonLabel="Subscribe for alerts →" href="mailto:info@kenyayouthclimatehub.org" external />
+      <CTABand title={t("ctaTitle")} buttonLabel={`${t("ctaButton")} →`} href="mailto:info@kenyayouthclimatehub.org" external />
     </>
   );
 }

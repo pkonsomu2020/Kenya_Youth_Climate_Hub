@@ -12,6 +12,12 @@ import {
 import { NK, nkShadow, nkCard } from "@/lib/nkTheme";
 import { GrowHeading } from "@/components/GrowHeading";
 import { CTABand } from "@/components/CTABand";
+import { useLocale, useTranslations } from "next-intl";
+import { useTaxonomy } from "@/i18n/useTaxonomy";
+import { intlLocale, type Locale } from "@/i18n/config";
+import { localizeItems } from "@/lib/data/localize";
+import { elNinoStepsI18n } from "@/lib/data/translations/elNinoPreparedness";
+import { countyAdvisoriesI18n } from "@/lib/data/translations/countyAdvisories";
 
 const ALL_47_KENYA_COUNTIES = KENYA_COUNTIES_WEATHER.map((c) => c.name);
 
@@ -25,6 +31,17 @@ const STEP_CATEGORIES = [
 ] as const;
 
 export default function WeatherPage() {
+  const t = useTranslations("weatherPage");
+  const tax = useTaxonomy();
+  const term = useTaxonomy("weatherTerms");
+  const locale = useLocale() as Locale;
+  const steps = useMemo(() => localizeItems(EL_NINO_23_STEPS, elNinoStepsI18n, locale, (s) => String(s.stepNumber)), [locale]);
+  // CAP alerts carry the county's English advisory; swap in the translated one when we have it.
+  const advisoryFor = (alertId: string, fallback: string) => {
+    if (locale === "en") return fallback;
+    const countyId = `c-${alertId.replace(/^al-/, "")}`;
+    return countyAdvisoriesI18n[locale]?.[countyId] ?? fallback;
+  };
   const [selectedLocation, setSelectedLocation] = useState("Nairobi City");
   const [weatherData, setWeatherData] = useState<AccuWeatherData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -45,7 +62,7 @@ export default function WeatherPage() {
     let active = true;
     setLoading(true);
 
-    getAccuWeatherTelemetry(selectedLocation).then((data) => {
+    getAccuWeatherTelemetry(selectedLocation, intlLocale[locale]).then((data) => {
       if (active) {
         setWeatherData(data);
         setLoading(false);
@@ -53,12 +70,12 @@ export default function WeatherPage() {
     });
 
     return () => { active = false; };
-  }, [selectedLocation]);
+  }, [selectedLocation, locale]);
 
   // Auto-Detect User Location using Geolocation API
   const handleAutoDetectLocation = () => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
+      alert(t("geoUnsupported"));
       return;
     }
 
@@ -94,11 +111,11 @@ export default function WeatherPage() {
 
   // Filtered Preparedness Steps
   const filteredSteps = useMemo(() => {
-    return EL_NINO_23_STEPS.filter((step) => {
+    return steps.filter((step) => {
       if (activeCategory !== "All 23 Steps" && step.category !== activeCategory) return false;
       return true;
     });
-  }, [activeCategory]);
+  }, [activeCategory, steps]);
 
   // 7-Day Weather Focus Selected Day Index
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
@@ -120,11 +137,11 @@ export default function WeatherPage() {
                   {weatherData?.cityName || selectedLocation}
                 </h1>
                 <span style={{ fontFamily: "var(--fm)", fontSize: 11, background: "rgba(255,255,255,0.15)", color: NK.green, padding: "2px 8px" }}>
-                  {weatherData?.countyName || "Kenya"}
+                  {weatherData ? t("countyName", { name: weatherData.cityName }) : "Kenya"}
                 </span>
               </div>
               <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedOnDark, marginTop: 3 }}>
-                Powered by AccuWeather Telemetry · Updated {weatherData?.lastUpdated || "Live"}
+                {t("poweredUpdated", { time: weatherData?.lastUpdated || t("live") })}
               </div>
             </div>
           </div>
@@ -141,11 +158,12 @@ export default function WeatherPage() {
               }}
             >
               <Navigation size={14} className={locating ? "animate-spin" : ""} />
-              {locating ? "Detecting Location..." : "Auto-Detect My Location"}
+              {locating ? t("detecting") : t("autoDetect")}
             </button>
 
             {/* All 47 Kenya Counties Select Dropdown */}
             <select
+              aria-label={t("countySelect")}
               value={selectedLocation}
               onChange={(e) => setSelectedLocation(e.target.value)}
               style={{
@@ -178,13 +196,13 @@ export default function WeatherPage() {
               </div>
               <div>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(1.1rem, 2vw, 1.35rem)", color: NK.ink, marginBottom: 4 }}>
-                  {weatherData?.weatherText}
+                  {term(weatherData?.weatherText)}
                 </div>
                 <div style={{ fontFamily: "var(--fm)", fontSize: 13, color: NK.greenAlt, fontWeight: 700 }}>
                   RealFeel® {weatherData?.realFeelTemp || "24°C"}
                 </div>
                 <div style={{ fontFamily: "var(--fm)", fontSize: 11.5, color: NK.mutedLabel, marginTop: 4 }}>
-                  High {weatherData?.highTemp} · Low {weatherData?.lowTemp}
+                  {t("highLow", { high: weatherData?.highTemp ?? "", low: weatherData?.lowTemp ?? "" })}
                 </div>
               </div>
             </div>
@@ -192,20 +210,20 @@ export default function WeatherPage() {
             {/* Right Telemetry Grid */}
             <div className="grid grid-cols-2 gap-3 p-4" style={{ background: NK.bg, border: `1.5px solid ${NK.ink}` }}>
               <div>
-                <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.08em" }}>Humidity</div>
+                <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.08em" }}>{t("humidity")}</div>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.ink, marginTop: 2 }}>{weatherData?.humidity}</div>
               </div>
               <div>
-                <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.08em" }}>Wind Speed</div>
+                <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.08em" }}>{t("windSpeed")}</div>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.ink, marginTop: 2 }}>{weatherData?.windSpeed}</div>
               </div>
               <div>
-                <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.08em" }}>Max UV Index</div>
-                <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.ink, marginTop: 2 }}>{weatherData?.uvIndex}</div>
+                <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.08em" }}>{t("uv")}</div>
+                <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.ink, marginTop: 2 }}>{weatherData?.uvIndex.replace("(High)", `(${term("High")})`)}</div>
               </div>
               <div>
-                <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.08em" }}>Air Quality</div>
-                <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.greenAlt, marginTop: 2 }}>{weatherData?.airQuality}</div>
+                <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.08em" }}>{t("airQuality")}</div>
+                <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.greenAlt, marginTop: 2 }}>{weatherData?.airQuality.replace("Good", term("Good"))}</div>
               </div>
             </div>
 
@@ -221,10 +239,10 @@ export default function WeatherPage() {
           <div className="flex items-center justify-between gap-2 mb-4">
             <div className="flex items-center gap-2 flex-wrap">
               <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: "0.12em", color: NK.navyDeep }}>
-                {new Date().toLocaleDateString("en-US", { weekday: "short", day: "numeric", month: "long", year: "numeric" }).toUpperCase()}
+                {new Date().toLocaleDateString(intlLocale[locale], { weekday: "short", day: "numeric", month: "long", year: "numeric" }).toUpperCase()}
               </span>
               <span className="hidden sm:inline" style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedLabel }}>
-                · Time-of-Day Forecast Breakdown
+                · {t("timeOfDay")}
               </span>
             </div>
 
@@ -232,7 +250,7 @@ export default function WeatherPage() {
               <button
                 disabled={periodIndex === 0}
                 onClick={() => setPeriodIndex((p) => Math.max(0, p - 1))}
-                aria-label="Previous period"
+                aria-label={t("prevPeriod")}
                 style={{ width: 34, height: 34, background: NK.navyDeep, border: "none", color: "#fff", cursor: periodIndex === 0 ? "not-allowed" : "pointer", opacity: periodIndex === 0 ? 0.4 : 1, display: "flex", alignItems: "center", justifyContent: "center" }}
               >
                 <ChevronLeft size={18} />
@@ -240,7 +258,7 @@ export default function WeatherPage() {
               <button
                 disabled={periodIndex >= (weatherData?.periods.length || 4) - 2}
                 onClick={() => setPeriodIndex((p) => Math.min((weatherData?.periods.length || 4) - 2, p + 1))}
-                aria-label="Next period"
+                aria-label={t("nextPeriod")}
                 style={{ width: 34, height: 34, background: NK.navyDeep, border: "none", color: "#fff", cursor: periodIndex >= (weatherData?.periods.length || 4) - 2 ? "not-allowed" : "pointer", opacity: periodIndex >= (weatherData?.periods.length || 4) - 2 ? 0.4 : 1, display: "flex", alignItems: "center", justifyContent: "center" }}
               >
                 <ChevronRight size={18} />
@@ -255,20 +273,20 @@ export default function WeatherPage() {
                 
                 {/* Period Title Bar */}
                 <div style={{ background: NK.navyDeep, color: "#fff", padding: ".4rem .75rem", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, textAlign: "center", marginBottom: "1rem" }}>
-                  {p.periodName}
+                  {term(p.periodName)}
                 </div>
 
                 {/* Weather Condition & Icon */}
                 <div style={{ textAlign: "center", marginBottom: "1rem" }}>
                   <div style={{ fontSize: 36, marginBottom: 4 }}>{p.icon}</div>
                   <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.25rem", color: NK.ink }}>{p.temp}</div>
-                  <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedLabel }}>{p.condition}</div>
+                  <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedLabel }}>{term(p.condition)}</div>
                 </div>
 
                 {/* Metrics */}
                 <div style={{ background: NK.white, border: "1px solid rgba(16,28,51,0.12)", padding: ".6rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px", textAlign: "center", fontFamily: "var(--fm)", fontSize: 11 }}>
-                  <div>💧 Rain: <strong>{p.precipProb}</strong></div>
-                  <div>💨 Wind: <strong>{p.windSpeed}</strong></div>
+                  <div>💧 {t("rain")} <strong>{p.precipProb}</strong></div>
+                  <div>💨 {t("wind")} <strong>{p.windSpeed}</strong></div>
                 </div>
 
               </div>
@@ -289,7 +307,7 @@ export default function WeatherPage() {
                 <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
                   <ShieldAlert size={20} color="#dc2626" />
                   <h3 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.25rem", color: NK.ink, margin: 0 }}>
-                    CAP Alerts &amp; Advisories
+                    {t("alertsTitle")}
                   </h3>
                 </div>
                 <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, padding: "2px 8px", background: "#dc2626", color: "#fff", borderRadius: 10 }}>
@@ -300,7 +318,7 @@ export default function WeatherPage() {
               {(weatherData?.capAlerts || []).length === 0 ? (
                 <div style={{ textAlign: "center", padding: "3rem 1rem", color: NK.muted }}>
                   <ShieldAlert size={36} color={NK.mutedLabel} style={{ marginBottom: ".5rem" }} />
-                  <div style={{ fontFamily: "var(--fs)", fontWeight: 600, fontSize: ".95rem" }}>No active severe weather alerts currently</div>
+                  <div style={{ fontFamily: "var(--fs)", fontWeight: 600, fontSize: ".95rem" }}>{t("noAlerts")}</div>
                 </div>
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
@@ -308,15 +326,15 @@ export default function WeatherPage() {
                     <div key={al.id} style={{ background: "#fef2f2", border: "1.5px solid #ef4444", padding: "1rem", borderLeft: "4px solid #dc2626" }}>
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
                         <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10, padding: "2px 6px", background: "#dc2626", color: "#fff", textTransform: "uppercase" }}>
-                          {al.severity} Alert
+                          {t("severityAlert", { severity: term(al.severity) })}
                         </span>
-                        <span style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: "#991b1b" }}>{al.issued}</span>
+                        <span style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: "#991b1b" }}>{term(al.issued)}</span>
                       </div>
                       <h4 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.05rem", color: "#991b1b", margin: "0 0 4px" }}>
-                        {al.headline}
+                        {t("alertHeadline", { county: (weatherData?.cityName ?? "").toUpperCase() })}
                       </h4>
                       <p style={{ fontFamily: "var(--fb)", fontSize: ".88rem", color: "#7f1d1d", lineHeight: 1.5, margin: 0 }}>
-                        {al.description}
+                        {advisoryFor(al.id, al.description)}
                       </p>
                     </div>
                   ))}
@@ -326,9 +344,9 @@ export default function WeatherPage() {
 
             {/* Emergency Hotline Direct Links */}
             <div style={{ marginTop: "2rem", paddingTop: "1rem", borderTop: "1px solid rgba(16,28,51,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <span style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedLabel }}>Emergency Hotline:</span>
+              <span style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedLabel }}>{t("hotline")}</span>
               <a href="tel:1199" style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: 13, color: "#dc2626", textDecoration: "none" }}>
-                📞 Red Cross 1199
+                📞 {t("redCross")}
               </a>
             </div>
           </div>
@@ -340,7 +358,7 @@ export default function WeatherPage() {
                 <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
                   <Compass size={20} color={NK.greenAlt} />
                   <h3 style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.25rem", color: NK.ink, margin: 0 }}>
-                    Our Weather Watch Map
+                    {t("mapTitle")}
                   </h3>
                 </div>
                 <div style={{ display: "flex", gap: ".5rem" }}>
@@ -348,7 +366,7 @@ export default function WeatherPage() {
                     onClick={() => setMapLayer(mapLayer === "forecast" ? "natural" : "forecast")}
                     style={{ padding: "4px 10px", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, background: NK.navyDeep, color: "#fff", border: "none", cursor: "pointer" }}
                   >
-                    {mapLayer === "forecast" ? "🌐 Map View" : "📡 Satellite"}
+                    {mapLayer === "forecast" ? `🌐 ${t("mapView")}` : `📡 ${t("satellite")}`}
                   </button>
                 </div>
               </div>
@@ -415,7 +433,7 @@ export default function WeatherPage() {
                   return (
                     <iframe
                       key={`${selectedLocation}-${mapLayer}`}
-                      title={`Kenya Weather Radar Map - ${selectedLocation}`}
+                      title={t("mapFrame", { place: selectedLocation })}
                       src={mapUrl}
                       style={{ width: "100%", height: "calc(100% + 38px)", border: "none", marginBottom: "-38px" }}
                     />
@@ -424,7 +442,7 @@ export default function WeatherPage() {
 
                 {/* Custom Overlay Badges */}
                 <div style={{ position: "absolute", top: 12, left: 12, background: NK.navyDeep, color: "#fff", padding: "4px 10px", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, display: "flex", alignItems: "center", gap: 6, border: `1px solid ${NK.green}`, pointerEvents: "none", zIndex: 10 }}>
-                  <CloudRain size={13} color={NK.green} /> Telemetry Canvas: {selectedLocation}
+                  <CloudRain size={13} color={NK.green} /> {t("canvas", { place: selectedLocation })}
                 </div>
 
                 <div style={{ position: "absolute", bottom: 10, right: 10, background: "rgba(11,20,36,0.92)", color: "#fff", padding: "4px 8px", fontFamily: "var(--fm)", fontSize: 10, border: "1px solid rgba(255,255,255,0.2)", pointerEvents: "none", zIndex: 10 }}>
@@ -436,10 +454,10 @@ export default function WeatherPage() {
               <div style={{ marginTop: "1.25rem", background: NK.bg, border: `1.5px solid ${NK.ink}`, padding: "1rem" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: ".75rem", flexWrap: "wrap", gap: ".4rem" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: ".4rem", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 12.5, color: NK.ink }}>
-                    <Layers size={15} color={NK.greenAlt} /> Heat Map Signatures &amp; Risk Scale
+                    <Layers size={15} color={NK.greenAlt} /> {t("heatTitle")}
                   </div>
                   <span style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel }}>
-                    KMD Radar Signatures
+                    {t("kmdSignatures")}
                   </span>
                 </div>
 
@@ -448,41 +466,41 @@ export default function WeatherPage() {
                   <div style={{ background: "#fef2f2", border: "1px solid #ef4444", padding: "6px 8px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "var(--fm)", fontWeight: 800, fontSize: 10, color: "#991b1b" }}>
                       <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#dc2626", display: "inline-block" }}></span>
-                      🔴 Extreme (&gt;100mm)
+                      🔴 {t("extreme")}
                     </div>
-                    <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: "#7f1d1d", marginTop: 2 }}>Overflow &amp; Flash Floods</div>
+                    <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: "#7f1d1d", marginTop: 2 }}>{t("extremeDesc")}</div>
                   </div>
 
                   <div style={{ background: "#fff7ed", border: "1px solid #f97316", padding: "6px 8px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "var(--fm)", fontWeight: 800, fontSize: 10, color: "#c2410c" }}>
                       <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ea580c", display: "inline-block" }}></span>
-                      🟧 High (50–100mm)
+                      🟧 {t("high")}
                     </div>
-                    <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: "#9a3412", marginTop: 2 }}>Urban Drain Pooling</div>
+                    <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: "#9a3412", marginTop: 2 }}>{t("highDesc")}</div>
                   </div>
 
                   <div style={{ background: "#fefce8", border: "1px solid #eab308", padding: "6px 8px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "var(--fm)", fontWeight: 800, fontSize: 10, color: "#854d0e" }}>
                       <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#eab308", display: "inline-block" }}></span>
-                      🟨 Moderate (20–50mm)
+                      🟨 {t("moderate")}
                     </div>
-                    <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: "#713f12", marginTop: 2 }}>Thunderstorm Watch</div>
+                    <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: "#713f12", marginTop: 2 }}>{t("moderateDesc")}</div>
                   </div>
 
                   <div style={{ background: "#f0fdf4", border: "1px solid #22c55e", padding: "6px 8px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "var(--fm)", fontWeight: 800, fontSize: 10, color: "#166534" }}>
                       <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#16a34a", display: "inline-block" }}></span>
-                      🟩 Normal (&lt;20mm)
+                      🟩 {t("normal")}
                     </div>
-                    <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: "#14532d", marginTop: 2 }}>Low Vulnerability</div>
+                    <div style={{ fontFamily: "var(--fm)", fontSize: 9.5, color: "#14532d", marginTop: 2 }}>{t("normalDesc")}</div>
                   </div>
                 </div>
 
                 {/* County Live Heat Index Analysis Readout */}
                 <div style={{ marginTop: ".75rem", background: NK.white, padding: "6px 10px", border: "1px solid rgba(16,28,51,0.12)", display: "flex", alignItems: "center", justifyContent: "space-between", fontFamily: "var(--fm)", fontSize: 11, flexWrap: "wrap", gap: 4 }}>
-                  <span>County Analysis ({weatherData?.cityName}):</span>
+                  <span>{t("countyAnalysis", { name: weatherData?.cityName ?? "" })}</span>
                   <span style={{ fontWeight: 800, color: selectedLocation === "Garissa" || selectedLocation === "Tana River" || selectedLocation === "Baringo" ? "#dc2626" : selectedLocation === "Kisumu" ? "#dc2626" : selectedLocation === "Nairobi" ? "#ea580c" : "#166534" }}>
-                    {selectedLocation === "Garissa" || selectedLocation === "Tana River" ? "🔴 EXTREME FLOOD SURGE INDEX" : selectedLocation === "Kisumu" ? "🔴 SEVERE LAKE NYANDO FLOOD RISK" : selectedLocation === "Nairobi" ? "🟧 HIGH URBAN INUNDATION RISK" : "🟩 LOW/MODERATE FLOOD VULNERABILITY"}
+                    {selectedLocation === "Garissa" || selectedLocation === "Tana River" ? `🔴 ${t("riskExtreme")}` : selectedLocation === "Kisumu" ? `🔴 ${t("riskKisumu")}` : selectedLocation === "Nairobi" ? `🟧 ${t("riskUrban")}` : `🟩 ${t("riskLow")}`}
                   </span>
                 </div>
               </div>
@@ -490,9 +508,9 @@ export default function WeatherPage() {
 
             {/* Map Bottom Region Link */}
             <div style={{ marginTop: "1rem", display: "flex", alignItems: "center", justifyContent: "space-between", fontFamily: "var(--fm)", fontSize: 11.5 }}>
-              <span style={{ color: NK.mutedLabel }}>Selected Region: <strong style={{ color: NK.ink }}>{weatherData?.countyName}</strong></span>
+              <span style={{ color: NK.mutedLabel }}>{t.rich("selectedRegion", { name: weatherData ? t("countyName", { name: weatherData.cityName }) : "", b: (c) => <strong style={{ color: NK.ink }}>{c}</strong> })}</span>
               <a href="#preparedness" style={{ color: NK.greenAlt, fontWeight: 700, textDecoration: "none" }}>
-                23-Point El Niño Guide ↓
+                {t("guideLink")} ↓
               </a>
             </div>
 
@@ -508,15 +526,15 @@ export default function WeatherPage() {
           <div style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
             <div>
               <div style={{ display: "inline-flex", alignItems: "center", gap: ".3rem", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, background: NK.navyDeep, color: NK.green, padding: "2px 8px", textTransform: "uppercase", marginBottom: 4 }}>
-                📅 Weekly Climate Focus
+                📅 {t("weeklyFocus")}
               </div>
               <h3 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "clamp(1.2rem, 2.2vw, 1.6rem)", color: NK.ink, margin: 0 }}>
-                7-Day Weather Focus for {selectedLocation} ({weatherData?.dailyForecasts[0]?.dateStr || "Today"} – {weatherData?.dailyForecasts[6]?.dateStr || "Next 7 Days"})
+                {t("sevenDay", { place: selectedLocation, from: weatherData?.dailyForecasts[0]?.dateStr || t("today"), to: weatherData?.dailyForecasts[6]?.dateStr || t("next7") })}
               </h3>
             </div>
 
             <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11.5, color: NK.greenAlt, background: NK.bg, padding: "6px 12px", border: `1px solid ${NK.ink}` }}>
-              Powered by AccuWeather &amp; KMD Telemetry
+              {t("poweredBy")}
             </span>
           </div>
 
@@ -570,13 +588,13 @@ export default function WeatherPage() {
                 
                 <div>
                   <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.1em", color: NK.green }}>
-                    Selected Day Spotlight
+                    {t("spotlight")}
                   </div>
                   <h4 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.4rem", color: "#fff", margin: "4px 0" }}>
                     {activeDay.dayName}, {activeDay.dateStr}
                   </h4>
                   <div style={{ fontFamily: "var(--fm)", fontSize: 12, color: NK.mutedOnDark }}>
-                    Daytime: {activeDay.dayCondition} · Nighttime: {activeDay.nightCondition}
+                    {t("dayNight", { day: term(activeDay.dayCondition), night: term(activeDay.nightCondition) })}
                   </div>
                 </div>
 
@@ -587,21 +605,21 @@ export default function WeatherPage() {
                       {activeDay.highTemp} / {activeDay.lowTemp}
                     </div>
                     <div style={{ fontFamily: "var(--fm)", fontSize: 11, color: NK.mutedOnDark }}>
-                      Precipitation Risk: <strong>{activeDay.precipProb}</strong>
+                      {t("precipRisk")} <strong>{activeDay.precipProb}</strong>
                     </div>
                   </div>
                 </div>
 
                 <div style={{ background: NK.panelNavy, padding: "1rem", border: `1px solid ${NK.borderNavy}` }}>
                   <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.green, fontWeight: 700, textTransform: "uppercase" }}>
-                    💡 Recommended Focus
+                    💡 {t("recommended")}
                   </div>
                   <div style={{ fontFamily: "var(--fb)", fontSize: ".88rem", color: "#fff", marginTop: 4 }}>
                     {parseInt(activeDay.precipProb) >= 70
-                      ? "Heavy downpour risk expected. Clear drainage pathways and avoid travelling during peak afternoon rain."
+                      ? t("adviceHeavy")
                       : parseInt(activeDay.precipProb) >= 40
-                      ? "Moderate rain chance. Keep rain gear handy and inspect roof gutters."
-                      : "Favorable dry conditions expected. Ideal for outdoor repairs and farming preparation."}
+                      ? t("adviceModerate")
+                      : t("adviceDry")}
                   </div>
                 </div>
 
@@ -620,27 +638,27 @@ export default function WeatherPage() {
           <div className="flex flex-col lg:flex-row justify-between lg:items-end gap-6 mb-10">
             <div>
               <div style={{ display: "inline-flex", alignItems: "center", gap: ".4rem", background: NK.green, color: NK.navyDeep, padding: "3px 10px", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, textTransform: "uppercase", marginBottom: ".75rem" }}>
-                Official KMD &amp; Ministry Action Plan
+                {t("planBadge")}
               </div>
               <GrowHeading as="h2" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(26px, 3.8vw, 52px)", color: "#fff", textTransform: "uppercase", letterSpacing: "-0.02em", margin: 0 }}>
-                El Niño Preparedness <span style={{ color: NK.green }}>23-Point Checklist.</span>
+                {t.rich("checklistTitle", { g: (c) => <span style={{ color: NK.green }}>{c}</span> })}
               </GrowHeading>
               <p style={{ fontFamily: "var(--fb)", fontSize: "1rem", color: NK.mutedOnDark, marginTop: ".5rem", maxWidth: 620 }}>
-                Check off items as you prepare your household, school, or business before heavy rains hit.
+                {t("checklistIntro")}
               </p>
             </div>
 
             {/* Interactive Progress Bar Card */}
             <div className="w-full lg:w-auto min-w-[280px]" style={{ background: NK.panelNavy, border: `2px solid ${NK.ink}`, padding: "1.25rem 1.75rem", boxShadow: nkShadow(NK.green, 6) }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: ".5rem" }}>
-                <span style={{ fontFamily: "var(--fm)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: NK.mutedOnDark }}>Preparedness Score</span>
+                <span style={{ fontFamily: "var(--fm)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: NK.mutedOnDark }}>{t("score")}</span>
                 <span style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.2rem", color: NK.green }}>{completionPercentage}%</span>
               </div>
               <div style={{ height: 10, background: "rgba(255,255,255,0.1)", borderRadius: 5, overflow: "hidden", border: `1px solid ${NK.borderNavy}` }}>
                 <div style={{ height: "100%", width: `${completionPercentage}%`, background: NK.green, transition: "width .3s ease" }} />
               </div>
               <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedOnDark, marginTop: ".5rem", textAlign: "right" }}>
-                {completedCount} of 23 Action Steps Completed
+                {t("completed", { done: completedCount, total: 23 })}
               </div>
             </div>
           </div>
@@ -661,7 +679,7 @@ export default function WeatherPage() {
                     whiteSpace: "nowrap"
                   }}
                 >
-                  {cat}
+                  {tax(cat)}
                 </button>
               );
             })}
@@ -709,7 +727,7 @@ export default function WeatherPage() {
                   </div>
 
                   <div style={{ background: NK.navyDeep, padding: ".5rem .75rem", borderLeft: `3px solid ${NK.green}`, fontFamily: "var(--fm)", fontSize: 11, color: NK.green }}>
-                    💡 <strong>Action:</strong> {step.keyAction}
+                    💡 <strong>{t("action")}</strong> {step.keyAction}
                   </div>
                 </div>
               );
@@ -724,13 +742,13 @@ export default function WeatherPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center" style={{ maxWidth: 1320, margin: "0 auto" }}>
           <div>
             <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11.5, letterSpacing: "0.18em", textTransform: "uppercase", color: NK.navyDeep, marginBottom: ".5rem" }}>
-              Official Government Disaster Agencies
+              {t("agenciesEyebrow")}
             </span>
             <h2 style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "clamp(24px, 3.5vw, 44px)", color: NK.navyDeep, textTransform: "uppercase", letterSpacing: "-0.02em", margin: "0 0 1rem", lineHeight: 1.1 }}>
-              Need Emergency Relief or Rescue Services?
+              {t("agenciesTitle")}
             </h2>
             <p style={{ fontFamily: "var(--fb)", fontSize: "1rem", color: NK.navyDeep, lineHeight: 1.65, opacity: 0.9 }}>
-              Disaster management, search &amp; rescue, flood relief, and emergency evacuations are officially coordinated by Kenya Government agencies and auxiliary response units.
+              {t("agenciesBody")}
             </p>
           </div>
 
@@ -738,37 +756,37 @@ export default function WeatherPage() {
             {/* NDOC */}
             <a href="tel:0800721570" style={{ background: NK.navyDeep, color: "#fff", padding: "1.25rem", border: `2px solid ${NK.ink}`, textDecoration: "none", boxShadow: nkShadow(NK.ink) }}>
               <div style={{ fontFamily: "var(--fm)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", color: NK.green, marginBottom: 4 }}>
-                National Disaster Center (NDOC)
+                {t("ndoc")}
               </div>
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.1rem", marginBottom: 2 }}>Toll-Free 0800 721 570</div>
-              <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedOnDark }}>Landline: 020 221 2386</div>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.1rem", marginBottom: 2 }}>{t("tollFree", { number: "0800 721 570" })}</div>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedOnDark }}>{t("landline", { number: "020 221 2386" })}</div>
             </a>
 
             {/* Red Cross */}
             <a href="tel:1199" style={{ background: "#dc2626", color: "#fff", padding: "1.25rem", border: `2px solid ${NK.ink}`, textDecoration: "none", boxShadow: nkShadow(NK.ink) }}>
               <div style={{ fontFamily: "var(--fm)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", color: "#fff", opacity: 0.9, marginBottom: 4 }}>
-                Kenya Red Cross Ambulance
+                {t("redCrossAmb")}
               </div>
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.2rem", marginBottom: 2 }}>Toll-Free 1199</div>
-              <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: "#fee2e2" }}>24/7 Rescue &amp; Medical</div>
+              <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.2rem", marginBottom: 2 }}>{t("tollFree", { number: "1199" })}</div>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: "#fee2e2" }}>{t("rescue247")}</div>
             </a>
 
             {/* NDMU */}
             <a href="tel:0203871851" style={{ background: NK.navyDeep, color: "#fff", padding: "1.25rem", border: `2px solid ${NK.ink}`, textDecoration: "none", boxShadow: nkShadow(NK.ink) }}>
               <div style={{ fontFamily: "var(--fm)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", color: NK.green, marginBottom: 4 }}>
-                Disaster Management Unit (NDMU)
+                {t("ndmu")}
               </div>
               <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.05rem", marginBottom: 2 }}>020 387 1851</div>
-              <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedOnDark }}>Mobile: 0722 519 288</div>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedOnDark }}>{t("mobile", { number: "0722 519 288" })}</div>
             </a>
 
             {/* KMD */}
             <a href="tel:0203867880" style={{ background: NK.navyDeep, color: "#fff", padding: "1.25rem", border: `2px solid ${NK.ink}`, textDecoration: "none", boxShadow: nkShadow(NK.ink) }}>
               <div style={{ fontFamily: "var(--fm)", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", color: NK.green, marginBottom: 4 }}>
-                Kenya Met Department (KMD)
+                {t("kmd")}
               </div>
               <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.05rem", marginBottom: 2 }}>020 386 7880</div>
-              <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedOnDark }}>Weather Advisories</div>
+              <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedOnDark }}>{t("advisories")}</div>
             </a>
           </div>
         </div>

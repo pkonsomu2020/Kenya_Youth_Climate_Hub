@@ -4,53 +4,58 @@
 // ============================================================
 import { useState } from "react";
 import { X, Car, Zap, Leaf, Trash2, Share2, RotateCcw, ChevronRight, ChevronLeft, CheckCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // ── Kenya-specific emission factors (kg CO₂/year) ────────────
+// Keyed by option id; labels live in messages under calculator.options.*
 const TRANSPORT_EMISSIONS: Record<string, number> = {
-  "🚶 Walk / Cycle":    0,
-  "🚌 Matatu / Bus":    180,
-  "🏍️ Boda Boda":       220,
-  "🚗 Private Car":     1200,
-  "🚕 Uber / Taxi":     600,
+  walk:    0,
+  matatu:  180,
+  boda:    220,
+  car:     1200,
+  taxi:    600,
 };
 
 const ENERGY_EMISSIONS: Record<string, number> = {
-  "☀️ Solar only":          50,
-  "⚡ Grid + some solar":   200,
-  "🔌 Grid only":           400,
-  "🛢️ Generator":           800,
+  solar:      50,
+  gridSolar:  200,
+  grid:       400,
+  generator:  800,
 };
 
 const FOOD_EMISSIONS: Record<string, number> = {
-  "🥩 Mostly meat":    1200,
-  "🍽️ Mixed diet":     700,
-  "🥦 Mostly veg":     400,
-  "🌱 Vegan":          200,
+  meat:   1200,
+  mixed:  700,
+  veg:    400,
+  vegan:  200,
 };
 
 const WASTE_EMISSIONS: Record<string, number> = {
-  "♻️ Always recycle":     50,
-  "🗑️ Sometimes recycle":  150,
-  "❌ Rarely recycle":     300,
-  "🚮 Never recycle":      500,
+  always:     50,
+  sometimes:  150,
+  rarely:     300,
+  never:      500,
+};
+
+const OPTION_EMOJI: Record<string, string> = {
+  walk: "🚶", matatu: "🚌", boda: "🏍️", car: "🚗", taxi: "🚕",
+  solar: "☀️", gridSolar: "⚡", grid: "🔌", generator: "🛢️",
+  meat: "🥩", mixed: "🍽️", veg: "🥦", vegan: "🌱",
+  always: "♻️", sometimes: "🗑️", rarely: "❌", never: "🚮",
 };
 
 const KENYA_AVG  = 0.4;
 const AFRICA_AVG = 1.0;
 const WORLD_AVG  = 4.7;
 
-// ── Tips based on highest emission category ──────────────────
+// ── Tips based on highest emission category (returns calculator.tips.* keys) ──
 function getTips(transport: number, energy: number, food: number, waste: number) {
-  const tips: string[] = [];
-  const sorted = [
-    { label: "transport", val: transport, tip: "Switch to matatu or cycle for short trips — saves up to 1.0t CO₂/year" },
-    { label: "energy",    val: energy,    tip: "Install a small solar panel — saves 0.35t CO₂/year and cuts electricity bills" },
-    { label: "food",      val: food,      tip: "Reduce meat 2 days/week — saves up to 0.5t CO₂/year" },
-    { label: "waste",     val: waste,     tip: "Start composting food waste — reduces methane emissions significantly" },
-  ].sort((a, b) => b.val - a.val);
-
-  sorted.slice(0, 3).forEach((s) => tips.push(s.tip));
-  return tips;
+  return [
+    { label: "transport", val: transport },
+    { label: "energy",    val: energy },
+    { label: "food",      val: food },
+    { label: "waste",     val: waste },
+  ].sort((a, b) => b.val - a.val).slice(0, 3).map((s) => s.label);
 }
 
 // ── Step config ───────────────────────────────────────────────
@@ -59,8 +64,6 @@ const STEPS = [
     id: "transport",
     icon: <Car size={28} />,
     color: "#059669",
-    title: "How do you get around?",
-    subtitle: "Your main daily transport in Kenya",
     options: Object.keys(TRANSPORT_EMISSIONS),
     emissions: TRANSPORT_EMISSIONS,
   },
@@ -68,8 +71,6 @@ const STEPS = [
     id: "energy",
     icon: <Zap size={28} />,
     color: "#047857",
-    title: "How do you power your home?",
-    subtitle: "Your primary energy source",
     options: Object.keys(ENERGY_EMISSIONS),
     emissions: ENERGY_EMISSIONS,
   },
@@ -77,8 +78,6 @@ const STEPS = [
     id: "food",
     icon: <Leaf size={28} />,
     color: "#10B981",
-    title: "What's your diet like?",
-    subtitle: "Your typical eating habits",
     options: Object.keys(FOOD_EMISSIONS),
     emissions: FOOD_EMISSIONS,
   },
@@ -86,8 +85,6 @@ const STEPS = [
     id: "waste",
     icon: <Trash2 size={28} />,
     color: "#34D399",
-    title: "How do you handle waste?",
-    subtitle: "Your recycling & waste habits",
     options: Object.keys(WASTE_EMISSIONS),
     emissions: WASTE_EMISSIONS,
   },
@@ -97,12 +94,13 @@ const STEPS = [
 function ComparisonBar({ label, value, max, color, isYou }: {
   label: string; value: number; max: number; color: string; isYou?: boolean;
 }) {
+  const t = useTranslations("calculator");
   const pct = Math.min((value / max) * 100, 100);
   return (
     <div style={{ marginBottom: ".75rem" }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: ".3rem" }}>
         <span style={{ fontSize: ".78rem", fontWeight: isYou ? 700 : 500, color: isYou ? "var(--dark)" : "var(--muted-foreground)", fontFamily: "var(--fs)" }}>
-          {isYou ? "🫵 You" : label}
+          {isYou ? `🫵 ${t("you")}` : label}
         </span>
         <span style={{ fontSize: ".78rem", fontWeight: 700, color: isYou ? color : "var(--muted-foreground)", fontFamily: "var(--fs)" }}>
           {value.toFixed(1)}t
@@ -122,6 +120,7 @@ function ComparisonBar({ label, value, max, color, isYou }: {
 
 // ── Main component ────────────────────────────────────────────
 export function CarbonCalculator({ onClose }: { onClose: () => void }) {
+  const t = useTranslations("calculator");
   const [step, setStep] = useState(0); // 0-3 = questions, 4 = results
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [animating, setAnimating] = useState(false);
@@ -143,10 +142,10 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
 
   // Score label
   const getScoreLabel = () => {
-    if (totalTonnes <= KENYA_AVG)  return { label: "Climate Hero 🏆",    color: "#059669", bg: "#ECFDF5" };
-    if (totalTonnes <= AFRICA_AVG) return { label: "Doing Well 🌿",      color: "#047857", bg: "#D1FAE5" };
-    if (totalTonnes <= WORLD_AVG)  return { label: "Room to Improve 🌱", color: "#d97706", bg: "#FEF9C3" };
-    return                                { label: "High Impact ⚠️",      color: "#dc2626", bg: "#FEF2F2" };
+    if (totalTonnes <= KENYA_AVG)  return { label: `${t("score.hero")} 🏆`,    color: "#059669", bg: "#ECFDF5" };
+    if (totalTonnes <= AFRICA_AVG) return { label: `${t("score.well")} 🌿`,    color: "#047857", bg: "#D1FAE5" };
+    if (totalTonnes <= WORLD_AVG)  return { label: `${t("score.improve")} 🌱`, color: "#d97706", bg: "#FEF9C3" };
+    return                                { label: `${t("score.high")} ⚠️`,    color: "#dc2626", bg: "#FEF2F2" };
   };
 
   const scoreLabel = getScoreLabel();
@@ -175,12 +174,12 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
   };
 
   const handleShare = () => {
-    const text = `I calculated my carbon footprint with KYCH! 🌍\nMy footprint: ${totalTonnes.toFixed(1)}t CO₂/year\nKenya average: ${KENYA_AVG}t | World average: ${WORLD_AVG}t\nCalculate yours at kych.org/e-library`;
+    const text = t("shareText", { total: totalTonnes.toFixed(1), kenya: KENYA_AVG, world: WORLD_AVG });
     if (navigator.share) {
-      navigator.share({ title: "My Carbon Footprint — KYCH", text });
+      navigator.share({ title: t("shareTitle"), text });
     } else {
       navigator.clipboard.writeText(text);
-      alert("Copied to clipboard!");
+      alert(t("copied"));
     }
   };
 
@@ -203,7 +202,7 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
           padding: "1.5rem 1.75rem 1.25rem",
           position: "relative",
         }}>
-          <button onClick={onClose} style={{
+          <button onClick={onClose} aria-label={t("close")} style={{
             position: "absolute", top: "1rem", right: "1rem",
             background: "rgba(255,255,255,.2)", border: "none", borderRadius: "50%",
             width: 32, height: 32, cursor: "pointer", color: "#fff",
@@ -212,13 +211,13 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
             <X size={16} />
           </button>
           <div style={{ fontSize: ".7rem", color: "rgba(255,255,255,.7)", fontFamily: "var(--fm)", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: ".4rem" }}>
-            KYCH Tool
+            {t("toolLabel")}
           </div>
           <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.3rem", color: "#fff" }}>
-            🌍 Carbon Footprint Calculator
+            🌍 {t("title")}
           </div>
           <div style={{ fontSize: ".82rem", color: "rgba(255,255,255,.75)", marginTop: ".25rem" }}>
-            Find out your CO₂ impact in 60 seconds
+            {t("subtitle")}
           </div>
 
           {/* Progress dots */}
@@ -253,10 +252,10 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
                 </div>
                 <div>
                   <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.05rem", color: "var(--dark)" }}>
-                    {currentStep.title}
+                    {t(`steps.${currentStep.id}.title`)}
                   </div>
                   <div style={{ fontSize: ".78rem", color: "var(--muted-foreground)", marginTop: ".15rem" }}>
-                    {currentStep.subtitle}
+                    {t(`steps.${currentStep.id}.subtitle`)}
                   </div>
                 </div>
               </div>
@@ -285,7 +284,7 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
                         justifyContent: "space-between",
                       }}
                     >
-                      <span>{option}</span>
+                      <span>{OPTION_EMOJI[option]} {t(`options.${option}`)}</span>
                       {selected && <CheckCircle size={18} color={currentStep.color} />}
                     </button>
                   );
@@ -295,7 +294,7 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
               <div style={{ display: "flex", gap: ".75rem" }}>
                 {step > 0 && (
                   <button onClick={goBack} className="btn-g" style={{ display: "flex", alignItems: "center", gap: ".3rem" }}>
-                    <ChevronLeft size={16} /> Back
+                    <ChevronLeft size={16} /> {t("back")}
                   </button>
                 )}
                 <button
@@ -308,7 +307,7 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
                     cursor: answers[currentStep.id] ? "pointer" : "not-allowed",
                   }}
                 >
-                  {isLastQuestion ? "Calculate My Footprint 🌍" : "Next"} <ChevronRight size={16} />
+                  {isLastQuestion ? `${t("calculate")} 🌍` : t("next")} <ChevronRight size={16} />
                 </button>
               </div>
             </>
@@ -327,7 +326,7 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
                   {totalTonnes.toFixed(1)}
                 </div>
                 <div style={{ fontSize: ".85rem", color: scoreLabel.color, fontFamily: "var(--fm)", marginTop: ".25rem" }}>
-                  tonnes CO₂ per year
+                  {t("perYear")}
                 </div>
                 <div style={{
                   display: "inline-block", marginTop: ".75rem",
@@ -342,25 +341,25 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
               {/* Comparison bars */}
               <div style={{ marginBottom: "1.5rem" }}>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".9rem", marginBottom: "1rem", color: "var(--dark)" }}>
-                  How you compare
+                  {t("compare")}
                 </div>
-                <ComparisonBar label="You" value={totalTonnes} max={maxBar} color={scoreLabel.color} isYou />
-                <ComparisonBar label={`🇰🇪 Kenya avg (${KENYA_AVG}t)`} value={KENYA_AVG} max={maxBar} color="#059669" />
-                <ComparisonBar label={`🌍 Africa avg (${AFRICA_AVG}t)`} value={AFRICA_AVG} max={maxBar} color="#047857" />
-                <ComparisonBar label={`🌐 World avg (${WORLD_AVG}t)`} value={WORLD_AVG} max={maxBar} color="#dc2626" />
+                <ComparisonBar label={t("you")} value={totalTonnes} max={maxBar} color={scoreLabel.color} isYou />
+                <ComparisonBar label={`🇰🇪 ${t("kenyaAvg", { value: KENYA_AVG })}`} value={KENYA_AVG} max={maxBar} color="#059669" />
+                <ComparisonBar label={`🌍 ${t("africaAvg", { value: AFRICA_AVG })}`} value={AFRICA_AVG} max={maxBar} color="#047857" />
+                <ComparisonBar label={`🌐 ${t("worldAvg", { value: WORLD_AVG })}`} value={WORLD_AVG} max={maxBar} color="#dc2626" />
               </div>
 
               {/* Breakdown */}
               <div style={{ marginBottom: "1.5rem" }}>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".9rem", marginBottom: ".75rem", color: "var(--dark)" }}>
-                  Your breakdown
+                  {t("breakdown")}
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".5rem" }}>
                   {[
-                    { label: "Transport", val: transportKg, icon: "🚗" },
-                    { label: "Energy",    val: energyKg,    icon: "⚡" },
-                    { label: "Food",      val: foodKg,      icon: "🍽️" },
-                    { label: "Waste",     val: wasteKg,     icon: "🗑️" },
+                    { label: t("cat.transport"), val: transportKg, icon: "🚗" },
+                    { label: t("cat.energy"),    val: energyKg,    icon: "⚡" },
+                    { label: t("cat.food"),      val: foodKg,      icon: "🍽️" },
+                    { label: t("cat.waste"),     val: wasteKg,     icon: "🗑️" },
                   ].map(({ label, val, icon }) => (
                     <div key={label} style={{
                       padding: ".75rem", background: "var(--cd)",
@@ -380,7 +379,7 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
               {/* Tips */}
               <div style={{ marginBottom: "1.5rem" }}>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".9rem", marginBottom: ".75rem", color: "var(--dark)" }}>
-                  💡 Your top 3 actions
+                  💡 {t("topActions")}
                 </div>
                 {tips.map((tip, i) => (
                   <div key={i} style={{
@@ -392,7 +391,7 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
                     <span style={{ fontFamily: "var(--fs)", fontWeight: 800, color: "var(--green)", fontSize: ".85rem", flexShrink: 0 }}>
                       {i + 1}.
                     </span>
-                    <span style={{ fontSize: ".82rem", color: "#065F46", lineHeight: 1.5 }}>{tip}</span>
+                    <span style={{ fontSize: ".82rem", color: "#065F46", lineHeight: 1.5 }}>{t(`tips.${tip}`)}</span>
                   </div>
                 ))}
               </div>
@@ -400,10 +399,10 @@ export function CarbonCalculator({ onClose }: { onClose: () => void }) {
               {/* Action buttons */}
               <div style={{ display: "flex", gap: ".75rem" }}>
                 <button onClick={reset} className="btn-g" style={{ display: "flex", alignItems: "center", gap: ".35rem" }}>
-                  <RotateCcw size={14} /> Recalculate
+                  <RotateCcw size={14} /> {t("recalculate")}
                 </button>
                 <button onClick={handleShare} className="btn-green" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: ".35rem" }}>
-                  <Share2 size={14} /> Share My Result
+                  <Share2 size={14} /> {t("share")}
                 </button>
               </div>
             </>

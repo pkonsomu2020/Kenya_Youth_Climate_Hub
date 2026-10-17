@@ -3,6 +3,7 @@
 // Falls back to empty array if backend is unavailable
 // ============================================================
 import { useState, useEffect } from "react";
+import { useLocale } from "next-intl";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -37,6 +38,7 @@ type UseNewsResult = {
 };
 
 export function useNews({ limit = 20, category = "All" }: UseNewsOptions = {}): UseNewsResult {
+  const locale = useLocale(); // content comes back translated when available
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,6 +51,7 @@ export function useNews({ limit = 20, category = "All" }: UseNewsOptions = {}): 
 
     const params = new URLSearchParams({ limit: String(limit) });
     params.set("_t", Date.now().toString());
+    params.set("lang", locale);
     if (category && category !== "All") params.set("category", category);
 
     fetch(`/api/news?${params}`, { cache: 'no-store' })
@@ -72,7 +75,7 @@ export function useNews({ limit = 20, category = "All" }: UseNewsOptions = {}): 
       });
 
     return () => { cancelled = true; };
-  }, [limit, category, tick]);
+  }, [limit, category, tick, locale]);
 
   const refetch = () => setTick((t) => t + 1);
 

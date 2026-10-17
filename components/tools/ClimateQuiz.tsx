@@ -4,99 +4,30 @@
 // ============================================================
 import { useState } from "react";
 import { X, ChevronRight, ChevronLeft, RotateCcw, Share2, BookOpen, CheckCircle, XCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // ── Quiz questions ────────────────────────────────────────────
-const QUESTIONS = [
-  {
-    id: 1,
-    category: "Kenya Energy",
-    emoji: "⚡",
-    question: "What percentage of Kenya's electricity comes from renewable sources?",
-    options: ["25%", "50%", "75%", "92%"],
-    correct: 3,
-    explanation: "Kenya is a renewable energy leader! About 92% of its electricity comes from geothermal, hydro, wind and solar — one of the highest rates in Africa.",
-  },
-  {
-    id: 2,
-    category: "Climate Finance",
-    emoji: "💰",
-    question: "What does 'GCF' stand for in climate finance?",
-    options: ["Global Carbon Fund", "Green Climate Fund", "Government Climate Finance", "Global Conservation Fund"],
-    correct: 1,
-    explanation: "The Green Climate Fund (GCF) is the world's largest dedicated climate fund, helping developing countries like Kenya respond to climate change.",
-  },
-  {
-    id: 3,
-    category: "Kenya Energy",
-    emoji: "🌋",
-    question: "Which renewable energy source generates the MOST electricity in Kenya?",
-    options: ["Solar", "Wind", "Geothermal", "Hydro"],
-    correct: 2,
-    explanation: "Geothermal energy from the Great Rift Valley generates about 47% of Kenya's electricity. Kenya is the 8th largest geothermal producer in the world!",
-  },
-  {
-    id: 4,
-    category: "Kenya Policy",
-    emoji: "📋",
-    question: "What is Kenya's NDC target for reducing greenhouse gas emissions by 2030?",
-    options: ["15%", "32%", "45%", "60%"],
-    correct: 1,
-    explanation: "Kenya's Nationally Determined Contribution (NDC) commits to a 32% reduction in greenhouse gas emissions by 2030, conditional on international support.",
-  },
-  {
-    id: 5,
-    category: "Climate Impact",
-    emoji: "🌡️",
-    question: "Which Kenyan county is MOST vulnerable to drought and climate stress?",
-    options: ["Nairobi", "Mombasa", "Turkana", "Kisumu"],
-    correct: 2,
-    explanation: "Turkana County in northern Kenya is one of the most climate-vulnerable areas in Africa, facing severe droughts, food insecurity, and water scarcity.",
-  },
-  {
-    id: 6,
-    category: "Global Policy",
-    emoji: "🌍",
-    question: "What does 'UNFCCC' stand for?",
-    options: [
-      "UN Framework Convention on Climate Change",
-      "UN Fund for Climate Change Control",
-      "UN Finance Committee on Climate Change",
-      "UN Forum for Carbon Credit Control",
-    ],
-    correct: 0,
-    explanation: "The UNFCCC (UN Framework Convention on Climate Change) is the international treaty that guides global climate action, including the Paris Agreement.",
-  },
-  {
-    id: 7,
-    category: "Carbon Markets",
-    emoji: "🏭",
-    question: "What is a 'carbon credit'?",
-    options: [
-      "A loan for green projects",
-      "A permit to emit 1 tonne of CO₂",
-      "A government climate subsidy",
-      "A renewable energy certificate",
-    ],
-    correct: 1,
-    explanation: "A carbon credit represents the right to emit 1 tonne of CO₂. Companies can buy credits to offset their emissions or earn them by reducing emissions.",
-  },
-  {
-    id: 8,
-    category: "Youth Action",
-    emoji: "🚀",
-    question: "What is the Paris Agreement's goal for limiting global temperature rise?",
-    options: ["1°C above pre-industrial levels", "1.5°C above pre-industrial levels", "2.5°C above pre-industrial levels", "3°C above pre-industrial levels"],
-    correct: 1,
-    explanation: "The Paris Agreement aims to limit global warming to 1.5°C above pre-industrial levels. Every fraction of a degree matters for communities like those in Kenya!",
-  },
+// Question text, options, category and explanation live in messages under quiz.questions[i].
+const QUESTION_META = [
+  { id: 1, emoji: "⚡", correct: 3 },
+  { id: 2, emoji: "💰", correct: 1 },
+  { id: 3, emoji: "🌋", correct: 2 },
+  { id: 4, emoji: "📋", correct: 1 },
+  { id: 5, emoji: "🌡️", correct: 2 },
+  { id: 6, emoji: "🌍", correct: 0 },
+  { id: 7, emoji: "🏭", correct: 1 },
+  { id: 8, emoji: "🚀", correct: 1 },
 ];
 
+type QuestionText = { category: string; question: string; options: string[]; explanation: string };
+
 // ── Badges ────────────────────────────────────────────────────
-const BADGES = [
-  { min: 0, max: 2, emoji: "🌱", title: "Climate Seedling",    color: "#10B981", bg: "#ECFDF5", desc: "You're just getting started — and that's great! Every expert was once a beginner." },
-  { min: 3, max: 4, emoji: "🌿", title: "Climate Changemaker", color: "#059669", bg: "#D1FAE5", desc: "You have solid climate knowledge. Keep learning and take action in your community!" },
-  { min: 5, max: 6, emoji: "🌳", title: "Climate Champion",    color: "#047857", bg: "#A7F3D0", desc: "Impressive! You know your climate facts. You're ready to lead climate action." },
-  { min: 7, max: 8, emoji: "🏆", title: "Climate Expert",      color: "#065F46", bg: "#6EE7B7", desc: "Outstanding! You're a climate knowledge leader. Share your expertise with others!" },
+// Titles / descriptions live in messages under quiz.badges[i].
+const BADGE_META = [
+  { min: 0, max: 2, emoji: "🌱", color: "#10B981", bg: "#ECFDF5" },
+  { min: 3, max: 4, emoji: "🌿", color: "#059669", bg: "#D1FAE5" },
+  { min: 5, max: 6, emoji: "🌳", color: "#047857", bg: "#A7F3D0" },
+  { min: 7, max: 8, emoji: "🏆", color: "#065F46", bg: "#6EE7B7" },
 ];
 
 // ── Resource recommendations based on wrong answers ──────────
@@ -113,6 +44,11 @@ const RESOURCE_MAP: Record<number, string> = {
 
 // ── Main component ────────────────────────────────────────────
 export function ClimateQuiz({ onClose }: { onClose: () => void }) {
+  const t = useTranslations("quiz");
+  const questionText = t.raw("questions") as QuestionText[];
+  const badgeText = t.raw("badges") as { title: string; desc: string }[];
+  const QUESTIONS = QUESTION_META.map((q, i) => ({ ...q, ...questionText[i] }));
+  const BADGES = BADGE_META.map((b, i) => ({ ...b, ...badgeText[i] }));
   const [step, setStep]       = useState<"intro" | "quiz" | "results">("intro");
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
@@ -174,12 +110,12 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
   };
 
   const handleShare = () => {
-    const text = `I scored ${score}/${totalQ} on the KYCH Climate Readiness Quiz! 🌍\nI earned the "${badge.title}" badge ${badge.emoji}\nTest your climate knowledge at kych.org/e-library`;
+    const text = t("shareText", { score, total: totalQ, badge: badge.title, emoji: badge.emoji });
     if (navigator.share) {
-      navigator.share({ title: "My Climate Quiz Result — KYCH", text });
+      navigator.share({ title: t("shareTitle"), text });
     } else {
       navigator.clipboard.writeText(text);
-      alert("Copied to clipboard!");
+      alert(t("copied"));
     }
   };
 
@@ -204,7 +140,7 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
           background: "#0A0A0A", borderRadius: "20px 20px 0 0",
           padding: "1.5rem 1.75rem 1.25rem", position: "relative",
         }}>
-          <button onClick={onClose} style={{
+          <button onClick={onClose} aria-label={t("close")} style={{
             position: "absolute", top: "1rem", right: "1rem",
             background: "rgba(255,255,255,.15)", border: "none", borderRadius: "50%",
             width: 32, height: 32, cursor: "pointer", color: "#fff",
@@ -213,13 +149,13 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
             <X size={16} />
           </button>
           <div style={{ fontSize: ".7rem", color: "rgba(255,255,255,.5)", fontFamily: "var(--fm)", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: ".4rem" }}>
-            KYCH Tool
+            {t("toolLabel")}
           </div>
           <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.3rem", color: "#fff" }}>
-            🧠 Climate Readiness Quiz
+            🧠 {t("title")}
           </div>
           <div style={{ fontSize: ".82rem", color: "rgba(255,255,255,.6)", marginTop: ".25rem" }}>
-            Test your climate knowledge — earn your badge
+            {t("subtitle")}
           </div>
 
           {/* Progress bar */}
@@ -227,10 +163,10 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
             <div style={{ marginTop: "1rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: ".35rem" }}>
                 <span style={{ fontSize: ".68rem", color: "rgba(255,255,255,.5)", fontFamily: "var(--fm)" }}>
-                  Question {current + 1} of {totalQ}
+                  {t("progress", { n: current + 1, total: totalQ })}
                 </span>
                 <span style={{ fontSize: ".68rem", color: "var(--green)", fontFamily: "var(--fm)", fontWeight: 700 }}>
-                  {score} correct
+                  {t("correctCount", { count: score })}
                 </span>
               </div>
               <div style={{ height: 6, background: "rgba(255,255,255,.15)", borderRadius: 99, overflow: "hidden" }}>
@@ -253,10 +189,10 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>🌍</div>
               <div style={{ fontFamily: "var(--fs)", fontWeight: 800, fontSize: "1.3rem", color: "var(--dark)", marginBottom: ".75rem" }}>
-                How climate-ready are you?
+                {t("introTitle")}
               </div>
               <div style={{ fontSize: ".88rem", color: "var(--muted-foreground)", lineHeight: 1.6, marginBottom: "1.5rem" }}>
-                8 questions covering Kenya's climate policy, renewable energy, carbon markets, and global climate action. Takes about 3 minutes.
+                {t("introBody")}
               </div>
 
               {/* Badge preview */}
@@ -273,7 +209,7 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
               </div>
 
               <button onClick={() => setStep("quiz")} className="btn-green" style={{ width: "100%", fontSize: "1rem", padding: ".85rem", display: "flex", alignItems: "center", justifyContent: "center", gap: ".5rem" }}>
-                Start Quiz <ChevronRight size={18} />
+                {t("start")} <ChevronRight size={18} />
               </button>
             </div>
           )}
@@ -350,7 +286,7 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
                   border: `1px solid ${isCorrect ? "#A7F3D0" : "#FDE68A"}`,
                 }}>
                   <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".85rem", color: isCorrect ? "#065F46" : "#92400E", marginBottom: ".35rem" }}>
-                    {isCorrect ? "✅ Correct!" : "❌ Not quite!"}
+                    {isCorrect ? `✅ ${t("correct")}` : `❌ ${t("wrong")}`}
                   </div>
                   <div style={{ fontSize: ".82rem", color: isCorrect ? "#065F46" : "#92400E", lineHeight: 1.55 }}>
                     {question.explanation}
@@ -362,7 +298,7 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
               <div style={{ display: "flex", gap: ".75rem" }}>
                 {current > 0 && !revealed && (
                   <button onClick={handleBack} className="btn-g" style={{ display: "flex", alignItems: "center", gap: ".3rem" }}>
-                    <ChevronLeft size={16} /> Back
+                    <ChevronLeft size={16} /> {t("back")}
                   </button>
                 )}
                 {!revealed ? (
@@ -376,11 +312,11 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
                       cursor: selected !== null ? "pointer" : "not-allowed",
                     }}
                   >
-                    Check Answer
+                    {t("check")}
                   </button>
                 ) : (
                   <button onClick={handleNext} className="btn-green" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: ".4rem" }}>
-                    {current < totalQ - 1 ? "Next Question" : "See My Results"} <ChevronRight size={16} />
+                    {current < totalQ - 1 ? t("nextQuestion") : t("seeResults")} <ChevronRight size={16} />
                   </button>
                 )}
               </div>
@@ -414,7 +350,7 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
               {/* Question review */}
               <div style={{ marginBottom: "1.5rem" }}>
                 <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".9rem", marginBottom: ".75rem", color: "var(--dark)" }}>
-                  Your answers
+                  {t("yourAnswers")}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: ".4rem" }}>
                   {QUESTIONS.map((q, idx) => {
@@ -444,7 +380,7 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
               {recommendedResources.length > 0 && (
                 <div style={{ marginBottom: "1.5rem" }}>
                   <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".9rem", marginBottom: ".75rem", color: "var(--dark)" }}>
-                    📚 Recommended for you
+                    📚 {t("recommended")}
                   </div>
                   {recommendedResources.map((res) => (
                     <div key={res} style={{
@@ -462,10 +398,10 @@ export function ClimateQuiz({ onClose }: { onClose: () => void }) {
               {/* Action buttons */}
               <div style={{ display: "flex", gap: ".75rem" }}>
                 <button onClick={reset} className="btn-g" style={{ display: "flex", alignItems: "center", gap: ".35rem" }}>
-                  <RotateCcw size={14} /> Retake Quiz
+                  <RotateCcw size={14} /> {t("retake")}
                 </button>
                 <button onClick={handleShare} className="btn-green" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: ".35rem" }}>
-                  <Share2 size={14} /> Share My Badge
+                  <Share2 size={14} /> {t("share")}
                 </button>
               </div>
             </>

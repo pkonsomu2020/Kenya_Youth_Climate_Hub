@@ -6,6 +6,9 @@ import { successStories } from "@/lib/data/successStories";
 import { NK, nkShadow, nkCard } from "@/lib/nkTheme";
 import { GrowHeading } from "@/components/GrowHeading";
 import { CTABand } from "@/components/CTABand";
+import { useTranslations } from "next-intl";
+import { useTaxonomy } from "@/i18n/useTaxonomy";
+import { useLocalizedStories } from "@/lib/data/useLocalizedStories";
 
 function useInView(ref: React.RefObject<Element | null>, threshold = 0.12) {
   const [inView, setInView] = useState(false);
@@ -29,9 +32,14 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 
 // Normalize the data file's inconsistent tag casing ("Renewal energy" typo,
 // "Renewable Energy") into one canonical label for filtering/display.
+// Always run on the English tag; the display label comes from the taxonomy messages.
 function normalizeTag(tag: string): string {
   if (/renew/i.test(tag)) return "Renewable Energy";
   return tag;
+}
+
+function categoryOf(id: string): string {
+  return normalizeTag(successStories.find((s) => s.id === id)?.tag ?? "");
 }
 
 const FILTERS = ["All", "Renewable Energy", "WASH"];
@@ -45,7 +53,9 @@ function StoryCard({ story, index }: { story: typeof successStories[0]; index: n
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
   const [hov, setHov] = useState(false);
-  const badge = normalizeTag(story.tag) === "WASH" ? { bg: NK.greenAlt, fg: NK.white } : BADGE_COLORS[index % 2];
+  const t = useTranslations("storiesPage");
+  const tax = useTaxonomy();
+  const badge = categoryOf(story.id) === "WASH" ? { bg: NK.greenAlt, fg: NK.white } : BADGE_COLORS[index % 2];
 
   return (
     <Link
@@ -70,7 +80,7 @@ function StoryCard({ story, index }: { story: typeof successStories[0]; index: n
         alignSelf: "flex-start", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase",
         padding: "5px 9px", background: badge.bg, color: badge.fg, marginBottom: "1rem",
       }}>
-        {normalizeTag(story.tag)}
+        {tax(categoryOf(story.id))}
       </span>
       <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.3rem", color: NK.ink, marginBottom: ".75rem" }}>{story.company}</div>
       <p style={{ fontSize: ".9rem", color: NK.muted, lineHeight: 1.6, flex: 1, marginBottom: "1.25rem" }}>{story.excerpt}</p>
@@ -79,7 +89,7 @@ function StoryCard({ story, index }: { story: typeof successStories[0]; index: n
           {story.name.split(" ").map((n) => n[0]).join("")}
         </div>
         <div>
-          <div style={{ fontFamily: "var(--fm)", fontSize: 9, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.1em" }}>Founder</div>
+          <div style={{ fontFamily: "var(--fm)", fontSize: 9, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.1em" }}>{t("founder")}</div>
           <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".9rem", color: NK.ink }}>{story.name}</div>
         </div>
       </div>
@@ -88,8 +98,11 @@ function StoryCard({ story, index }: { story: typeof successStories[0]; index: n
 }
 
 export default function SuccessStoriesPage() {
+  const t = useTranslations("storiesPage");
+  const tax = useTaxonomy();
+  const stories = useLocalizedStories();
   const [filter, setFilter] = useState("All");
-  const filtered = filter === "All" ? successStories : successStories.filter((s) => normalizeTag(s.tag) === filter);
+  const filtered = filter === "All" ? stories : stories.filter((s) => categoryOf(s.id) === filter);
 
   return (
     <>
@@ -97,13 +110,13 @@ export default function SuccessStoriesPage() {
       <section style={{ background: NK.bg }}>
         <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
           <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>
-            Featured
+            {t("eyebrow")}
           </span>
           <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.6vw,86px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.02, margin: 0 }}>
-            Climate startup <span style={{ color: NK.green }}>stories.</span>
+            {t.rich("title", { g: (c) => <span style={{ color: NK.green }}>{c}</span> })}
           </GrowHeading>
           <p style={{ fontFamily: "var(--fb)", fontSize: "1.25rem", color: NK.muted, lineHeight: 1.7, marginTop: "1.5rem", maxWidth: 660 }}>
-            Founders backed through the Youth Climate Innovation Challenge, turning Kenyan climate challenges into working businesses.
+            {t("intro")}
           </p>
         </div>
       </section>
@@ -127,7 +140,7 @@ export default function SuccessStoriesPage() {
                       cursor: "pointer", transition: "all .2s",
                     }}
                   >
-                    {f}
+                    {tax(f)}
                   </button>
                 );
               })}
@@ -140,13 +153,13 @@ export default function SuccessStoriesPage() {
 
           {filtered.length === 0 && (
             <div style={{ textAlign: "center", padding: "4rem 2rem", color: NK.muted, fontFamily: "var(--fb)" }}>
-              No stories in this category yet.
+              {t("empty")}
             </div>
           )}
         </div>
       </section>
 
-      <CTABand title="Your solution could be next." buttonLabel="Apply to the challenge →" href="/opportunities" />
+      <CTABand title={t("ctaTitle")} buttonLabel={`${t("ctaButton")} →`} href="/opportunities" />
     </>
   );
 }

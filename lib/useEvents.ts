@@ -2,6 +2,7 @@
 // useEvents hook — fetches live climate events from backend API
 // ============================================================
 import { useState, useEffect, useCallback } from "react";
+import { useLocale } from "next-intl";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -29,6 +30,7 @@ type UseEventsOptions = {
 };
 
 export function useEvents({ limit = 30, type = "All", format = "All" }: UseEventsOptions = {}) {
+  const locale = useLocale(); // content comes back translated when available
   const [events, setEvents] = useState<LiveEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +43,7 @@ export function useEvents({ limit = 30, type = "All", format = "All" }: UseEvent
 
     const params = new URLSearchParams({ limit: String(limit) });
     params.set("_t", Date.now().toString());
+    params.set("lang", locale);
     if (type && type !== "All") params.set("type", type);
     if (format && format !== "All") params.set("format", format);
 
@@ -65,7 +68,7 @@ export function useEvents({ limit = 30, type = "All", format = "All" }: UseEvent
       });
 
     return () => { cancelled = true; };
-  }, [limit, type, format, tick]);
+  }, [limit, type, format, tick, locale]);
 
   const refetch = useCallback(() => setTick((t) => t + 1), []);
   return { events, loading, error, refetch };
