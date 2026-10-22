@@ -122,7 +122,7 @@ export function ClimateAIChatbot() {
   }, []);
 
   return (
-    <div style={{ position: "fixed", right: 24, bottom: 24, zIndex: 90 }}>
+    <div style={{ position: "fixed", right: 24, bottom: 24, zIndex: 350 }}>
       {open && (
         <div
           style={{

@@ -12,59 +12,134 @@
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
     "tagline": "L'action climatique menée par les jeunes",
-    "language": "Langue"
+    "language": "Langue",
+    "skip": "Aller au contenu",
+    "home": "Accueil Kenya Youth Climate Hub",
+    "main": "Principal"
   },
   "footer": {
-    "blurb": "Donner du pouvoir aux jeunes, une solution climatique à la fois. La plateforme numérique nationale du mouvement climatique des jeunes au Kenya.",
+    "blurb": "Subventions, compétences, événements et alertes climat pour les jeunes Kényans de 15 à 35 ans. Porté par Afosi depuis 2020.",
     "quickLinks": "Liens rapides",
     "platform": "Plateforme",
     "contactUs": "Nous contacter",
     "poweredByAfosi": "Propulsé par Afosi",
     "copyright": "© {year} Kenya Youth Climate Hub. Tous droits réservés.",
     "tagline": "L'action climatique menée par les jeunes.",
-    "getStarted": "Commencer"
+    "getStarted": "Commencer",
+    "explore": "Explorer",
+    "tools": "Outils",
+    "climateAI": "Climate AI",
+    "contactForm": "Nous écrire",
+    "social": {
+      "facebook": "KYCH sur Facebook",
+      "instagram": "KYCH sur Instagram",
+      "linkedin": "KYCH sur LinkedIn"
+    }
   },
   "home": {
-    "backedBy": "Soutenu par",
-    "showPartner": "Afficher {name}",
-    "founder": "Fondateur·rice",
     "alert": {
-      "badge": "ALERTE EL NIÑO",
-      "body": "Fortes pluies et alertes aux inondations en vigueur dans les comtés de l'Ouest, de la Côte, de la vallée du Rift et du Nord-Est.",
-      "cta": "Voir le radar des comtés et le guide de protection en 23 points"
+      "badge": "EL NIÑO",
+      "body": "Alertes inondations dans l'Ouest, sur la Côte et dans la vallée du Rift",
+      "cta": "Voir votre comté"
     },
     "hero": {
-      "eyebrow": "Donner du pouvoir aux jeunes, une solution climatique à la fois",
-      "title": "Kenya Youth <g>Climate Hub.</g>",
-      "builtFor": "Conçu pour les",
-      "words": [
-        "innovateurs du climat",
-        "acteurs du changement local",
-        "fondateurs verts",
-        "défenseurs des politiques"
-      ],
-      "body": "Rejoignez une communauté de jeunes innovateurs qui relèvent les défis climatiques et construisent un avenir durable pour le Kenya. Financements, compétences, espaces politiques et innovation, dans les 47 comtés.",
+      "eyebrow": "Kenya Youth Climate Hub · 15–35 ans",
+      "title": "Ton comté.<br></br>Ton <hl>climat.</hl><br></br>À <u>toi.</u>",
+      "langNote": "Also in English · Pia kwa Kiswahili",
+      "lead": "Subventions, compétences, événements et <b>une vraie place à la table</b> : tout ce qu'il faut à un jeune Kényan pour passer de l'idée à l'action climatique, dans les 47 comtés.",
       "ctaFunding": "Trouver un financement",
-      "ctaPrograms": "Voir les programmes",
-      "statCounties": "Comtés",
-      "statAge": "Tranche d'âge",
-      "statFounded": "Création",
-      "imgAlt": "Des jeunes en action pour le climat au Kenya",
-      "imgAlt2": "Innovateurs du climat",
-      "countiesConnected": "Comtés connectés",
-      "since": "Mené par les jeunes depuis 2020"
+      "ctaAI": "Demander à Climate AI",
+      "statOpen": "opportunités ouvertes",
+      "statCounties": "comtés",
+      "statYcic": "KES via le YCIC",
+      "imgMain": "Des jeunes lors d'une session climat KYCH",
+      "imgViolet": "Violet Ochieng, fondatrice de Veeklture",
+      "imgPitch": "Les fondateurs lors de la journée de pitch YCIC 2025",
+      "capViolet": "Violet, Kibera",
+      "capPitch": "Pitch YCIC 2025",
+      "nextUp": "Prochain",
+      "event": "Événement",
+      "nextAria": "Prochain événement : {title}, {date}"
     },
-    "about": {
-      "poweredBy": "Propulsé par",
-      "eyebrow": "Qui sommes-nous",
-      "title": "Plus qu'un hub, <g>un mouvement.</g>",
-      "body": "KYCH est la plateforme numérique nationale du mouvement climatique des jeunes au Kenya, qui relie l'ambition au changement systémique. Elle fonctionne sous l'égide d'<b>Afosi, Action for Sustainability Initiative</b>, alliant plus de dix ans de développement fondé sur des données probantes à une conception pensée d'abord pour les jeunes.",
-      "mission": "Mission",
-      "missionText": "Permettre à chaque jeune Kényan de mener l'action climatique.",
-      "vision": "Vision",
-      "visionText": "Un Kenya où les jeunes mènent la riposte.",
-      "quote": "Afosi produit les données. Les jeunes produisent les solutions. Le Hub les relie pour changer d'échelle.",
-      "cta": "Notre histoire et notre équipe"
+    "now": {
+      "live": "EN DIRECT",
+      "label": "En ce moment<br></br>sur KYCH",
+      "closesToday": "Clôture aujourd'hui",
+      "closesTomorrow": "Clôture demain",
+      "closesIn": "Clôture dans {n} jours",
+      "today": "Aujourd'hui",
+      "yesterday": "Hier",
+      "daysAgo": "Il y a {n} jours",
+      "eventToday": "Aujourd'hui",
+      "eventTomorrow": "Demain",
+      "eventIn": "Dans {n} jours",
+      "openNow": "Ouvert",
+      "empty": "De nouvelles opportunités et histoires arrivent. Revenez bientôt."
+    },
+    "picker": {
+      "kicker": "Commence ici",
+      "title": "Tu viens<br></br><s>pour quoi ?</s>",
+      "note": "choisis, on t'y emmène",
+      "funding": {
+        "title": "Être financé·e",
+        "desc": "Subventions, bourses, stages et concours, chacun avec sa date limite.",
+        "go": "voir ce qui est ouvert",
+        "count": "{n} ouvertes"
+      },
+      "learn": {
+        "title": "Apprendre",
+        "desc": "Boîtes à outils, données et rapports, plus le quiz climat et un calculateur carbone en 60 secondes.",
+        "go": "commencer",
+        "count": "{n} outils"
+      },
+      "events": {
+        "title": "Être présent·e",
+        "desc": "Ateliers, sommets et hackathons au Kenya et en ligne.",
+        "go": "voir les dates",
+        "count": "{n} événements"
+      },
+      "safe": {
+        "title": "Rester en sécurité",
+        "desc": "Les prévisions de ton comté, les alertes inondations et la liste El Niño en 23 points.",
+        "go": "voir ton comté",
+        "count": "47 comtés"
+      }
+    },
+    "simba": {
+      "kicker": "Notre mascotte",
+      "title": "Simba wa<br></br><s>Tabianchi.</s>",
+      "body": "Simba est une sculpture de lion faite de bouteilles en plastique, de vieilles canettes et de fil de fer de récupération. C'est aussi le visage de <b>Climate AI</b> : pose-lui tes questions sur les subventions, les événements ou la météo de ton comté, à tout moment.",
+      "factMade": "Bouteilles, canettes et fil",
+      "factLang": "English · Kiswahili · Français",
+      "factTime": "Répond 24h/24",
+      "cta": "Pose ta question à Simba",
+      "hint": "survole ou touche-moi",
+      "plateTop": "DEMANDE",
+      "stageLabel": "Simba, la mascotte de KYCH : une sculpture de lion faite de bouteilles, canettes et fil recyclés. Ouvre Climate AI."
+    },
+    "stories": {
+      "kicker": "Fondateurs YCIC 2025",
+      "title": "Jeunes Kényans,<br></br><s>vraies entreprises.</s>",
+      "cta": "Toutes les histoires"
+    },
+    "quote": {
+      "label": "Citation",
+      "text": "Afosi produit les données. Les jeunes produisent les solutions. <m>Le Hub les relie pour changer d'échelle.</m>",
+      "cite": "Kenya Youth Climate Hub · porté par Afosi"
+    },
+    "events": {
+      "kicker": "À venir",
+      "title": "Note-le<br></br>dans ton <s>agenda.</s>",
+      "cta": "Tout le calendrier",
+      "empty": "Aucun événement daté pour l'instant. Le calendrier complet recense tout ce qui est prévu."
+    },
+    "join": {
+      "title": "Les subventions<br></br>dans ta <s>boîte mail.</s>",
+      "sub": "Un e-mail par semaine : nouvelles opportunités, échéances et histoires.",
+      "label": "Adresse e-mail",
+      "placeholder": "toi@email.com",
+      "submit": "Je m'inscris",
+      "done": "C'est noté. Surveille le prochain e-mail."
     },
     "values": {
       "eyebrow": "Ce qui nous anime",
@@ -94,61 +169,6 @@
         "desc": "Au-delà des symptômes, s'attaquer aux causes profondes"
       }
     },
-    "tools": {
-      "eyebrow": "Outils de la plateforme",
-      "title": "Tout ce qu'il faut pour <g>agir.</g>",
-      "body": "Une seule plateforme qui relie la jeunesse kényane aux financements, aux connaissances, aux programmes et à l'expertise climatique.",
-      "library": {
-        "label": "Bibliothèque et centre de ressources",
-        "desc": "Rapports, boîtes à outils, notes politiques et articles de recherche. Enregistrez-les dans votre tableau de bord.",
-        "cta": "Parcourir la bibliothèque"
-      },
-      "funding": {
-        "label": "Financements et opportunités",
-        "desc": "Un tableau en direct de subventions, bourses et stages, avec alertes d'échéance.",
-        "cta": "Trouver un financement"
-      },
-      "programs": {
-        "label": "Programmes et défis",
-        "desc": "Postulez à des incubateurs comme le Youth Climate Innovation Challenge et à des programmes de mentorat.",
-        "cta": "Voir les programmes"
-      },
-      "events": {
-        "label": "Événements et ateliers",
-        "desc": "Inscrivez-vous aux bootcamps, dialogues politiques et webinaires de KYCH et de ses partenaires.",
-        "cta": "Voir le calendrier"
-      },
-      "weather": {
-        "label": "Veille climatique et météo",
-        "desc": "Radar des inondations en direct pour les 47 comtés, alertes de pluie et guide officiel de préparation à El Niño en 23 points.",
-        "cta": "Voir le radar météo"
-      },
-      "ai": {
-        "label": "Assistant IA climat",
-        "desc": "Un guide IA disponible 24h/24 et 7j/7, formé sur les données climatiques, les opportunités et les ressources du Kenya.",
-        "cta": "Demander à l'IA"
-      }
-    },
-    "calendar": {
-      "eyebrow": "Calendrier officiel 2026",
-      "title": "Prochaines <g>dates clés du climat.</g>",
-      "cta": "Voir tout le calendrier",
-      "e1": {
-        "date": "10 OCT. 2026",
-        "title": "Journée Mazingira",
-        "desc": "Journée nationale de l'environnement du Kenya et reboisement par les jeunes dans tout le pays."
-      },
-      "e2": {
-        "date": "5 – 8 OCT. 2026",
-        "title": "Sommet pré-COP 31",
-        "desc": "Réunion ministérielle et des jeunes sur la stratégie de négociation avant la COP31."
-      },
-      "e3": {
-        "date": "9 – 20 NOV. 2026",
-        "title": "Sommet climat de l'ONU COP31",
-        "desc": "Conférence mondiale des Nations unies sur les changements climatiques, organisée en Türkiye."
-      }
-    },
     "pillars": {
       "eyebrow": "Ce que nous faisons",
       "title": "Cinq piliers de <g>l'action climatique.</g>",
@@ -174,42 +194,6 @@
         "title": "Partenariats et écosystème",
         "desc": "Créer des ponts entre les jeunes, le gouvernement, les ONG, les partenaires au développement et le secteur privé."
       }
-    },
-    "video": {
-      "title": "Notre impact en action",
-      "counter": "Vidéo {n} sur {total}",
-      "prev": "Vidéo précédente",
-      "next": "Vidéo suivante",
-      "play": "Lire la vidéo",
-      "close": "Fermer la vidéo"
-    },
-    "stories": {
-      "eyebrow": "À la une",
-      "title": "Histoires de startups <g>climat.</g>",
-      "cta": "Voir toutes les histoires"
-    },
-    "partners": {
-      "eyebrow": "Partenaires et collaborateurs de confiance"
-    },
-    "news": {
-      "eyebrow": "À la une",
-      "title": "Actualités, événements et <g>ressources.</g>",
-      "cta": "Tout voir",
-      "error": "Impossible de charger les actualités pour le moment. Veuillez réessayer plus tard.",
-      "empty": "Aucune actualité pour le moment. Revenez bientôt."
-    },
-    "newsletter": {
-      "eyebrow": "Restez informé·e",
-      "title": "Prêt·e à rejoindre <g>le mouvement ?</g>",
-      "body": "Chaque semaine, des opportunités climat, des actualités et des nouvelles des défis, directement dans votre boîte mail.",
-      "sunTitle": "Faire lever le soleil",
-      "sunOn": "le soleil est levé",
-      "sunOff": "faire lever le soleil",
-      "subscribed": "Vous êtes inscrit·e !",
-      "emailPlaceholder": "vous@email.com",
-      "emailLabel": "Adresse e-mail",
-      "subscribe": "S'abonner",
-      "getStarted": "Commencer dès aujourd'hui"
     }
   },
   "about": {

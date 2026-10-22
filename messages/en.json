@@ -12,59 +12,134 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "tagline": "Youth-led climate action",
-    "language": "Language"
+    "language": "Language",
+    "skip": "Skip to content",
+    "home": "Kenya Youth Climate Hub home",
+    "main": "Main"
   },
   "footer": {
-    "blurb": "Empowering youth, one climate solution at a time. Kenya's national digital platform for the youth climate movement.",
+    "blurb": "Grants, skills, events and climate alerts for young Kenyans aged 15–35. Run by Afosi since 2020.",
     "quickLinks": "Quick Links",
     "platform": "Platform",
     "contactUs": "Contact Us",
     "poweredByAfosi": "Powered by Afosi",
     "copyright": "© {year} Kenya Youth Climate Hub. All rights reserved.",
     "tagline": "Youth-led climate action.",
-    "getStarted": "Get started"
+    "getStarted": "Get started",
+    "explore": "Explore",
+    "tools": "Tools",
+    "climateAI": "Climate AI",
+    "contactForm": "Send us a message",
+    "social": {
+      "facebook": "KYCH on Facebook",
+      "instagram": "KYCH on Instagram",
+      "linkedin": "KYCH on LinkedIn"
+    }
   },
   "home": {
-    "backedBy": "Backed by",
-    "showPartner": "Show {name}",
-    "founder": "Founder",
     "alert": {
-      "badge": "EL NIÑO ALERT",
-      "body": "Heavy rains & flood advisories active across Western, Coast, Rift Valley & North Eastern counties.",
-      "cta": "Check County Radar & 23-Point Protection Guide"
+      "badge": "EL NIÑO",
+      "body": "Flood advisories in Western, Coast & Rift Valley",
+      "cta": "Check your county"
     },
     "hero": {
-      "eyebrow": "Empowering youth, one climate solution at a time",
-      "title": "Kenya Youth <g>Climate Hub.</g>",
-      "builtFor": "Built for",
-      "words": [
-        "climate innovators",
-        "county changemakers",
-        "green founders",
-        "policy advocates"
-      ],
-      "body": "Join a community of young innovators addressing climate challenges and building a sustainable future for Kenya. Funding, skills, policy spaces and innovation, across all 47 counties.",
-      "ctaFunding": "Find Funding",
-      "ctaPrograms": "View Programs",
-      "statCounties": "Counties",
-      "statAge": "Age focus",
-      "statFounded": "Founded",
-      "imgAlt": "Youth climate action in Kenya",
-      "imgAlt2": "Climate innovators",
-      "countiesConnected": "Counties connected",
-      "since": "Youth-led since 2020"
+      "eyebrow": "Kenya Youth Climate Hub · ages 15–35",
+      "title": "Your county.<br></br>Your <hl>climate.</hl><br></br>Your <u>move.</u>",
+      "langNote": "Pia kwa Kiswahili · Aussi en français",
+      "lead": "Grants, skills, events and a <b>real seat at the table</b>: everything a young Kenyan needs to turn climate ideas into action, in all 47 counties.",
+      "ctaFunding": "Find funding",
+      "ctaAI": "Ask Climate AI",
+      "statOpen": "opportunities open",
+      "statCounties": "counties",
+      "statYcic": "KES via YCIC",
+      "imgMain": "Young people at a KYCH climate session",
+      "imgViolet": "Violet Ochieng, founder of Veeklture",
+      "imgPitch": "Founders at the YCIC 2025 pitch day",
+      "capViolet": "Violet, Kibera",
+      "capPitch": "YCIC 2025 pitch day",
+      "nextUp": "Next up",
+      "event": "Event",
+      "nextAria": "Next event: {title}, {date}"
     },
-    "about": {
-      "poweredBy": "Powered by",
-      "eyebrow": "Who We Are",
-      "title": "More than a hub, <g>a movement.</g>",
-      "body": "KYCH serves as a national digital platform for Kenya's youth climate movement, connecting ambition to systems change. It operates under <b>Afosi, Action for Sustainability Initiative</b>, blending over a decade of evidence-based development with youth-first design.",
-      "mission": "Mission",
-      "missionText": "Equip every young Kenyan to lead climate action.",
-      "vision": "Vision",
-      "visionText": "A Kenya where young people lead the response.",
-      "quote": "Afosi generates the evidence. Youth generate the solutions. The Hub connects them to scale.",
-      "cta": "Our Story & Team"
+    "now": {
+      "live": "LIVE",
+      "label": "Right now<br></br>on KYCH",
+      "closesToday": "Closes today",
+      "closesTomorrow": "Closes tomorrow",
+      "closesIn": "Closes in {n} days",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "daysAgo": "{n} days ago",
+      "eventToday": "Today",
+      "eventTomorrow": "Tomorrow",
+      "eventIn": "In {n} days",
+      "openNow": "Open now",
+      "empty": "New opportunities and stories are on their way. Check back soon."
+    },
+    "picker": {
+      "kicker": "Start here",
+      "title": "What are you<br></br><s>here for?</s>",
+      "note": "pick one, we'll take you there",
+      "funding": {
+        "title": "Get funded",
+        "desc": "Grants, fellowships, internships and competitions, each with its deadline.",
+        "go": "see what's open",
+        "count": "{n} open"
+      },
+      "learn": {
+        "title": "Learn & level up",
+        "desc": "Toolkits, datasets and reports, plus the climate quiz and a 60-second carbon calculator.",
+        "go": "start learning",
+        "count": "{n} tools"
+      },
+      "events": {
+        "title": "Show up",
+        "desc": "Workshops, summits and hackathons in Kenya and online.",
+        "go": "see dates",
+        "count": "{n} events"
+      },
+      "safe": {
+        "title": "Stay safe",
+        "desc": "Your county's forecast, flood advisories and the 23-point El Niño checklist.",
+        "go": "check your county",
+        "count": "47 counties"
+      }
+    },
+    "simba": {
+      "kicker": "Meet our mascot",
+      "title": "Simba wa<br></br><s>Tabianchi.</s>",
+      "body": "Simba is a lion sculpture made from plastic bottles, old cans and scrap wire. He's also the face of <b>Climate AI</b>: ask him about grants, events or your county's weather, any time.",
+      "factMade": "Bottles, cans & wire",
+      "factLang": "English · Kiswahili · Français",
+      "factTime": "Answers 24/7",
+      "cta": "Ask Simba anything",
+      "hint": "hover or tap me",
+      "plateTop": "ASK ME",
+      "stageLabel": "Simba, the KYCH mascot: a lion sculpture made from recycled bottles, cans and wire. Opens Climate AI."
+    },
+    "stories": {
+      "kicker": "YCIC 2025 founders",
+      "title": "Young Kenyans,<br></br><s>real ventures.</s>",
+      "cta": "All stories"
+    },
+    "quote": {
+      "label": "Quote",
+      "text": "Afosi generates the evidence. Youth generate the solutions. <m>The Hub connects them to scale.</m>",
+      "cite": "Kenya Youth Climate Hub · run by Afosi"
+    },
+    "events": {
+      "kicker": "Coming up",
+      "title": "Mark your<br></br><s>calendar.</s>",
+      "cta": "Full calendar",
+      "empty": "No dated events right now. The full calendar has everything that's planned."
+    },
+    "join": {
+      "title": "Get grants in<br></br>your <s>inbox.</s>",
+      "sub": "One email a week: new opportunities, deadlines and stories.",
+      "label": "Email address",
+      "placeholder": "you@email.com",
+      "submit": "Sign me up",
+      "done": "You're on the list. Look out for the next email."
     },
     "values": {
       "eyebrow": "What Drives Us",
@@ -94,61 +169,6 @@
         "desc": "Beyond symptoms, changing root causes"
       }
     },
-    "tools": {
-      "eyebrow": "Platform Tools",
-      "title": "Everything you need to <g>act.</g>",
-      "body": "One platform connecting Kenya's youth to funding, knowledge, programs, and climate expertise.",
-      "library": {
-        "label": "E-Library & Resource Hub",
-        "desc": "Reports, toolkits, policy briefs, and research papers. Save them to your dashboard.",
-        "cta": "Browse Library"
-      },
-      "funding": {
-        "label": "Funding & Opportunities",
-        "desc": "A live board of grants, fellowships, and internships with deadline alerts.",
-        "cta": "Find Funding"
-      },
-      "programs": {
-        "label": "Programs & Challenges",
-        "desc": "Apply for incubators like the Youth Climate Innovation Challenge and mentorship programs.",
-        "cta": "View Programs"
-      },
-      "events": {
-        "label": "Events & Workshops",
-        "desc": "Register for bootcamps, policy dialogues, and webinars from KYCH and partners.",
-        "cta": "View Calendar"
-      },
-      "weather": {
-        "label": "Climate Watch & Weather Focus",
-        "desc": "Live 47-county flood radar, rainfall advisories, and official 23-point El Niño preparedness guide.",
-        "cta": "View Weather Radar"
-      },
-      "ai": {
-        "label": "Climate AI Assistant",
-        "desc": "A 24/7 AI guide trained on Kenya's climate data, opportunities and resources.",
-        "cta": "Ask AI Now"
-      }
-    },
-    "calendar": {
-      "eyebrow": "Official Calendar 2026",
-      "title": "Upcoming <g>Key Climate Dates.</g>",
-      "cta": "Explore Full Calendar",
-      "e1": {
-        "date": "10TH OCT 2026",
-        "title": "Mazingira Day",
-        "desc": "Kenya National Environmental Day & nationwide youth tree restoration."
-      },
-      "e2": {
-        "date": "5TH – 8TH OCT 2026",
-        "title": "Pre-COP 31 Summit",
-        "desc": "Ministerial & youth negotiation strategy meeting ahead of COP31."
-      },
-      "e3": {
-        "date": "9TH – 20TH NOV 2026",
-        "title": "COP31 UN Climate Summit",
-        "desc": "Global UN Climate Change Conference taking place in Türkiye."
-      }
-    },
     "pillars": {
       "eyebrow": "What We Do",
       "title": "Five pillars of <g>climate action.</g>",
@@ -174,42 +194,6 @@
         "title": "Partnerships & Ecosystem Building",
         "desc": "Building bridges between youth, government, NGOs, development partners, and the private sector."
       }
-    },
-    "video": {
-      "title": "See our impact in action",
-      "counter": "Video {n} of {total}",
-      "prev": "Previous video",
-      "next": "Next video",
-      "play": "Play video",
-      "close": "Close video"
-    },
-    "stories": {
-      "eyebrow": "Featured",
-      "title": "Climate startup <g>stories.</g>",
-      "cta": "See All Stories"
-    },
-    "partners": {
-      "eyebrow": "Trusted Partners & Collaborators"
-    },
-    "news": {
-      "eyebrow": "Latest",
-      "title": "News, events & <g>resources.</g>",
-      "cta": "View All",
-      "error": "Unable to load news right now. Please try again later.",
-      "empty": "No news articles available right now. Check back soon."
-    },
-    "newsletter": {
-      "eyebrow": "Stay in the Loop",
-      "title": "Ready to join the <g>movement?</g>",
-      "body": "Weekly climate opportunities, news, and challenge updates, straight to your inbox.",
-      "sunTitle": "Bring the sun up",
-      "sunOn": "sun's up",
-      "sunOff": "bring the sun up",
-      "subscribed": "You're subscribed!",
-      "emailPlaceholder": "you@email.com",
-      "emailLabel": "Email address",
-      "subscribe": "Subscribe",
-      "getStarted": "Get Started Today"
     }
   },
   "about": {

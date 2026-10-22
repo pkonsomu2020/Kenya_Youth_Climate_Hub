@@ -58,3 +58,5 @@ yarn-error.log*
 /deployment
 DEPLOY.txt
 Calender of Events.docx
+# brainstorm mockups
+.superpowers/

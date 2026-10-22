@@ -2,9 +2,8 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Check, ChevronDown, Globe } from "lucide-react";
-import { NK, nkShadow } from "@/lib/nkTheme";
 import { LOCALE_COOKIE, localeLabels, locales, localeShort, type Locale } from "@/i18n/config";
+import { Icon } from "@/components/zine/Icon";
 
 function useSetLocale() {
   const router = useRouter();
@@ -25,7 +24,6 @@ export function LanguageSwitcher() {
   const t = useTranslations("nav");
   const { setLocale, pending } = useSetLocale();
   const [open, setOpen] = useState(false);
-  const [hov, setHov] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,43 +41,24 @@ export function LanguageSwitcher() {
   }, [open]);
 
   return (
-    <div ref={rootRef} className="nk-lang-switch" style={{ position: "relative" }}>
+    <div ref={rootRef} className="z-lang nk-lang-switch">
       <button
         type="button"
+        className="z-lang__btn"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={t("language")}
         onClick={() => setOpen((o) => !o)}
-        onMouseEnter={() => setHov(true)}
-        onMouseLeave={() => setHov(false)}
         disabled={pending}
-        style={{
-          height: 44, minWidth: 44, padding: "0 12px",
-          display: "flex", alignItems: "center", gap: 6,
-          border: `2px solid ${NK.ink}`,
-          background: hov || open ? NK.ink : "transparent",
-          color: hov || open ? "#fff" : NK.ink,
-          fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, letterSpacing: "0.04em",
-          cursor: pending ? "wait" : "pointer", opacity: pending ? 0.6 : 1,
-          transition: "background .2s, color .2s",
-        }}
+        style={{ opacity: pending ? 0.6 : 1 }}
       >
-        <Globe size={16} aria-hidden="true" />
+        <Icon name="language" />
         {localeShort[locale]}
-        <ChevronDown size={14} aria-hidden="true" style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
+        <Icon name={open ? "expand_less" : "expand_more"} />
       </button>
 
       {open && (
-        <ul
-          role="listbox"
-          aria-label={t("language")}
-          style={{
-            position: "absolute", top: "calc(100% + 8px)", right: 0, zIndex: 320,
-            minWidth: 170, margin: 0, padding: 0, listStyle: "none",
-            background: NK.bg, border: `2px solid ${NK.ink}`,
-            boxShadow: nkShadow(NK.green, 5),
-          }}
-        >
+        <ul role="listbox" aria-label={t("language")} className="z-lang__list">
           {locales.map((l) => {
             const active = l === locale;
             return (
@@ -87,18 +66,11 @@ export function LanguageSwitcher() {
                 <button
                   type="button"
                   lang={l}
+                  data-active={active}
                   onClick={() => { setOpen(false); if (!active) setLocale(l); }}
-                  style={{
-                    width: "100%", minHeight: 44, padding: "0 14px",
-                    display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
-                    border: "none", borderBottom: l === locales[locales.length - 1] ? "none" : "1px solid rgba(16,28,51,0.1)",
-                    background: active ? NK.tintGreen : "transparent",
-                    color: NK.ink, cursor: "pointer", textAlign: "left",
-                    fontFamily: "var(--fs)", fontWeight: active ? 700 : 600, fontSize: 14,
-                  }}
                 >
                   {localeLabels[l]}
-                  {active && <Check size={16} color={NK.greenAlt} aria-hidden="true" />}
+                  {active && <Icon name="check" />}
                 </button>
               </li>
             );
@@ -116,8 +88,8 @@ export function LanguageSwitcherInline() {
   const { setLocale, pending } = useSetLocale();
 
   return (
-    <div role="radiogroup" aria-label={t("language")} style={{ display: "flex", border: `2px solid ${NK.ink}` }}>
-      {locales.map((l, i) => {
+    <div role="radiogroup" aria-label={t("language")} className="z-lang-seg">
+      {locales.map((l) => {
         const active = l === locale;
         return (
           <button
@@ -128,15 +100,6 @@ export function LanguageSwitcherInline() {
             lang={l}
             disabled={pending}
             onClick={() => { if (!active) setLocale(l); }}
-            style={{
-              flex: 1, minHeight: 44, padding: "0 6px",
-              border: "none", borderLeft: i === 0 ? "none" : `2px solid ${NK.ink}`,
-              background: active ? NK.ink : "transparent",
-              color: active ? "#fff" : NK.ink,
-              fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13,
-              cursor: pending ? "wait" : "pointer",
-              transition: "background .2s, color .2s",
-            }}
           >
             {localeLabels[l]}
           </button>
