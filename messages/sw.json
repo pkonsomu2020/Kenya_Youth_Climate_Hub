@@ -15,7 +15,8 @@
     "language": "Lugha",
     "skip": "Ruka hadi maudhui",
     "home": "Ukurasa mkuu wa Kenya Youth Climate Hub",
-    "main": "Kuu"
+    "main": "Kuu",
+    "homeLink": "Nyumbani"
   },
   "footer": {
     "blurb": "Ruzuku, ujuzi, matukio na tahadhari za tabianchi kwa vijana wa Kenya wenye umri wa miaka 15–35. Inaendeshwa na Afosi tangu 2020.",
@@ -837,7 +838,8 @@
           "desc": "Waliofuzu fainali watawasilisha ubunifu wao mbele ya jopo la majaji wakati wa Kongamano la Ubunifu wa Tabianchi."
         }
       ],
-      "apply": "Omba kupitia Yoma"
+      "apply": "Omba kupitia Yoma",
+      "meetFounders": "Kutana na waanzilishi"
     },
     "ycicKicker": "Programu kuu · mzunguko wa 2025 · maombi yamefungwa",
     "ycicTitle": "Youth Climate Innovation <s>Challenge</s>",

@@ -15,7 +15,8 @@
     "language": "Langue",
     "skip": "Aller au contenu",
     "home": "Accueil Kenya Youth Climate Hub",
-    "main": "Principal"
+    "main": "Principal",
+    "homeLink": "Accueil"
   },
   "footer": {
     "blurb": "Subventions, compétences, événements et alertes climat pour les jeunes Kényans de 15 à 35 ans. Porté par Afosi depuis 2020.",
@@ -837,7 +838,8 @@
           "desc": "Les finalistes sélectionnés présenteront leur innovation à un jury lors du Climate Innovation Summit."
         }
       ],
-      "apply": "Postuler sur Yoma"
+      "apply": "Postuler sur Yoma",
+      "meetFounders": "Rencontrer les fondateurs"
     },
     "ycicKicker": "Programme phare · édition 2025 · candidatures closes",
     "ycicTitle": "Youth Climate Innovation <s>Challenge</s>",

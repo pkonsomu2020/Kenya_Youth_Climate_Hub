@@ -8,6 +8,7 @@ import { Icon } from "@/components/zine/Icon";
 
 // Labels are nav.* message keys.
 const links = [
+  { to: "/",                key: "homeLink"       },
   { to: "/opportunities",   key: "opportunities"  },
   { to: "/programs",        key: "programs"       },
   { to: "/events",          key: "events"         },
@@ -19,6 +20,7 @@ const links = [
 ] as const;
 
 function isActive(path: string, to: string) {
+  if (to === "/") return path === "/";
   return path === to || path.startsWith(to + "/");
 }
 
