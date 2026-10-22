@@ -70,7 +70,7 @@ function parseWmoCode(code: number): { condition: string; icon: string } {
 }
 
 // Map county names to exact Lat/Lon for Satellite live weather fetch
-const COUNTY_COORDINATES: Record<string, { lat: number; lon: number }> = {
+export const COUNTY_COORDINATES: Record<string, { lat: number; lon: number }> = {
   mombasa: { lat: -4.0435, lon: 39.6682 },
   kwale: { lat: -4.1737, lon: 39.4521 },
   kilifi: { lat: -3.6307, lon: 39.8499 },
