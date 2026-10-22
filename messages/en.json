@@ -197,23 +197,52 @@
     }
   },
   "about": {
-    "eyebrow": "About KYCH",
-    "title": "More than a hub, <g>a movement.</g>",
-    "intro": "KYCH serves as a national digital platform for Kenya's youth climate movement, connecting ambition to systems change across all 47 counties.",
-    "imgAlt": "Kenya Youth Climate Hub team in action",
-    "badge": "Founded 2020 · Powered by Afosi",
-    "storyEyebrow": "Our Story",
-    "storyTitle": "Ambition, connected to systems change.",
+    "eyebrow": "About KYCH · founded 2020 under Afosi",
+    "title": "Who <s>we</s> are",
     "story1": "KYCH operates under <b>Afosi, Action for Sustainability Initiative</b>, blending over a decade of evidence-based development with youth-first design.",
     "story2": "We connect young Kenyans aged 15 to 35 to climate finance, skills, policy spaces and innovation opportunities in every county.",
+    "imgAlt": "Two young women at Afosi's 2024 Colour Festival",
+    "photoCaption": "Afosi Colour Festival, 2024",
+    "cardsLabel": "Mission and vision",
     "mission": "Mission",
     "missionText": "Equip every young Kenyan to lead climate action.",
     "vision": "Vision",
     "visionText": "A Kenya where young people don't just adapt to climate change, they lead the response.",
-    "valuesTitle": "Our core values.",
+    "tlKicker": "Our story",
+    "tlTitle": "How we <s>got here</s>",
+    "timeline": {
+      "founded": {
+        "title": "KYCH is founded",
+        "body": "Set up under Afosi, Action for Sustainability Initiative, to connect young Kenyans to climate finance, skills and policy spaces."
+      },
+      "begreen": {
+        "title": "BeGreen Africa Kenya pilot",
+        "body": "2,264 young people aged 18–35 apply to build green waste businesses, with pitching events in Nairobi, Kisumu and Mombasa.",
+        "begreenAlt": "Young women at an Afosi youth event"
+      },
+      "ycic": {
+        "title": "Youth Climate Innovation Challenge",
+        "body": "300 young innovators enter with solutions for informal settlements, competing for a KES 500,000 prize pool.",
+        "ycicAlt": "Violet Ochieng, founder of Veeklture"
+      },
+      "results": {
+        "title": "BeGreen results are in",
+        "body": "By July 2025 the pilot had created 846 jobs and funded 146 young entrepreneurs with grants of up to USD 5,000."
+      },
+      "languages": {
+        "title": "The hub speaks three languages",
+        "body": "The platform now works in English, Kiswahili and French, including live funding calls, events and county weather alerts."
+      }
+    },
+    "valuesKicker": "What drives us",
+    "valuesTitle": "Six <s>values</s>",
     "quote": "Afosi generates the evidence. Youth generate the solutions. The Hub connects them to scale.",
-    "ctaTitle": "Ready to join the movement?",
-    "ctaButton": "Get started today"
+    "quoteCite": "How KYCH works",
+    "ctaKicker": "Join the hub",
+    "ctaTitle": "Ready to <s>join</s>?",
+    "ctaBody": "Create an account on KYCH, or write to the team about partnerships, events and media.",
+    "ctaButton": "Create an account",
+    "contactButton": "Contact the team"
   },
   "contact": {
     "eyebrow": "Get In Touch",

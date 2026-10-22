@@ -197,23 +197,52 @@
     }
   },
   "about": {
-    "eyebrow": "Kuhusu KYCH",
-    "title": "Zaidi ya kitovu, <g>ni vuguvugu.</g>",
-    "intro": "KYCH ni jukwaa la kidijitali la kitaifa la vuguvugu la vijana kuhusu tabianchi nchini Kenya, linalounganisha ndoto na mabadiliko ya kimfumo katika kaunti zote 47.",
-    "imgAlt": "Timu ya Kenya Youth Climate Hub kazini",
-    "badge": "Ilianzishwa 2020 · Inaendeshwa na Afosi",
-    "storyEyebrow": "Hadithi Yetu",
-    "storyTitle": "Ndoto, zilizounganishwa na mabadiliko ya kimfumo.",
-    "story1": "KYCH inaendeshwa chini ya <b>Afosi, Action for Sustainability Initiative</b>, ikichanganya zaidi ya muongo mmoja wa maendeleo yanayotegemea ushahidi na muundo unaowaweka vijana mbele.",
-    "story2": "Tunawaunganisha vijana wa Kenya wenye umri wa miaka 15 hadi 35 na fedha za tabianchi, ujuzi, nafasi za sera na fursa za ubunifu katika kila kaunti.",
+    "eyebrow": "Kuhusu KYCH · ilianzishwa 2020 chini ya Afosi",
+    "title": "<s>Sisi</s> ni nani",
+    "story1": "KYCH inafanya kazi chini ya <b>Afosi, Action for Sustainability Initiative</b>, ikichanganya zaidi ya muongo mmoja wa maendeleo yanayotegemea ushahidi na muundo unaowatanguliza vijana.",
+    "story2": "Tunawaunganisha vijana wa Kenya wenye umri wa miaka 15 hadi 35 na ufadhili wa tabianchi, ujuzi, nafasi za sera na fursa za ubunifu katika kila kaunti.",
+    "imgAlt": "Wanawake wawili vijana katika Colour Festival ya Afosi ya 2024",
+    "photoCaption": "Colour Festival ya Afosi, 2024",
+    "cardsLabel": "Dhamira na maono",
     "mission": "Dhamira",
     "missionText": "Kumwezesha kila kijana wa Kenya kuongoza hatua za tabianchi.",
     "vision": "Maono",
-    "visionText": "Kenya ambayo vijana hawajizoeshi tu na mabadiliko ya tabianchi, bali wanaongoza mapambano.",
-    "valuesTitle": "Maadili yetu ya msingi.",
-    "quote": "Afosi inazalisha ushahidi. Vijana wanazalisha suluhisho. Kitovu kinawaunganisha ili kukua.",
-    "ctaTitle": "Uko tayari kujiunga na vuguvugu?",
-    "ctaButton": "Anza leo"
+    "visionText": "Kenya ambapo vijana hawajizoeshi tu na mabadiliko ya tabianchi, bali wanaongoza jitihada za kukabiliana nayo.",
+    "tlKicker": "Hadithi yetu",
+    "tlTitle": "Tulivyofika <s>hapa</s>",
+    "timeline": {
+      "founded": {
+        "title": "KYCH inaanzishwa",
+        "body": "Ilianzishwa chini ya Afosi, Action for Sustainability Initiative, kuwaunganisha vijana wa Kenya na ufadhili wa tabianchi, ujuzi na nafasi za sera."
+      },
+      "begreen": {
+        "title": "Majaribio ya BeGreen Africa Kenya",
+        "body": "Vijana 2,264 wenye umri wa miaka 18–35 wanaomba kujenga biashara za kijani za taka, na hafla za kuwasilisha mawazo Nairobi, Kisumu na Mombasa.",
+        "begreenAlt": "Wanawake vijana katika hafla ya vijana ya Afosi"
+      },
+      "ycic": {
+        "title": "Youth Climate Innovation Challenge",
+        "body": "Wabunifu vijana 300 wanashiriki na suluhisho kwa makazi yasiyo rasmi, wakiwania jumla ya zawadi ya KES 500,000.",
+        "ycicAlt": "Violet Ochieng, mwanzilishi wa Veeklture"
+      },
+      "results": {
+        "title": "Matokeo ya BeGreen yatoka",
+        "body": "Kufikia Julai 2025 majaribio yalikuwa yameunda ajira 846 na kufadhili wajasiriamali vijana 146 kwa ruzuku za hadi USD 5,000."
+      },
+      "languages": {
+        "title": "Jukwaa linazungumza lugha tatu",
+        "body": "Jukwaa sasa linafanya kazi kwa Kiingereza, Kiswahili na Kifaransa, ikiwemo matangazo ya ufadhili, matukio na tahadhari za hali ya hewa za kaunti."
+      }
+    },
+    "valuesKicker": "Kinachotusukuma",
+    "valuesTitle": "Maadili <s>sita</s>",
+    "quote": "Afosi huzalisha ushahidi. Vijana huzalisha suluhisho. Hub huwaunganisha ili kukua.",
+    "quoteCite": "Jinsi KYCH inavyofanya kazi",
+    "ctaKicker": "Jiunge na hub",
+    "ctaTitle": "Uko tayari <s>kujiunga</s>?",
+    "ctaBody": "Fungua akaunti kwenye KYCH, au iandikie timu kuhusu ushirikiano, matukio na vyombo vya habari.",
+    "ctaButton": "Fungua akaunti",
+    "contactButton": "Wasiliana na timu"
   },
   "contact": {
     "eyebrow": "Wasiliana Nasi",

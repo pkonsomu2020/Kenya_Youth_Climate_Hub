@@ -197,23 +197,52 @@
     }
   },
   "about": {
-    "eyebrow": "À propos de KYCH",
-    "title": "Plus qu'un hub, <g>un mouvement.</g>",
-    "intro": "KYCH est la plateforme numérique nationale du mouvement climatique des jeunes au Kenya, qui relie l'ambition au changement systémique dans les 47 comtés.",
-    "imgAlt": "L'équipe du Kenya Youth Climate Hub en action",
-    "badge": "Créé en 2020 · Propulsé par Afosi",
-    "storyEyebrow": "Notre histoire",
-    "storyTitle": "L'ambition, reliée au changement systémique.",
-    "story1": "KYCH fonctionne sous l'égide d'<b>Afosi, Action for Sustainability Initiative</b>, alliant plus de dix ans de développement fondé sur des données probantes à une conception pensée d'abord pour les jeunes.",
-    "story2": "Nous relions les jeunes Kényans de 15 à 35 ans à la finance climat, aux compétences, aux espaces politiques et aux opportunités d'innovation dans chaque comté.",
+    "eyebrow": "À propos de KYCH · fondé en 2020 au sein d'Afosi",
+    "title": "Qui <s>sommes-nous</s>",
+    "story1": "KYCH fonctionne au sein d'<b>Afosi, Action for Sustainability Initiative</b>, alliant plus de dix ans de développement fondé sur les données à une conception pensée d'abord pour les jeunes.",
+    "story2": "Nous relions les jeunes Kényans de 15 à 35 ans au financement climatique, aux compétences, aux espaces politiques et aux opportunités d'innovation dans chaque comté.",
+    "imgAlt": "Deux jeunes femmes au Colour Festival 2024 d'Afosi",
+    "photoCaption": "Colour Festival d'Afosi, 2024",
+    "cardsLabel": "Mission et vision",
     "mission": "Mission",
-    "missionText": "Permettre à chaque jeune Kényan de mener l'action climatique.",
+    "missionText": "Donner à chaque jeune Kényan les moyens de mener l'action climatique.",
     "vision": "Vision",
     "visionText": "Un Kenya où les jeunes ne se contentent pas de s'adapter au changement climatique : ils mènent la riposte.",
-    "valuesTitle": "Nos valeurs fondamentales.",
+    "tlKicker": "Notre histoire",
+    "tlTitle": "Notre <s>parcours</s>",
+    "timeline": {
+      "founded": {
+        "title": "Création de KYCH",
+        "body": "Créé au sein d'Afosi, Action for Sustainability Initiative, pour relier les jeunes Kényans au financement climatique, aux compétences et aux espaces politiques."
+      },
+      "begreen": {
+        "title": "Projet pilote BeGreen Africa au Kenya",
+        "body": "2 264 jeunes de 18 à 35 ans postulent pour créer des entreprises vertes de gestion des déchets, avec des séances de pitch à Nairobi, Kisumu et Mombasa.",
+        "begreenAlt": "Des jeunes femmes lors d'un événement jeunesse d'Afosi"
+      },
+      "ycic": {
+        "title": "Youth Climate Innovation Challenge",
+        "body": "300 jeunes innovateurs proposent des solutions pour les quartiers informels et concourent pour une dotation de 500 000 KES.",
+        "ycicAlt": "Violet Ochieng, fondatrice de Veeklture"
+      },
+      "results": {
+        "title": "Les résultats de BeGreen",
+        "body": "En juillet 2025, le projet pilote avait créé 846 emplois et financé 146 jeunes entrepreneurs avec des subventions allant jusqu'à 5 000 USD."
+      },
+      "languages": {
+        "title": "La plateforme parle trois langues",
+        "body": "La plateforme fonctionne désormais en anglais, en kiswahili et en français, y compris les appels à financement, les événements et les alertes météo par comté."
+      }
+    },
+    "valuesKicker": "Ce qui nous anime",
+    "valuesTitle": "Six <s>valeurs</s>",
     "quote": "Afosi produit les données. Les jeunes produisent les solutions. Le Hub les relie pour changer d'échelle.",
-    "ctaTitle": "Prêt·e à rejoindre le mouvement ?",
-    "ctaButton": "Commencer dès aujourd'hui"
+    "quoteCite": "Le fonctionnement de KYCH",
+    "ctaKicker": "Rejoindre le hub",
+    "ctaTitle": "Prêt à nous <s>rejoindre</s> ?",
+    "ctaBody": "Créez un compte sur KYCH, ou écrivez à l'équipe pour les partenariats, les événements et la presse.",
+    "ctaButton": "Créer un compte",
+    "contactButton": "Contacter l'équipe"
   },
   "contact": {
     "eyebrow": "Nous contacter",
