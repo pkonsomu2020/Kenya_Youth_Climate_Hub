@@ -278,30 +278,37 @@
   },
   "dashboard": {
     "eyebrow": "Votre tableau de bord",
-    "title": "Bienvenue sur <g>la plateforme KYCH</g>",
-    "subtitle": "Votre espace personnel pour les opportunités, ressources et outils climat.",
-    "aiTitle": "Assistant IA climat",
-    "aiBody": "Un guide IA disponible 24h/24 et 7j/7, formé sur les données climatiques, les opportunités et les ressources du Kenya. Bientôt disponible.",
-    "comingSoon": "Bientôt disponible",
-    "quickAccess": "Accès rapide",
-    "links": {
-      "opportunities": {
-        "label": "Opportunités",
-        "desc": "Parcourir les subventions et bourses ouvertes"
-      },
-      "library": {
-        "label": "Bibliothèque",
-        "desc": "Rapports, boîtes à outils et ressources"
-      },
-      "events": {
-        "label": "Événements",
-        "desc": "Sommets et ateliers à venir"
-      },
+    "title": "Vos <s>raccourcis</s>",
+    "subtitle": "Épinglez ce pour quoi vous venez sur KYCH. Les raccourcis épinglés passent en haut et y restent sur cet appareil.",
+    "pickLabel": "Qu’êtes-vous venu chercher ?",
+    "pickHint": "Rien d’épinglé pour l’instant. Touchez l’un des choix ci-dessus.",
+    "pinnedNote": "{n, plural, one {# raccourci épinglé} other {# raccourcis épinglés}}, enregistré(s) sur cet appareil uniquement.",
+    "boardLabel": "Raccourcis",
+    "pinned": "Épinglé",
+    "cards": {
       "programs": {
-        "label": "Programmes",
-        "desc": "Postuler aux programmes d'innovation"
+        "title": "Rejoindre un programme",
+        "desc": "Le Youth Climate Innovation Challenge et BeGreen Africa : ce qu’ils offrent et comment ils se sont déroulés."
+      },
+      "stories": {
+        "title": "Rencontrer les fondateurs",
+        "desc": "Cinq jeunes Kényans qui ont transformé un problème climatique en entreprise qui fonctionne."
       }
-    }
+    },
+    "live": {
+      "closing": "{days, plural, =0 {Ferme aujourd’hui} one {Ferme demain} other {Ferme dans # jours}} : {title}",
+      "nextEvent": "{days, plural, =0 {Aujourd’hui} one {Demain} other {Dans # jours}} : {title}",
+      "library": "{n} ressources + 2 outils",
+      "safe": "Prévisions et risque d’inondation, 47 comtés",
+      "programs": "2 programmes",
+      "stories": "5 histoires de fondateurs"
+    },
+    "aiKicker": "Climate AI",
+    "aiTitle": "Posez vos questions, <s>à tout moment</s>",
+    "aiBody": "L’assistant Climate AI répond aux questions sur les subventions, programmes, événements et le Youth Climate Innovation Challenge, en anglais, kiswahili ou français.",
+    "aiButton": "Demander à Climate AI",
+    "joinText": "Vous voulez que l’équipe sache sur quoi vous travaillez ? Créez un profil jeune.",
+    "joinButton": "Créer un profil"
   },
   "register": {
     "eyebrow": "Rejoindre KYCH",

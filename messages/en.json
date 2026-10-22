@@ -277,31 +277,38 @@
     "another": "Write another message"
   },
   "dashboard": {
-    "eyebrow": "Your Dashboard",
-    "title": "Welcome to <g>KYCH Platform</g>",
-    "subtitle": "Your personal hub for climate opportunities, resources, and tools.",
-    "aiTitle": "Climate AI Assistant",
-    "aiBody": "A 24/7 AI guide trained on Kenya's climate data, opportunities and resources. Coming soon.",
-    "comingSoon": "Coming Soon",
-    "quickAccess": "Quick Access",
-    "links": {
-      "opportunities": {
-        "label": "Opportunities",
-        "desc": "Browse open grants & fellowships"
-      },
-      "library": {
-        "label": "E-Library",
-        "desc": "Reports, toolkits & resources"
-      },
-      "events": {
-        "label": "Events",
-        "desc": "Upcoming summits & workshops"
-      },
+    "eyebrow": "Your dashboard",
+    "title": "Your <s>shortcuts</s>",
+    "subtitle": "Pin what you come to KYCH for. Pinned shortcuts move to the top and stay there on this device.",
+    "pickLabel": "What are you here for?",
+    "pickHint": "Nothing pinned yet. Tap any of the above.",
+    "pinnedNote": "{n, plural, one {# shortcut pinned} other {# shortcuts pinned}}, saved on this device only.",
+    "boardLabel": "Shortcuts",
+    "pinned": "Pinned",
+    "cards": {
       "programs": {
-        "label": "Programs",
-        "desc": "Apply to innovation programs"
+        "title": "Join a programme",
+        "desc": "The Youth Climate Innovation Challenge and BeGreen Africa: what they offer and how they ran."
+      },
+      "stories": {
+        "title": "Meet founders",
+        "desc": "Five young Kenyans who turned a climate problem into a working business."
       }
-    }
+    },
+    "live": {
+      "closing": "{days, plural, =0 {Closes today} one {Closes tomorrow} other {Closes in # days}}: {title}",
+      "nextEvent": "{days, plural, =0 {Today} one {Tomorrow} other {In # days}}: {title}",
+      "library": "{n} resources + 2 tools",
+      "safe": "Forecast and flood risk, 47 counties",
+      "programs": "2 programmes",
+      "stories": "5 founder stories"
+    },
+    "aiKicker": "Climate AI",
+    "aiTitle": "Ask anything, <s>any time</s>",
+    "aiBody": "The Climate AI assistant answers questions about grants, programmes, events and the Youth Climate Innovation Challenge, in English, Kiswahili or French.",
+    "aiButton": "Ask Climate AI",
+    "joinText": "Want the team to know what you work on? Create a youth profile.",
+    "joinButton": "Create a profile"
   },
   "register": {
     "eyebrow": "Join KYCH",

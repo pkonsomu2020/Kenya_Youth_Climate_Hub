@@ -1243,7 +1243,7 @@
 .z-field--chips > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 .z-chip { position: relative; cursor: pointer; }
 .z-chip input { position: absolute; opacity: 0; pointer-events: none; }
-.z-chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; border: 2px solid var(--z-navy); border-radius: 999px; background: var(--z-white); font-weight: 600; font-size: 14.5px; transition: background .15s; }
+.z-chip > span { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; border: 2px solid var(--z-navy); border-radius: 999px; background: var(--z-white); font-weight: 600; font-size: 14.5px; transition: background .15s; }
 .z-chip input:checked + span { background: var(--z-navy); color: var(--z-paper); }
 .z-chip input:focus-visible + span { outline: 3px solid var(--z-orange); outline-offset: 2px; }
 .z-formcard__submit { justify-self: start; margin-top: 4px; }
@@ -1271,6 +1271,57 @@ a.z-form__item:hover { box-shadow: var(--z-shadow); transform: translate(-2px, -
   .z-formcard form { padding-left: 8px; }
   .z-field__row { grid-template-columns: 1fr; }
   .z-formcard__submit { width: 100%; justify-content: center; }
+}
+
+/* ============================================================
+   Dashboard (/dashboard) — personal shortcuts pinboard
+   ============================================================ */
+.z-dash__head { padding: 56px 0 30px; }
+.z-dash__head .z-h2 .z-serif { color: var(--z-green-d); }
+.z-dash__pick { border: 0; margin: 28px 0 0; padding: 0; }
+.z-dash__pick legend { padding: 0; margin-bottom: 10px; color: var(--z-green-d); }
+.z-dash__pick > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.z-dash__pick .z-chip > span { gap: 6px; }
+.z-dash__pick .z-chip .z-ms { font-size: 19px; }
+.z-dash__hint { margin: 12px 0 0; font-size: 14px; color: var(--z-muted); }
+
+.z-dash__board { padding: 10px 0 80px; }
+.z-dash__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.z-dash__item { display: flex; }
+.z-dash__card { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: start; width: 100%; padding: 22px; background: var(--z-white); color: var(--z-navy); border: 2px solid var(--z-navy); border-radius: var(--z-r-md); text-decoration: none; box-shadow: var(--z-shadow); transition: transform .2s var(--z-ease), box-shadow .2s var(--z-ease); }
+.z-dash__card:hover { transform: translate(-2px, -2px); box-shadow: var(--z-shadow-lg); }
+.z-dash__item--pinned .z-dash__card { background: #FFFBEE; transform: rotate(-.6deg); box-shadow: 5px 5px 0 var(--z-orange); }
+.z-dash__item--pinned:nth-child(even) .z-dash__card { transform: rotate(.6deg); }
+.z-dash__item--pinned .z-dash__card:hover { transform: rotate(0) translate(-2px, -2px); }
+.z-dash__pin { position: absolute; top: -16px; left: 50%; margin-left: -16px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: var(--z-orange); color: var(--z-white); border: 2px solid var(--z-navy); transform: rotate(20deg); }
+.z-dash__pin .z-ms { font-size: 18px; }
+.z-dash__ico { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 16px; border: 2px solid var(--z-navy); }
+.z-dash__body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.z-dash__body b { font-family: var(--z-display); font-weight: 400; font-size: 21px; line-height: 1.1; }
+.z-dash__desc { font-size: 14.5px; color: var(--z-muted); line-height: 1.5; }
+.z-dash__live { margin-top: 6px; padding-top: 10px; border-top: 1.5px dashed var(--z-line); font-size: 10.5px; color: var(--z-green-d); letter-spacing: .06em; overflow-wrap: anywhere; }
+.z-dash__go { align-self: center; }
+
+.z-dash__ai { padding: 60px 0 70px; }
+.z-dash__aigrid { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 28px; align-items: center; }
+.z-dash__aiicon { width: 84px; height: 84px; display: grid; place-items: center; border-radius: 50%; background: var(--z-green); color: var(--z-navy); }
+.z-dash__ai .z-h2 { font-size: clamp(30px, 3.6vw, 46px); }
+.z-dash__ai p { margin: 10px 0 0; max-width: 40em; color: rgba(247, 241, 227, .8); }
+
+.z-dash__join { padding: 50px 0 90px; }
+.z-dash__join .z-wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; padding-top: 26px; padding-bottom: 26px; border-top: 2px solid var(--z-navy); border-bottom: 2px solid var(--z-navy); }
+.z-dash__join p { margin: 0; font-family: var(--z-serif); font-style: italic; font-weight: 600; font-size: clamp(20px, 2.2vw, 26px); max-width: 30em; }
+
+@media (max-width: 980px) {
+  .z-dash__grid { grid-template-columns: 1fr 1fr; }
+  .z-dash__aigrid { grid-template-columns: 1fr; justify-items: start; }
+}
+@media (max-width: 560px) {
+  .z-dash__head { padding-top: 36px; }
+  .z-dash__grid { grid-template-columns: minmax(0, 1fr); }
+  .z-dash__card { padding: 18px; gap: 12px; }
+  .z-dash__item--pinned .z-dash__card { transform: none; }
+  .z-dash__join .z-wrap { border-left: 0; }
 }
 
 /* ---------- responsive ---------- */

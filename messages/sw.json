@@ -277,31 +277,38 @@
     "another": "Andika ujumbe mwingine"
   },
   "dashboard": {
-    "eyebrow": "Dashibodi Yako",
-    "title": "Karibu kwenye <g>Jukwaa la KYCH</g>",
-    "subtitle": "Kitovu chako binafsi cha fursa, rasilimali na zana za tabianchi.",
-    "aiTitle": "Msaidizi wa AI wa Tabianchi",
-    "aiBody": "Mwongozo wa AI saa 24/7 uliofunzwa kwa data za tabianchi, fursa na rasilimali za Kenya. Inakuja hivi karibuni.",
-    "comingSoon": "Inakuja Hivi Karibuni",
-    "quickAccess": "Ufikiaji wa Haraka",
-    "links": {
-      "opportunities": {
-        "label": "Fursa",
-        "desc": "Vinjari ruzuku na ushirika ulio wazi"
-      },
-      "library": {
-        "label": "Maktaba",
-        "desc": "Ripoti, vifaa vya mafunzo na rasilimali"
-      },
-      "events": {
-        "label": "Matukio",
-        "desc": "Mikutano na warsha zijazo"
-      },
+    "eyebrow": "Dashibodi yako",
+    "title": "Njia zako <s>za mkato</s>",
+    "subtitle": "Bandika unachokuja kwenye KYCH kutafuta. Njia zilizobandikwa hupanda juu na kubaki hapo kwenye kifaa hiki.",
+    "pickLabel": "Uko hapa kwa ajili ya nini?",
+    "pickHint": "Bado hujabandika chochote. Gusa chochote hapo juu.",
+    "pinnedNote": "{n, plural, one {Njia # imebandikwa} other {Njia # zimebandikwa}}, zimehifadhiwa kwenye kifaa hiki pekee.",
+    "boardLabel": "Njia za mkato",
+    "pinned": "Imebandikwa",
+    "cards": {
       "programs": {
-        "label": "Programu",
-        "desc": "Omba kujiunga na programu za ubunifu"
+        "title": "Jiunge na programu",
+        "desc": "Youth Climate Innovation Challenge na BeGreen Africa: zinachotoa na jinsi zilivyoendeshwa."
+      },
+      "stories": {
+        "title": "Kutana na waanzilishi",
+        "desc": "Vijana watano wa Kenya waliogeuza tatizo la tabianchi kuwa biashara inayofanya kazi."
       }
-    }
+    },
+    "live": {
+      "closing": "{days, plural, =0 {Inafungwa leo} one {Inafungwa kesho} other {Inafungwa baada ya siku #}}: {title}",
+      "nextEvent": "{days, plural, =0 {Leo} one {Kesho} other {Baada ya siku #}}: {title}",
+      "library": "Rasilimali {n} + zana 2",
+      "safe": "Utabiri na hatari ya mafuriko, kaunti 47",
+      "programs": "Programu 2",
+      "stories": "Hadithi 5 za waanzilishi"
+    },
+    "aiKicker": "Climate AI",
+    "aiTitle": "Uliza chochote, <s>wakati wowote</s>",
+    "aiBody": "Msaidizi wa Climate AI hujibu maswali kuhusu ruzuku, programu, matukio na Youth Climate Innovation Challenge, kwa Kiingereza, Kiswahili au Kifaransa.",
+    "aiButton": "Uliza Climate AI",
+    "joinText": "Ungependa timu ijue unachoshughulikia? Fungua wasifu wa kijana.",
+    "joinButton": "Fungua wasifu"
   },
   "register": {
     "eyebrow": "Jiunge na KYCH",
