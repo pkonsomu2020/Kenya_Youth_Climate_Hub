@@ -411,13 +411,11 @@
     "suggestButton": "Proposer une opportunité"
   },
   "programs": {
-    "eyebrow": "Programmes et défis",
-    "title": "Des programmes qui <g>forment des leaders.</g>",
-    "intro": "Postulez à des incubateurs, des programmes de mentorat et des défis conçus pour accélérer l'action climatique menée par les jeunes dans les 47 comtés.",
-    "pillarsBody": "Des axes stratégiques ciblés pour accélérer l'action climatique grâce à l'innovation menée par les jeunes.",
-    "viewProgram": "Voir le programme",
-    "ctaTitle": "Construisez votre solution climat avec nous.",
-    "ctaButton": "Voir les opportunités",
+    "eyebrow": "Programmes et concours",
+    "title": "Ce que nous <s>menons</s>",
+    "intro": "Deux programmes à ce jour : le Youth Climate Innovation Challenge pour les fondateurs qui conçoivent des solutions dans les quartiers informels, et BeGreen Africa pour les jeunes à la tête d'entreprises vertes de gestion des déchets. Tous deux relèvent des cinq piliers ci-dessous.",
+    "ctaTitle": "Construisez-la <s>avec nous</s>",
+    "ctaButton": "Voir les appels ouverts",
     "list": {
       "ycic": {
         "tag": "Programme phare",
@@ -766,7 +764,28 @@
         }
       ],
       "apply": "Postuler sur Yoma"
-    }
+    },
+    "ycicKicker": "Programme phare · édition 2025 · candidatures closes",
+    "ycicTitle": "Youth Climate Innovation <s>Challenge</s>",
+    "ycicAlt": "Des jeunes lors d'un atelier climat d'Afosi",
+    "begreenKicker": "Projet pilote au Kenya · nov. 2023 – juil. 2025",
+    "begreenTitle": "BeGreen <s>Africa</s>",
+    "begreenAlt": "Des jeunes femmes lors d'un événement jeunesse d'Afosi",
+    "figPrize": "dotation totale",
+    "figInnovators": "jeunes innovateurs",
+    "figMentorship": "mois de mentorat",
+    "figJobs": "emplois créés",
+    "figRevenue": "croissance du chiffre d'affaires",
+    "figWaste": "kg de déchets gérés",
+    "begreenPull": "Les entreprises accompagnées ont créé 531 emplois, contre 104 sans mentorat.",
+    "focusLabel": "Domaines d'action",
+    "readProgramme": "Découvrir le programme",
+    "meetFounders": "Rencontrer les fondateurs",
+    "pillarsKicker": "Cinq piliers",
+    "pillarsTitle": "Où s'inscrit <s>le travail</s>",
+    "pillarsBody": "Chaque programme, événement et ressource de KYCH sert au moins l'un de ces piliers.",
+    "ctaKicker": "Une idée pour le climat ?",
+    "ctaBody": "Les nouvelles éditions des programmes sont annoncées sur le tableau des financements, avec les subventions, bourses et concours ouverts dès maintenant aux jeunes Kényans."
   },
   "storiesPage": {
     "eyebrow": "Fondateurs du Youth Climate Innovation Challenge",

@@ -411,13 +411,11 @@
     "suggestButton": "Pendekeza fursa"
   },
   "programs": {
-    "eyebrow": "Programu na Mashindano",
-    "title": "Programu zinazojenga <g>viongozi.</g>",
-    "intro": "Omba kujiunga na programu za ukuzaji biashara, ushauri na mashindano yaliyobuniwa kuharakisha hatua za tabianchi zinazoongozwa na vijana katika kaunti zote 47.",
-    "pillarsBody": "Maeneo ya kimkakati yaliyolengwa kuharakisha hatua za tabianchi kupitia ubunifu unaoongozwa na vijana.",
-    "viewProgram": "Tazama programu",
-    "ctaTitle": "Jenga suluhisho lako la tabianchi pamoja nasi.",
-    "ctaButton": "Tazama fursa",
+    "eyebrow": "Programu na mashindano",
+    "title": "Programu <s>tunazoendesha</s>",
+    "intro": "Programu mbili hadi sasa: Youth Climate Innovation Challenge kwa waanzilishi wanaojenga suluhisho katika makazi yasiyo rasmi, na BeGreen Africa kwa vijana wanaoendesha biashara za kijani za taka. Zote ziko chini ya nguzo tano zilizo hapa chini.",
+    "ctaTitle": "Lijenge <s>pamoja nasi</s>",
+    "ctaButton": "Ona matangazo yaliyo wazi",
     "list": {
       "ycic": {
         "tag": "Programu kuu",
@@ -766,7 +764,28 @@
         }
       ],
       "apply": "Omba kupitia Yoma"
-    }
+    },
+    "ycicKicker": "Programu kuu · mzunguko wa 2025 · maombi yamefungwa",
+    "ycicTitle": "Youth Climate Innovation <s>Challenge</s>",
+    "ycicAlt": "Vijana katika warsha ya tabianchi ya Afosi",
+    "begreenKicker": "Majaribio Kenya · Nov 2023 – Jul 2025",
+    "begreenTitle": "BeGreen <s>Africa</s>",
+    "begreenAlt": "Wanawake vijana katika hafla ya vijana ya Afosi",
+    "figPrize": "jumla ya zawadi",
+    "figInnovators": "wabunifu vijana",
+    "figMentorship": "miezi ya ushauri",
+    "figJobs": "ajira zilizoundwa",
+    "figRevenue": "ukuaji wa mapato",
+    "figWaste": "kg za taka zilizoshughulikiwa",
+    "begreenPull": "Biashara zilizopata ushauri ziliunda ajira 531, ikilinganishwa na 104 bila ushauri.",
+    "focusLabel": "Maeneo ya kuzingatia",
+    "readProgramme": "Soma kuhusu programu",
+    "meetFounders": "Kutana na waanzilishi",
+    "pillarsKicker": "Nguzo tano",
+    "pillarsTitle": "Mahali kazi <s>inapoingia</s>",
+    "pillarsBody": "Kila programu, tukio na rasilimali kwenye KYCH hutumikia angalau moja ya nguzo hizi.",
+    "ctaKicker": "Una wazo la tabianchi?",
+    "ctaBody": "Mizunguko mipya ya programu hutangazwa kwenye ubao wa ufadhili, pamoja na ruzuku, ushirika na mashindano yaliyo wazi kwa vijana wa Kenya sasa."
   },
   "storiesPage": {
     "eyebrow": "Waanzilishi wa Youth Climate Innovation Challenge",

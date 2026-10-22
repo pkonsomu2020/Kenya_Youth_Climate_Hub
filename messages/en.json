@@ -411,13 +411,11 @@
     "suggestButton": "Suggest an opportunity"
   },
   "programs": {
-    "eyebrow": "Programs & Challenges",
-    "title": "Programs that <g>build leaders.</g>",
-    "intro": "Apply for incubators, mentorship programs and challenges designed to accelerate youth-led climate action across all 47 counties.",
-    "pillarsBody": "Focused strategic areas designed to accelerate climate action through youth-led innovation.",
-    "viewProgram": "View program",
-    "ctaTitle": "Build your climate solution with us.",
-    "ctaButton": "View opportunities",
+    "eyebrow": "Programmes & challenges",
+    "title": "What we <s>run</s>",
+    "intro": "Two programmes so far: the Youth Climate Innovation Challenge for founders building solutions in informal settlements, and BeGreen Africa for young people running green waste businesses. Both sit under the five pillars below.",
+    "ctaTitle": "Build it <s>with us</s>",
+    "ctaButton": "See open calls",
     "list": {
       "ycic": {
         "tag": "Flagship program",
@@ -766,7 +764,28 @@
         }
       ],
       "apply": "Apply on Yoma"
-    }
+    },
+    "ycicKicker": "Flagship · 2025 cycle · applications closed",
+    "ycicTitle": "Youth Climate Innovation <s>Challenge</s>",
+    "ycicAlt": "Young people at an Afosi youth climate workshop",
+    "begreenKicker": "Kenya pilot · Nov 2023 – Jul 2025",
+    "begreenTitle": "BeGreen <s>Africa</s>",
+    "begreenAlt": "Young women at an Afosi youth event",
+    "figPrize": "prize pool",
+    "figInnovators": "young innovators",
+    "figMentorship": "months of mentorship",
+    "figJobs": "jobs created",
+    "figRevenue": "revenue growth",
+    "figWaste": "kg of waste managed",
+    "begreenPull": "Mentored enterprises created 531 jobs, against 104 without mentorship.",
+    "focusLabel": "Focus areas",
+    "readProgramme": "Read the programme",
+    "meetFounders": "Meet the founders",
+    "pillarsKicker": "Five pillars",
+    "pillarsTitle": "Where the work <s>fits</s>",
+    "pillarsBody": "Every programme, event and resource on KYCH serves at least one of these.",
+    "ctaKicker": "Have a climate idea?",
+    "ctaBody": "New programme cycles are announced on the funding board, alongside grants, fellowships and competitions open to young Kenyans now."
   },
   "storiesPage": {
     "eyebrow": "Youth Climate Innovation Challenge founders",
