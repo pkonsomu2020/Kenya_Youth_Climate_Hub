@@ -1207,6 +1207,72 @@
   .z-tool__badges, .z-tool__breakdown { grid-template-columns: 1fr 1fr; }
 }
 
+/* ============================================================
+   Contact + Register — one form on a taped index card
+   ============================================================ */
+.z-form__head { padding: 56px 0 30px; }
+.z-form__head .z-h2 .z-serif { color: var(--z-green-d); }
+.z-form__head--center { text-align: center; }
+.z-form__head--center .z-lead { margin-left: auto; margin-right: auto; }
+.z-form__sec { padding: 20px 0 100px; }
+.z-form__grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .8fr); gap: 48px; align-items: start; }
+
+.z-formcard {
+  position: relative; padding: 40px 36px 30px; background-color: var(--z-white);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='34'%3E%3Cpath d='M0 33.5 H10' stroke='%23CFE8F7' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-position: 0 70px; border: 2px solid var(--z-navy); box-shadow: var(--z-shadow-lg); transform: rotate(-.6deg);
+}
+.z-formcard::before { content: ""; position: absolute; top: 0; bottom: 0; left: 24px; width: 2px; background: var(--z-pink); }
+.z-formcard > :not(.z-tape) { position: relative; }
+.z-formcard--solo { max-width: 640px; margin: 0 auto; transform: rotate(.5deg); }
+.z-formcard form { display: grid; gap: 18px; padding-left: 16px; }
+.z-formcard__title { margin: 0 0 4px; color: var(--z-orange); font-size: 12px; }
+.z-field { display: grid; gap: 6px; min-width: 0; border: 0; margin: 0; padding: 0; }
+.z-field > label, .z-field > legend { font-family: var(--z-mono); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 0; }
+.z-field input, .z-field select, .z-field textarea {
+  width: 100%; min-height: 48px; padding: 12px 14px; border: 2px solid var(--z-navy); border-radius: var(--z-r-sm);
+  background: var(--z-white); color: var(--z-navy); font-family: var(--z-body); font-size: 16px;
+}
+.z-field textarea { resize: vertical; line-height: 1.5; }
+.z-field input::placeholder, .z-field textarea::placeholder { color: #6B7280; }
+.z-field input:focus-visible, .z-field select:focus-visible, .z-field textarea:focus-visible { outline: 3px solid var(--z-orange); outline-offset: 2px; }
+.z-field input:user-invalid, .z-field select:user-invalid, .z-field textarea:user-invalid { border-color: var(--z-orange); background: #FFF3EE; }
+.z-field__row { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.z-field__row .z-field { align-content: start; }
+.z-field__hint { font-size: 12.5px; color: var(--z-muted); }
+.z-field--chips > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.z-chip { position: relative; cursor: pointer; }
+.z-chip input { position: absolute; opacity: 0; pointer-events: none; }
+.z-chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; border: 2px solid var(--z-navy); border-radius: 999px; background: var(--z-white); font-weight: 600; font-size: 14.5px; transition: background .15s; }
+.z-chip input:checked + span { background: var(--z-navy); color: var(--z-paper); }
+.z-chip input:focus-visible + span { outline: 3px solid var(--z-orange); outline-offset: 2px; }
+.z-formcard__submit { justify-self: start; margin-top: 4px; }
+.z-formcard__note { margin: 0; font-size: 13px; color: var(--z-muted); }
+.z-formcard__done { text-align: center; padding: 20px 10px 10px 26px; }
+.z-formcard__done .z-ms { color: var(--z-green-d); }
+.z-formcard__done h2 { font-family: var(--z-display); font-weight: 400; font-size: 28px; margin: 10px 0 8px; }
+.z-formcard__done p { max-width: 32em; margin: 0 auto 20px; color: var(--z-muted); line-height: 1.6; }
+
+.z-form__aside { display: grid; gap: 14px; }
+.z-form__item { display: flex; align-items: flex-start; gap: 14px; padding: 18px; background: var(--z-white); border: 2px solid var(--z-navy); border-radius: var(--z-r-md); color: var(--z-navy); text-decoration: none; overflow-wrap: anywhere; font-weight: 600; }
+.z-form__item > .z-ms { width: 44px; height: 44px; display: grid; place-items: center; flex: none; border-radius: 50%; background: var(--z-green-l); }
+.z-form__item small { display: block; margin-bottom: 4px; color: var(--z-muted); font-size: 10px; }
+a.z-form__item:hover { box-shadow: var(--z-shadow); transform: translate(-2px, -2px); }
+.z-form__item--note { background: var(--z-sun); font-weight: 500; }
+.z-form__item--note > .z-ms { background: var(--z-white); }
+
+@media (max-width: 980px) {
+  .z-form__grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .z-form__head { padding-top: 36px; }
+  .z-formcard { padding: 34px 18px 24px; transform: none; }
+  .z-formcard::before { left: 12px; }
+  .z-formcard form { padding-left: 8px; }
+  .z-field__row { grid-template-columns: 1fr; }
+  .z-formcard__submit { width: 100%; justify-content: center; }
+}
+
 /* ---------- responsive ---------- */
 @media (max-width: 1120px) {
   .z-nav__links { display: none; }
