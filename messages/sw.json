@@ -366,29 +366,53 @@
     "HealthMedicine": "Afya na Dawa",
     "EmergencyKit": "Mfuko wa Dharura",
     "WaterSanitation": "Maji na Usafi",
-    "SafetyLivestock": "Usalama na Mifugo"
+    "SafetyLivestock": "Usalama na Mifugo",
+    "Toolkit": "Vifaa",
+    "Dataset": "Seti za data",
+    "AITool": "Zana za AI",
+    "Report": "Ripoti",
+    "Calculator": "Vikokotoo",
+    "Beginner": "Mwanzo",
+    "Intermediate": "Kati",
+    "Advanced": "Juu",
+    "ClimateModeling": "Uundaji wa miundo ya tabianchi",
+    "Health": "Afya",
+    "Biodiversity": "Bioanuwai",
+    "Carbon": "Kaboni",
+    "Sustainability": "Uendelevu",
+    "Research": "Utafiti"
   },
   "library": {
-    "eyebrow": "Maktaba na Kituo cha Rasilimali",
-    "title": "Maarifa ya <g>kuchukua hatua.</g>",
-    "intro": "Zana shirikishi zilizotengenezwa mahususi kwa vijana wa Kenya wanaoleta mabadiliko ya tabianchi.",
-    "launch": "ANZA",
+    "eyebrow": "Maktaba ya Kidijitali",
+    "title": "Zana na rasilimali za <s>kuchukua hatua</s>",
+    "intro": "Zana mbili zilizojengwa kwa ajili ya vijana wa Kenya, pamoja na kabati la vifaa, seti za data, zana za AI na ripoti zilizokusanywa kutoka mashirika ya tabianchi. Kila kitu kimeelezwa kwa lugha rahisi na vingi ni bure.",
+    "toolsTitle": "Kwenye rafu",
+    "launch": "Fungua",
     "calcTitle": "Kikokotoo cha Alama ya Kaboni",
-    "calcDesc": "Kokotoa athari yako binafsi ya CO₂ kwa sekunde 60 ukitumia vipimo vya uzalishaji vya Kenya. Pata vidokezo maalum kwako.",
+    "calcDesc": "Kokotoa CO₂ yako ya mwaka kwa takriban dakika moja ukitumia vipimo vya uzalishaji vya Kenya, kisha uone mabadiliko yatakayoipunguza zaidi.",
     "calcTags": [
       "Maswali 4",
       "Sekunde 60",
-      "Data za Kenya"
+      "Data ya Kenya"
     ],
     "quizTitle": "Jaribio la Utayari wa Tabianchi",
-    "quizDesc": "Pima maarifa yako ya tabianchi. Pata beji. Pata rasilimali za kujifunza kulingana na matokeo yako.",
+    "quizDesc": "Maswali manane kuhusu sera, ufadhili na sayansi ya tabianchi ya Kenya. Pata beji na uone mada za kurudia.",
     "quizTags": [
       "Maswali 8",
       "Dakika 3",
       "Viwango 4 vya beji"
     ],
-    "ctaTitle": "Jenga maarifa yako ya tabianchi.",
-    "ctaButton": "Gundua programu"
+    "filesKicker": "{count, plural, one {Rasilimali #} other {Rasilimali #}} kabatini",
+    "filesTitle": "Kabati la <s>rasilimali</s>",
+    "filesNote": "Chagua folda. Kila faili hufungua rasilimali asili kwenye tovuti ya mchapishaji wake.",
+    "foldersLabel": "Folda za rasilimali",
+    "free": "Bure",
+    "loadError": "Kabati la rasilimali halikuweza kupakiwa kwa sasa.",
+    "empty": "Bado hakuna rasilimali. Mpya hukusanywa kila siku.",
+    "ctaKicker": "Ongeza kwenye maktaba",
+    "ctaTitle": "Unajua zana <s>tunayopaswa kuweka</s>?",
+    "ctaBody": "Tutumie kiungo cha kifaa, seti ya data au ripoti inayowasaidia vijana kuchukua hatua za tabianchi, nasi tutaikagua kwa ajili ya kabati.",
+    "ctaButton": "Pendekeza rasilimali"
   },
   "newsPage": {
     "title": "Habari za tabianchi kutoka <s>Kenya</s> na kwingineko",
@@ -1095,7 +1119,7 @@
     "topActions": "Hatua zako 3 kuu",
     "recalculate": "Kokotoa Upya",
     "share": "Shiriki Matokeo Yangu",
-    "shareText": "Nimekokotoa alama yangu ya kaboni na KYCH! 🌍\nAlama yangu: tani {total} za CO₂ kwa mwaka\nWastani wa Kenya: tani {kenya} | Wastani wa dunia: tani {world}\nKokotoa yako kwenye kych.org/e-library",
+    "shareText": "Nimekokotoa alama yangu ya kaboni na KYCH.\nAlama yangu: tani {total} za CO₂ kwa mwaka\nWastani wa Kenya: tani {kenya} | Wastani wa dunia: tani {world}\nKokotoa yako kwenye kenyayouthclimatehub.org/e-library",
     "shareTitle": "Alama Yangu ya Kaboni — KYCH",
     "copied": "Imenakiliwa!"
   },
@@ -1119,7 +1143,7 @@
     "recommended": "Tunakupendekezea",
     "retake": "Rudia Jaribio",
     "share": "Shiriki Beji Yangu",
-    "shareText": "Nimepata {score}/{total} kwenye Jaribio la Utayari wa Tabianchi la KYCH! 🌍\nNimepata beji ya \"{badge}\" {emoji}\nPima maarifa yako ya tabianchi kwenye kych.org/e-library",
+    "shareText": "Nimepata {score}/{total} kwenye Jaribio la Utayari wa Tabianchi la KYCH na nimepata beji ya \"{badge}\".\nPima maarifa yako ya tabianchi kwenye kenyayouthclimatehub.org/e-library",
     "shareTitle": "Matokeo Yangu ya Jaribio la Tabianchi — KYCH",
     "copied": "Imenakiliwa!",
     "questions": [
