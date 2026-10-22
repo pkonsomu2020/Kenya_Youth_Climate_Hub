@@ -1,4 +1,5 @@
 "use client";
+import Photo from "@/components/zine/Photo";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { Icon } from "@/components/zine/Icon";
@@ -79,7 +80,7 @@ export function Hero({ feed }: { feed: HomeFeed }) {
               <circle cx="50" cy="50" r="22" fill="#FFB703" stroke="#101C33" strokeWidth="3" />
             </svg>
             <figure className="z-polaroid z-polaroid--b">
-              <img src="/YCIC_Photos/VIOLET.jpeg" alt={t("hero.imgViolet")} width={130} height={150} />
+              <Photo src="/YCIC_Photos/web/violet.jpg" alt={t("hero.imgViolet")} width={130} height={150} />
               <figcaption>{t("hero.capViolet")}</figcaption>
             </figure>
             <figure className="z-polaroid z-polaroid--a">

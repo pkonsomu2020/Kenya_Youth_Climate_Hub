@@ -1,5 +1,6 @@
 "use client";
 
+import Photo from "@/components/zine/Photo";
 import Link from "next/link";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
@@ -72,7 +73,7 @@ export default function SuccessStoriesPage() {
               <div className="z-st__spread">
                 <figure className="z-st__photo">
                   <span className="z-tape z-tape--sun" style={{ top: -12, left: "50%", marginLeft: -46, transform: "rotate(-3deg)" }} aria-hidden="true" />
-                  {focus.photo && <img src={focus.photo} alt={focus.name} width={440} height={520} />}
+                  {focus.photo && <Photo src={focus.photo} alt={focus.name} width={440} height={520} />}
                   <figcaption className="z-marker">{focus.name}</figcaption>
                 </figure>
                 <div className="z-st__text">

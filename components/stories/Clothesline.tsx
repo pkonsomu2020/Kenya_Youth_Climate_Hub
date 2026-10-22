@@ -1,4 +1,5 @@
 "use client";
+import Photo from "@/components/zine/Photo";
 import Link from "next/link";
 import { useTaxonomy } from "@/i18n/useTaxonomy";
 import { successStories } from "@/lib/data/successStories";
@@ -36,7 +37,7 @@ export function Clothesline({ stories, small = false, label }: { stories: Story[
               <li key={s.id} style={{ "--drop": sag.toFixed(3), "--tilt": `${TILTS[i % TILTS.length]}deg` } as React.CSSProperties}>
                 <Link href={`/success-stories/${s.id}`} className="z-pol">
                   <span className="z-pol__peg" style={{ background: PEGS[i % PEGS.length] }} aria-hidden="true" />
-                  {s.photo && <img src={s.photo} alt={s.name} loading="lazy" width={220} height={200} />}
+                  {s.photo && <Photo src={s.photo} alt={s.name} loading="lazy" width={220} height={200} />}
                   <span className="z-pol__cap">{s.name.split(" ")[0]} · {s.company}</span>
                   {!small && <span className="z-pol__tag">{tax(storyCategory(s.id))}</span>}
                 </Link>
