@@ -50,6 +50,7 @@
   overflow-x: clip;
 }
 .z-page img { display: block; max-width: 100%; }
+.z-page picture { display: contents; }
 .z-wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; position: relative; }
 .z-mono { font-family: var(--z-mono); letter-spacing: .12em; text-transform: uppercase; font-size: 11.5px; font-weight: 700; }
 .z-marker { font-family: var(--z-marker); letter-spacing: .01em; }

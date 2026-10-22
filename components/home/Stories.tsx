@@ -1,4 +1,5 @@
 "use client";
+import Photo from "@/components/zine/Photo";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Icon } from "@/components/zine/Icon";
@@ -31,7 +32,7 @@ export function Stories() {
           {stories.map((s) => (
             <Link key={s.id} href={`/success-stories/${s.id}`} className="z-story">
               <span className="z-story__tag">{tax(category(s.id))}</span>
-              <img src={s.photo} alt={s.name} width={260} height={250} loading="lazy" />
+              <Photo src={s.photo} alt={s.name} width={260} height={250} loading="lazy" />
               <h3>{s.company}</h3>
               <div className="z-story__who">{s.name}</div>
               <p>{s.excerpt}</p>

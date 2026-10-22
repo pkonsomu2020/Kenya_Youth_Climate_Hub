@@ -1,5 +1,6 @@
 "use client";
 
+import Photo from "@/components/zine/Photo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { use } from "react";
@@ -35,7 +36,7 @@ export default function StoryPage({ params }: StoryPageProps) {
           <div className="z-st__spread z-st__spread--light">
             <figure className="z-st__photo">
               <span className="z-tape" style={{ top: -12, left: "50%", marginLeft: -46, transform: "rotate(3deg)" }} aria-hidden="true" />
-              {story.photo && <img src={story.photo} alt={story.name} width={440} height={520} />}
+              {story.photo && <Photo src={story.photo} alt={story.name} width={440} height={520} />}
               <figcaption className="z-marker">{story.name}</figcaption>
             </figure>
             <article className="z-st__text">
