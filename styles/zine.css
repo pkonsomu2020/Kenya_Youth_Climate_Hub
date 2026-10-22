@@ -771,12 +771,13 @@
 .z-st__hint { display: none; margin-top: 4px; font-size: 18px; }
 
 /* washing line: rope across the full width, polaroids pegged along its sag */
-.z-line { --pol: 214px; --sag: 64px; position: relative; }
+.z-line { --pol: 214px; --sag: 64px; --r0: 16px; position: relative; }
 .z-line:focus-visible { outline: 3px solid var(--z-orange); outline-offset: 6px; border-radius: 12px; }
-.z-line__track { position: relative; padding-top: 18px; }
-.z-line__rope { position: absolute; left: -2%; top: 10px; width: 104%; height: calc(var(--sag) + 12px); overflow: visible; }
-.z-line__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 18px; position: relative; }
-.z-line__list > li { display: flex; justify-content: center; padding-top: calc(var(--drop) * var(--sag)); }
+.z-line__track { position: relative; }
+/* rope and photos share one parabola: y = r0 + sag * 4t(1 - t), t = column centre / width */
+.z-line__rope { position: absolute; left: 0; top: var(--r0); width: 100%; height: var(--sag); overflow: visible; }
+.z-line__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 0; position: relative; }
+.z-line__list > li { display: flex; justify-content: center; padding: calc(var(--r0) + var(--drop) * var(--sag) + 2px) 9px 0; }
 .z-pol {
   position: relative; display: flex; flex-direction: column; width: 100%; max-width: var(--pol);
   background: var(--z-white); color: var(--z-navy); text-decoration: none;
@@ -829,8 +830,8 @@
 @media (max-width: 860px) {
   .z-line { overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -18px; padding: 0 18px 20px; overscroll-behavior-x: contain; }
   .z-line__track { width: max-content; }
-  .z-line__list { grid-template-columns: repeat(var(--n), 200px); gap: 22px; }
-  .z-line--small .z-line__list { grid-template-columns: repeat(var(--n), 160px); }
+  .z-line__list { grid-template-columns: repeat(var(--n), 222px); }
+  .z-line--small .z-line__list { grid-template-columns: repeat(var(--n), 180px); }
   .z-line__list > li { scroll-snap-align: center; }
   .z-st__hint { display: inline-flex; }
 }

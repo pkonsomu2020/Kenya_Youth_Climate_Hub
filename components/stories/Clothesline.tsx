@@ -26,8 +26,8 @@ export function Clothesline({ stories, small = false, label }: { stories: Story[
   return (
     <div className={`z-line${small ? " z-line--small" : ""}`} role="region" aria-label={label} tabIndex={0}>
       <div className="z-line__track" style={{ "--n": n } as React.CSSProperties}>
-        <svg className="z-line__rope" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 8 Q 500 70 1000 8" fill="none" stroke="#101C33" strokeWidth="3" vectorEffect="non-scaling-stroke" />
+        <svg className="z-line__rope" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 0 Q 500 200 1000 0" fill="none" stroke="#101C33" strokeWidth="3" vectorEffect="non-scaling-stroke" />
         </svg>
         <ul className="z-line__list">
           {stories.map((s, i) => {
