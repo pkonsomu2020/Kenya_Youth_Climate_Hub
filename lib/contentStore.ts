@@ -3,7 +3,8 @@
 // ============================================================
 // KYCH Admin Hub content store — localStorage backed mini CMS
 // Opportunities and News are now managed via the backend API.
-// This store handles: Resources, Events, Posts, Messages, Settings
+// This store handles: Resources, Events, Posts, Settings.
+// Contact messages live in Supabase (lib/useContactMessages.ts).
 // ============================================================
 import { useEffect, useState, useCallback } from "react";
 

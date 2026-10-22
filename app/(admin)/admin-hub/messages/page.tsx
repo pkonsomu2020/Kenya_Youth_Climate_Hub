@@ -1,14 +1,13 @@
 "use client";
 
-import { PageHead, useAdmin } from "@/components/admin/AdminUI";
+import { PageHead } from "@/components/admin/AdminUI";
+import { useContactMessages } from "@/lib/useContactMessages";
 
 export default function MessagesAdmin() {
-  const { content, update } = useAdmin();
-  // Safe access to messages array
-  const messages = content.messages || [];
+  const { messages, error, toggleRead, remove: removeMessage } = useContactMessages();
 
-  const toggle = (id: string) => update("messages", messages.map((m) => m.id === id ? { ...m, read: !m.read } : m));
-  const remove = (id: string) => { if (confirm("Delete message?")) update("messages", messages.filter((m) => m.id !== id)); };
+  const toggle = (id: string) => { void toggleRead(id); };
+  const remove = (id: string) => { if (confirm("Delete message?")) void removeMessage(id); };
 
   return (
     <>
@@ -32,7 +31,8 @@ export default function MessagesAdmin() {
             </div>
           </div>
         ))}
-        {messages.length === 0 && <div style={{ color: "var(--muted-foreground)" }}>No messages.</div>}
+        {error && <div style={{ color: "var(--red)" }}>Could not load messages: {error}</div>}
+        {messages.length === 0 && !error && <div style={{ color: "var(--muted-foreground)" }}>No messages.</div>}
       </div>
     </>
   );
