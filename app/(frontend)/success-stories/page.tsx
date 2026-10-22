@@ -1,165 +1,113 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useEffect, useState } from "react";
-import { successStories } from "@/lib/data/successStories";
-import { NK, nkShadow, nkCard } from "@/lib/nkTheme";
-import { GrowHeading } from "@/components/GrowHeading";
-import { CTABand } from "@/components/CTABand";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useTaxonomy } from "@/i18n/useTaxonomy";
 import { useLocalizedStories } from "@/lib/data/useLocalizedStories";
-
-function useInView(ref: React.RefObject<Element | null>, threshold = 0.12) {
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setInView(true); obs.disconnect(); } }, { threshold });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [ref, threshold]);
-  return inView;
-}
-
-function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref);
-  return (
-    <div ref={ref} style={{ opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(20px)", transition: `opacity .8s ease ${delay}s, transform .8s ease ${delay}s` }}>
-      {children}
-    </div>
-  );
-}
-
-// Normalize the data file's inconsistent tag casing ("Renewal energy" typo,
-// "Renewable Energy") into one canonical label for filtering/display.
-// Always run on the English tag; the display label comes from the taxonomy messages.
-function normalizeTag(tag: string): string {
-  if (/renew/i.test(tag)) return "Renewable Energy";
-  return tag;
-}
-
-function categoryOf(id: string): string {
-  return normalizeTag(successStories.find((s) => s.id === id)?.tag ?? "");
-}
+import { Clothesline, storyCategory } from "@/components/stories/Clothesline";
+import { Icon } from "@/components/zine/Icon";
 
 const FILTERS = ["All", "Renewable Energy", "WASH"];
-
-const BADGE_COLORS = [
-  { bg: NK.green, fg: NK.navyDeep },
-  { bg: NK.ink, fg: NK.green },
-];
-
-function StoryCard({ story, index }: { story: typeof successStories[0]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref);
-  const [hov, setHov] = useState(false);
-  const t = useTranslations("storiesPage");
-  const tax = useTaxonomy();
-  const badge = categoryOf(story.id) === "WASH" ? { bg: NK.greenAlt, fg: NK.white } : BADGE_COLORS[index % 2];
-
-  return (
-    <Link
-      ref={ref as any}
-      href={`/success-stories/${story.id}`}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        ...nkCard, display: "flex", flexDirection: "column", textDecoration: "none", padding: "1.75rem",
-        opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(40px)",
-        transition: `opacity .5s ease ${index * 0.08}s, transform .5s ease ${index * 0.08}s, box-shadow .2s, translate .2s`,
-        boxShadow: hov ? nkShadow(NK.green) : nkShadow(NK.ink),
-        translate: hov ? "0 -4px" : "0 0",
-      }}
-    >
-      {story.photo && (
-        <div style={{ height: 160, overflow: "hidden", border: `2px solid ${NK.ink}`, marginBottom: "1.25rem" }}>
-          <img src={story.photo} alt={story.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%" }} />
-        </div>
-      )}
-      <span style={{
-        alignSelf: "flex-start", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase",
-        padding: "5px 9px", background: badge.bg, color: badge.fg, marginBottom: "1rem",
-      }}>
-        {tax(categoryOf(story.id))}
-      </span>
-      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.3rem", color: NK.ink, marginBottom: ".75rem" }}>{story.company}</div>
-      <p style={{ fontSize: ".9rem", color: NK.muted, lineHeight: 1.6, flex: 1, marginBottom: "1.25rem" }}>{story.excerpt}</p>
-      <div style={{ display: "flex", alignItems: "center", gap: ".75rem", paddingTop: "1rem", borderTop: "1px solid rgba(16,28,51,0.1)" }}>
-        <div style={{ width: 38, height: 38, background: NK.ink, color: NK.green, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".8rem", flexShrink: 0 }}>
-          {story.name.split(" ").map((n) => n[0]).join("")}
-        </div>
-        <div>
-          <div style={{ fontFamily: "var(--fm)", fontSize: 9, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.1em" }}>{t("founder")}</div>
-          <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: ".9rem", color: NK.ink }}>{story.name}</div>
-        </div>
-      </div>
-    </Link>
-  );
-}
 
 export default function SuccessStoriesPage() {
   const t = useTranslations("storiesPage");
   const tax = useTaxonomy();
   const stories = useLocalizedStories();
   const [filter, setFilter] = useState("All");
-  const filtered = filter === "All" ? stories : stories.filter((s) => categoryOf(s.id) === filter);
+  const [focusId, setFocusId] = useState<string | null>(null);
+  const filtered = filter === "All" ? stories : stories.filter((s) => storyCategory(s.id) === filter);
+  const focus = filtered.find((s) => s.id === focusId) ?? filtered[0];
+  const s = (c: React.ReactNode) => <span className="z-serif">{c}</span>;
 
   return (
-    <>
-      {/* ── HERO ── */}
-      <section style={{ background: NK.bg }}>
-        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
-          <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>
-            {t("eyebrow")}
-          </span>
-          <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.6vw,86px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.02, margin: 0 }}>
-            {t.rich("title", { g: (c) => <span style={{ color: NK.green }}>{c}</span> })}
-          </GrowHeading>
-          <p style={{ fontFamily: "var(--fb)", fontSize: "1.25rem", color: NK.muted, lineHeight: 1.7, marginTop: "1.5rem", maxWidth: 660 }}>
-            {t("intro")}
-          </p>
-        </div>
-      </section>
-
-      {/* ── FILTER + GRID ── */}
-      <section style={{ background: NK.bg }}>
-        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "1.5rem 2.5rem 5.5rem" }}>
-          <Reveal>
-            <div style={{ display: "flex", gap: ".6rem", flexWrap: "wrap", marginBottom: "2rem" }}>
-              {FILTERS.map((f) => {
-                const active = filter === f;
-                return (
-                  <button
-                    key={f}
-                    onClick={() => setFilter(f)}
-                    style={{
-                      padding: "9px 18px", fontFamily: "var(--fs)", fontWeight: 600, fontSize: 13,
-                      border: `2px solid ${active ? NK.green : NK.ink}`,
-                      background: active ? NK.green : "transparent",
-                      color: active ? NK.navyDeep : NK.ink,
-                      cursor: "pointer", transition: "all .2s",
-                    }}
-                  >
-                    {tax(f)}
-                  </button>
-                );
-              })}
-            </div>
-          </Reveal>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.5rem" }} className="nk-grid-3">
-            {filtered.map((s, i) => <StoryCard key={s.id} story={s} index={i} />)}
+    <div className="z-page z-st">
+      <header className="z-st__head">
+        <div className="z-wrap">
+          <span className="z-mono z-eyebrow">{t("eyebrow")}</span>
+          <h1 className="z-h2 z-balance">{t.rich("title", { s })}</h1>
+          <p className="z-lead">{t("intro")}</p>
+          <div className="z-fund__types" role="group" aria-label={t("filterLabel")} style={{ marginTop: 26 }}>
+            {FILTERS.map((f) => (
+              <button key={f} type="button" aria-pressed={filter === f} onClick={() => { setFilter(f); setFocusId(null); }}>
+                {tax(f)}
+              </button>
+            ))}
           </div>
+        </div>
+      </header>
 
-          {filtered.length === 0 && (
-            <div style={{ textAlign: "center", padding: "4rem 2rem", color: NK.muted, fontFamily: "var(--fb)" }}>
-              {t("empty")}
-            </div>
+      <section className="z-st__linesec" aria-label={t("lineLabel")}>
+        <div className="z-wrap">
+          {filtered.length ? (
+            <>
+              <Clothesline stories={filtered} label={t("lineLabel")} />
+              <p className="z-note z-st__hint"><Icon name="swipe" /> {t("hint")}</p>
+            </>
+          ) : (
+            <p className="z-fund__empty">{t("empty")}</p>
           )}
         </div>
       </section>
 
-      <CTABand title={t("ctaTitle")} buttonLabel={`${t("ctaButton")} →`} href="/opportunities" />
-    </>
+      {focus && (
+        <>
+          <div className="z-tear z-tear--top" aria-hidden="true" />
+          <section className="z-dark z-st__focus" aria-labelledby="st-focus">
+            <div className="z-wrap">
+              <div className="z-sec-head">
+                <div>
+                  <span className="z-mono z-kicker">{t("focusKicker")}</span>
+                  <h2 id="st-focus" className="z-h2">{focus.company}</h2>
+                </div>
+                <div className="z-st__pick" role="group" aria-label={t("pickLabel")}>
+                  {filtered.map((x) => (
+                    <button key={x.id} type="button" aria-pressed={x.id === focus.id} onClick={() => setFocusId(x.id)}>
+                      {x.name.split(" ")[0]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="z-st__spread">
+                <figure className="z-st__photo">
+                  <span className="z-tape z-tape--sun" style={{ top: -12, left: "50%", marginLeft: -46, transform: "rotate(-3deg)" }} aria-hidden="true" />
+                  {focus.photo && <img src={focus.photo} alt={focus.name} width={440} height={520} />}
+                  <figcaption className="z-marker">{focus.name}</figcaption>
+                </figure>
+                <div className="z-st__text">
+                  <span className="z-st__tag">{tax(storyCategory(focus.id))}</span>
+                  <p className="z-st__excerpt">{focus.excerpt}</p>
+                  <p className="z-st__full">{focus.fullText}</p>
+                  <Link href={`/success-stories/${focus.id}`} className="z-btn z-btn--green">
+                    {t("readStory")} <Icon name="arrow_forward" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+          <div className="z-tear z-tear--bottom" aria-hidden="true" />
+        </>
+      )}
+
+      <section className="z-st__next">
+        <div className="z-wrap z-st__nextgrid">
+          <Link href="/opportunities" className="z-pol z-pol--empty" aria-label={t("ctaButton")}>
+            <span className="z-pol__peg" style={{ background: "var(--z-green)" }} aria-hidden="true" />
+            <span className="z-pol__blank"><Icon name="add_a_photo" size={48} /></span>
+            <span className="z-pol__cap">{t("blankCaption")}</span>
+          </Link>
+          <div>
+            <span className="z-mono z-kicker">{t("ctaKicker")}</span>
+            <h2 className="z-h2 z-balance">{t.rich("ctaTitle", { s })}</h2>
+            <p className="z-lead">{t("ctaBody")}</p>
+            <div className="z-ctas">
+              <Link href="/opportunities" className="z-btn z-btn--navy">{t("ctaButton")} <Icon name="arrow_forward" /></Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div className="z-tear z-tear--top" aria-hidden="true" />
+    </div>
   );
 }
