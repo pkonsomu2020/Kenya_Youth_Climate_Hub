@@ -20,7 +20,8 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: [
-          { key: "X-Frame-Options", value: "DENY" },
+          // afosi.org embeds KYCH, so framing is limited to it (this was a server-only edit before)
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self' https://afosi.org https://www.afosi.org http://localhost:*" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
