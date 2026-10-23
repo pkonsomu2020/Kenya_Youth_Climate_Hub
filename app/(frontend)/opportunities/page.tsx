@@ -1,114 +1,15 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { useOpportunities } from "@/lib/useOpportunities";
-import { Clock, Search, ArrowRight } from "lucide-react";
-import { NK, nkShadow, nkCard, nkBadgeForKey } from "@/lib/nkTheme";
-import { GrowHeading } from "@/components/GrowHeading";
-import { CTABand } from "@/components/CTABand";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useOpportunities } from "@/lib/useOpportunities";
 import { useTaxonomy } from "@/i18n/useTaxonomy";
+import { NoticeCard, daysUntil, cleanTitle } from "@/components/funding/NoticeCard";
+import { Icon } from "@/components/zine/Icon";
 
 const TYPES = ["All", "Grant", "Fellowship", "Internship", "Competition", "Job", "Accelerator"];
 const TOPICS = ["All", "Energy", "Water", "Agriculture", "Policy", "Finance", "Innovation", "Resilience", "Advocacy", "Waste"];
-
-function useInView(ref: React.RefObject<Element | null>, threshold = 0.1) {
-  const [v, setV] = useState(false);
-  useEffect(() => {
-    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); o.disconnect(); } }, { threshold });
-    if (ref.current) o.observe(ref.current);
-    return () => o.disconnect();
-  }, [ref, threshold]);
-  return v;
-}
-
-function parseDeadline(str: string | null): Date | null {
-  if (!str || str === "Open" || str === "Rolling") return null;
-  const d = new Date(str);
-  if (!isNaN(d.getTime())) return d;
-  const d2 = new Date(str.replace(/(\d+)(st|nd|rd|th)/gi, "$1"));
-  return isNaN(d2.getTime()) ? null : d2;
-}
-function getDaysUntil(s: string | null): number | null {
-  const d = parseDeadline(s);
-  if (!d) return null;
-  const t = new Date(); t.setHours(0, 0, 0, 0);
-  return Math.ceil((d.getTime() - t.getTime()) / 86400000);
-}
-
-function FilterPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        padding: "8px 16px", fontFamily: "var(--fs)", fontWeight: 600, fontSize: 12.5,
-        border: `2px solid ${active ? NK.green : NK.ink}`,
-        background: active ? NK.green : "transparent",
-        color: active ? NK.navyDeep : NK.ink,
-        cursor: "pointer", transition: "all .2s",
-      }}
-    >
-      {label}
-    </button>
-  );
-}
-
-function OppCard({ o, index }: { o: any; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref);
-  const [hov, setHov] = useState(false);
-  const t = useTranslations("opportunitiesPage");
-  const tax = useTaxonomy();
-  const badge = nkBadgeForKey(o.type || "Opportunity");
-  const days = getDaysUntil(o.deadline);
-
-  let deadlineText: string;
-  if (!o.deadline || o.deadline === "Open" || o.deadline === "Rolling") deadlineText = t("rolling");
-  else if (days !== null && days >= 0 && days <= 7) deadlineText = days === 0 ? t("closesToday") : t("closesIn", { days });
-  else deadlineText = t("closesOn", { date: o.deadline });
-
-  return (
-    <a
-      ref={ref as any}
-      href={o.url} target="_blank" rel="noopener noreferrer"
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{
-        ...nkCard, display: "flex", flexDirection: "column", padding: "1.75rem", textDecoration: "none",
-        opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(30px)",
-        transition: `opacity .5s ease ${index * 0.06}s, transform .5s ease ${index * 0.06}s, box-shadow .2s, translate .2s`,
-        boxShadow: hov ? nkShadow(NK.green) : nkShadow(NK.ink),
-        translate: hov ? "0 -4px" : "0 0",
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: ".75rem", marginBottom: "1.1rem" }}>
-        <span style={{ fontFamily: "var(--fm)", fontWeight: 700, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 9px", background: badge.bg, color: badge.fg }}>
-          {tax(o.type)}
-        </span>
-        {o.amount && (
-          <span style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: 12.5, color: NK.greenAlt }}>{o.amount}</span>
-        )}
-      </div>
-      <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.15rem", color: NK.ink, marginBottom: ".35rem", lineHeight: 1.25 }}>{o.name || o.title}</div>
-      <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: ".9rem" }}>{o.provider || o.source}</div>
-      <p style={{ fontSize: ".88rem", color: NK.muted, lineHeight: 1.6, flex: 1, marginBottom: "1.1rem" }}>{o.desc}</p>
-      <div style={{ fontFamily: "var(--fm)", fontSize: 11.5, color: NK.mutedLabel, marginBottom: "1rem" }}>{deadlineText}</div>
-      <span style={{ alignSelf: "flex-start", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 14, color: NK.ink, borderBottom: `2px solid ${NK.green}`, paddingBottom: 2 }}>
-        {o.type === "Grant" ? t("apply") : t("details")} →
-      </span>
-    </a>
-  );
-}
-
-function SkeletonCard() {
-  return (
-    <div style={{ ...nkCard, boxShadow: nkShadow(NK.ink), padding: "1.75rem" }}>
-      <div style={{ height: 20, width: 70, background: "rgba(16,28,51,0.08)", marginBottom: "1.1rem" }} />
-      <div style={{ height: 20, background: "rgba(16,28,51,0.08)", marginBottom: 8 }} />
-      <div style={{ height: 12, width: "50%", background: "rgba(16,28,51,0.06)", marginBottom: 16 }} />
-      <div style={{ height: 14, background: "rgba(16,28,51,0.06)" }} />
-    </div>
-  );
-}
+const SOON_DAYS = 14;
 
 export default function Opportunities() {
   const t = useTranslations("opportunitiesPage");
@@ -116,77 +17,142 @@ export default function Opportunities() {
   const [type, setType] = useState("All");
   const [topic, setTopic] = useState("All");
   const [search, setSearch] = useState("");
-  const { opportunities, loading, error, refetch } = useOpportunities({ limit: 50, type, topic });
+  const { opportunities, loading, error, refetch } = useOpportunities({ limit: 100, type, topic });
 
-  const filtered = opportunities.filter((o) => {
-    if (!search) return true;
-    const q = search.toLowerCase();
-    return o.name?.toLowerCase().includes(q) || o.provider?.toLowerCase().includes(q) || o.desc?.toLowerCase().includes(q);
-  });
+  const q = search.trim().toLowerCase();
+  const filtered = opportunities.filter((o) =>
+    !q || cleanTitle(o).toLowerCase().includes(q) || o.provider?.toLowerCase().includes(q) || o.desc?.toLowerCase().includes(q));
+
+  // Anything with a real deadline in the next two weeks is pinned above the board, soonest first.
+  const soon = filtered
+    .map((o) => ({ o, d: daysUntil(o.deadline) }))
+    .filter((x): x is { o: typeof x.o; d: number } => x.d !== null && x.d >= 0 && x.d <= SOON_DAYS)
+    .sort((a, b) => a.d - b.d)
+    .map((x) => x.o);
+  const soonIds = new Set(soon.map((o) => o.id));
+  const rest = filtered.filter((o) => !soonIds.has(o.id));
+  const s = (c: React.ReactNode) => <span className="z-serif">{c}</span>;
 
   return (
-    <>
-      <section style={{ background: NK.bg }}>
-        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
-          <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>
-            {t("eyebrow")}
+    <div className="z-page z-fund">
+      <header className="z-fund__head">
+        <div className="z-wrap">
+          <span className="z-mono z-eyebrow">
+            {loading ? t("eyebrow") : t("onBoard", { count: opportunities.length })}
           </span>
-          <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.6vw,86px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.02, margin: 0 }}>
-            {t.rich("title", { g: (c) => <span style={{ color: NK.green }}>{c}</span> })}
-          </GrowHeading>
-          <p style={{ fontFamily: "var(--fb)", fontSize: "1.25rem", color: NK.muted, lineHeight: 1.7, marginTop: "1.5rem", maxWidth: 660 }}>
-            {t("intro")}
-          </p>
+          <h1 className="z-h2 z-balance">{t.rich("title", { s })}</h1>
+          <p className="z-lead">{t("intro")}</p>
+        </div>
+      </header>
+
+      <section className="z-fund__filters" aria-label={t("filters")}>
+        <div className="z-wrap">
+          <div className="z-fund__types" role="group" aria-label={t("typeLabel")}>
+            {TYPES.map((v) => (
+              <button key={v} type="button" aria-pressed={type === v} onClick={() => setType(v)}>
+                {tax(v)}
+              </button>
+            ))}
+          </div>
+          <div className="z-fund__row">
+            <label className="z-fund__field">
+              <Icon name="search" />
+              <span className="z-sr">{t("search")}</span>
+              <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t("search")} />
+            </label>
+            <label className="z-fund__field z-fund__field--select">
+              <Icon name="sell" />
+              <span className="z-sr">{t("topicLabel")}</span>
+              <select value={topic} onChange={(e) => setTopic(e.target.value)}>
+                {TOPICS.map((v) => <option key={v} value={v}>{v === "All" ? t("allTopics") : tax(v)}</option>)}
+              </select>
+              <Icon name="expand_more" />
+            </label>
+          </div>
         </div>
       </section>
 
-      <section style={{ background: NK.bg }}>
-        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "1.5rem 2.5rem 5.5rem" }}>
-          <div style={{ marginBottom: ".85rem", display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
-            {TYPES.map((v) => <FilterPill key={v} label={tax(v)} active={type === v} onClick={() => setType(v)} />)}
-          </div>
-          <div style={{ marginBottom: "1rem", display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
-            {TOPICS.map((v) => <FilterPill key={v} label={tax(v)} active={topic === v} onClick={() => setTopic(v)} />)}
-          </div>
-          <div style={{ position: "relative", maxWidth: 320, marginBottom: "2rem" }}>
-            <Search size={14} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: NK.mutedLabel }} />
-            <input
-              value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t("search")}
-              aria-label={t("search")}
-              style={{ width: "100%", padding: "10px 12px 10px 34px", border: `2px solid ${NK.ink}`, fontFamily: "var(--fb)", fontSize: 13.5, outline: "none", background: NK.white, color: NK.ink }}
-            />
-          </div>
-
+      <section className="z-fund__boardsec" aria-labelledby="fund-board" aria-busy={loading}>
+        <div className="z-wrap">
           {loading && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
-              {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+            <div className="z-board">
+              {Array.from({ length: 8 }).map((_, i) => <div key={i} className="z-note-card z-note-card--skel" aria-hidden="true" />)}
             </div>
           )}
 
-          {!loading && filtered.length > 0 && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
-              {filtered.map((o, i) => <OppCard key={o.id} o={o} index={i} />)}
+          {!loading && soon.length > 0 && (
+            <div className="z-fund__soon">
+              <div className="z-fund__boardhead">
+                <h2 className="z-fund__h3"><Icon name="timer" /> {t("soonTitle")}</h2>
+                <span className="z-note">{t("soonNote", { days: SOON_DAYS })}</span>
+              </div>
+              <ul className="z-board z-board--soon">
+                {soon.map((o) => <li key={o.id}><NoticeCard o={o} /></li>)}
+              </ul>
             </div>
+          )}
+
+          {!loading && rest.length > 0 && (
+            <>
+              <div className="z-fund__boardhead">
+                <h2 id="fund-board" className="z-fund__h3"><Icon name="push_pin" /> {t("boardTitle")}</h2>
+                <span className="z-mono">{t("showing", { count: filtered.length })}</span>
+              </div>
+              <ul className="z-board">
+                {rest.map((o) => <li key={o.id}><NoticeCard o={o} /></li>)}
+              </ul>
+            </>
           )}
 
           {!loading && !error && filtered.length === 0 && (
-            <div style={{ textAlign: "center", padding: "5rem 2rem", border: `2px solid ${NK.ink}` }}>
-              <Clock size={40} color={NK.green} style={{ margin: "0 auto 1rem", display: "block" }} />
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.ink, marginBottom: ".5rem" }}>{t("emptyTitle")}</div>
-              <p style={{ color: NK.muted, marginBottom: "1.5rem" }}>{t("emptyBody")}</p>
-              <button onClick={refetch} style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", padding: "12px 24px", background: NK.green, color: NK.navyDeep, fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, border: "none", cursor: "pointer" }}>
-                {t("refresh")} <ArrowRight size={14} />
-              </button>
+            <div className="z-fund__empty">
+              <Icon name="search_off" size={44} />
+              <h2 className="z-fund__h3">{opportunities.length ? t("noMatchTitle") : t("emptyTitle")}</h2>
+              <p>{opportunities.length ? t("noMatchBody") : t("emptyBody")}</p>
+              {opportunities.length ? (
+                <button type="button" className="z-btn z-btn--white" onClick={() => { setSearch(""); setType("All"); setTopic("All"); }}>
+                  <Icon name="filter_alt_off" /> {t("clearFilters")}
+                </button>
+              ) : (
+                <button type="button" className="z-btn z-btn--green" onClick={refetch}>
+                  <Icon name="refresh" /> {t("refresh")}
+                </button>
+              )}
             </div>
           )}
 
           {error && (
-            <div style={{ textAlign: "center", padding: "3rem 2rem", color: NK.muted, fontFamily: "var(--fb)" }}>{t("loadError")}</div>
+            <div className="z-fund__empty" role="alert">
+              <Icon name="cloud_off" size={44} />
+              <p>{t("loadError")}</p>
+              <button type="button" className="z-btn z-btn--green" onClick={refetch}><Icon name="refresh" /> {t("refresh")}</button>
+            </div>
           )}
         </div>
       </section>
 
-      <CTABand title={t("ctaTitle")} buttonLabel={`${t("ctaButton")} →`} href="mailto:info@kenyayouthclimatehub.org" external />
-    </>
+      <section className="z-fund__cta">
+        <div className="z-wrap">
+          <div className="z-fund__ctagrid">
+            <span className="z-tape" style={{ top: -13, left: "12%", transform: "rotate(-5deg)" }} aria-hidden="true" />
+            <span className="z-tape z-tape--orange" style={{ top: -13, right: "10%", transform: "rotate(4deg)" }} aria-hidden="true" />
+            <div>
+              <span className="z-mono z-kicker">{t("ctaKicker")}</span>
+              <h2 className="z-h2 z-balance">{t.rich("ctaTitle", { s })}</h2>
+              <p className="z-fund__ctabody">{t("ctaBody")}</p>
+            </div>
+            <div className="z-fund__ctas">
+              <a className="z-btn z-btn--green" href="mailto:info@kenyayouthclimatehub.org?subject=Deadline%20alerts">
+                <Icon name="notifications" /> {t("ctaButton")}
+              </a>
+              <a className="z-btn z-btn--white" href="mailto:info@kenyayouthclimatehub.org?subject=Opportunity%20to%20add">
+                <Icon name="add_link" /> {t("suggestButton")}
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div className="z-tear z-tear--top" aria-hidden="true" />
+    </div>
   );
 }

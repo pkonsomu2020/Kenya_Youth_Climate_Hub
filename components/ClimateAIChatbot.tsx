@@ -1,23 +1,23 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Sparkles, X, Send, Loader2 } from "lucide-react";
-import { NK, nkShadow } from "@/lib/nkTheme";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { Icon } from "@/components/zine/Icon";
 
 // ============================================================
-// Climate AI Chatbot — RAG + OpenAI-powered floating widget.
-// Grounded in KYCH Knowledge Base (grants, fellowships, YCIC,
-// e-library, events, 47 counties weather, contact details).
+// Climate AI — floating assistant.
+// Answers stream from /api/chat, which grounds them in the KYCH knowledge
+// base plus live funding calls, events and county forecasts.
 // ============================================================
 
-type Msg = { from: "bot" | "user"; text: string };
+type Source = { label: string; href: string };
+type Msg = { from: "bot" | "user"; text: string; sources?: Source[]; error?: boolean };
 
-// Quick prompt labels/queries and canned replies live in messages under chat.*
-const QUICK_PROMPTS = ["funding", "ycic", "join", "weather"] as const;
+const QUICK_PROMPTS = ["funding", "weather", "events", "join"] as const;
+const STORE = "kych:chat";
 
-// Offline fallback when /api/chat is unreachable. Keyword match covers English,
-// Kiswahili and French so the reply topic still fits the question.
+// Offline fallback when /api/chat is unreachable (keywords in English, Kiswahili, French).
 function cannedTopic(text: string): "funding" | "programs" | "join" | "library" | "weather" | "default" {
   const t = text.toLowerCase();
   if (/(fund|grant|money|scholarship|ufadhili|ruzuku|pesa|financement|subvention|bourse)/.test(t)) return "funding";
@@ -28,254 +28,276 @@ function cannedTopic(text: string): "funding" | "programs" | "join" | "library" 
   return "default";
 }
 
-function renderMessageText(text: string) {
-  const lines = text.split("\n");
-  return lines.map((line, lIdx) => {
-    // Split by bold (**bold**) and markdown links ([label](url))
-    const parts = line.split(/(\*\*.*?\*\*|\[.*?\]\(.*?\))/g);
-    return (
-      <div key={lIdx} style={{ minHeight: line.trim() ? "auto" : "0.4rem", marginBottom: "0.2rem" }}>
-        {parts.map((part, pIdx) => {
-          if (part.startsWith("**") && part.endsWith("**")) {
-            return <strong key={pIdx}>{part.slice(2, -2)}</strong>;
-          }
-          const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
-          if (linkMatch) {
-            return (
-              <a
-                key={pIdx}
-                href={linkMatch[2]}
-                target={linkMatch[2].startsWith("http") ? "_blank" : "_self"}
-                rel="noreferrer"
-                style={{ color: "#101C33", textDecoration: "underline", fontWeight: 700 }}
-              >
-                {linkMatch[1]}
-              </a>
-            );
-          }
-          return part;
-        })}
-      </div>
-    );
+// ---------- tiny, safe markdown renderer (headings, lists, bold, links) ----------
+const SITE = /^https?:\/\/(www\.)?kenyayouthclimatehub\.org/i;
+
+function inline(text: string, key: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)\s]+\))/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) return <strong key={`${key}-${i}`}>{part.slice(2, -2)}</strong>;
+    const m = part.match(/^\[([^\]]+)\]\(([^)\s]+)\)$/);
+    if (m) {
+      const href = m[2].replace(SITE, "") || "/";
+      if (href.startsWith("/")) return <Link key={`${key}-${i}`} href={href}>{m[1]}</Link>;
+      if (/^https?:\/\//i.test(href)) return <a key={`${key}-${i}`} href={href} target="_blank" rel="noopener noreferrer">{m[1]}</a>;
+      return <span key={`${key}-${i}`}>{m[1]}</span>; // never render other schemes as links
+    }
+    return part;
   });
 }
 
+function Markdown({ text }: { text: string }) {
+  const blocks: React.ReactNode[] = [];
+  let list: { ordered: boolean; items: string[] } | null = null;
+  const flush = () => {
+    if (!list) return;
+    const items = list.items.map((it, i) => <li key={i}>{inline(it, `li${blocks.length}-${i}`)}</li>);
+    blocks.push(list.ordered ? <ol key={blocks.length}>{items}</ol> : <ul key={blocks.length}>{items}</ul>);
+    list = null;
+  };
+  for (const raw of text.split("\n")) {
+    const line = raw.trimEnd();
+    const bullet = line.match(/^\s*[-*•]\s+(.*)$/);
+    const num = line.match(/^\s*\d+[.)]\s+(.*)$/);
+    const head = line.match(/^#{1,4}\s+(.*)$/);
+    if (bullet || num) {
+      const ordered = !!num;
+      if (!list || list.ordered !== ordered) { flush(); list = { ordered, items: [] }; }
+      list.items.push((bullet ?? num)![1]);
+      continue;
+    }
+    flush();
+    if (head) blocks.push(<h4 key={blocks.length}>{inline(head[1].replace(/\*\*/g, ""), `h${blocks.length}`)}</h4>);
+    else if (line.trim()) blocks.push(<p key={blocks.length}>{inline(line, `p${blocks.length}`)}</p>);
+  }
+  flush();
+  return <>{blocks}</>;
+}
+
+// Source chips use the site's own (translated) section names.
+const SOURCE_KEYS: Record<string, string> = {
+  "/opportunities": "opportunities",
+  "/events": "events",
+  "/weather": "climateWatch",
+  "/e-library": "eLibrary",
+  "/programs": "programs",
+  "/success-stories": "successStories",
+  "/about": "about",
+  "/news": "news",
+};
+
 export function ClimateAIChatbot() {
   const t = useTranslations("chat");
+  const tn = useTranslations("nav");
   const locale = useLocale();
-  const getCannedReply = (text: string) => t(`canned.${cannedTopic(text)}`);
+  const greeting: Msg = { from: "bot", text: t("greeting") };
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [msgs, setMsgs] = useState<Msg[]>([
-    { from: "bot", text: t("greeting") },
-  ]);
-  const [hovToggle, setHovToggle] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [msgs, setMsgs] = useState<Msg[]>([greeting]);
+  const [restored, setRestored] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
-  const scrollToBottom = () => {
-    requestAnimationFrame(() => {
-      if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
-    });
+  const sourceLabel = (s: Source) => {
+    if (s.href === "/programs/ycic") return "YCIC";
+    if (s.href === "/programs/begreen") return "BeGreen Africa";
+    const k = SOURCE_KEYS[s.href];
+    return k ? tn(k) : s.label;
   };
 
-  const send = async (text?: string) => {
-    const value = (text ?? input).trim();
-    if (!value || isLoading) return;
-
-    const newMsgs: Msg[] = [...msgs, { from: "user", text: value }];
-    setMsgs(newMsgs);
-    setInput("");
-    setIsLoading(true);
-    scrollToBottom();
-
+  // Restore this tab's conversation once (sessionStorage is a per-tab convenience).
+  if (!restored && typeof window !== "undefined") {
+    setRestored(true);
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMsgs, locale }),
-      });
+      const saved = JSON.parse(sessionStorage.getItem(STORE) ?? "null");
+      if (Array.isArray(saved) && saved.length) setMsgs(saved);
+    } catch { /* storage blocked or corrupt: start fresh */ }
+  }
+  useEffect(() => {
+    if (busy) return;
+    try { sessionStorage.setItem(STORE, JSON.stringify(msgs.slice(-30))); } catch { /* ignore */ }
+  }, [msgs, busy]);
 
-      if (!res.ok) {
-        throw new Error(`Server returned ${res.status}`);
-      }
+  const scrollToBottom = () => requestAnimationFrame(() => {
+    if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+  });
 
-      const data = await res.json();
-      const botReply = data.reply || getCannedReply(value);
-      setMsgs((m) => [...m, { from: "bot", text: botReply }]);
-    } catch (err) {
-      console.error("Chat API error, using fallback RAG reply:", err);
-      setMsgs((m) => [...m, { from: "bot", text: getCannedReply(value) }]);
-    } finally {
-      setIsLoading(false);
-      scrollToBottom();
-    }
-  };
+  const wasOpen = useRef(false);
+  const close = () => setOpen(false);
+  // Return focus to the toggle after closing (it is hidden while the phone sheet is open).
+  useEffect(() => {
+    if (wasOpen.current && !open) toggleRef.current?.focus();
+    wasOpen.current = open;
+  }, [open]);
 
-  useEffect(() => { if (open) scrollToBottom(); }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    scrollToBottom();
+    inputRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
-  // Allow other components (e.g. the "Ask AI Now" platform tool card) to open this widget.
+  // Other components (homepage Simba, dashboard, footer) open the assistant with this event.
   useEffect(() => {
     const handler = () => setOpen(true);
     window.addEventListener("kych:open-chat", handler);
     return () => window.removeEventListener("kych:open-chat", handler);
   }, []);
 
-  return (
-    <div style={{ position: "fixed", right: 24, bottom: 24, zIndex: 90 }}>
-      {open && (
-        <div
-          style={{
-            width: 384, maxWidth: "calc(100vw - 48px)",
-            height: "min(560px, calc(100vh - 140px))",
-            background: NK.bg, border: `2px solid ${NK.ink}`,
-            boxShadow: nkShadow(NK.ink, 8),
-            display: "flex", flexDirection: "column",
-            marginBottom: "0.75rem",
-          }}
-        >
-          {/* Header */}
-          <div style={{ background: NK.ink, padding: "1rem 1.1rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: ".65rem" }}>
-              <div style={{ width: 30, height: 30, background: NK.green, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <Sparkles size={15} color={NK.navyDeep} />
-              </div>
-              <div>
-                <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "15px", color: "#fff", lineHeight: 1.2 }}>Climate AI</div>
-                <div style={{ display: "flex", alignItems: "center", gap: ".35rem", marginTop: 2 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: NK.green, flexShrink: 0 }} />
-                  <span style={{ fontFamily: "var(--fm)", fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase", color: NK.mutedOnDark }}>
-                    {isLoading ? t("thinking") : t("online")}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={() => setOpen(false)}
-              aria-label={t("close")}
-              style={{ background: "transparent", border: "none", color: "#fff", cursor: "pointer", padding: 4, display: "flex" }}
-            >
-              <X size={18} />
-            </button>
-          </div>
+  const send = async (text?: string) => {
+    const value = (text ?? input).trim().slice(0, 1000);
+    if (!value || busy) return;
+    const history: Msg[] = [...msgs, { from: "user", text: value }];
+    setMsgs([...history, { from: "bot", text: "" }]);
+    setInput("");
+    setBusy(true);
+    scrollToBottom();
 
-          {/* Messages */}
-          <div
-            ref={bodyRef}
-            style={{
-              flex: 1, overflowY: "auto", padding: "1rem",
-              display: "flex", flexDirection: "column", gap: ".65rem",
-              backgroundImage: `radial-gradient(${NK.green}22 1.2px, transparent 1.6px)`,
-              backgroundSize: "20px 20px",
-            }}
-          >
+    const ctrl = new AbortController();
+    abortRef.current = ctrl;
+    const update = (patch: Partial<Msg>) =>
+      setMsgs((m) => { const next = [...m]; next[next.length - 1] = { ...next[next.length - 1], ...patch }; return next; });
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: history.filter((m) => m.text && !m.error).map(({ from, text }) => ({ from, text })), locale }),
+        signal: ctrl.signal,
+      });
+      let sources: Source[] = [];
+      try { sources = JSON.parse(decodeURIComponent(res.headers.get("X-KYCH-Sources") ?? "[]")); } catch { /* none */ }
+      if (!res.body) throw new Error(`HTTP ${res.status}`);
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let acc = "";
+      for (;;) {
+        const { done, value: chunk } = await reader.read();
+        if (done) break;
+        acc += decoder.decode(chunk, { stream: true });
+        update({ text: acc });
+        scrollToBottom();
+      }
+      update({ text: acc || t(`canned.${cannedTopic(value)}`), sources: res.ok ? sources : [] });
+    } catch (err) {
+      if ((err as Error).name === "AbortError") {
+        setMsgs((m) => {
+          const last = m[m.length - 1];
+          return last.text ? [...m.slice(0, -1), { ...last, text: `${last.text}\n\n${t("stopped")}` }] : m.slice(0, -1);
+        });
+      } else {
+        update({ text: t(`canned.${cannedTopic(value)}`), error: true });
+      }
+    } finally {
+      abortRef.current = null;
+      setBusy(false);
+      scrollToBottom();
+    }
+  };
+
+  const reset = () => {
+    abortRef.current?.abort();
+    setMsgs([greeting]);
+    try { sessionStorage.removeItem(STORE); } catch { /* ignore */ }
+    inputRef.current?.focus();
+  };
+
+  const onlyGreeting = msgs.length === 1;
+  const last = msgs[msgs.length - 1];
+
+  return (
+    <div className={`z-chat${open ? " z-chat--open" : ""}`}>
+      {open && (
+        <section className="z-chat__panel" role="dialog" aria-labelledby="z-chat-title" aria-describedby="z-chat-status">
+          <header className="z-chat__head">
+            <span className="z-chat__avatar" aria-hidden="true"><Icon name="forum" fill /></span>
+            <div className="z-chat__title">
+              <h2 id="z-chat-title">Climate AI</h2>
+              <span id="z-chat-status" className="z-chat__status z-mono">
+                <i aria-hidden="true" data-busy={busy} /> {busy ? t("thinking") : t("online")}
+              </span>
+            </div>
+            <button type="button" className="z-chat__iconbtn" onClick={reset} aria-label={t("newChat")} title={t("newChat")}>
+              <Icon name="edit_square" />
+            </button>
+            <button type="button" className="z-chat__iconbtn" onClick={close} aria-label={t("close")}>
+              <Icon name="close" />
+            </button>
+          </header>
+
+          <div ref={bodyRef} className="z-chat__body" aria-live="polite" aria-busy={busy} aria-relevant="additions">
             {msgs.map((m, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: m.from === "user" ? "flex-end" : "flex-start" }}>
-                <div style={{
-                  maxWidth: "85%", padding: ".65rem .85rem",
-                  fontFamily: "var(--fb)", fontSize: "13px", lineHeight: 1.5,
-                  background: m.from === "user" ? NK.green : NK.white,
-                  color: m.from === "user" ? NK.navyDeep : NK.ink,
-                  fontWeight: m.from === "user" ? 700 : 400,
-                  border: m.from === "user" ? "none" : `1.5px solid ${NK.ink}`,
-                  boxShadow: m.from === "user" ? nkShadow("rgba(16,28,51,0.18)", 3) : nkShadow("rgba(16,28,51,0.12)", 3),
-                }}>
-                  {renderMessageText(m.text)}
-                </div>
+              <div key={i} className={`z-chat__msg z-chat__msg--${m.from}${m.error ? " z-chat__msg--err" : ""}`}>
+                {m.from === "bot" && !m.text && busy && i === msgs.length - 1 ? (
+                  <span className="z-chat__typing" aria-label={t("retrieving")}><i /><i /><i /> <small>{t("retrieving")}</small></span>
+                ) : m.from === "bot" ? (
+                  <Markdown text={m.text} />
+                ) : (
+                  <p>{m.text}</p>
+                )}
+                {m.sources && m.sources.length > 0 && (
+                  <div className="z-chat__sources">
+                    <span className="z-mono">{t("sources")}</span>
+                    {m.sources.map((s) => <Link key={s.href} href={s.href}>{sourceLabel(s)}</Link>)}
+                  </div>
+                )}
               </div>
             ))}
 
-            {isLoading && (
-              <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                <div style={{
-                  maxWidth: "80%", padding: ".5rem .75rem",
-                  background: NK.white, color: NK.ink,
-                  border: `1.5px solid ${NK.ink}`,
-                  boxShadow: nkShadow("rgba(16,28,51,0.12)", 3),
-                  display: "flex", alignItems: "center", gap: ".5rem",
-                  fontFamily: "var(--fm)", fontSize: "12px",
-                }}>
-                  <Loader2 size={14} className="animate-spin" color={NK.greenAlt} />
-                  <span>{t("retrieving")}</span>
-                </div>
+            {onlyGreeting && (
+              <div className="z-chat__prompts" role="group" aria-label={t("suggestions")}>
+                {QUICK_PROMPTS.map((p) => (
+                  <button key={p} type="button" onClick={() => send(t(`prompts.${p}.query`))}>
+                    <Icon name={{ funding: "payments", weather: "rainy", events: "event", join: "person_add" }[p]} />
+                    {t(`prompts.${p}.label`)}
+                  </button>
+                ))}
               </div>
             )}
           </div>
 
-          {/* Quick prompts */}
-          <div style={{ display: "flex", gap: ".4rem", padding: "0 1rem .75rem", flexWrap: "wrap", flexShrink: 0 }}>
-            {QUICK_PROMPTS.map((p) => (
-              <button
-                key={p}
-                disabled={isLoading}
-                onClick={() => send(t(`prompts.${p}.query`))}
-                style={{
-                  padding: ".35rem .65rem", fontFamily: "var(--fs)", fontWeight: 600, fontSize: "11px",
-                  background: NK.white, border: `1.5px solid ${NK.ink}`, color: NK.ink, cursor: isLoading ? "not-allowed" : "pointer",
-                  opacity: isLoading ? 0.6 : 1, transition: "background .2s, color .2s",
-                }}
-                onMouseEnter={(e) => { if (!isLoading) e.currentTarget.style.background = NK.green; }}
-                onMouseLeave={(e) => { if (!isLoading) e.currentTarget.style.background = NK.white; }}
-              >
-                {t(`prompts.${p}.label`)}
-              </button>
-            ))}
-          </div>
-
-          {/* Input row */}
-          <div style={{ display: "flex", gap: ".5rem", padding: "0 1rem 1rem", flexShrink: 0 }}>
-            <input
+          <form className="z-chat__form" onSubmit={(e) => { e.preventDefault(); send(); }}>
+            <label htmlFor="z-chat-input" className="z-sr">{t("placeholder")}</label>
+            <textarea
+              id="z-chat-input"
+              ref={inputRef}
+              rows={1}
               value={input}
-              disabled={isLoading}
+              maxLength={1000}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter" && !isLoading) send(); }}
-              placeholder={isLoading ? t("typing") : t("placeholder")}
-              aria-label={t("placeholder")}
-              style={{
-                flex: 1, padding: ".65rem .85rem", fontFamily: "var(--fb)", fontSize: "13px",
-                border: `2px solid ${NK.ink}`, background: NK.white, color: NK.ink, outline: "none",
-                opacity: isLoading ? 0.7 : 1,
-              }}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
+              placeholder={t("placeholder")}
             />
-            <button
-              disabled={isLoading || !input.trim()}
-              onClick={() => send()}
-              aria-label={t("send")}
-              style={{
-                width: 42, height: 42, flexShrink: 0,
-                background: NK.green, border: "none",
-                cursor: (isLoading || !input.trim()) ? "not-allowed" : "pointer",
-                opacity: (isLoading || !input.trim()) ? 0.5 : 1,
-                display: "flex", alignItems: "center", justifyContent: "center"
-              }}
-            >
-              <Send size={16} color={NK.navyDeep} />
-            </button>
-          </div>
-        </div>
+            {busy ? (
+              <button type="button" className="z-chat__send z-chat__send--stop" onClick={() => abortRef.current?.abort()} aria-label={t("stop")}>
+                <Icon name="stop" fill />
+              </button>
+            ) : (
+              <button type="submit" className="z-chat__send" disabled={!input.trim()} aria-label={t("send")}>
+                <Icon name="arrow_upward" />
+              </button>
+            )}
+          </form>
+          <p className="z-chat__note">{t("note")}</p>
+          {last.error && <span className="z-sr" role="status">{t("offlineNotice")}</span>}
+        </section>
       )}
 
-      {/* Toggle pill */}
       <button
-        onClick={() => setOpen((o) => !o)}
-        onMouseEnter={() => setHovToggle(true)}
-        onMouseLeave={() => setHovToggle(false)}
-        style={{
-          display: "flex", alignItems: "center", gap: ".55rem",
-          background: hovToggle ? NK.green : NK.ink,
-          color: hovToggle ? NK.navyDeep : "#F6F8F4",
-          padding: ".65rem 1.15rem .65rem .65rem",
-          border: `2px solid ${NK.ink}`,
-          boxShadow: hovToggle ? nkShadow(NK.ink, 5) : nkShadow(NK.green, 5),
-          fontFamily: "var(--fs)", fontWeight: 700, fontSize: "14.5px",
-          cursor: "pointer", transition: "background .2s, color .2s, box-shadow .2s",
-          marginLeft: "auto",
-        }}
+        ref={toggleRef}
+        type="button"
+        className="z-chat__toggle"
+        aria-expanded={open}
+        aria-label={open ? t("close") : t("open")}
+        onClick={() => (open ? close() : setOpen(true))}
       >
-        <div style={{ width: 32, height: 32, background: hovToggle ? NK.navyDeep : NK.green, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <Sparkles size={16} color={hovToggle ? NK.green : NK.navyDeep} />
-        </div>
-        <span>Climate AI</span>
+        <span className="z-chat__toggleicon" aria-hidden="true"><Icon name={open ? "close" : "forum"} fill /></span>
+        <span className="z-chat__togglelabel">Climate AI</span>
       </button>
     </div>
   );

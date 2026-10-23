@@ -1,24 +1,26 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
-import { X, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { NK } from "@/lib/nkTheme";
 import { LanguageSwitcher, LanguageSwitcherInline } from "@/components/LanguageSwitcher";
+import { Icon } from "@/components/zine/Icon";
 
+// Labels are nav.* message keys.
 const links = [
+  { to: "/",                key: "homeLink"       },
   { to: "/about",           key: "about"          },
-  { to: "/weather",         key: "climateWatch"   },
-  { to: "/e-library",       key: "eLibrary"       },
   { to: "/opportunities",   key: "opportunities"  },
   { to: "/programs",        key: "programs"       },
   { to: "/events",          key: "events"         },
+  { to: "/weather",         key: "climateWatch"   },
+  { to: "/e-library",       key: "eLibrary"       },
   { to: "/news",            key: "news"           },
   { to: "/success-stories", key: "successStories" },
 ] as const;
 
 function isActive(path: string, to: string) {
+  if (to === "/") return path === "/";
   return path === to || path.startsWith(to + "/");
 }
 
@@ -26,18 +28,27 @@ export function Nav() {
   const t = useTranslations("nav");
   const [open, setOpen] = useState(false);
   const [scrollPct, setScrollPct] = useState(0);
-  const [ctaHov, setCtaHov] = useState(false);
-  const [burgerHov, setBurgerHov] = useState(false);
+  // The bar floats over the page: it slides away while scrolling down and returns on the way up.
+  const [hidden, setHidden] = useState(false);
   const path = usePathname() || "";
-  const panelRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setOpen(false); }, [path]);
+  // Close the mobile menu when the route changes (adjusting state during render, not in an effect).
+  const [menuPath, setMenuPath] = useState(path);
+  if (menuPath !== path) {
+    setMenuPath(path);
+    setOpen(false);
+  }
 
   useEffect(() => {
+    let lastY = window.scrollY;
     const onScroll = () => {
       const y = window.scrollY;
       const h = document.documentElement.scrollHeight - window.innerHeight;
       setScrollPct(h > 0 ? Math.min(1, y / h) * 100 : 0);
+      if (y < 120) setHidden(false);
+      else if (y > lastY + 8) setHidden(true);
+      else if (y < lastY - 8) setHidden(false);
+      if (Math.abs(y - lastY) > 8) lastY = y;
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -46,152 +57,70 @@ export function Nav() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = ""; document.removeEventListener("keydown", onKey); };
   }, [open]);
 
   return (
     <>
-      <header
-        style={{
-          position: "sticky", top: 0, zIndex: 300,
-          background: "rgba(246,248,244,0.9)",
-          backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(16,28,51,0.12)",
-        }}
-      >
-        {/* Scroll progress bar */}
-        <div style={{ height: 4, background: "rgba(76,184,44,0.18)" }}>
-          <div style={{ height: "100%", width: `${scrollPct}%`, background: NK.green, transition: "width 0.1s linear" }} />
-        </div>
-
-        <div style={{
-          maxWidth: 1320, margin: "0 auto", padding: "14px 40px",
-          display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem",
-        }}>
-          {/* Logo */}
-          <Link href="/" style={{ textDecoration: "none", flexShrink: 0, display: "flex", alignItems: "center" }}>
-            <img src="/kych_logo.png" alt="Kenya Youth Climate Hub" style={{ height: 76, width: "auto" }} />
+      <a className="z-skip" href="#main">{t("skip")}</a>
+      <header className={hidden && !open ? "z-nav z-nav--hidden" : "z-nav"}>
+        <div className="z-nav__in">
+          <Link href="/" className="z-nav__logo" aria-label={t("home")}>
+            <img src="/kych_logo_wordmark.png" alt="Kenya Youth Climate Hub" width={384} height={168} />
           </Link>
 
-          {/* Desktop links */}
-          <nav style={{ display: "flex", alignItems: "center", gap: "1.75rem" }} className="nk-nav-links">
+          <nav className="z-nav__links" aria-label={t("main")}>
             {links.map((l) => (
-              <Link
-                key={l.to}
-                href={l.to as any}
-                style={{
-                  fontFamily: "var(--fs)", fontWeight: 600, fontSize: 14, textDecoration: "none",
-                  color: isActive(path, l.to) ? NK.green : NK.ink,
-                }}
-              >
+              <Link key={l.to} href={l.to} aria-current={isActive(path, l.to) ? "page" : undefined}>
                 {t(l.key)}
               </Link>
             ))}
           </nav>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <div className="z-nav__right">
             <LanguageSwitcher />
-            <Link
-              href="/opportunities"
-              className="nk-nav-cta"
-              onMouseEnter={() => setCtaHov(true)}
-              onMouseLeave={() => setCtaHov(false)}
-              style={{
-                fontFamily: "var(--fs)", fontWeight: 700, fontSize: 14, textDecoration: "none",
-                padding: "11px 20px",
-                background: ctaHov ? NK.green : NK.ink,
-                color: ctaHov ? NK.navyDeep : "#F6F8F4",
-                transition: "background .2s, color .2s",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {t("findFunding")}
+            <Link href="/opportunities" className="z-btn z-btn--navy z-btn--sm z-nav__cta nk-nav-cta">
+              {t("findFunding")} <Icon name="arrow_forward" />
             </Link>
-
             <button
-              className="nk-nav-burger"
+              type="button"
+              className="z-nav__burger nk-nav-burger"
               aria-label={t("openMenu")}
+              aria-expanded={open}
+              aria-controls="z-menu"
               onClick={() => setOpen(true)}
-              onMouseEnter={() => setBurgerHov(true)}
-              onMouseLeave={() => setBurgerHov(false)}
-              style={{
-                border: `2px solid ${NK.ink}`, background: burgerHov ? NK.ink : "transparent",
-                color: burgerHov ? "#fff" : NK.ink, width: 44, height: 44,
-                cursor: "pointer", display: "none", alignItems: "center", justifyContent: "center",
-                transition: "background .2s, color .2s",
-              }}
             >
-              <Menu size={20} />
+              <Icon name="menu" />
             </button>
           </div>
+          <span className="z-nav__track" aria-hidden="true"><i style={{ width: `${scrollPct}%` }} /></span>
         </div>
       </header>
 
-      {/* Mobile menu overlay */}
-      <div
-        onClick={() => setOpen(false)}
-        style={{
-          position: "fixed", inset: 0, zIndex: 399,
-          background: open ? "rgba(16,28,51,0.4)" : "rgba(16,28,51,0)",
-          pointerEvents: open ? "all" : "none",
-          transition: "background .3s ease",
-        }}
-        aria-hidden="true"
-      />
+      {open && <div className="z-menu-scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
 
-      {/* Mobile menu panel */}
-      <div
-        ref={panelRef}
-        style={{
-          position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 400,
-          width: 380, maxWidth: "90vw",
-          background: NK.bg, borderLeft: `2px solid ${NK.ink}`,
-          transform: open ? "translateX(0)" : "translateX(100%)",
-          transition: "transform .4s cubic-bezier(0.4,0,0.2,1)",
-          display: "flex", flexDirection: "column",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.5rem" }}>
-          <img src="/kych_logo.png" alt="Kenya Youth Climate Hub" style={{ height: 52, width: "auto" }} />
-          <button
-            onClick={() => setOpen(false)}
-            aria-label={t("closeMenu")}
-            style={{ width: 40, height: 40, border: `2px solid ${NK.ink}`, background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: NK.ink }}
-          >
-            <X size={18} />
+      <div id="z-menu" className="z-menu" data-open={open} aria-hidden={!open} inert={!open}>
+        <div className="z-menu__top">
+          <img src="/kych_logo_wordmark.png" alt="Kenya Youth Climate Hub" width={384} height={168} className="z-menu__logo" />
+          <button type="button" className="z-nav__burger" style={{ display: "inline-flex" }} aria-label={t("closeMenu")} onClick={() => setOpen(false)}>
+            <Icon name="close" />
           </button>
         </div>
-
-        <nav style={{ flex: 1, padding: "0.5rem 1.5rem", display: "flex", flexDirection: "column", overflowY: "auto" }}>
-          {links.map((l, i) => {
-            const active = isActive(path, l.to);
-            return (
-              <Link
-                key={l.to}
-                href={l.to as any}
-                onClick={() => setOpen(false)}
-                style={{
-                  display: "flex", alignItems: "center", justifyContent: "space-between",
-                  padding: "16px 0",
-                  borderBottom: "1px solid rgba(16,28,51,0.1)",
-                  fontFamily: "var(--fs)", fontWeight: 700, fontSize: 19,
-                  color: active ? NK.green : NK.ink,
-                  textDecoration: "none",
-                  animation: open ? `slide-in-up 0.3s ease ${i * 0.04}s both` : "none",
-                }}
-              >
-                {t(l.key)}
-                <span style={{ width: 18, height: 2, background: active ? NK.green : "rgba(16,28,51,0.25)" }} />
-              </Link>
-            );
-          })}
+        <nav className="z-menu__links" aria-label={t("main")}>
+          {links.map((l) => (
+            <Link key={l.to} href={l.to} aria-current={isActive(path, l.to) ? "page" : undefined} onClick={() => setOpen(false)}>
+              {t(l.key)} <Icon name="arrow_forward" />
+            </Link>
+          ))}
         </nav>
-
-        <div style={{ padding: "1.25rem 1.5rem", borderTop: "1px solid rgba(16,28,51,0.1)", display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div className="z-menu__foot">
           <LanguageSwitcherInline />
-          <span style={{ fontFamily: "var(--fm)", fontSize: 10.5, letterSpacing: "0.18em", textTransform: "uppercase", color: NK.muted }}>
-            {t("tagline")}
-          </span>
+          <Link href="/opportunities" className="z-btn z-btn--green" style={{ justifyContent: "center" }} onClick={() => setOpen(false)}>
+            {t("findFunding")} <Icon name="arrow_forward" />
+          </Link>
         </div>
       </div>
     </>

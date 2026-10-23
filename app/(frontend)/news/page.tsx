@@ -1,165 +1,181 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { useNews } from "@/lib/useNews";
-import * as Icons from "lucide-react";
-import { Globe, ArrowRight } from "lucide-react";
-import { NK, nkShadow, nkCard, nkBadgeForKey } from "@/lib/nkTheme";
-import { GrowHeading } from "@/components/GrowHeading";
-import { CTABand } from "@/components/CTABand";
-import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useNews, type NewsArticle } from "@/lib/useNews";
 import { useTaxonomy } from "@/i18n/useTaxonomy";
+import { intlLocale, type Locale } from "@/i18n/config";
+import { Icon } from "@/components/zine/Icon";
 
 const CATS = ["All", "News", "Climate Insights", "Success Stories", "Events Recap", "Partner Updates"];
+const BRIEFS = 6;
 
-function useInView(ref: React.RefObject<Element | null>, threshold = 0.1) {
-  const [v, setV] = useState(false);
-  useEffect(() => {
-    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); o.disconnect(); } }, { threshold });
-    if (ref.current) o.observe(ref.current);
-    return () => o.disconnect();
-  }, [ref, threshold]);
-  return v;
+// Scraped headlines end in " - Publisher"; split that off so the byline can carry it.
+function split(a: NewsArticle) {
+  const i = a.title.lastIndexOf(" - ");
+  const publisher = i > 20 ? a.title.slice(i + 3).replace(/^news - /i, "") : (a.source || "").replace(/\s*\[.*?\]\s*/g, "").trim();
+  // some feeds also leave a section label ("- news", "- opinion") on the end
+  const headline = (i > 20 ? a.title.slice(0, i) : a.title).replace(/\s+-\s+(news|opinion|analysis|blog)$/i, "");
+  return { headline, publisher };
 }
 
-function renderIcon(iconName: string, size = 40) {
-  const Icon = (Icons as any)[iconName];
-  return Icon ? <Icon size={size} strokeWidth={1.5} /> : <Globe size={size} strokeWidth={1.5} />;
-}
-
-function FilterPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        padding: "9px 18px", fontFamily: "var(--fs)", fontWeight: 600, fontSize: 13,
-        border: `2px solid ${active ? NK.green : NK.ink}`,
-        background: active ? NK.green : "transparent",
-        color: active ? NK.navyDeep : NK.ink,
-        cursor: "pointer", transition: "all .2s",
-      }}
-    >
-      {label}
-    </button>
-  );
-}
-
-function NewsCard({ article, index }: { article: any; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref);
-  const [hov, setHov] = useState(false);
-  const t = useTranslations("newsPage");
-  const tax = useTaxonomy();
-  const badge = nkBadgeForKey(article.category || "News");
-
-  return (
-    <a
-      ref={ref as any}
-      href={article.url} target="_blank" rel="noopener noreferrer"
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{
-        ...nkCard, display: "flex", flexDirection: "column", textDecoration: "none",
-        opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(30px)",
-        transition: `opacity .5s ease ${index * 0.06}s, transform .5s ease ${index * 0.06}s, box-shadow .2s, translate .2s`,
-        boxShadow: hov ? nkShadow(NK.green) : nkShadow(NK.ink),
-        translate: hov ? "0 -4px" : "0 0",
-      }}
-    >
-      <div style={{ height: 170, overflow: "hidden", borderBottom: `2px solid ${NK.ink}`, position: "relative", background: badge.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        {article.image_url ? (
-          <img src={article.image_url} alt={article.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-        ) : (
-          <span style={{ color: badge.fg, opacity: 0.5 }}>{renderIcon(article.icon || "Globe", 40)}</span>
-        )}
-        <span style={{ position: "absolute", top: 12, left: 12, fontFamily: "var(--fm)", fontWeight: 700, fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 9px", background: badge.bg, color: badge.fg }}>
-          {tax(article.category)}
-        </span>
-      </div>
-      <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", flex: 1 }}>
-        <div style={{ fontFamily: "var(--fm)", fontSize: 10.5, color: NK.mutedLabel, marginBottom: ".75rem" }}>{article.date} · {article.source}</div>
-        <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1rem", color: NK.ink, marginBottom: ".6rem", lineHeight: 1.3 }}>{article.title}</div>
-        <p style={{ fontSize: ".85rem", color: NK.muted, lineHeight: 1.6, flex: 1, marginBottom: "1.1rem" }}>{article.excerpt}</p>
-        <span style={{ alignSelf: "flex-start", fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13.5, color: NK.ink, borderBottom: `2px solid ${NK.green}`, paddingBottom: 2 }}>
-          {t("readMore")} →
-        </span>
-      </div>
-    </a>
-  );
-}
-
-function SkeletonCard() {
-  return (
-    <div style={{ ...nkCard, boxShadow: nkShadow(NK.ink) }}>
-      <div style={{ height: 170, background: "rgba(16,28,51,0.06)", borderBottom: `2px solid ${NK.ink}` }} />
-      <div style={{ padding: "1.5rem" }}>
-        <div style={{ height: 10, width: "40%", background: "rgba(16,28,51,0.06)", marginBottom: 12 }} />
-        <div style={{ height: 16, background: "rgba(16,28,51,0.08)", marginBottom: 10 }} />
-        <div style={{ height: 12, background: "rgba(16,28,51,0.06)" }} />
-      </div>
-    </div>
-  );
-}
+// Generic stock fallbacks (no real photo from the publisher) are skipped: the page is text-first then.
+const realImage = (url: string | null) => (url && !/images\.unsplash\.com/.test(url) ? url : null);
 
 export default function News() {
   const t = useTranslations("newsPage");
   const tax = useTaxonomy();
+  const locale = useLocale() as Locale;
   const [cat, setCat] = useState("All");
-  const { articles, loading, error, refetch } = useNews({ limit: 30, category: cat });
+  // one clock reading per visit, so relative times stay stable across re-renders
+  const [now] = useState(() => Date.now());
+  const { articles, loading, error, refetch } = useNews({ limit: 40, category: cat });
+
+  // the feed sometimes repeats an article (same story, different link); keep the first copy
+  const seen = new Set<string>();
+  const items = articles.filter((a) => {
+    const k = split(a).headline.toLowerCase();
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+  const [lead, ...rest] = items;
+  const briefs = rest.slice(0, BRIEFS);
+  const more = rest.slice(BRIEFS);
+
+  const rtf = new Intl.RelativeTimeFormat(intlLocale[locale], { numeric: "auto" });
+  const ago = (iso: string) => {
+    const mins = Math.round((Date.parse(iso) - now) / 60000);
+    if (isNaN(mins)) return "";
+    if (Math.abs(mins) < 60) return rtf.format(mins, "minute");
+    const hrs = Math.round(mins / 60);
+    if (Math.abs(hrs) < 24) return rtf.format(hrs, "hour");
+    return rtf.format(Math.round(hrs / 24), "day");
+  };
+  const today = new Intl.DateTimeFormat(intlLocale[locale], { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(now));
+  const s = (c: React.ReactNode) => <span className="z-serif">{c}</span>;
 
   return (
-    <>
-      <section style={{ background: NK.bg }}>
-        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "3.5rem 2.5rem 1.75rem" }}>
-          <span style={{ display: "block", fontFamily: "var(--fm)", fontWeight: 700, fontSize: 12, letterSpacing: "0.22em", textTransform: "uppercase", color: NK.greenAlt, marginBottom: "1rem" }}>
-            {t("eyebrow")}
-          </span>
-          <GrowHeading as="h1" style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "clamp(44px,5.6vw,86px)", color: NK.ink, textTransform: "uppercase", letterSpacing: "-0.03em", lineHeight: 1.02, margin: 0 }}>
-            {t.rich("title", { g: (c) => <span style={{ color: NK.green }}>{c}</span> })}
-          </GrowHeading>
-          <p style={{ fontFamily: "var(--fb)", fontSize: "1.25rem", color: NK.muted, lineHeight: 1.7, marginTop: "1.5rem", maxWidth: 660 }}>
-            {t("intro")}
-          </p>
-        </div>
-      </section>
-
-      <section style={{ background: NK.bg }}>
-        <div style={{ maxWidth: 1320, margin: "0 auto", padding: "1.5rem 2.5rem 5.5rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem", marginBottom: "2rem" }}>
-            <div style={{ display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
-              {CATS.map((c) => <FilterPill key={c} label={tax(c)} active={cat === c} onClick={() => setCat(c)} />)}
-            </div>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: ".4rem", fontFamily: "var(--fm)", fontSize: 11, fontWeight: 700, color: error ? "#B91C1C" : NK.greenAlt, padding: "6px 14px", border: `1.5px solid ${error ? "#B91C1C" : NK.green}` }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: error ? "#B91C1C" : NK.green }} />
-              {error ? t("offline") : t("live")}
+    <div className="z-page z-nw">
+      <header className="z-nw__mast">
+        <div className="z-wrap">
+          <div className="z-nw__strip z-mono">
+            <span>{today}</span>
+            <span className={error ? "z-nw__status z-nw__status--off" : "z-nw__status"}>
+              <i aria-hidden="true" /> {error ? t("offline") : t("live")}
             </span>
           </div>
+          <h1 className="z-nw__title">{t.rich("title", { s })}</h1>
+          <p className="z-nw__intro">{t("intro")}</p>
+          <nav className="z-nw__tabs" aria-label={t("sections")}>
+            {CATS.map((c) => (
+              <button key={c} type="button" aria-pressed={cat === c} onClick={() => setCat(c)}>{tax(c)}</button>
+            ))}
+          </nav>
+        </div>
+      </header>
 
-          {loading && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
-              {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+      <section className="z-nw__front" aria-busy={loading} aria-label={t("frontPage")}>
+        <div className="z-wrap">
+          {loading ? (
+            <div className="z-nw__grid" aria-hidden="true">
+              <div className="z-nw__lead"><div className="z-skel" style={{ height: 320 }} /></div>
+              <div className="z-nw__briefs"><div className="z-skel" style={{ height: 320 }} /></div>
             </div>
-          )}
+          ) : error ? (
+            <div className="z-fund__empty" role="alert">
+              <Icon name="cloud_off" size={44} />
+              <p>{t("loadError")}</p>
+              <button type="button" className="z-btn z-btn--green" onClick={refetch}><Icon name="refresh" /> {t("retry")}</button>
+            </div>
+          ) : !lead ? (
+            <div className="z-fund__empty">
+              <Icon name="newspaper" size={44} />
+              <h2 className="z-fund__h3">{t("emptyTitle")}</h2>
+              <p>{t("emptyBody")}</p>
+              <button type="button" className="z-btn z-btn--green" onClick={refetch}><Icon name="refresh" /> {t("retry")}</button>
+            </div>
+          ) : (
+            <>
+              <div className="z-nw__grid">
+                {(() => {
+                  const { headline, publisher } = split(lead);
+                  const img = realImage(lead.image_url);
+                  return (
+                    <article className="z-nw__lead">
+                      <span className="z-nw__kicker z-mono">{tax(lead.category)} · {ago(lead.published_at)}</span>
+                      <h2><a href={lead.url} target="_blank" rel="noopener noreferrer">{headline}</a></h2>
+                      {img && <img src={img} alt="" loading="eager" />}
+                      <p className="z-nw__standfirst">{lead.excerpt}</p>
+                      <p className="z-nw__byline">
+                        <span>{t("via", { publisher })}</span>
+                        <a href={lead.url} target="_blank" rel="noopener noreferrer" className="z-nw__read">
+                          {t("readAt", { publisher })} <Icon name="open_in_new" />
+                        </a>
+                      </p>
+                    </article>
+                  );
+                })()}
 
-          {!loading && articles.length > 0 && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "1.25rem" }} className="nk-grid-3">
-              {articles.map((a, i) => <NewsCard key={a.id} article={a} index={i} />)}
-            </div>
-          )}
+                <aside className="z-nw__briefs" aria-labelledby="nw-briefs">
+                  <h2 id="nw-briefs" className="z-nw__colhead z-mono">{t("briefs")}</h2>
+                  <ol>
+                    {briefs.map((a) => {
+                      const { headline, publisher } = split(a);
+                      return (
+                        <li key={a.id}>
+                          <a href={a.url} target="_blank" rel="noopener noreferrer">
+                            <span className="z-mono">{tax(a.category)} · {ago(a.published_at)}</span>
+                            <b>{headline}</b>
+                            <small>{publisher}</small>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                </aside>
+              </div>
 
-          {!loading && !error && articles.length === 0 && (
-            <div style={{ textAlign: "center", padding: "5rem 2rem", border: `2px solid ${NK.ink}` }}>
-              <Globe size={40} color={NK.green} style={{ margin: "0 auto 1rem", display: "block" }} />
-              <div style={{ fontFamily: "var(--fs)", fontWeight: 700, fontSize: "1.1rem", color: NK.ink, marginBottom: ".5rem" }}>{t("emptyTitle")}</div>
-              <p style={{ color: NK.muted, marginBottom: "1.5rem" }}>{t("emptyBody")}</p>
-              <button onClick={refetch} style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", padding: "12px 24px", background: NK.green, color: NK.navyDeep, fontFamily: "var(--fs)", fontWeight: 700, fontSize: 13, border: "none", cursor: "pointer" }}>
-                {t("fetch")} <ArrowRight size={14} />
-              </button>
-            </div>
+              {more.length > 0 && (
+                <>
+                  <h2 className="z-nw__colhead z-nw__colhead--wide z-mono">{t("moreStories")}</h2>
+                  <ul className="z-nw__more">
+                    {more.map((a) => {
+                      const { headline, publisher } = split(a);
+                      const img = realImage(a.image_url);
+                      return (
+                        <li key={a.id}>
+                          <a href={a.url} target="_blank" rel="noopener noreferrer">
+                            {img && <img src={img} alt="" loading="lazy" />}
+                            <span className="z-mono">{tax(a.category)} · {ago(a.published_at)}</span>
+                            <b>{headline}</b>
+                            {a.excerpt && <p>{a.excerpt}</p>}
+                            <small>{publisher}</small>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              )}
+            </>
           )}
         </div>
       </section>
 
-      <CTABand title={t("ctaTitle")} buttonLabel={`${t("ctaButton")} →`} href="mailto:info@kenyayouthclimatehub.org" external />
-    </>
+      <section className="z-nw__adsec">
+        <div className="z-wrap">
+          <div className="z-nw__ad">
+            <span className="z-mono z-kicker">{t("ctaKicker")}</span>
+            <h2 className="z-h2 z-balance">{t.rich("ctaTitle", { s })}</h2>
+            <p>{t("ctaBody")}</p>
+            <a className="z-btn z-btn--navy" href="mailto:info@kenyayouthclimatehub.org?subject=News%20digest">
+              <Icon name="mail" /> {t("ctaButton")}
+            </a>
+          </div>
+        </div>
+      </section>
+      <div className="z-tear z-tear--top" aria-hidden="true" />
+    </div>
   );
 }

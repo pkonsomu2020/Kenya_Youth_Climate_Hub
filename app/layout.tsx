@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Montserrat, Archivo_Black, Bricolage_Grotesque, Fraunces, Permanent_Marker, Space_Mono } from "next/font/google";
 import "./globals.css";
+import "../styles/zine.css";
 import { Providers } from "@/components/Providers";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { NextIntlClientProvider } from "next-intl";
@@ -12,6 +13,13 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
   display: "swap",
 });
+
+// Zine × kitenge design system fonts (see styles/zine.css)
+const archivo = Archivo_Black({ subsets: ["latin"], weight: "400", variable: "--z-font-display", display: "swap" });
+const bricolage = Bricolage_Grotesque({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--z-font-body", display: "swap" });
+const fraunces = Fraunces({ subsets: ["latin"], style: "italic", weight: ["500", "700", "800"], variable: "--z-font-serif", display: "swap" });
+const marker = Permanent_Marker({ subsets: ["latin"], weight: "400", variable: "--z-font-marker", display: "swap" });
+const spaceMono = Space_Mono({ subsets: ["latin"], weight: "700", variable: "--z-font-mono", display: "swap" });
 
 const BASE_URL = "https://kenyayouthclimatehub.org";
 
@@ -113,7 +121,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${montserrat.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${archivo.variable} ${bricolage.variable} ${fraunces.variable} ${marker.variable} ${spaceMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
@@ -122,6 +130,11 @@ export default async function RootLayout({
         <meta name="geo.placename" content="Nairobi, Kenya" />
         <meta name="geo.position" content="-1.286389;36.817223" />
         <meta name="ICBM" content="-1.286389, 36.817223" />
+        {/* Google Material Symbols (Rounded) — the only icon set in the new design */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0..1,0&display=block"
+        />
       </head>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>

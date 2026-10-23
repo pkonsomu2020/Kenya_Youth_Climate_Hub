@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { PageHeader } from "@/components/PageHeader";
-import { useContent, newId } from "@/lib/contentStore";
-import { MapPin, Mail, Phone, ArrowRight, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useContent, newId } from "@/lib/contentStore";
+import { Icon } from "@/components/zine/Icon";
+
+const INBOX = "info@kenyayouthclimatehub.org";
 
 // Stored in English for the admin inbox; only the visible labels are translated.
 const SENDER_TYPES = [
@@ -15,146 +16,99 @@ const SENDER_TYPES = [
   { value: "Other", key: "other" },
 ] as const;
 
-function useInView(ref: React.RefObject<Element | null>) {
-  const [v, setV] = useState(false);
-  useEffect(() => {
-    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setV(true); }, { threshold: 0.1 });
-    if (ref.current) o.observe(ref.current);
-    return () => o.disconnect();
-  }, [ref]);
-  return v;
-}
-
 export default function Contact() {
   const t = useTranslations("contact");
-  const [sent, setSent] = useState(false);
   const { content, update } = useContent();
   const [form, setForm] = useState({ name: "", email: "", type: "Young Kenyan", body: "" });
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref);
+  const [mailto, setMailto] = useState<string | null>(null);
+  const s = (c: React.ReactNode) => <span className="z-serif">{c}</span>;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Keep a copy in the admin hub inbox (as before)...
     update("messages", [{ id: newId(), from: form.name, email: form.email, subject: `Message from ${form.type}`, body: form.body, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }), read: false }, ...(content.messages || [])]);
-    setSent(true);
+    // ...and hand the message to the visitor's email app so it actually reaches the team.
+    const href = `mailto:${INBOX}?subject=${encodeURIComponent(`KYCH contact: ${form.type} - ${form.name}`)}&body=${encodeURIComponent(`${form.body}\n\n${form.name}\n${form.email}`)}`;
+    setMailto(href);
+    window.location.href = href;
   };
 
   return (
-    <>
-      <PageHeader
-        eyebrow={t("eyebrow")}
-        title={t.rich("title", { g: (c) => <span style={{ color: "#5dba2f" }}>{c}</span> })}
-        subtitle={t("subtitle")}
-      />
+    <div className="z-page z-form">
+      <header className="z-form__head">
+        <div className="z-wrap">
+          <span className="z-mono z-eyebrow">{t("eyebrow")}</span>
+          <h1 className="z-h2 z-balance">{t.rich("title", { s })}</h1>
+          <p className="z-lead">{t("subtitle")}</p>
+        </div>
+      </header>
 
-      <section className="py-32 px-6 md:px-16" style={{ background: "var(--section-light)" }}>
-        <div
-          ref={ref}
-          style={{ maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "4rem", alignItems: "start" }}
-        >
-          {/* ── Contact info ── */}
-          <div style={{ opacity: inView ? 1 : 0, transform: inView ? "translateX(0)" : "translateX(-40px)", transition: "opacity 0.8s ease, transform 0.8s ease" }}>
-            <span style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "11px", letterSpacing: "0.25em", textTransform: "uppercase", color: "#5dba2f" }}>{t("label")}</span>
-            <h2 style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "clamp(2rem,4vw,3rem)", color: "var(--foreground)", letterSpacing: "-0.03em", lineHeight: 1.1, marginTop: "1rem", marginBottom: "2.5rem" }}>
-              {t.rich("heading", { g: (c) => <span style={{ color: "#5dba2f" }}>{c}</span> })}
-            </h2>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-              {[
-                { icon: <Mail size={20} />, label: t("email"), value: "info@kenyayouthclimatehub.org", href: "mailto:info@kenyayouthclimatehub.org" },
-                { icon: <Phone size={20} />, label: t("phone"), value: "+254 712 345 678", href: "tel:+254712345678" },
-                { icon: <MapPin size={20} />, label: t("location"), value: "Ngong Road, Nairobi, Kenya", href: undefined },
-              ].map(({ icon, label, value, href }) => (
-                <div key={label} style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(93,186,47,.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "#5dba2f", flexShrink: 0 }}>
-                    {icon}
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".78rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".2rem" }}>{label}</div>
-                    {href ? (
-                      <a href={href} style={{ fontFamily: "Montserrat, sans-serif", fontSize: "1rem", fontWeight: 600, color: "var(--foreground)", textDecoration: "none" }}
-                        onMouseEnter={e => (e.currentTarget.style.color = "#5dba2f")}
-                        onMouseLeave={e => (e.currentTarget.style.color = "var(--foreground)")}
-                      >{value}</a>
-                    ) : (
-                      <span style={{ fontFamily: "Montserrat, sans-serif", fontSize: "1rem", fontWeight: 600, color: "var(--foreground)" }}>{value}</span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ marginTop: "3rem", padding: "1.5rem 2rem", background: "var(--section-dark)", borderRadius: 16, border: "1px solid rgba(93,186,47,.15)" }}>
-              <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 800, fontSize: ".9rem", color: "var(--text-on-dark)", marginBottom: ".5rem" }}>{t("donorsTitle")}</div>
-              <p style={{ fontSize: ".85rem", color: "var(--muted-foreground)", lineHeight: 1.65 }}>
-                {t("donorsBody")}
-              </p>
-            </div>
-          </div>
-
-          {/* ── Form ── */}
-          <div style={{ opacity: inView ? 1 : 0, transform: inView ? "translateX(0)" : "translateX(40px)", transition: "opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s" }}>
-            <div style={{ background: "var(--section-dark)", borderRadius: 20, padding: "2.5rem", border: "1px solid rgba(93,186,47,0.15)", position: "relative", overflow: "hidden" }}>
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: "linear-gradient(90deg, #5dba2f, transparent)" }} />
-
-              {sent ? (
-                <div style={{ textAlign: "center", padding: "3rem 1rem" }}>
-                  <CheckCircle2 size={56} color="#5dba2f" style={{ margin: "0 auto 1.25rem" }} />
-                  <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "1.3rem", color: "var(--text-on-dark)", marginBottom: ".75rem" }}>{t("sentTitle")}</div>
-                  <p style={{ color: "var(--muted-foreground)", lineHeight: 1.65 }}>{t("sentBody")}</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                  <div style={{ fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: "1.1rem", color: "var(--text-on-dark)", marginBottom: ".25rem" }}>{t("formTitle")}</div>
-
-                  {[
-                    { label: t("nameLabel"), key: "name", type: "text", placeholder: t("namePlaceholder") },
-                    { label: t("emailLabel"), key: "email", type: "email", placeholder: t("emailPlaceholder") },
-                  ].map(({ label, key, type, placeholder }) => (
-                    <div key={key}>
-                      <label htmlFor={`contact-${key}`} style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".4rem" }}>{label}</label>
-                      <input
-                        id={`contact-${key}`}
-                        type={type} required placeholder={placeholder}
-                        value={(form as any)[key]}
-                        onChange={e => setForm({ ...form, [key]: e.target.value })}
-                        style={{ width: "100%", padding: ".85rem 1rem", borderRadius: 10, border: "1px solid rgba(255,255,255,.1)", background: "rgba(255,255,255,.05)", color: "var(--text-on-dark)", fontFamily: "Montserrat, sans-serif", fontSize: ".9rem", outline: "none", boxSizing: "border-box" }}
-                        onFocus={e => (e.target.style.borderColor = "#5dba2f")}
-                        onBlur={e => (e.target.style.borderColor = "rgba(255,255,255,.1)")}
-                      />
-                    </div>
-                  ))}
-
-                  <div>
-                    <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".4rem" }}>{t("typeLabel")}</label>
-                    <select aria-label={t("typeLabel")} value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}
-                      style={{ width: "100%", padding: ".85rem 1rem", borderRadius: 10, border: "1px solid rgba(255,255,255,.1)", background: "rgba(255,255,255,.05)", color: "var(--text-on-dark)", fontFamily: "Montserrat, sans-serif", fontSize: ".9rem", outline: "none" }}>
-                      {SENDER_TYPES.map((s) => <option key={s.key} value={s.value}>{t(`types.${s.key}`)}</option>)}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label style={{ display: "block", fontFamily: "Montserrat, sans-serif", fontWeight: 700, fontSize: ".75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: ".4rem" }}>{t("messageLabel")}</label>
-                    <textarea aria-label={t("messageLabel")} required rows={5} value={form.body} onChange={e => setForm({ ...form, body: e.target.value })} placeholder={t("messagePlaceholder")}
-                      style={{ width: "100%", padding: ".85rem 1rem", borderRadius: 10, border: "1px solid rgba(255,255,255,.1)", background: "rgba(255,255,255,.05)", color: "var(--text-on-dark)", fontFamily: "Montserrat, sans-serif", fontSize: ".9rem", outline: "none", resize: "vertical", boxSizing: "border-box" }}
-                      onFocus={e => (e.target.style.borderColor = "#5dba2f")}
-                      onBlur={e => (e.target.style.borderColor = "rgba(255,255,255,.1)")}
-                    />
-                  </div>
-
-                  <button type="submit"
-                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: ".5rem", padding: "1rem 2rem", borderRadius: 10, background: "#5dba2f", color: "#fff", fontFamily: "Montserrat, sans-serif", fontWeight: 900, fontSize: ".9rem", letterSpacing: "0.05em", border: "none", cursor: "pointer", transition: "background .2s, transform .2s" }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#4aa324"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#5dba2f"; (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}
-                  >
-                    {t("send")} <ArrowRight size={16} />
+      <section className="z-form__sec">
+        <div className="z-wrap z-form__grid">
+          <article className="z-formcard">
+            <span className="z-tape" style={{ top: -12, left: 40, transform: "rotate(-4deg)" }} aria-hidden="true" />
+            <span className="z-tape z-tape--sun" style={{ top: -12, right: 40, transform: "rotate(5deg)" }} aria-hidden="true" />
+            {mailto ? (
+              <div className="z-formcard__done" role="status">
+                <Icon name="forward_to_inbox" size={48} />
+                <h2>{t("sentTitle")}</h2>
+                <p>{t("sentBody", { email: INBOX })}</p>
+                <div className="z-ctas" style={{ justifyContent: "center" }}>
+                  <a className="z-btn z-btn--green z-btn--sm" href={mailto}><Icon name="mail" /> {t("openAgain")}</a>
+                  <button type="button" className="z-btn z-btn--white z-btn--sm" onClick={() => { setMailto(null); setForm({ name: "", email: "", type: "Young Kenyan", body: "" }); }}>
+                    <Icon name="edit_note" /> {t("another")}
                   </button>
-                </form>
-              )}
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <h2 className="z-formcard__title z-mono">{t("formTitle")}</h2>
+                <div className="z-field">
+                  <label htmlFor="contact-name">{t("nameLabel")}</label>
+                  <input id="contact-name" required autoComplete="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder={t("namePlaceholder")} />
+                </div>
+                <div className="z-field">
+                  <label htmlFor="contact-email">{t("emailLabel")}</label>
+                  <input id="contact-email" type="email" required autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder={t("emailPlaceholder")} />
+                </div>
+                <fieldset className="z-field z-field--chips">
+                  <legend>{t("typeLabel")}</legend>
+                  <div>
+                    {SENDER_TYPES.map((st) => (
+                      <label key={st.key} className="z-chip">
+                        <input type="radio" name="type" value={st.value} checked={form.type === st.value} onChange={() => setForm({ ...form, type: st.value })} />
+                        <span>{t(`types.${st.key}`)}</span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+                <div className="z-field">
+                  <label htmlFor="contact-body">{t("messageLabel")}</label>
+                  <textarea id="contact-body" required rows={6} value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder={t("messagePlaceholder")} />
+                </div>
+                <button type="submit" className="z-btn z-btn--navy z-formcard__submit">{t("send")} <Icon name="send" /></button>
+                <p className="z-formcard__note">{t("formNote")}</p>
+              </form>
+            )}
+          </article>
+
+          <aside className="z-form__aside" aria-label={t("label")}>
+            <a className="z-form__item" href={`mailto:${INBOX}`}>
+              <Icon name="mail" />
+              <span><small className="z-mono">{t("email")}</small>{INBOX}</span>
+            </a>
+            <div className="z-form__item">
+              <Icon name="location_on" />
+              <span><small className="z-mono">{t("location")}</small>{t("locationValue")}</span>
             </div>
-          </div>
+            <div className="z-form__item z-form__item--note">
+              <Icon name="schedule" />
+              <span><small className="z-mono">{t("donorsTitle")}</small>{t("donorsBody")}</span>
+            </div>
+          </aside>
         </div>
       </section>
-    </>
+      <div className="z-tear z-tear--top" aria-hidden="true" />
+    </div>
   );
 }
