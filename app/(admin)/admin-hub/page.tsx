@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useAdmin, StatCard, PageHead } from "@/components/admin/AdminUI";
+import { useContactMessages } from "@/lib/useContactMessages";
 import { BookOpen, Target, Calendar, Newspaper, Settings, Globe } from "lucide-react";
 
 export default function Dashboard() {
-  const { content, reset } = useAdmin();
-  // Safe access — guard against undefined arrays from old localStorage data
-  const messages = content.messages ?? [];
+  const { content } = useAdmin();
+  const { messages } = useContactMessages();
   const unread = messages.filter((m) => !m.read).length;
 
   return (
