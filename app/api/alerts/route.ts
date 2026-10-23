@@ -46,7 +46,8 @@ const withTimeout = <T,>(p: Promise<T>, ms: number) => Promise.race([p, new Prom
 
 async function build(locale: Locale, origin: string): Promise<Alert[]> {
   const today = startOfToday();
-  const iso = (d: Date) => d.toISOString().slice(0, 10);
+  // local calendar date; toISOString() would shift a day back on servers ahead of UTC
+  const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   const [weather, opps, events] = await Promise.all([
     Promise.all(WATCH.map((name) => withTimeout(getAccuWeatherTelemetry(name, intlLocale[locale]).catch(() => null), 7000))),
     getJson(`${origin}/api/opportunities?limit=100&lang=${locale}`),

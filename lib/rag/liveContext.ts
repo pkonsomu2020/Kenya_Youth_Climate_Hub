@@ -13,6 +13,9 @@ export type Source = { label: string; href: string };
 
 const fold = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 const DAY = 86_400_000;
+// Local calendar date (YYYY-MM-DD). toISOString() would shift to UTC and show the
+// previous day on servers whose clock is ahead of UTC.
+const ymd = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
 const INTENTS = {
   funding: /(fund|grant|fellowship|internship|job|competition|accelerator|scholarship|deadline|apply|money|ufadhili|ruzuku|ushirika|mafunzo kazini|ajira|mashindano|omba|financ|subvention|bourse|stage|emploi|concours|postuler)/,
@@ -90,7 +93,7 @@ export async function buildLiveContext(query: string, locale: Locale, origin: st
       `- ${cleanTitle(o.title || o.name || "")}${o.provider ? ` (${o.provider})` : ""} — ${o.type ?? "Opportunity"}${o.amount ? `, ${o.amount}` : ""} — ${when} — ${o.url}`;
     sections.push(
       `LIVE FUNDING CALLS${type ? ` (type: ${type})` : ""} — ${rows.length} on the board. Soonest closing:\n` +
-        (dated.length ? dated.map(({ o, d }) => line(o, `closes ${d.toISOString().slice(0, 10)} (in ${Math.round((d.getTime() - today.getTime()) / DAY)} days)`)).join("\n") : "- none with a dated deadline") +
+        (dated.length ? dated.map(({ o, d }) => line(o, `closes ${ymd(d)} (in ${Math.round((d.getTime() - today.getTime()) / DAY)} days)`)).join("\n") : "- none with a dated deadline") +
         (open.length ? `\nOpen / rolling:\n${open.map((o) => line(o, "open, apply any time")).join("\n")}` : ""),
     );
     sources.push({ label: "Funding board", href: "/opportunities" });
@@ -99,11 +102,11 @@ export async function buildLiveContext(query: string, locale: Locale, origin: st
   // ---- events (official calendar + live feed) ----
   if (want.events) {
     type Ev = { title: string; start: string | null; where: string; link?: string };
-    const official: Ev[] = OFFICIAL_EVENTS_2026.map((e) => ({ title: e.title, start: e.endDate >= today.toISOString().slice(0, 10) ? e.startDate : null, where: e.location, link: e.link }))
+    const official: Ev[] = OFFICIAL_EVENTS_2026.map((e) => ({ title: e.title, start: e.endDate >= ymd(today) ? e.startDate : null, where: e.location, link: e.link }))
       .filter((e) => e.start);
     type LiveEv = { title: string; event_date?: string | null; location?: string; url?: string };
     const live: Ev[] = ((liveEvents?.data ?? []) as LiveEv[])
-      .filter((e) => e.event_date && e.event_date >= today.toISOString().slice(0, 10))
+      .filter((e) => e.event_date && e.event_date >= ymd(today))
       .map((e) => ({ title: e.title, start: e.event_date!.slice(0, 10), where: e.location ?? "", link: e.url }));
     const seen = new Set<string>();
     const next = [...official, ...live]
