@@ -1023,44 +1023,53 @@
     "ClearSky": "Ciel dégagé"
   },
   "chat": {
-    "greeting": "Karibu ! Je suis Climate AI de KYCH. Posez-moi vos questions sur les subventions, les bourses, les programmes ou le Youth Climate Innovation Challenge.",
-    "thinking": "L'IA réfléchit...",
-    "online": "En ligne • Connecté à OpenAI",
-    "close": "Fermer la discussion",
-    "retrieving": "Recherche dans la base KYCH et rédaction de la réponse...",
-    "typing": "KYCH AI écrit...",
-    "placeholder": "Posez une question sur les subventions, le YCIC ou la météo...",
-    "send": "Envoyer le message",
+    "greeting": "Karibu ! Je suis Climate AI. Demandez-moi quels appels à financement ferment bientôt, ce qui se passe ce mois-ci, ou le risque d’inondation et la météo de votre comté.",
+    "thinking": "Rédaction de la réponse…",
+    "online": "Réponses fondées sur les données KYCH en direct",
+    "open": "Ouvrir Climate AI",
+    "close": "Fermer Climate AI",
+    "newChat": "Nouvelle conversation",
+    "retrieving": "Consultation des données KYCH…",
+    "placeholder": "Posez une question sur les financements, les événements ou votre comté…",
+    "send": "Envoyer",
+    "stop": "Arrêter la réponse",
+    "stopped": "(Arrêté.)",
+    "sources": "Sources",
+    "suggestions": "Questions suggérées",
+    "note": "Climate AI peut se tromper. Vérifiez les dates limites sur l’appel d’origine.",
+    "offlineNotice": "Climate AI est hors ligne, voici une réponse enregistrée.",
     "prompts": {
       "funding": {
-        "label": "Trouver un financement",
-        "query": "Quels financements ou subventions sont disponibles ?"
+        "label": "Appels bientôt clos",
+        "query": "Quels appels à financement ferment dans les deux prochaines semaines ?"
       },
-      "ycic": {
-        "label": "Défi YCIC",
-        "query": "Parlez-moi du Youth Climate Innovation Challenge"
+      "weather": {
+        "label": "Inondations dans mon comté",
+        "query": "Quel est le risque d’inondation et la météo à Nairobi cette semaine ?"
+      },
+      "events": {
+        "label": "Événements du mois",
+        "query": "Quels événements climat ont lieu ce mois-ci ?"
       },
       "join": {
         "label": "Rejoindre KYCH",
-        "query": "Comment m'inscrire et rejoindre KYCH ?"
-      },
-      "weather": {
-        "label": "Météo du comté",
-        "query": "Comment consulter la météo de mon comté ?"
+        "query": "Comment rejoindre KYCH et créer un profil ?"
       }
     },
     "canned": {
-      "funding": "Notre tableau des opportunités recense en direct des subventions, bourses et stages, avec alertes d'échéance. Rendez-vous sur la [page Opportunités](/opportunities) pour filtrer par type et date de clôture.",
-      "programs": "Le Youth Climate Innovation Challenge (YCIC 2025) est terminé (candidatures closes en juin 2025). Le programme a attribué 500 000 KES de subventions d'amorçage pour l'eau et l'assainissement, la résilience aux inondations et les technologies propres. Découvrez son impact sur la [page YCIC](/programs/ycic) ou consultez le [tableau des opportunités](/opportunities) pour les appels en cours.",
-      "join": "Tout jeune de 15 à 35 ans au Kenya peut rejoindre KYCH. Commencez par vous inscrire sur yoma.world, puis consultez le [tableau des opportunités](/opportunities).",
-      "library": "La bibliothèque propose des rapports de recherche, des boîtes à outils et des notes politiques. Parcourez les ressources gratuites sur la [page Bibliothèque](/e-library).",
-      "weather": "Notre espace Veille climatique fournit des données satellites en direct et des alertes pour les 47 comtés du Kenya. Consultez la [page Météo](/weather).",
-      "default": "Karibu ! Merci de nous avoir écrit. Contactez-nous directement à info@kenyayouthclimatehub.org ou au (+254) 0115963306 pour un accompagnement personnalisé."
+      "funding": "Le [tableau des financements](/opportunities) recense subventions, bourses, stages, emplois et concours ; les appels qui ferment dans les 14 jours sont épinglés en haut.",
+      "programs": "Le Youth Climate Innovation Challenge 2025 est terminé (candidatures closes en juin 2025). Découvrez ce qu’il a soutenu sur la [page YCIC](/programs/ycic) et suivez le [tableau des financements](/opportunities) pour la prochaine édition.",
+      "join": "KYCH s’adresse aux jeunes du Kenya de 15 à 35 ans. Créez un profil sur la [page d’inscription](/register), puis épinglez vos raccourcis sur votre [tableau de bord](/dashboard).",
+      "library": "La [médiathèque](/e-library) propose un calculateur d’empreinte carbone, un quiz climat, ainsi que des boîtes à outils, jeux de données et rapports en accès libre.",
+      "weather": "[Climate Watch](/weather) affiche la carte des 47 comtés selon le risque d’inondation, avec la météo du jour, les prévisions à 7 jours et les numéros d’urgence pour chacun.",
+      "default": "Karibu ! Je n’ai pas pu joindre l’assistant pour le moment. Écrivez à info@kenyayouthclimatehub.org ou appelez le (+254) 0115963306."
     }
   },
   "chatApi": {
     "fallback": "Karibu ! {content}\n\nPour en savoir plus, consultez [{title}]({url}) ou contactez-nous directement à info@kenyayouthclimatehub.org ou au (+254) 0115963306.",
-    "noReply": "Merci de nous avoir écrit ! En attendant, vous pouvez nous joindre à info@kenyayouthclimatehub.org ou au (+254) 0115963306."
+    "noReply": "Merci de nous avoir écrit ! En attendant, vous pouvez nous joindre à info@kenyayouthclimatehub.org ou au (+254) 0115963306.",
+    "rateLimited": "Vous avez envoyé beaucoup de questions en peu de temps. Patientez une minute puis réessayez.",
+    "interrupted": "(La réponse a été interrompue. Merci de reposer la question.)"
   },
   "calculator": {
     "toolLabel": "Outil KYCH",

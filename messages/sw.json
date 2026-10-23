@@ -1023,44 +1023,53 @@
     "ClearSky": "Anga Safi"
   },
   "chat": {
-    "greeting": "Karibu! Mimi ni Climate AI ya KYCH. Niulize kuhusu ruzuku, ushirika, programu au Youth Climate Innovation Challenge.",
-    "thinking": "AI inafikiri...",
-    "online": "Mtandaoni • Imeunganishwa na OpenAI",
-    "close": "Funga gumzo",
-    "retrieving": "Inatafuta taarifa za KYCH na kuandaa jibu...",
-    "typing": "KYCH AI inaandika...",
-    "placeholder": "Uliza kuhusu ruzuku, YCIC au hali ya hewa...",
-    "send": "Tuma ujumbe",
+    "greeting": "Karibu! Mimi ni Climate AI. Niulize ni fursa zipi za ufadhili zinazofungwa hivi karibuni, kinachoendelea mwezi huu, au hatari ya mafuriko na utabiri wa kaunti yako.",
+    "thinking": "Ninaandika jibu…",
+    "online": "Majibu kutoka data hai ya KYCH",
+    "open": "Fungua Climate AI",
+    "close": "Funga Climate AI",
+    "newChat": "Anza mazungumzo mapya",
+    "retrieving": "Ninaangalia data ya KYCH…",
+    "placeholder": "Uliza kuhusu ufadhili, matukio au kaunti yako…",
+    "send": "Tuma",
+    "stop": "Simamisha jibu",
+    "stopped": "(Imesimamishwa.)",
+    "sources": "Vyanzo",
+    "suggestions": "Maswali yanayopendekezwa",
+    "note": "Climate AI inaweza kukosea. Hakikisha tarehe za mwisho kwenye tangazo asili.",
+    "offlineNotice": "Climate AI haipatikani, kwa hivyo hili ni jibu lililohifadhiwa.",
     "prompts": {
       "funding": {
-        "label": "Pata ufadhili",
-        "query": "Kuna ufadhili au ruzuku gani zinazopatikana?"
-      },
-      "ycic": {
-        "label": "Shindano la YCIC",
-        "query": "Nieleze kuhusu Youth Climate Innovation Challenge"
-      },
-      "join": {
-        "label": "Jiunge na KYCH",
-        "query": "Ninawezaje kujisajili na kujiunga na KYCH?"
+        "label": "Zinazofungwa karibuni",
+        "query": "Ni fursa zipi za ufadhili zinazofungwa ndani ya wiki mbili zijazo?"
       },
       "weather": {
-        "label": "Hali ya hewa ya kaunti",
-        "query": "Ninawezaje kuangalia hali ya hewa ya kaunti yangu?"
+        "label": "Mafuriko kaunti yangu",
+        "query": "Hatari ya mafuriko na utabiri wa Nairobi wiki hii ni upi?"
+      },
+      "events": {
+        "label": "Matukio ya mwezi huu",
+        "query": "Ni matukio gani ya tabianchi yanayokuja mwezi huu?"
+      },
+      "join": {
+        "label": "Jinsi ya kujiunga",
+        "query": "Ninajiungaje na KYCH na kufungua wasifu?"
       }
     },
     "canned": {
-      "funding": "Ubao wetu wa Fursa una ruzuku, ushirika na mafunzo kazini yanayosasishwa moja kwa moja, pamoja na vikumbusho vya tarehe za mwisho. Nenda kwenye [ukurasa wa Fursa](/opportunities) kuchuja kwa aina na tarehe ya kufunga.",
-      "programs": "Youth Climate Innovation Challenge (YCIC 2025) imekamilika (maombi yalifungwa Juni 2025). Programu ilitoa ruzuku za kuanzia za KES 500K kwa WASH, ustahimilivu wa mafuriko na teknolojia safi. Tazama matokeo yake kwenye [Ukurasa wa YCIC](/programs/ycic) au tembelea [Ubao wa Fursa](/opportunities) kwa ruzuku zilizo wazi sasa.",
-      "join": "Kijana yeyote wa miaka 15 hadi 35 nchini Kenya anaweza kujiunga na KYCH. Anza kwa kujisajili kwenye yoma.world, kisha tazama [Ubao wa Fursa](/opportunities).",
-      "library": "Maktaba ina ripoti za utafiti, vifaa vya mafunzo na muhtasari wa sera. Vinjari rasilimali bila malipo kwenye [ukurasa wa Maktaba](/e-library).",
-      "weather": "Kitovu chetu cha Hali ya Hewa kinatoa taarifa za setilaiti na ushauri kwa kaunti zote 47 za Kenya. Tembelea [ukurasa wa Hali ya Hewa](/weather).",
-      "default": "Karibu! Asante kwa kuwasiliana nasi. Tupate moja kwa moja kupitia info@kenyayouthclimatehub.org au (+254) 0115963306 kwa msaada zaidi."
+      "funding": "[Ubao wa ufadhili](/opportunities) una ruzuku, ushirika, mafunzo kazini, ajira na mashindano, na matangazo yanayofungwa ndani ya siku 14 yamebandikwa juu.",
+      "programs": "Youth Climate Innovation Challenge 2025 imekamilika (maombi yalifungwa Juni 2025). Ona ilichounga mkono kwenye [ukurasa wa YCIC](/programs/ycic), na fuatilia [ubao wa ufadhili](/opportunities) kwa mzunguko ujao.",
+      "join": "KYCH ni ya vijana wa Kenya wenye umri wa miaka 15 hadi 35. Fungua wasifu kwenye [ukurasa wa usajili](/register), kisha bandika njia zako za mkato kwenye [dashibodi](/dashboard).",
+      "library": "[Maktaba](/e-library) ina kikokotoo cha alama ya kaboni, jaribio la tabianchi, na vifaa, seti za data na ripoti unazoweza kufungua bure.",
+      "weather": "[Climate Watch](/weather) inaonyesha ramani ya kaunti zote 47 kwa hatari ya mafuriko, na hali ya hewa ya leo, utabiri wa siku 7 na nambari za dharura kwa kila moja.",
+      "default": "Karibu! Sikuweza kumfikia msaidizi kwa sasa. Unaweza kuandika kwa info@kenyayouthclimatehub.org au kupiga (+254) 0115963306."
     }
   },
   "chatApi": {
     "fallback": "Karibu! {content}\n\nKwa maelezo zaidi, tembelea [{title}]({url}) au wasiliana nasi moja kwa moja kupitia info@kenyayouthclimatehub.org au (+254) 0115963306.",
-    "noReply": "Asante kwa kuwasiliana nasi! Kwa sasa unaweza kutupata kupitia info@kenyayouthclimatehub.org au (+254) 0115963306."
+    "noReply": "Asante kwa kuwasiliana nasi! Kwa sasa unaweza kutupata kupitia info@kenyayouthclimatehub.org au (+254) 0115963306.",
+    "rateLimited": "Umetuma maswali mengi kwa muda mfupi. Tafadhali subiri dakika moja kisha ujaribu tena.",
+    "interrupted": "(Jibu lilikatika. Tafadhali uliza tena.)"
   },
   "calculator": {
     "toolLabel": "Zana ya KYCH",
