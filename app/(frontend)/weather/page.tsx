@@ -13,6 +13,7 @@ import { countyAdvisoriesI18n } from "@/lib/data/translations/countyAdvisories";
 import { CountyMap, RISK_FILL, type Risk } from "@/components/weather/CountyMap";
 import { countyAt } from "@/lib/geo/countyMap";
 import { Icon } from "@/components/zine/Icon";
+import { AlertTicker } from "@/components/AlertTicker";
 import { EMERGENCY_CONTACTS } from "@/lib/data/emergencyContacts";
 
 const STEP_CATEGORIES = [
@@ -166,6 +167,7 @@ export default function WeatherPage() {
             </label>
           </div>
           <p className="z-wx__geomsg" role="status" aria-live="polite">{geoMsg}</p>
+          <AlertTicker className="z-alerts--left" />
         </div>
       </header>
 

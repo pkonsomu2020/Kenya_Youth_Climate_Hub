@@ -5,6 +5,7 @@ import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { useHomeFeed } from "@/lib/useHomeFeed";
 import { Icon } from "@/components/zine/Icon";
+import { AlertTicker } from "@/components/AlertTicker";
 import { cleanTitle } from "@/components/funding/NoticeCard";
 import type { Opportunity } from "@/lib/useOpportunities";
 
@@ -89,6 +90,7 @@ export default function DashboardPage() {
             </div>
             <p className="z-dash__hint">{pins.length ? t("pinnedNote", { n: pins.length }) : t("pickHint")}</p>
           </fieldset>
+          <AlertTicker className="z-alerts--left" />
         </div>
       </header>
 

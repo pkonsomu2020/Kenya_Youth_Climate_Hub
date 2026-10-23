@@ -38,11 +38,6 @@
     }
   },
   "home": {
-    "alert": {
-      "badge": "EL NIÑO",
-      "body": "Alertes inondations dans l'Ouest, sur la Côte et dans la vallée du Rift",
-      "cta": "Voir votre comté"
-    },
     "hero": {
       "eyebrow": "Kenya Youth Climate Hub · 15–35 ans",
       "title": "Ton comté.<br></br>Ton <hl>climat.</hl><br></br>À <u>toi.</u>",
@@ -1279,5 +1274,46 @@
         "desc": "Remarquable ! Vous êtes une référence en matière de climat. Partagez votre savoir !"
       }
     ]
+  },
+  "alerts": {
+    "label": "Alertes en direct",
+    "roledescription": "alertes défilantes",
+    "prev": "Alerte précédente",
+    "next": "Alerte suivante",
+    "pause": "Mettre les alertes en pause",
+    "play": "Relancer les alertes",
+    "rain": {
+      "badge": "Fortes pluies",
+      "body": "{when, select, today {Fortes pluies probables à {county} aujourd’hui} other {Fortes pluies probables à {county} demain}} ({chance} % de risque){others, plural, =0 {} one { et # autre comté} other { et # autres comtés}}",
+      "cta": "Voir votre comté"
+    },
+    "heat": {
+      "badge": "Chaleur",
+      "body": "Jusqu’à {temp} °C prévus à {county}. Buvez de l’eau et évitez le soleil de midi.",
+      "cta": "Voir la météo"
+    },
+    "flood": {
+      "badge": "Risque d’inondation",
+      "body": "Alertes inondation dans {count} comtés : {regions}",
+      "cta": "Voir votre comté"
+    },
+    "closing": {
+      "badge": "Bientôt clos",
+      "body": "{days, plural, =0 {Ferme aujourd’hui} one {Ferme demain} other {Ferme dans # jours}} : {title}{others, plural, =0 {} other { (+# autres)}}",
+      "cta": "Voir l’appel"
+    },
+    "event": {
+      "badge": "Prochain événement",
+      "body": "{days, plural, =0 {Aujourd’hui} one {Demain} other {Dans # jours}} : {title}",
+      "cta": "Voir les dates"
+    },
+    "regions": {
+      "western": "Ouest",
+      "rift": "Vallée du Rift",
+      "coast": "Côte",
+      "northEast": "Nord-Est",
+      "central": "Centre",
+      "nairobiEast": "Nairobi et Est"
+    }
   }
 }

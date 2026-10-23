@@ -38,11 +38,6 @@
     }
   },
   "home": {
-    "alert": {
-      "badge": "EL NIÑO",
-      "body": "Tahadhari za mafuriko Magharibi, Pwani na Bonde la Ufa",
-      "cta": "Angalia kaunti yako"
-    },
     "hero": {
       "eyebrow": "Kenya Youth Climate Hub · miaka 15–35",
       "title": "Kaunti yako.<br></br>Tabianchi <hl>yako.</hl><br></br>Zamu <u>yako.</u>",
@@ -1279,5 +1274,46 @@
         "desc": "Bora kabisa! Wewe ni kiongozi wa maarifa ya tabianchi. Shiriki ujuzi wako na wengine!"
       }
     ]
+  },
+  "alerts": {
+    "label": "Tahadhari za moja kwa moja",
+    "roledescription": "tahadhari zinazozunguka",
+    "prev": "Tahadhari iliyotangulia",
+    "next": "Tahadhari inayofuata",
+    "pause": "Sitisha tahadhari",
+    "play": "Endelea na tahadhari",
+    "rain": {
+      "badge": "Mvua kubwa",
+      "body": "{when, select, today {Mvua kubwa inatarajiwa {county} leo} other {Mvua kubwa inatarajiwa {county} kesho}} (uwezekano {chance}%){others, plural, =0 {} one { na kaunti # nyingine} other { na kaunti # nyingine}}",
+      "cta": "Angalia kaunti yako"
+    },
+    "heat": {
+      "badge": "Joto",
+      "body": "Hadi {temp}°C inatarajiwa {county}. Kunywa maji na epuka jua la mchana.",
+      "cta": "Ona utabiri"
+    },
+    "flood": {
+      "badge": "Hatari ya mafuriko",
+      "body": "Tahadhari za mafuriko katika kaunti {count}: {regions}",
+      "cta": "Angalia kaunti yako"
+    },
+    "closing": {
+      "badge": "Inafungwa karibuni",
+      "body": "{days, plural, =0 {Inafungwa leo} one {Inafungwa kesho} other {Inafungwa baada ya siku #}}: {title}{others, plural, =0 {} other { (+# zaidi)}}",
+      "cta": "Ona tangazo"
+    },
+    "event": {
+      "badge": "Tukio lijalo",
+      "body": "{days, plural, =0 {Leo} one {Kesho} other {Baada ya siku #}}: {title}",
+      "cta": "Ona tarehe"
+    },
+    "regions": {
+      "western": "Magharibi",
+      "rift": "Bonde la Ufa",
+      "coast": "Pwani",
+      "northEast": "Kaskazini Mashariki",
+      "central": "Kati",
+      "nairobiEast": "Nairobi na Mashariki"
+    }
   }
 }

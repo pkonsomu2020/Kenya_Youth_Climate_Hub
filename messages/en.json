@@ -38,11 +38,6 @@
     }
   },
   "home": {
-    "alert": {
-      "badge": "EL NIÑO",
-      "body": "Flood advisories in Western, Coast & Rift Valley",
-      "cta": "Check your county"
-    },
     "hero": {
       "eyebrow": "Kenya Youth Climate Hub · ages 15–35",
       "title": "Your county.<br></br>Your <hl>climate.</hl><br></br>Your <u>move.</u>",
@@ -1251,5 +1246,46 @@
         "desc": "Outstanding! You're a climate knowledge leader. Share your expertise with others!"
       }
     ]
+  },
+  "alerts": {
+    "label": "Live alerts",
+    "roledescription": "rotating alerts",
+    "prev": "Previous alert",
+    "next": "Next alert",
+    "pause": "Pause alerts",
+    "play": "Play alerts",
+    "rain": {
+      "badge": "Heavy rain",
+      "body": "{when, select, today {Heavy rain likely in {county} today} other {Heavy rain likely in {county} tomorrow}} ({chance}% chance){others, plural, =0 {} one { and # more county} other { and # more counties}}",
+      "cta": "Check your county"
+    },
+    "heat": {
+      "badge": "Heat",
+      "body": "Up to {temp}°C forecast in {county}. Drink water and avoid the midday sun.",
+      "cta": "See the forecast"
+    },
+    "flood": {
+      "badge": "Flood risk",
+      "body": "Flood advisories in {count} counties: {regions}",
+      "cta": "Check your county"
+    },
+    "closing": {
+      "badge": "Closing soon",
+      "body": "{days, plural, =0 {Closes today} one {Closes tomorrow} other {Closes in # days}}: {title}{others, plural, =0 {} other { (+# more)}}",
+      "cta": "See the call"
+    },
+    "event": {
+      "badge": "Next event",
+      "body": "{days, plural, =0 {Today} one {Tomorrow} other {In # days}}: {title}",
+      "cta": "See dates"
+    },
+    "regions": {
+      "western": "Western",
+      "rift": "Rift Valley",
+      "coast": "Coast",
+      "northEast": "North Eastern",
+      "central": "Central",
+      "nairobiEast": "Nairobi & Eastern"
+    }
   }
 }
