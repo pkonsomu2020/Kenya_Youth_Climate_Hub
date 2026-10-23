@@ -35,7 +35,9 @@ after=$(git rev-parse --short HEAD)
 echo "    $before -> $after"
 
 echo "==> Installing dependencies"
-npm ci --no-audit --no-fund
+# npm ci is strict about the lock file; different npm versions can disagree on it,
+# so fall back to npm install (the lock-file drift is reset at the start of the next deploy)
+npm ci --no-audit --no-fund || npm install --no-audit --no-fund
 
 echo "==> Building"
 npm run build
