@@ -8,6 +8,8 @@ import { Icon } from "@/components/zine/Icon";
 
 // Labels are nav.* message keys.
 const links = [
+  { to: "/",                key: "homeLink"       },
+  { to: "/about",           key: "about"          },
   { to: "/opportunities",   key: "opportunities"  },
   { to: "/programs",        key: "programs"       },
   { to: "/events",          key: "events"         },
@@ -15,10 +17,10 @@ const links = [
   { to: "/e-library",       key: "eLibrary"       },
   { to: "/news",            key: "news"           },
   { to: "/success-stories", key: "successStories" },
-  { to: "/about",           key: "about"          },
 ] as const;
 
 function isActive(path: string, to: string) {
+  if (to === "/") return path === "/";
   return path === to || path.startsWith(to + "/");
 }
 
@@ -26,6 +28,8 @@ export function Nav() {
   const t = useTranslations("nav");
   const [open, setOpen] = useState(false);
   const [scrollPct, setScrollPct] = useState(0);
+  // The bar floats over the page: it slides away while scrolling down and returns on the way up.
+  const [hidden, setHidden] = useState(false);
   const path = usePathname() || "";
 
   // Close the mobile menu when the route changes (adjusting state during render, not in an effect).
@@ -36,9 +40,15 @@ export function Nav() {
   }
 
   useEffect(() => {
+    let lastY = window.scrollY;
     const onScroll = () => {
+      const y = window.scrollY;
       const h = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollPct(h > 0 ? Math.min(1, window.scrollY / h) * 100 : 0);
+      setScrollPct(h > 0 ? Math.min(1, y / h) * 100 : 0);
+      if (y < 120) setHidden(false);
+      else if (y > lastY + 8) setHidden(true);
+      else if (y < lastY - 8) setHidden(false);
+      if (Math.abs(y - lastY) > 8) lastY = y;
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -56,10 +66,10 @@ export function Nav() {
   return (
     <>
       <a className="z-skip" href="#main">{t("skip")}</a>
-      <header className="z-nav">
+      <header className={hidden && !open ? "z-nav z-nav--hidden" : "z-nav"}>
         <div className="z-nav__in">
           <Link href="/" className="z-nav__logo" aria-label={t("home")}>
-            <img src="/kych_logo.png" alt="Kenya Youth Climate Hub" width={110} height={52} />
+            <img src="/kych_logo_wordmark.png" alt="Kenya Youth Climate Hub" width={384} height={168} />
           </Link>
 
           <nav className="z-nav__links" aria-label={t("main")}>
@@ -86,15 +96,15 @@ export function Nav() {
               <Icon name="menu" />
             </button>
           </div>
+          <span className="z-nav__track" aria-hidden="true"><i style={{ width: `${scrollPct}%` }} /></span>
         </div>
-        <span className="z-nav__progress" style={{ width: `${scrollPct}%` }} aria-hidden="true" />
       </header>
 
       {open && <div className="z-menu-scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
 
       <div id="z-menu" className="z-menu" data-open={open} aria-hidden={!open} inert={!open}>
         <div className="z-menu__top">
-          <img src="/kych_logo.png" alt="Kenya Youth Climate Hub" width={98} height={46} />
+          <img src="/kych_logo_wordmark.png" alt="Kenya Youth Climate Hub" width={384} height={168} className="z-menu__logo" />
           <button type="button" className="z-nav__burger" style={{ display: "inline-flex" }} aria-label={t("closeMenu")} onClick={() => setOpen(false)}>
             <Icon name="close" />
           </button>

@@ -13,6 +13,8 @@ import { countyAdvisoriesI18n } from "@/lib/data/translations/countyAdvisories";
 import { CountyMap, RISK_FILL, type Risk } from "@/components/weather/CountyMap";
 import { countyAt } from "@/lib/geo/countyMap";
 import { Icon } from "@/components/zine/Icon";
+import { AlertTicker } from "@/components/AlertTicker";
+import { EMERGENCY_CONTACTS } from "@/lib/data/emergencyContacts";
 
 const STEP_CATEGORIES = [
   "All 23 Steps",
@@ -60,12 +62,8 @@ const NOW_ICON: Record<string, string> = {
 const riskById = Object.fromEntries(KENYA_COUNTIES_WEATHER.map((c) => [c.id, c.riskLevel])) as Record<string, Risk>;
 const nameById = Object.fromEntries(KENYA_COUNTIES_WEATHER.map((c) => [c.id, c.name]));
 
-const EMERGENCY = [
-  { key: "ndoc", tel: "0800721570", main: "tollFree", number: "0800 721 570", sub: "landline", subNumber: "020 221 2386", hot: false },
-  { key: "redCrossAmb", tel: "1199", main: "tollFree", number: "1199", sub: "rescue247", hot: true },
-  { key: "ndmu", tel: "0203871851", main: null, number: "020 387 1851", sub: "mobile", subNumber: "0722 519 288", hot: false },
-  { key: "kmd", tel: "0203867880", main: null, number: "020 386 7880", sub: "advisories", hot: false },
-] as const;
+// Emergency numbers are shared with the Climate AI knowledge base.
+const EMERGENCY = EMERGENCY_CONTACTS;
 
 export default function WeatherPage() {
   const t = useTranslations("weatherPage");
@@ -169,6 +167,7 @@ export default function WeatherPage() {
             </label>
           </div>
           <p className="z-wx__geomsg" role="status" aria-live="polite">{geoMsg}</p>
+          <AlertTicker className="z-alerts--left" />
         </div>
       </header>
 
@@ -422,7 +421,7 @@ export default function WeatherPage() {
                 <a href={`tel:${e.tel}`} className={e.hot ? "z-wx__phone z-wx__phone--hot" : "z-wx__phone"}>
                   <span className="z-mono">{t(e.key)}</span>
                   <b><Icon name="call" fill /> {e.main ? t(e.main, { number: e.number }) : e.number}</b>
-                  <small>{"subNumber" in e ? t(e.sub, { number: e.subNumber }) : t(e.sub)}</small>
+                  <small>{e.subNumber ? t(e.sub, { number: e.subNumber }) : t(e.sub)}</small>
                 </a>
               </li>
             ))}

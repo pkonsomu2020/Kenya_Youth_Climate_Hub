@@ -8,7 +8,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
     <>
       <Nav />
       <ScrollReveal />
-      <main id="main" className="flex-1" tabIndex={-1}>
+      <main id="main" className="flex-1 z-main" tabIndex={-1}>
         {children}
       </main>
       <Footer />

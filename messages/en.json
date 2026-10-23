@@ -15,7 +15,8 @@
     "language": "Language",
     "skip": "Skip to content",
     "home": "Kenya Youth Climate Hub home",
-    "main": "Main"
+    "main": "Main",
+    "homeLink": "Home"
   },
   "footer": {
     "blurb": "Grants, skills, events and climate alerts for young Kenyans aged 15–35. Run by Afosi since 2020.",
@@ -37,11 +38,6 @@
     }
   },
   "home": {
-    "alert": {
-      "badge": "EL NIÑO",
-      "body": "Flood advisories in Western, Coast & Rift Valley",
-      "cta": "Check your county"
-    },
     "hero": {
       "eyebrow": "Kenya Youth Climate Hub · ages 15–35",
       "title": "Your county.<br></br>Your <hl>climate.</hl><br></br>Your <u>move.</u>",
@@ -282,31 +278,38 @@
     "retry": "Try again"
   },
   "dashboard": {
-    "eyebrow": "Your Dashboard",
-    "title": "Welcome to <g>KYCH Platform</g>",
-    "subtitle": "Your personal hub for climate opportunities, resources, and tools.",
-    "aiTitle": "Climate AI Assistant",
-    "aiBody": "A 24/7 AI guide trained on Kenya's climate data, opportunities and resources. Coming soon.",
-    "comingSoon": "Coming Soon",
-    "quickAccess": "Quick Access",
-    "links": {
-      "opportunities": {
-        "label": "Opportunities",
-        "desc": "Browse open grants & fellowships"
-      },
-      "library": {
-        "label": "E-Library",
-        "desc": "Reports, toolkits & resources"
-      },
-      "events": {
-        "label": "Events",
-        "desc": "Upcoming summits & workshops"
-      },
+    "eyebrow": "Your dashboard",
+    "title": "Your <s>shortcuts</s>",
+    "subtitle": "Pin what you come to KYCH for. Pinned shortcuts move to the top and stay there on this device.",
+    "pickLabel": "What are you here for?",
+    "pickHint": "Nothing pinned yet. Tap any of the above.",
+    "pinnedNote": "{n, plural, one {# shortcut pinned} other {# shortcuts pinned}}, saved on this device only.",
+    "boardLabel": "Shortcuts",
+    "pinned": "Pinned",
+    "cards": {
       "programs": {
-        "label": "Programs",
-        "desc": "Apply to innovation programs"
+        "title": "Join a programme",
+        "desc": "The Youth Climate Innovation Challenge and BeGreen Africa: what they offer and how they ran."
+      },
+      "stories": {
+        "title": "Meet founders",
+        "desc": "Five young Kenyans who turned a climate problem into a working business."
       }
-    }
+    },
+    "live": {
+      "closing": "{days, plural, =0 {Closes today} one {Closes tomorrow} other {Closes in # days}}: {title}",
+      "nextEvent": "{days, plural, =0 {Today} one {Tomorrow} other {In # days}}: {title}",
+      "library": "{n} resources + 2 tools",
+      "safe": "Forecast and flood risk, 47 counties",
+      "programs": "2 programmes",
+      "stories": "5 founder stories"
+    },
+    "aiKicker": "Climate AI",
+    "aiTitle": "Ask anything, <s>any time</s>",
+    "aiBody": "The Climate AI assistant answers questions about grants, programmes, events and the Youth Climate Innovation Challenge, in English, Kiswahili or French.",
+    "aiButton": "Ask Climate AI",
+    "joinText": "Want the team to know what you work on? Create a youth profile.",
+    "joinButton": "Create a profile"
   },
   "register": {
     "eyebrow": "Join KYCH",
@@ -840,7 +843,8 @@
           "desc": "Selected finalists will present their innovations to a panel of judges during the Climate Innovation Summit."
         }
       ],
-      "apply": "Apply on Yoma"
+      "apply": "Apply on Yoma",
+      "meetFounders": "Meet the founders"
     },
     "ycicKicker": "Flagship · 2025 cycle · applications closed",
     "ycicTitle": "Youth Climate Innovation <s>Challenge</s>",
@@ -996,44 +1000,53 @@
   },
   "weatherTerms": {},
   "chat": {
-    "greeting": "Karibu! I'm the KYCH Climate AI. Ask me about grants, fellowships, programs or the Youth Climate Innovation Challenge.",
-    "thinking": "RAG AI Thinking...",
-    "online": "Online • OpenAI RAG Connected",
-    "close": "Close chat",
-    "retrieving": "Retrieving KYCH context & generating answer...",
-    "typing": "KYCH AI is typing...",
-    "placeholder": "Ask about grants, YCIC, or climate watch...",
-    "send": "Send message",
+    "greeting": "Karibu! I'm Climate AI. Ask me which funding calls close soon, what's happening this month, or the flood risk and forecast for your county.",
+    "thinking": "Writing an answer…",
+    "online": "Answers from live KYCH data",
+    "open": "Open Climate AI",
+    "close": "Close Climate AI",
+    "newChat": "Start a new chat",
+    "retrieving": "Checking KYCH data…",
+    "placeholder": "Ask about funding, events or your county…",
+    "send": "Send",
+    "stop": "Stop the answer",
+    "stopped": "(Stopped.)",
+    "sources": "Sources",
+    "suggestions": "Suggested questions",
+    "note": "Climate AI can make mistakes. Check deadlines on the original call.",
+    "offlineNotice": "Climate AI is offline, so this is a saved answer.",
     "prompts": {
       "funding": {
-        "label": "Find funding",
-        "query": "What funding or grants are available?"
-      },
-      "ycic": {
-        "label": "YCIC Challenge",
-        "query": "Tell me about the Youth Climate Innovation Challenge"
-      },
-      "join": {
-        "label": "Join KYCH",
-        "query": "How do I register and join KYCH?"
+        "label": "Calls closing soon",
+        "query": "Which funding calls close in the next two weeks?"
       },
       "weather": {
-        "label": "County Weather",
-        "query": "How do I check weather telemetry for my county?"
+        "label": "Flood risk in my county",
+        "query": "What is the flood risk and forecast for Nairobi this week?"
+      },
+      "events": {
+        "label": "Events this month",
+        "query": "What climate events are coming up this month?"
+      },
+      "join": {
+        "label": "How to join KYCH",
+        "query": "How do I join KYCH and create a profile?"
       }
     },
     "canned": {
-      "funding": "Our Opportunities board carries live grants, fellowships and internships with deadline alerts. Head to the [Opportunities page](/opportunities) to filter by type and closing date.",
-      "programs": "The Youth Climate Innovation Challenge (YCIC 2025) has concluded (applications closed in June 2025). The program awarded KES 500K in seed grants for WASH, flood resilience, and clean tech. Explore past impact on the [YCIC Page](/programs/ycic) or visit our [Opportunities Board](/opportunities) for active grants.",
-      "join": "Anyone aged 15 to 35 in Kenya can join KYCH. Start by registering on yoma.world, then check out the [Opportunities board](/opportunities).",
-      "library": "The E-Library holds research reports, toolkits, and policy briefs. Browse free resources on the [E-Library page](/e-library).",
-      "weather": "Our Climate Watch hub provides live satellite weather telemetry and advisories for all 47 Kenya counties. Visit the [Weather Watch page](/weather).",
-      "default": "Karibu! Thanks for reaching out. Reach us directly at info@kenyayouthclimatehub.org or (+254) 0115963306 for personalized support."
+      "funding": "The [funding board](/opportunities) lists grants, fellowships, internships, jobs and competitions, with calls closing in the next 14 days pinned at the top.",
+      "programs": "The Youth Climate Innovation Challenge 2025 has concluded (applications closed in June 2025). See what it backed on the [YCIC page](/programs/ycic), and watch the [funding board](/opportunities) for the next cycle.",
+      "join": "KYCH is for young people in Kenya aged 15 to 35. Create a youth profile on the [registration page](/register), then pin your shortcuts on your [dashboard](/dashboard).",
+      "library": "The [E-Library](/e-library) has a carbon footprint calculator, a climate quiz, and toolkits, datasets and reports you can open for free.",
+      "weather": "[Climate Watch](/weather) shows a map of all 47 counties by flood risk, with today's weather, a 7-day forecast and emergency numbers for each one.",
+      "default": "Karibu! I couldn't reach the assistant just now. You can write to info@kenyayouthclimatehub.org or call (+254) 0115963306."
     }
   },
   "chatApi": {
     "fallback": "Karibu! {content}\n\nFor more details, visit [{title}]({url}) or reach us directly at info@kenyayouthclimatehub.org or (+254) 0115963306.",
-    "noReply": "Thanks for reaching out! In the meantime, you can reach us at info@kenyayouthclimatehub.org or (+254) 0115963306."
+    "noReply": "Thanks for reaching out! In the meantime, you can reach us at info@kenyayouthclimatehub.org or (+254) 0115963306.",
+    "rateLimited": "You have sent a lot of questions in a short time. Please wait a minute and try again.",
+    "interrupted": "(The answer was cut off. Please ask again.)"
   },
   "calculator": {
     "toolLabel": "KYCH Tool",
@@ -1243,5 +1256,46 @@
         "desc": "Outstanding! You're a climate knowledge leader. Share your expertise with others!"
       }
     ]
+  },
+  "alerts": {
+    "label": "Live alerts",
+    "roledescription": "rotating alerts",
+    "prev": "Previous alert",
+    "next": "Next alert",
+    "pause": "Pause alerts",
+    "play": "Play alerts",
+    "rain": {
+      "badge": "Heavy rain",
+      "body": "{when, select, today {Heavy rain likely in {county} today} other {Heavy rain likely in {county} tomorrow}} ({chance}% chance){others, plural, =0 {} one { and # more county} other { and # more counties}}",
+      "cta": "Check your county"
+    },
+    "heat": {
+      "badge": "Heat",
+      "body": "Up to {temp}°C forecast in {county}. Drink water and avoid the midday sun.",
+      "cta": "See the forecast"
+    },
+    "flood": {
+      "badge": "Flood risk",
+      "body": "Flood advisories in {count} counties: {regions}",
+      "cta": "Check your county"
+    },
+    "closing": {
+      "badge": "Closing soon",
+      "body": "{days, plural, =0 {Closes today} one {Closes tomorrow} other {Closes in # days}}: {title}{others, plural, =0 {} other { (+# more)}}",
+      "cta": "See the call"
+    },
+    "event": {
+      "badge": "Next event",
+      "body": "{days, plural, =0 {Today} one {Tomorrow} other {In # days}}: {title}",
+      "cta": "See dates"
+    },
+    "regions": {
+      "western": "Western",
+      "rift": "Rift Valley",
+      "coast": "Coast",
+      "northEast": "North Eastern",
+      "central": "Central",
+      "nairobiEast": "Nairobi & Eastern"
+    }
   }
 }

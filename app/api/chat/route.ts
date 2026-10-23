@@ -1,105 +1,138 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { retrieveRelevantContext } from "@/lib/rag/knowledgeBase";
+import { buildLiveContext, type Source } from "@/lib/rag/liveContext";
 import { getTranslations } from "next-intl/server";
 import { defaultLocale, isLocale, type Locale } from "@/i18n/config";
 
 const REPLY_LANGUAGE = { en: "English", sw: "Kiswahili (Swahili)", fr: "French" } as const;
+const MAX_CHARS = 1000; // per message
+const MAX_TURNS = 8; // history sent to the model
+const RATE = { windowMs: 60_000, max: 20 }; // per IP
+
+// Small in-memory limiter (per server instance). Enough to stop accidental loops and casual abuse.
+const hits = new Map<string, number[]>();
+function limited(ip: string) {
+  const now = Date.now();
+  const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE.windowMs);
+  recent.push(now);
+  hits.set(ip, recent);
+  if (hits.size > 5000) hits.clear();
+  return recent.length > RATE.max;
+}
+
+type InMsg = { from?: string; role?: string; text?: string; content?: string };
+const roleOf = (m: InMsg): "user" | "assistant" => (m.role === "user" || m.from === "user" ? "user" : "assistant");
+const textOf = (m: InMsg) => String(m.text ?? m.content ?? "").slice(0, MAX_CHARS);
+
+/** Plain-text reply with the sources header (used for fallbacks and errors). */
+function plain(reply: string, sources: Source[], status = 200) {
+  return new NextResponse(reply, {
+    status,
+    headers: { "Content-Type": "text/plain; charset=utf-8", "X-KYCH-Sources": encodeURIComponent(JSON.stringify(sources)) },
+  });
+}
 
 export async function POST(req: NextRequest) {
+  let body: { messages?: InMsg[]; locale?: string };
   try {
-    const body = await req.json();
-    const { messages } = body;
-    const locale: Locale = isLocale(body.locale) ? body.locale : defaultLocale;
-    const t = await getTranslations({ locale, namespace: "chatApi" });
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+  const locale: Locale = isLocale(body.locale) ? body.locale : defaultLocale;
+  const t = await getTranslations({ locale, namespace: "chatApi" });
 
-    if (!Array.isArray(messages) || messages.length === 0) {
-      return NextResponse.json({ error: "Invalid messages format" }, { status: 400 });
-    }
+  const messages = Array.isArray(body.messages) ? body.messages.filter((m) => textOf(m).trim()) : [];
+  if (!messages.length) return NextResponse.json({ error: "Invalid messages format" }, { status: 400 });
 
-    const lastUserMessage = [...messages].reverse().find((m: { from?: string; role?: string; text?: string; content?: string }) => {
-      const r = m.role || m.from;
-      return r === "user";
-    });
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "local";
+  if (limited(ip)) return plain(t("rateLimited"), [], 429);
 
-    const userQuery = lastUserMessage?.text || lastUserMessage?.content || "What is KYCH?";
+  const userQuery = textOf([...messages].reverse().find((m) => roleOf(m) === "user") ?? messages[messages.length - 1]);
 
-    // 1. Context Retrieval (RAG)
-    const contextChunks = retrieveRelevantContext(userQuery, 4);
-    const contextString = contextChunks
-      .map((c) => `--- [${c.title}] (Category: ${c.category})\nURL: ${c.url || "N/A"}\nContent: ${c.content}`)
-      .join("\n\n");
+  // 1. Static knowledge (what KYCH is and offers) + live data the question is about
+  const chunks = retrieveRelevantContext(userQuery, 4);
+  const live = await buildLiveContext(userQuery, locale, req.nextUrl.origin);
+  // Chips: the live data actually used, plus the single best-matching KYCH page.
+  const sources: Source[] = [
+    ...live.sources,
+    ...chunks.slice(0, 1).filter((c) => c.url).map((c) => ({ label: c.title, href: c.url! })),
+  ].filter((s, i, a) => a.findIndex((x) => x.href === s.href) === i).slice(0, 3);
 
-    // 2. OpenAI API Client setup
-    const apiKey = process.env.OPENAI_API_KEY;
+  const knowledge = chunks.map((c) => `--- ${c.title} (${c.url ?? "no page"})\n${c.content}`).join("\n\n");
+  const todayStr = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Nairobi" });
 
-    // Fallback if OpenAI API Key is missing or invalid
-    if (!apiKey || apiKey.trim() === "" || apiKey.startsWith("sk-proj-placeholder")) {
-      const topChunk = contextChunks[0];
-      return NextResponse.json({
-        reply: t("fallback", { content: topChunk.content, title: topChunk.title, url: topChunk.url || "/programs" }),
-      });
-    }
+  // 2. No API key: answer from the best-matching knowledge, translated wrapper
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey?.trim() || apiKey.startsWith("sk-proj-placeholder")) {
+    const top = chunks[0];
+    return plain(t("fallback", { content: top.content, title: top.title, url: top.url || "/programs" }), sources);
+  }
 
+  const systemPrompt = `You are Climate AI, the assistant of the Kenya Youth Climate Hub (KYCH), a platform for young Kenyans (15–35) working on climate.
+Today is ${todayStr} (Nairobi time).
+
+Answer using ONLY the facts below. If something is not covered, say you don't have that information and point to the closest KYCH page or info@kenyayouthclimatehub.org. Never invent opportunities, deadlines, amounts, events, phone numbers or statistics.
+
+KYCH KNOWLEDGE:
+${knowledge}
+
+${live.text ? `LIVE DATA (fetched just now; prefer it over general statements):\n${live.text}` : "No live data was needed for this question."}
+
+How to answer:
+- Reply in ${REPLY_LANGUAGE[locale]} (the language the user chose on the site), even though the facts above are in English. Keep names of programmes, organisations and URLs as they are.
+- Be specific and practical: name the actual calls, dates and counties from the live data, with "closes in N days" where known. Lead with the answer, no preamble or greetings after the first message.
+- Format: short paragraphs, "- " bullet lists, **bold** for key facts, at most one "### " heading. Under 220 words unless the user asks for detail.
+- Links: use markdown links. For KYCH pages use relative paths like [Funding board](/opportunities). For a funding call or event, make its title the link to the full URL from the live data, e.g. [Commonwealth Foundation Grant](https://...), instead of a separate "Link" word.
+- The Youth Climate Innovation Challenge 2025 is closed: never invite people to apply now; point them to /opportunities for future cycles.
+- For emergencies (floods, rescue), give the emergency numbers from the knowledge exactly as written.`;
+
+  const history: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = messages
+    .slice(-MAX_TURNS)
+    .map((m) => ({ role: roleOf(m), content: textOf(m) }));
+
+  // 3. Stream the answer; fall back to the knowledge text if the model call fails
+  try {
     const openai = new OpenAI({ apiKey });
-
-    // 3. Formulate System Prompt with RAG Context Grounding
-    const systemPrompt = `You are the KYCH Climate AI, a helpful, enthusiastic, and knowledgeable assistant for the Kenya Youth Climate Hub (KYCH).
-Your mission is to guide users on grants, fellowships, climate programs, the Youth Climate Innovation Challenge (YCIC), e-library research, and weather watch across Kenya's 47 counties.
-
-Ground your answers strictly using the following retrieved KYCH Knowledge Base context:
-${contextString}
-
-Formatting & Tone Guidelines:
-1. Be warm, welcoming ("Karibu!"), professional, and encouraging.
-2. Structure your answers cleanly using markdown bullet points and bold headers when helpful.
-3. Highlight key eligibility criteria, deadlines, contact info (info@kenyayouthclimatehub.org, (+254) 0115963306), and relevant page paths (e.g., /programs/ycic, /opportunities, /library, /weather) when appropriate.
-4. Keep responses concise, clear, and actionable (under 250 words unless detailed explanation is requested).
-5. LANGUAGE: Always reply in ${REPLY_LANGUAGE[locale]}, the language the user selected on the site, even though the context above is in English. Keep names of programmes, organisations and URLs unchanged.
-6. CRITICAL YCIC STATUS DIRECTIVE: The Youth Climate Innovation Challenge (YCIC 2025) has CONCLUDED and applications are CLOSED. Never suggest or invite users to apply or join YCIC now. State clearly that the 2025 cohort has concluded, summarize its past impact/partners (Flarehub, Yoma, KES 500K awarded at KICC), and guide users to the Opportunities Board (/opportunities) for current active calls and future cohorts.`;
-
-    // 4. Format messages for OpenAI completion API
-    const apiMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
-      { role: "system", content: systemPrompt },
-      ...messages.slice(-6).map((m: { from?: string; role?: string; text?: string; content?: string }) => {
-        const role: "user" | "assistant" = (m.role === "user" || m.from === "user") ? "user" : "assistant";
-        const content = m.text || m.content || "";
-        return { role, content };
-      }),
-    ];
-
-    // 5. Query OpenAI API
-    try {
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: apiMessages,
-        temperature: 0.6,
-        max_tokens: 500,
-      });
-
-      const reply = completion.choices[0]?.message?.content?.trim();
-
-      if (reply) {
-        return NextResponse.json({ reply });
-      }
-    } catch (openaiErr: unknown) {
-      console.error("OpenAI API call failed, falling back to RAG context engine:", openaiErr);
-      
-      // Fallback: Use RAG context content directly if OpenAI call fails (e.g. quota limit)
-      const topChunk = contextChunks[0];
-      return NextResponse.json({
-        reply: t("fallback", { content: topChunk.content, title: topChunk.title, url: topChunk.url || "/programs" }),
-      });
-    }
-
-    return NextResponse.json({
-      reply: t("noReply"),
+    const stream = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "system", content: systemPrompt }, ...history],
+      temperature: 0.4,
+      max_tokens: 600,
+      stream: true,
     });
-  } catch (err: unknown) {
-    console.error("Error in /api/chat route:", err);
-    return NextResponse.json(
-      { reply: "Karibu! We are currently experiencing a brief connection issue. Please feel free to email us at info@kenyayouthclimatehub.org or call (+254) 0115963306." },
-      { status: 500 }
-    );
+
+    const encoder = new TextEncoder();
+    const body = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        try {
+          for await (const part of stream) {
+            const delta = part.choices[0]?.delta?.content;
+            if (delta) controller.enqueue(encoder.encode(delta));
+          }
+        } catch (err) {
+          console.error("Chat stream interrupted:", err);
+          controller.enqueue(encoder.encode(`\n\n${t("interrupted")}`));
+        } finally {
+          controller.close();
+        }
+      },
+      cancel() {
+        stream.controller.abort();
+      },
+    });
+
+    return new NextResponse(body, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-store",
+        "X-KYCH-Sources": encodeURIComponent(JSON.stringify(sources)),
+      },
+    });
+  } catch (err) {
+    console.error("OpenAI call failed, answering from the knowledge base:", err);
+    const top = chunks[0];
+    return plain(t("fallback", { content: top.content, title: top.title, url: top.url || "/programs" }), sources);
   }
 }

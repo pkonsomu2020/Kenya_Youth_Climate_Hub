@@ -1,4 +1,5 @@
 "use client";
+import { AlertTicker } from "@/components/AlertTicker";
 import Photo from "@/components/zine/Photo";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
@@ -18,12 +19,8 @@ export function Hero({ feed }: { feed: HomeFeed }) {
 
   return (
     <>
-      <div className="z-wrap z-alert">
-        <Link href="/weather">
-          <b>{t("alert.badge")}</b>
-          <span>{t("alert.body")}</span>
-          <i>{t("alert.cta")} →</i>
-        </Link>
+      <div className="z-wrap">
+        <AlertTicker />
       </div>
 
       <header className="z-hero">

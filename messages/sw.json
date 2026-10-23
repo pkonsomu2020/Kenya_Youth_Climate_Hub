@@ -15,7 +15,8 @@
     "language": "Lugha",
     "skip": "Ruka hadi maudhui",
     "home": "Ukurasa mkuu wa Kenya Youth Climate Hub",
-    "main": "Kuu"
+    "main": "Kuu",
+    "homeLink": "Nyumbani"
   },
   "footer": {
     "blurb": "Ruzuku, ujuzi, matukio na tahadhari za tabianchi kwa vijana wa Kenya wenye umri wa miaka 15–35. Inaendeshwa na Afosi tangu 2020.",
@@ -37,11 +38,6 @@
     }
   },
   "home": {
-    "alert": {
-      "badge": "EL NIÑO",
-      "body": "Tahadhari za mafuriko Magharibi, Pwani na Bonde la Ufa",
-      "cta": "Angalia kaunti yako"
-    },
     "hero": {
       "eyebrow": "Kenya Youth Climate Hub · miaka 15–35",
       "title": "Kaunti yako.<br></br>Tabianchi <hl>yako.</hl><br></br>Zamu <u>yako.</u>",
@@ -282,31 +278,38 @@
     "retry": "Jaribu tena"
   },
   "dashboard": {
-    "eyebrow": "Dashibodi Yako",
-    "title": "Karibu kwenye <g>Jukwaa la KYCH</g>",
-    "subtitle": "Kitovu chako binafsi cha fursa, rasilimali na zana za tabianchi.",
-    "aiTitle": "Msaidizi wa AI wa Tabianchi",
-    "aiBody": "Mwongozo wa AI saa 24/7 uliofunzwa kwa data za tabianchi, fursa na rasilimali za Kenya. Inakuja hivi karibuni.",
-    "comingSoon": "Inakuja Hivi Karibuni",
-    "quickAccess": "Ufikiaji wa Haraka",
-    "links": {
-      "opportunities": {
-        "label": "Fursa",
-        "desc": "Vinjari ruzuku na ushirika ulio wazi"
-      },
-      "library": {
-        "label": "Maktaba",
-        "desc": "Ripoti, vifaa vya mafunzo na rasilimali"
-      },
-      "events": {
-        "label": "Matukio",
-        "desc": "Mikutano na warsha zijazo"
-      },
+    "eyebrow": "Dashibodi yako",
+    "title": "Njia zako <s>za mkato</s>",
+    "subtitle": "Bandika unachokuja kwenye KYCH kutafuta. Njia zilizobandikwa hupanda juu na kubaki hapo kwenye kifaa hiki.",
+    "pickLabel": "Uko hapa kwa ajili ya nini?",
+    "pickHint": "Bado hujabandika chochote. Gusa chochote hapo juu.",
+    "pinnedNote": "{n, plural, one {Njia # imebandikwa} other {Njia # zimebandikwa}}, zimehifadhiwa kwenye kifaa hiki pekee.",
+    "boardLabel": "Njia za mkato",
+    "pinned": "Imebandikwa",
+    "cards": {
       "programs": {
-        "label": "Programu",
-        "desc": "Omba kujiunga na programu za ubunifu"
+        "title": "Jiunge na programu",
+        "desc": "Youth Climate Innovation Challenge na BeGreen Africa: zinachotoa na jinsi zilivyoendeshwa."
+      },
+      "stories": {
+        "title": "Kutana na waanzilishi",
+        "desc": "Vijana watano wa Kenya waliogeuza tatizo la tabianchi kuwa biashara inayofanya kazi."
       }
-    }
+    },
+    "live": {
+      "closing": "{days, plural, =0 {Inafungwa leo} one {Inafungwa kesho} other {Inafungwa baada ya siku #}}: {title}",
+      "nextEvent": "{days, plural, =0 {Leo} one {Kesho} other {Baada ya siku #}}: {title}",
+      "library": "Rasilimali {n} + zana 2",
+      "safe": "Utabiri na hatari ya mafuriko, kaunti 47",
+      "programs": "Programu 2",
+      "stories": "Hadithi 5 za waanzilishi"
+    },
+    "aiKicker": "Climate AI",
+    "aiTitle": "Uliza chochote, <s>wakati wowote</s>",
+    "aiBody": "Msaidizi wa Climate AI hujibu maswali kuhusu ruzuku, programu, matukio na Youth Climate Innovation Challenge, kwa Kiingereza, Kiswahili au Kifaransa.",
+    "aiButton": "Uliza Climate AI",
+    "joinText": "Ungependa timu ijue unachoshughulikia? Fungua wasifu wa kijana.",
+    "joinButton": "Fungua wasifu"
   },
   "register": {
     "eyebrow": "Jiunge na KYCH",
@@ -840,7 +843,8 @@
           "desc": "Waliofuzu fainali watawasilisha ubunifu wao mbele ya jopo la majaji wakati wa Kongamano la Ubunifu wa Tabianchi."
         }
       ],
-      "apply": "Omba kupitia Yoma"
+      "apply": "Omba kupitia Yoma",
+      "meetFounders": "Kutana na waanzilishi"
     },
     "ycicKicker": "Programu kuu · mzunguko wa 2025 · maombi yamefungwa",
     "ycicTitle": "Youth Climate Innovation <s>Challenge</s>",
@@ -1024,44 +1028,53 @@
     "ClearSky": "Anga Safi"
   },
   "chat": {
-    "greeting": "Karibu! Mimi ni Climate AI ya KYCH. Niulize kuhusu ruzuku, ushirika, programu au Youth Climate Innovation Challenge.",
-    "thinking": "AI inafikiri...",
-    "online": "Mtandaoni • Imeunganishwa na OpenAI",
-    "close": "Funga gumzo",
-    "retrieving": "Inatafuta taarifa za KYCH na kuandaa jibu...",
-    "typing": "KYCH AI inaandika...",
-    "placeholder": "Uliza kuhusu ruzuku, YCIC au hali ya hewa...",
-    "send": "Tuma ujumbe",
+    "greeting": "Karibu! Mimi ni Climate AI. Niulize ni fursa zipi za ufadhili zinazofungwa hivi karibuni, kinachoendelea mwezi huu, au hatari ya mafuriko na utabiri wa kaunti yako.",
+    "thinking": "Ninaandika jibu…",
+    "online": "Majibu kutoka data hai ya KYCH",
+    "open": "Fungua Climate AI",
+    "close": "Funga Climate AI",
+    "newChat": "Anza mazungumzo mapya",
+    "retrieving": "Ninaangalia data ya KYCH…",
+    "placeholder": "Uliza kuhusu ufadhili, matukio au kaunti yako…",
+    "send": "Tuma",
+    "stop": "Simamisha jibu",
+    "stopped": "(Imesimamishwa.)",
+    "sources": "Vyanzo",
+    "suggestions": "Maswali yanayopendekezwa",
+    "note": "Climate AI inaweza kukosea. Hakikisha tarehe za mwisho kwenye tangazo asili.",
+    "offlineNotice": "Climate AI haipatikani, kwa hivyo hili ni jibu lililohifadhiwa.",
     "prompts": {
       "funding": {
-        "label": "Pata ufadhili",
-        "query": "Kuna ufadhili au ruzuku gani zinazopatikana?"
-      },
-      "ycic": {
-        "label": "Shindano la YCIC",
-        "query": "Nieleze kuhusu Youth Climate Innovation Challenge"
-      },
-      "join": {
-        "label": "Jiunge na KYCH",
-        "query": "Ninawezaje kujisajili na kujiunga na KYCH?"
+        "label": "Zinazofungwa karibuni",
+        "query": "Ni fursa zipi za ufadhili zinazofungwa ndani ya wiki mbili zijazo?"
       },
       "weather": {
-        "label": "Hali ya hewa ya kaunti",
-        "query": "Ninawezaje kuangalia hali ya hewa ya kaunti yangu?"
+        "label": "Mafuriko kaunti yangu",
+        "query": "Hatari ya mafuriko na utabiri wa Nairobi wiki hii ni upi?"
+      },
+      "events": {
+        "label": "Matukio ya mwezi huu",
+        "query": "Ni matukio gani ya tabianchi yanayokuja mwezi huu?"
+      },
+      "join": {
+        "label": "Jinsi ya kujiunga",
+        "query": "Ninajiungaje na KYCH na kufungua wasifu?"
       }
     },
     "canned": {
-      "funding": "Ubao wetu wa Fursa una ruzuku, ushirika na mafunzo kazini yanayosasishwa moja kwa moja, pamoja na vikumbusho vya tarehe za mwisho. Nenda kwenye [ukurasa wa Fursa](/opportunities) kuchuja kwa aina na tarehe ya kufunga.",
-      "programs": "Youth Climate Innovation Challenge (YCIC 2025) imekamilika (maombi yalifungwa Juni 2025). Programu ilitoa ruzuku za kuanzia za KES 500K kwa WASH, ustahimilivu wa mafuriko na teknolojia safi. Tazama matokeo yake kwenye [Ukurasa wa YCIC](/programs/ycic) au tembelea [Ubao wa Fursa](/opportunities) kwa ruzuku zilizo wazi sasa.",
-      "join": "Kijana yeyote wa miaka 15 hadi 35 nchini Kenya anaweza kujiunga na KYCH. Anza kwa kujisajili kwenye yoma.world, kisha tazama [Ubao wa Fursa](/opportunities).",
-      "library": "Maktaba ina ripoti za utafiti, vifaa vya mafunzo na muhtasari wa sera. Vinjari rasilimali bila malipo kwenye [ukurasa wa Maktaba](/e-library).",
-      "weather": "Kitovu chetu cha Hali ya Hewa kinatoa taarifa za setilaiti na ushauri kwa kaunti zote 47 za Kenya. Tembelea [ukurasa wa Hali ya Hewa](/weather).",
-      "default": "Karibu! Asante kwa kuwasiliana nasi. Tupate moja kwa moja kupitia info@kenyayouthclimatehub.org au (+254) 0115963306 kwa msaada zaidi."
+      "funding": "[Ubao wa ufadhili](/opportunities) una ruzuku, ushirika, mafunzo kazini, ajira na mashindano, na matangazo yanayofungwa ndani ya siku 14 yamebandikwa juu.",
+      "programs": "Youth Climate Innovation Challenge 2025 imekamilika (maombi yalifungwa Juni 2025). Ona ilichounga mkono kwenye [ukurasa wa YCIC](/programs/ycic), na fuatilia [ubao wa ufadhili](/opportunities) kwa mzunguko ujao.",
+      "join": "KYCH ni ya vijana wa Kenya wenye umri wa miaka 15 hadi 35. Fungua wasifu kwenye [ukurasa wa usajili](/register), kisha bandika njia zako za mkato kwenye [dashibodi](/dashboard).",
+      "library": "[Maktaba](/e-library) ina kikokotoo cha alama ya kaboni, jaribio la tabianchi, na vifaa, seti za data na ripoti unazoweza kufungua bure.",
+      "weather": "[Climate Watch](/weather) inaonyesha ramani ya kaunti zote 47 kwa hatari ya mafuriko, na hali ya hewa ya leo, utabiri wa siku 7 na nambari za dharura kwa kila moja.",
+      "default": "Karibu! Sikuweza kumfikia msaidizi kwa sasa. Unaweza kuandika kwa info@kenyayouthclimatehub.org au kupiga (+254) 0115963306."
     }
   },
   "chatApi": {
     "fallback": "Karibu! {content}\n\nKwa maelezo zaidi, tembelea [{title}]({url}) au wasiliana nasi moja kwa moja kupitia info@kenyayouthclimatehub.org au (+254) 0115963306.",
-    "noReply": "Asante kwa kuwasiliana nasi! Kwa sasa unaweza kutupata kupitia info@kenyayouthclimatehub.org au (+254) 0115963306."
+    "noReply": "Asante kwa kuwasiliana nasi! Kwa sasa unaweza kutupata kupitia info@kenyayouthclimatehub.org au (+254) 0115963306.",
+    "rateLimited": "Umetuma maswali mengi kwa muda mfupi. Tafadhali subiri dakika moja kisha ujaribu tena.",
+    "interrupted": "(Jibu lilikatika. Tafadhali uliza tena.)"
   },
   "calculator": {
     "toolLabel": "Zana ya KYCH",
@@ -1271,5 +1284,46 @@
         "desc": "Bora kabisa! Wewe ni kiongozi wa maarifa ya tabianchi. Shiriki ujuzi wako na wengine!"
       }
     ]
+  },
+  "alerts": {
+    "label": "Tahadhari za moja kwa moja",
+    "roledescription": "tahadhari zinazozunguka",
+    "prev": "Tahadhari iliyotangulia",
+    "next": "Tahadhari inayofuata",
+    "pause": "Sitisha tahadhari",
+    "play": "Endelea na tahadhari",
+    "rain": {
+      "badge": "Mvua kubwa",
+      "body": "{when, select, today {Mvua kubwa inatarajiwa {county} leo} other {Mvua kubwa inatarajiwa {county} kesho}} (uwezekano {chance}%){others, plural, =0 {} one { na kaunti # nyingine} other { na kaunti # nyingine}}",
+      "cta": "Angalia kaunti yako"
+    },
+    "heat": {
+      "badge": "Joto",
+      "body": "Hadi {temp}°C inatarajiwa {county}. Kunywa maji na epuka jua la mchana.",
+      "cta": "Ona utabiri"
+    },
+    "flood": {
+      "badge": "Hatari ya mafuriko",
+      "body": "Tahadhari za mafuriko katika kaunti {count}: {regions}",
+      "cta": "Angalia kaunti yako"
+    },
+    "closing": {
+      "badge": "Inafungwa karibuni",
+      "body": "{days, plural, =0 {Inafungwa leo} one {Inafungwa kesho} other {Inafungwa baada ya siku #}}: {title}{others, plural, =0 {} other { (+# zaidi)}}",
+      "cta": "Ona tangazo"
+    },
+    "event": {
+      "badge": "Tukio lijalo",
+      "body": "{days, plural, =0 {Leo} one {Kesho} other {Baada ya siku #}}: {title}",
+      "cta": "Ona tarehe"
+    },
+    "regions": {
+      "western": "Magharibi",
+      "rift": "Bonde la Ufa",
+      "coast": "Pwani",
+      "northEast": "Kaskazini Mashariki",
+      "central": "Kati",
+      "nairobiEast": "Nairobi na Mashariki"
+    }
   }
 }
